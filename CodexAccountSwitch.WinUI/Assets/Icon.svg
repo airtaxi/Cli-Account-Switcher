@@ -1,0 +1,63 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Clip to rounded rect -->
+  <defs>
+    <clipPath id="rounded">
+      <rect width="1024" height="1024" rx="160"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#rounded)">
+
+  <!-- Terminal window body -->
+  <rect x="0" y="0" width="1024" height="1024" fill="#1a1a2e"/>
+
+  <!-- Title bar -->
+  <rect x="0" y="0" width="1024" height="120" fill="#2a2a3e"/>
+
+  <!-- Window title -->
+  <text x="512" y="76" font-family="monospace" font-size="38" fill="#8892b0" text-anchor="middle">su — bash</text>
+
+  <!-- Prompt: su alice -->
+  <text x="60" y="210" font-family="monospace" font-size="52" fill="#50fa7b">$</text>
+  <text x="110" y="210" font-family="monospace" font-size="52" fill="#f8f8f2"> su alice</text>
+
+  <!-- Divider -->
+  <line x1="40" y1="240" x2="984" y2="240" stroke="#3a3a5e" stroke-width="2"/>
+
+  <!-- User A avatar -->
+  <circle cx="270" cy="450" r="120" fill="#6272a4"/>
+  <circle cx="270" cy="400" r="48" fill="#cdd6f4"/>
+  <ellipse cx="270" cy="518" rx="75" ry="46" fill="#cdd6f4"/>
+  <text x="270" y="610" font-family="monospace" font-size="44" fill="#8be9fd" text-anchor="middle">bob</text>
+
+  <!-- Switch arrows -->
+  <path d="M400 390 Q512 310 624 390" fill="none" stroke="#50fa7b" stroke-width="12" stroke-linecap="round"/>
+  <polygon points="614,352 638,396 598,404" fill="#50fa7b"/>
+
+  <path d="M624 490 Q512 570 400 490" fill="none" stroke="#ff79c6" stroke-width="12" stroke-linecap="round"/>
+  <polygon points="410,528 386,484 426,476" fill="#ff79c6"/>
+
+  <!-- User B avatar -->
+  <circle cx="754" cy="450" r="120" fill="#bd93f9"/>
+  <circle cx="754" cy="400" r="48" fill="#f8f8f2"/>
+  <ellipse cx="754" cy="518" rx="75" ry="46" fill="#f8f8f2"/>
+  <text x="754" y="610" font-family="monospace" font-size="44" fill="#ff79c6" text-anchor="middle">alice</text>
+
+  <!-- Divider -->
+  <line x1="40" y1="660" x2="984" y2="660" stroke="#3a3a5e" stroke-width="2"/>
+
+  <!-- Result prompt -->
+  <text x="60" y="760" font-family="monospace" font-size="52" fill="#ff79c6">[alice]$</text>
+  <rect x="410" y="718" width="36" height="52" fill="#f8f8f2" rx="3" opacity="0.9"/>
+
+  <!-- Password line -->
+  <text x="60" y="848" font-family="monospace" font-size="42" fill="#6272a4">Password: ••••••••</text>
+
+  <!-- Status bar -->
+  <rect x="0" y="900" width="1024" height="124" fill="#2a2a3e"/>
+  <circle cx="60" cy="962" r="20" fill="#28ca41"/>
+  <text x="100" y="972" font-family="monospace" font-size="42" fill="#8be9fd">alice@host:~</text>
+
+  </g>
+</svg>

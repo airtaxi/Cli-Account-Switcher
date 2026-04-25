@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "CodexAccountSwitch.WinUI (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "CodexAccountSwitch.WinUI (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
