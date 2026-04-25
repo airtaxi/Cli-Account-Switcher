@@ -140,10 +140,7 @@ public sealed partial class AccountsPage : Page
 
     private void OnPlanFilterSelectorBarSelectionChanged(SelectorBar sender, SelectorBarSelectionChangedEventArgs selectorBarSelectionChangedEventArguments) => ViewModel.SelectedPlanFilter = sender.SelectedItem?.Tag as string ?? "All";
 
-    private void OnAccountsListViewSelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArguments)
-    {
-        ViewModel.SetSelectedAccountIdentifiers(AccountsListView.SelectedItems.OfType<CodexAccountViewModel>().Select(accountViewModel => accountViewModel.AccountIdentifier));
-    }
+    private void OnAccountsListViewSelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArguments) => ViewModel.SetSelectedAccountIdentifiers(AccountsListView.SelectedItems.OfType<CodexAccountViewModel>().Select(accountViewModel => accountViewModel.AccountIdentifier));
 
     private void OnAccountsPageUnloaded(object sender, RoutedEventArgs routedEventArguments) => ViewModel.Dispose();
 

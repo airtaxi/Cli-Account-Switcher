@@ -4,10 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.UI.Dispatching;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace CodexAccountSwitch.WinUI.ViewModels;
 
@@ -15,7 +12,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 {
     private readonly CodexAccountService _codexAccountService;
     private readonly DispatcherQueue _dispatcherQueue;
-    private readonly HashSet<string> _selectedAccountIdentifiers = new(StringComparer.Ordinal);
+    private readonly HashSet<string> _selectedAccountIdentifiers = [with(StringComparer.Ordinal)];
     private bool _disposed;
 
     public AccountsPageViewModel(CodexAccountService codexAccountService, DispatcherQueue dispatcherQueue)

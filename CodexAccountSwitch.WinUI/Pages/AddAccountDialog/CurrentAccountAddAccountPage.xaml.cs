@@ -10,7 +10,9 @@ public sealed partial class CurrentAccountAddAccountPage : Page
     private AddAccountDialogContext _addAccountDialogContext;
     private bool _isCompletingSuccessfully;
 
+#pragma warning disable CA1822 // Mark members as static => Used in XAML binding, so it cannot be static
     public string CurrentAuthenticationFilePath => Constants.CurrentAuthenticationFilePath;
+#pragma warning restore CA1822 // Mark members as static => Used in XAML binding, so it cannot be static
 
     public CurrentAccountAddAccountPage() => InitializeComponent();
 
