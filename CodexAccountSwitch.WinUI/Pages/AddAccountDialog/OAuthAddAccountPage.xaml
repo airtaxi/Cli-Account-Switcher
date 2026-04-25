@@ -21,12 +21,12 @@
 
         <StackPanel Grid.Row="0" Spacing="6">
             <TextBlock
+                x:Uid="OAuthAddAccountPage_TitleTextBlock"
                 FontSize="22"
-                FontWeight="SemiBold"
-                Text="OAuth 인증" />
+                FontWeight="SemiBold" />
             <TextBlock
+                x:Uid="OAuthAddAccountPage_DescriptionTextBlock"
                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                Text="브라우저에서 Codex 인증을 완료하면 계정 사용량 검증 후 자동으로 추가됩니다."
                 TextWrapping="Wrap" />
         </StackPanel>
 
@@ -37,7 +37,7 @@
             Style="{StaticResource AccentButtonStyle}">
             <StackPanel Orientation="Horizontal" Spacing="8">
                 <FontIcon FontSize="15" Glyph="&#xE774;" />
-                <TextBlock Text="브라우저에서 인증 시작" />
+                <TextBlock x:Uid="OAuthAddAccountPage_OpenBrowserTextBlock" />
             </StackPanel>
         </Button>
 
@@ -52,9 +52,7 @@
                 Height="24"
                 Foreground="{ThemeResource SystemAccentColor}"
                 Mode="Arcs" />
-            <TextBlock
-                VerticalAlignment="Center"
-                Text="인증 콜백을 기다리는 중입니다." />
+            <TextBlock x:Uid="OAuthAddAccountPage_WaitingTextBlock" VerticalAlignment="Center" />
         </StackPanel>
 
         <StackPanel
@@ -63,8 +61,8 @@
             Spacing="8"
             Visibility="Collapsed">
             <TextBlock
+                x:Uid="OAuthAddAccountPage_ManualAddressDescriptionTextBlock"
                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                Text="브라우저를 자동으로 열 수 없습니다. 아래 주소를 복사해서 브라우저에 붙여넣고 인증을 진행하세요."
                 TextWrapping="Wrap" />
             <Grid ColumnSpacing="8">
                 <Grid.ColumnDefinitions>
@@ -80,7 +78,7 @@
                     Grid.Column="1"
                     Click="OnOAuthManualAddressCopyButtonClicked">
                     <ToolTipService.ToolTip>
-                        <ToolTip Content="복사" />
+                        <ToolTip x:Uid="OAuthAddAccountPage_CopyAddressToolTip" />
                     </ToolTipService.ToolTip>
                     <FontIcon FontSize="14" Glyph="&#xE8C8;" />
                 </Button>
@@ -89,10 +87,9 @@
 
         <InfoBar
             x:Name="OAuthErrorInfoBar"
+            x:Uid="OAuthAddAccountPage_ErrorInfoBar"
             Grid.Row="4"
             IsOpen="False"
-            Message="OAuth 인증 또는 계정 검증 중 오류가 발생했습니다."
-            Severity="Error"
-            Title="계정 추가 실패" />
+            Severity="Error" />
     </Grid>
 </Page>

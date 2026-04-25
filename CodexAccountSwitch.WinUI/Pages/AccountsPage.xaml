@@ -28,10 +28,10 @@
 
             <StackPanel Grid.Column="0" Spacing="4">
                 <TextBlock
+                    x:Uid="AccountsPage_TitleTextBlock"
                     FontSize="28"
-                    FontWeight="SemiBold"
-                    Text="계정 관리" />
-                <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="Codex auth.json 계정을 저장하고 사용량과 활성 상태를 관리합니다." />
+                    FontWeight="SemiBold" />
+                <TextBlock x:Uid="AccountsPage_DescriptionTextBlock" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
             </StackPanel>
 
             <StackPanel
@@ -41,7 +41,7 @@
                 <Button x:Name="RefreshAllAccountsButton" Click="OnRefreshAllAccountsButtonClicked">
                     <StackPanel Orientation="Horizontal" Spacing="6">
                         <FontIcon FontSize="14" Glyph="&#xE72C;" />
-                        <TextBlock Text="새로고침" />
+                        <TextBlock x:Uid="AccountsPage_RefreshAllAccountsTextBlock" />
                     </StackPanel>
                 </Button>
                 <Button
@@ -50,7 +50,7 @@
                     Style="{StaticResource AccentButtonStyle}">
                     <StackPanel Orientation="Horizontal" Spacing="6">
                         <FontIcon FontSize="14" Glyph="&#xE710;" />
-                        <TextBlock Text="계정 추가" />
+                        <TextBlock x:Uid="AccountsPage_AddAccountTextBlock" />
                     </StackPanel>
                 </Button>
             </StackPanel>
@@ -67,8 +67,8 @@
 
             <AutoSuggestBox
                 x:Name="AccountSearchAutoSuggestBox"
+                x:Uid="AccountsPage_AccountSearchAutoSuggestBox"
                 Grid.Column="0"
-                PlaceholderText="계정 이름, 이메일, 플랜 검색"
                 QueryIcon="Find"
                 TextChanged="OnAccountSearchAutoSuggestBoxTextChanged" />
 
@@ -79,12 +79,12 @@
                 SelectionChanged="OnPlanFilterSelectorBarSelectionChanged">
                 <SelectorBarItem
                     x:Name="AllPlanFilterSelectorBarItem"
-                    Tag="All"
-                    Text="전체" />
-                <SelectorBarItem Tag="free" Text="Free" />
-                <SelectorBarItem Tag="plus" Text="Plus" />
-                <SelectorBarItem Tag="team" Text="Team" />
-                <SelectorBarItem Tag="pro" Text="Pro" />
+                    x:Uid="AccountsPage_AllPlanFilterSelectorBarItem"
+                    Tag="All" />
+                <SelectorBarItem x:Uid="AccountsPage_FreePlanFilterSelectorBarItem" Tag="free" />
+                <SelectorBarItem x:Uid="AccountsPage_PlusPlanFilterSelectorBarItem" Tag="plus" />
+                <SelectorBarItem x:Uid="AccountsPage_TeamPlanFilterSelectorBarItem" Tag="team" />
+                <SelectorBarItem x:Uid="AccountsPage_ProPlanFilterSelectorBarItem" Tag="pro" />
             </dev:SelectorBarSegmented>
         </Grid>
 
@@ -110,7 +110,7 @@
                     IsEnabled="{x:Bind ViewModel.HasSelectedAccounts, Mode=OneWay}">
                     <StackPanel Orientation="Horizontal" Spacing="6">
                         <FontIcon FontSize="14" Glyph="&#xE72C;" />
-                        <TextBlock Text="선택 새로고침" />
+                        <TextBlock x:Uid="AccountsPage_RefreshSelectedAccountsTextBlock" />
                     </StackPanel>
                 </Button>
                 <Button
@@ -119,25 +119,25 @@
                     IsEnabled="{x:Bind ViewModel.HasSelectedAccounts, Mode=OneWay}">
                     <StackPanel Orientation="Horizontal" Spacing="6">
                         <FontIcon FontSize="14" Glyph="&#xE74D;" />
-                        <TextBlock Text="선택 삭제" />
+                        <TextBlock x:Uid="AccountsPage_DeleteSelectedAccountsTextBlock" />
                     </StackPanel>
                 </Button>
                 <Button x:Name="ExportBackupButton" Click="OnExportBackupButtonClicked">
                     <StackPanel Orientation="Horizontal" Spacing="6">
                         <FontIcon FontSize="14" Glyph="&#xEDE1;" />
-                        <TextBlock Text="백업 내보내기" />
+                        <TextBlock x:Uid="AccountsPage_ExportBackupTextBlock" />
                     </StackPanel>
                 </Button>
                 <Button x:Name="ImportBackupButton" Click="OnImportBackupButtonClicked">
                     <StackPanel Orientation="Horizontal" Spacing="6">
                         <FontIcon FontSize="14" Glyph="&#xE8B5;" />
-                        <TextBlock Text="백업 불러오기" />
+                        <TextBlock x:Uid="AccountsPage_ImportBackupTextBlock" />
                     </StackPanel>
                 </Button>
                 <Button x:Name="DeleteExpiredAccountsButton" Click="OnDeleteExpiredAccountsButtonClicked">
                     <StackPanel Orientation="Horizontal" Spacing="6">
                         <FontIcon FontSize="14" Glyph="&#xE711;" />
-                        <TextBlock Text="만료 계정 정리" />
+                        <TextBlock x:Uid="AccountsPage_DeleteExpiredAccountsTextBlock" />
                     </StackPanel>
                 </Button>
             </StackPanel>
@@ -159,26 +159,26 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBlock
+                            x:Uid="AccountsPage_AccountHeaderTextBlock"
                             Grid.Column="0"
-                            FontWeight="SemiBold"
-                            Text="계정" />
+                            FontWeight="SemiBold" />
                         <TextBlock
+                            x:Uid="AccountsPage_PlanHeaderTextBlock"
                             Grid.Column="1"
-                            FontWeight="SemiBold"
-                            Text="플랜" />
+                            FontWeight="SemiBold" />
                         <TextBlock
+                            x:Uid="AccountsPage_UsageHeaderTextBlock"
                             Grid.Column="2"
-                            FontWeight="SemiBold"
-                            Text="사용량" />
+                            FontWeight="SemiBold" />
                         <TextBlock
+                            x:Uid="AccountsPage_StatusHeaderTextBlock"
                             Grid.Column="3"
-                            FontWeight="SemiBold"
-                            Text="상태" />
+                            FontWeight="SemiBold" />
                         <TextBlock
+                            x:Uid="AccountsPage_ActionsHeaderTextBlock"
                             Grid.Column="4"
                             HorizontalAlignment="Right"
-                            FontWeight="SemiBold"
-                            Text="작업" />
+                            FontWeight="SemiBold" />
                     </Grid>
                 </ListView.Header>
                 <ListView.ItemTemplate>
@@ -259,7 +259,7 @@
                                     Click="OnSwitchAccountButtonClicked"
                                     CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}">
                                     <ToolTipService.ToolTip>
-                                        <ToolTip Content="전환" />
+                                        <ToolTip x:Uid="AccountsPage_SwitchAccountToolTip" />
                                     </ToolTipService.ToolTip>
                                     <FontIcon FontSize="14" Glyph="&#xE8AB;" />
                                 </Button>
@@ -269,7 +269,7 @@
                                     Click="OnRenameAccountButtonClicked"
                                     CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}">
                                     <ToolTipService.ToolTip>
-                                        <ToolTip Content="이름 변경" />
+                                        <ToolTip x:Uid="AccountsPage_RenameAccountToolTip" />
                                     </ToolTipService.ToolTip>
                                     <FontIcon FontSize="14" Glyph="&#xE70F;" />
                                 </Button>
@@ -279,7 +279,7 @@
                                     Click="OnRefreshAccountButtonClicked"
                                     CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}">
                                     <ToolTipService.ToolTip>
-                                        <ToolTip Content="새로고침" />
+                                        <ToolTip x:Uid="AccountsPage_RefreshAccountToolTip" />
                                     </ToolTipService.ToolTip>
                                     <FontIcon FontSize="14" Glyph="&#xE72C;" />
                                 </Button>
@@ -289,7 +289,7 @@
                                     Click="OnDeleteAccountButtonClicked"
                                     CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}">
                                     <ToolTipService.ToolTip>
-                                        <ToolTip Content="삭제" />
+                                        <ToolTip x:Uid="AccountsPage_DeleteAccountToolTip" />
                                     </ToolTipService.ToolTip>
                                     <FontIcon FontSize="14" Glyph="&#xE74D;" />
                                 </Button>
@@ -310,14 +310,14 @@
                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                     Glyph="&#xE748;" />
                 <TextBlock
+                    x:Uid="AccountsPage_NoAccountsTitleTextBlock"
                     HorizontalAlignment="Center"
                     FontSize="18"
-                    FontWeight="SemiBold"
-                    Text="등록된 계정이 없습니다." />
+                    FontWeight="SemiBold" />
                 <TextBlock
+                    x:Uid="AccountsPage_NoAccountsDescriptionTextBlock"
                     HorizontalAlignment="Center"
-                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                    Text="계정 추가 버튼으로 auth.json을 가져오세요." />
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
             </StackPanel>
 
             <StackPanel
@@ -331,14 +331,14 @@
                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                     Glyph="&#xE721;" />
                 <TextBlock
+                    x:Uid="AccountsPage_NoFilteredAccountsTitleTextBlock"
                     HorizontalAlignment="Center"
                     FontSize="18"
-                    FontWeight="SemiBold"
-                    Text="조건에 맞는 계정이 없습니다." />
+                    FontWeight="SemiBold" />
                 <TextBlock
+                    x:Uid="AccountsPage_NoFilteredAccountsDescriptionTextBlock"
                     HorizontalAlignment="Center"
-                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                    Text="검색어나 플랜 필터를 조정하세요." />
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
             </StackPanel>
         </Grid>
     </Grid>

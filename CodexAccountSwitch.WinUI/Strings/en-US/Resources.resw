@@ -138,4 +138,319 @@
   <data name="MainPage_SettingsSelectorBarItem.Text" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="DialogHelper_DefaultInputTitle" xml:space="preserve">
+    <value>Input</value>
+  </data>
+  <data name="DialogHelper_ConfirmButtonText" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="DialogHelper_CancelButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="AddAccountDialog.Title" xml:space="preserve">
+    <value>Add Account</value>
+  </data>
+  <data name="AddAccountDialog.CloseButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="AddAccountDialog_OAuthSelectorBarItem.Text" xml:space="preserve">
+    <value>OAuth</value>
+  </data>
+  <data name="AddAccountDialog_ManualPasteSelectorBarItem.Text" xml:space="preserve">
+    <value>Manual Paste</value>
+  </data>
+  <data name="AddAccountDialog_CurrentAccountSelectorBarItem.Text" xml:space="preserve">
+    <value>Signed-in Account</value>
+  </data>
+  <data name="AddAccountDialog_FileSelectorBarItem.Text" xml:space="preserve">
+    <value>Load File</value>
+  </data>
+  <data name="CodexAccountViewModel_UnknownPlan" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="CodexAccountViewModel_TokenExpiredStatus" xml:space="preserve">
+    <value>Token Expired</value>
+  </data>
+  <data name="CodexAccountViewModel_ActiveStatus" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="CodexAccountViewModel_WaitingStatus" xml:space="preserve">
+    <value>Waiting</value>
+  </data>
+  <data name="CodexAccountViewModel_NotRefreshed" xml:space="preserve">
+    <value>Not refreshed yet</value>
+  </data>
+  <data name="CodexAccountViewModel_NoAccessToken" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="CodexAccountViewModel_UnknownUsage" xml:space="preserve">
+    <value>Usage unavailable</value>
+  </data>
+  <data name="CodexAccountViewModel_UnknownResetTime" xml:space="preserve">
+    <value>Reset time unavailable</value>
+  </data>
+  <data name="CodexAccountViewModel_ResetAfterFormat" xml:space="preserve">
+    <value>resets in {0:hh\:mm\:ss}</value>
+  </data>
+  <data name="CodexAccountViewModel_UsageRemainingFormat" xml:space="preserve">
+    <value>{0}% remaining · {1}</value>
+  </data>
+  <data name="AccountsPageViewModel_NoSelectedAccounts" xml:space="preserve">
+    <value>No selection</value>
+  </data>
+  <data name="AccountsPageViewModel_SelectedAccountCountFormat" xml:space="preserve">
+    <value>{0} selected</value>
+  </data>
+  <data name="AccountsPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Account Management</value>
+  </data>
+  <data name="AccountsPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Store Codex auth.json accounts and manage usage and active status.</value>
+  </data>
+  <data name="AccountsPage_RefreshAllAccountsTextBlock.Text" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="AccountsPage_AddAccountTextBlock.Text" xml:space="preserve">
+    <value>Add Account</value>
+  </data>
+  <data name="AccountsPage_AccountSearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>Search account name, email, or plan</value>
+  </data>
+  <data name="AccountsPage_AllPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="AccountsPage_FreePlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Free</value>
+  </data>
+  <data name="AccountsPage_PlusPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Plus</value>
+  </data>
+  <data name="AccountsPage_TeamPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="AccountsPage_ProPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Pro</value>
+  </data>
+  <data name="AccountsPage_RefreshSelectedAccountsTextBlock.Text" xml:space="preserve">
+    <value>Refresh Selected</value>
+  </data>
+  <data name="AccountsPage_DeleteSelectedAccountsTextBlock.Text" xml:space="preserve">
+    <value>Delete Selected</value>
+  </data>
+  <data name="AccountsPage_ExportBackupTextBlock.Text" xml:space="preserve">
+    <value>Export Backup</value>
+  </data>
+  <data name="AccountsPage_ImportBackupTextBlock.Text" xml:space="preserve">
+    <value>Import Backup</value>
+  </data>
+  <data name="AccountsPage_DeleteExpiredAccountsTextBlock.Text" xml:space="preserve">
+    <value>Clean Expired Accounts</value>
+  </data>
+  <data name="AccountsPage_AccountHeaderTextBlock.Text" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="AccountsPage_PlanHeaderTextBlock.Text" xml:space="preserve">
+    <value>Plan</value>
+  </data>
+  <data name="AccountsPage_UsageHeaderTextBlock.Text" xml:space="preserve">
+    <value>Usage</value>
+  </data>
+  <data name="AccountsPage_StatusHeaderTextBlock.Text" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="AccountsPage_ActionsHeaderTextBlock.Text" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="AccountsPage_SwitchAccountToolTip.Content" xml:space="preserve">
+    <value>Switch</value>
+  </data>
+  <data name="AccountsPage_RenameAccountToolTip.Content" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="AccountsPage_RefreshAccountToolTip.Content" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="AccountsPage_DeleteAccountToolTip.Content" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="AccountsPage_NoAccountsTitleTextBlock.Text" xml:space="preserve">
+    <value>No accounts registered.</value>
+  </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Use Add Account to import auth.json.</value>
+  </data>
+  <data name="AccountsPage_NoFilteredAccountsTitleTextBlock.Text" xml:space="preserve">
+    <value>No accounts match the filter.</value>
+  </data>
+  <data name="AccountsPage_NoFilteredAccountsDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Adjust the search text or plan filter.</value>
+  </data>
+  <data name="AccountsPage_RefreshAllAccountsLoadingMessage" xml:space="preserve">
+    <value>Refreshing usage for all accounts.</value>
+  </data>
+  <data name="AccountsPage_RefreshSelectedAccountsLoadingMessage" xml:space="preserve">
+    <value>Refreshing usage for selected accounts.</value>
+  </data>
+  <data name="AccountsPage_DeleteSelectedAccountsDialogTitle" xml:space="preserve">
+    <value>Delete Selected Accounts</value>
+  </data>
+  <data name="AccountsPage_DeleteSelectedAccountsDialogMessage" xml:space="preserve">
+    <value>Delete {0} accounts?</value>
+  </data>
+  <data name="AccountsPage_DeleteButtonText" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="AccountsPage_ExportBackupDialogTitle" xml:space="preserve">
+    <value>Export Backup</value>
+  </data>
+  <data name="AccountsPage_ExportBackupDialogMessage" xml:space="preserve">
+    <value>Account backup saved.</value>
+  </data>
+  <data name="AccountsPage_ImportBackupLoadingMessage" xml:space="preserve">
+    <value>Validating accounts from the backup file.</value>
+  </data>
+  <data name="AccountsPage_ImportBackupDialogTitle" xml:space="preserve">
+    <value>Import Backup</value>
+  </data>
+  <data name="AccountsPage_DeleteExpiredAccountsDialogTitle" xml:space="preserve">
+    <value>Clean Expired Accounts</value>
+  </data>
+  <data name="AccountsPage_DeleteExpiredAccountsDialogMessage" xml:space="preserve">
+    <value>Delete token-expired accounts from the account list?</value>
+  </data>
+  <data name="AccountsPage_DeleteExpiredAccountsNoAccountsMessage" xml:space="preserve">
+    <value>There are no expired accounts to delete.</value>
+  </data>
+  <data name="AccountsPage_DeleteExpiredAccountsDeletedMessageFormat" xml:space="preserve">
+    <value>Deleted {0} accounts.</value>
+  </data>
+  <data name="AccountsPage_RenameAccountDialogTitle" xml:space="preserve">
+    <value>Rename Account</value>
+  </data>
+  <data name="AccountsPage_RenameAccountPlaceholderText" xml:space="preserve">
+    <value>New name</value>
+  </data>
+  <data name="AccountsPage_RefreshAccountLoadingMessage" xml:space="preserve">
+    <value>Refreshing account usage.</value>
+  </data>
+  <data name="AccountsPage_DeleteAccountDialogTitle" xml:space="preserve">
+    <value>Delete Account</value>
+  </data>
+  <data name="AccountsPage_DeleteAccountDialogMessage" xml:space="preserve">
+    <value>Delete this account?</value>
+  </data>
+  <data name="AccountsPage_ZipBackupFileTypeChoice" xml:space="preserve">
+    <value>ZIP Backup</value>
+  </data>
+  <data name="AccountsPage_ImportBackupSuccessCountFormat" xml:space="preserve">
+    <value>{0} succeeded</value>
+  </data>
+  <data name="AccountsPage_ImportBackupFailureCountFormat" xml:space="preserve">
+    <value>{0} failed</value>
+  </data>
+  <data name="AccountsPage_ImportBackupDuplicateCountFormat" xml:space="preserve">
+    <value>{0} duplicates</value>
+  </data>
+  <data name="AccountsPage_ImportBackupEmptyResultMessage" xml:space="preserve">
+    <value>No accounts to import.</value>
+  </data>
+  <data name="OAuthAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>OAuth</value>
+  </data>
+  <data name="OAuthAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Complete Codex authentication in the browser, then the account will be added after usage validation.</value>
+  </data>
+  <data name="OAuthAddAccountPage_OpenBrowserTextBlock.Text" xml:space="preserve">
+    <value>Start Authentication in Browser</value>
+  </data>
+  <data name="OAuthAddAccountPage_WaitingTextBlock.Text" xml:space="preserve">
+    <value>Waiting for the authentication callback.</value>
+  </data>
+  <data name="OAuthAddAccountPage_ManualAddressDescriptionTextBlock.Text" xml:space="preserve">
+    <value>The browser could not be opened automatically. Copy the address below, paste it into a browser, and continue authentication.</value>
+  </data>
+  <data name="OAuthAddAccountPage_CopyAddressToolTip.Content" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="OAuthAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>An error occurred during OAuth authentication or account validation.</value>
+  </data>
+  <data name="OAuthAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>Failed to Add Account</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Import Signed-in Account</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Read the currently signed-in Codex .codex/auth.json and validate the account with a usage request.</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ImportButtonTextBlock.Text" xml:space="preserve">
+    <value>Import Signed-in Account</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_FilePathHeaderTextBlock.Text" xml:space="preserve">
+    <value>File to Read</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>An error occurred while importing the signed-in account.</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>Failed to Add Account</value>
+  </data>
+  <data name="FileAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Load File</value>
+  </data>
+  <data name="FileAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Select an auth.json file saved on this PC and validate the account with a usage request.</value>
+  </data>
+  <data name="FileAddAccountPage_ImportButtonTextBlock.Text" xml:space="preserve">
+    <value>Select auth.json File</value>
+  </data>
+  <data name="FileAddAccountPage_SupportedFormatHeaderTextBlock.Text" xml:space="preserve">
+    <value>Supported Format</value>
+  </data>
+  <data name="FileAddAccountPage_SupportedFormatDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Select one .json file. It must use the Codex auth.json format.</value>
+  </data>
+  <data name="FileAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>An error occurred while importing the auth.json file.</value>
+  </data>
+  <data name="FileAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>Failed to Add Account</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Manual Paste</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Paste one or more auth.json documents and import them together.</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_AddInputTextBlock.Text" xml:space="preserve">
+    <value>Add Input</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_LoadInputsTextBlock.Text" xml:space="preserve">
+    <value>Import Pasted Accounts</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ManualAuthenticationTextBox.PlaceholderText" xml:space="preserve">
+    <value>Paste auth.json content</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_RemoveInputToolTip.Content" xml:space="preserve">
+    <value>Remove input</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_InputErrorInfoBar.Message" xml:space="preserve">
+    <value>This auth.json could not be imported.</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_InputErrorInfoBar.Title" xml:space="preserve">
+    <value>Validation Failed</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>Some auth.json documents could not be imported.</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>Failed to Add Account</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_NoInputMessage" xml:space="preserve">
+    <value>No auth.json content was pasted.</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_PartialFailureMessage" xml:space="preserve">
+    <value>Some auth.json documents could not be imported.</value>
+  </data>
 </root>

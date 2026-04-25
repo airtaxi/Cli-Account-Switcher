@@ -2,50 +2,41 @@
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.Storage;
-using Windows.Storage.Pickers;
-using Windows.UI.WebUI;
-using WinRT.Interop;
 
 namespace CodexAccountSwitch.WinUI.Helpers;
 
 public static class DialogHelper
 {
-    public static async Task<string> ShowInputDialogAsync(this UIElement element, string title = "입력", string placeholderText = "", bool showCancel = false, bool numberOnly = false, string defaultText = "")
+    public static async Task<string> ShowInputDialogAsync(this UIElement element, string title = null, string placeholderText = "", bool showCancel = false, bool numberOnly = false, string defaultText = "")
     {
         HideOpenContentDialogs(element);
 
         var dialog = new ContentDialog
         {
-            Title = title,
-            PrimaryButtonText = "확인",
+            Title = title ?? GetLocalizedString("DialogHelper_DefaultInputTitle"),
+            PrimaryButtonText = GetLocalizedString("DialogHelper_ConfirmButtonText"),
             DefaultButton = ContentDialogButton.Primary,
             XamlRoot = element.XamlRoot
         };
         var textBox = new TextBox();
-        if (numberOnly) textBox.BeforeTextChanging += (_, e) => e.Cancel = e.NewText.Any(c => !char.IsDigit(c));
+        if (numberOnly) textBox.BeforeTextChanging += (textBoxSender, textBoxBeforeTextChangingEventArguments) => textBoxBeforeTextChangingEventArguments.Cancel = textBoxBeforeTextChangingEventArguments.NewText.Any(character => !char.IsDigit(character));
         textBox.HorizontalAlignment = HorizontalAlignment.Stretch;
         textBox.PlaceholderText = placeholderText;
         if (!string.IsNullOrEmpty(defaultText)) textBox.Text = defaultText;
         dialog.Content = textBox;
-        if (showCancel) dialog.SecondaryButtonText = "취소";
+        if (showCancel) dialog.SecondaryButtonText = GetLocalizedString("DialogHelper_CancelButtonText");
         TaskCompletionSource<string> taskCompletionSource = new();
-        dialog.Closing += (_, args) =>
+        dialog.Closing += (contentDialogSender, contentDialogClosingEventArguments) =>
         {
-            if (args.Result == ContentDialogResult.Primary)
-                taskCompletionSource.SetResult(textBox.Text.Trim());
-            else
-                taskCompletionSource.SetResult(null);
+            taskCompletionSource.SetResult(contentDialogClosingEventArguments.Result == ContentDialogResult.Primary ? textBox.Text.Trim() : null);
         };
         await dialog.ShowAsync();
         return await taskCompletionSource.Task;
     }
 
-    public static ContentDialog GenerateMessageDialog(this UIElement element, string title, string description, string primaryButtonText = "확인", string secondaryButtonText = null)
+    public static ContentDialog GenerateMessageDialog(this UIElement element, string title, string description, string primaryButtonText = null, string secondaryButtonText = null)
     {
         HideOpenContentDialogs(element);
 
@@ -54,7 +45,7 @@ public static class DialogHelper
         {
             Title = title,
             Content = description,
-            PrimaryButtonText = primaryButtonText,
+            PrimaryButtonText = primaryButtonText ?? GetLocalizedString("DialogHelper_ConfirmButtonText"),
             XamlRoot = xamlRoot,
             DefaultButton = ContentDialogButton.Primary
         };
@@ -63,7 +54,7 @@ public static class DialogHelper
         return dialog;
     }
 
-    public static async Task<ContentDialogResult> ShowDialogAsync(this UIElement element, string title, string description, string primaryButtonText = "확인", string secondaryButtonText = null)
+    public static async Task<ContentDialogResult> ShowDialogAsync(this UIElement element, string title, string description, string primaryButtonText = null, string secondaryButtonText = null)
     {
         var dialog = GenerateMessageDialog(element, title, description, primaryButtonText, secondaryButtonText);
         return await dialog.ShowAsync();
@@ -71,10 +62,11 @@ public static class DialogHelper
 
     private static void HideOpenContentDialogs(UIElement element)
     {
-        var contentDialogs = VisualTreeHelper.GetOpenPopupsForXamlRoot(element.XamlRoot).Where(x => x.Child is ContentDialog).Select(x => x.Child as ContentDialog);
+        var contentDialogs = VisualTreeHelper.GetOpenPopupsForXamlRoot(element.XamlRoot).Where(popup => popup.Child is ContentDialog).Select(popup => popup.Child as ContentDialog);
         if (!contentDialogs.Any()) return;
 
-        foreach (var contentDialog in contentDialogs)
-            contentDialog.Hide();
+        foreach (var contentDialog in contentDialogs) contentDialog.Hide();
     }
+
+    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 }

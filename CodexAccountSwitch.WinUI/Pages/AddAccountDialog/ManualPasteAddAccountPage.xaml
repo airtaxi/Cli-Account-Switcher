@@ -19,12 +19,12 @@
 
         <StackPanel Grid.Row="0" Spacing="6">
             <TextBlock
+                x:Uid="ManualPasteAddAccountPage_TitleTextBlock"
                 FontSize="22"
-                FontWeight="SemiBold"
-                Text="수동 붙여넣기" />
+                FontWeight="SemiBold" />
             <TextBlock
+                x:Uid="ManualPasteAddAccountPage_DescriptionTextBlock"
                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                Text="auth.json 내용을 하나 이상 붙여넣고 한 번에 불러옵니다."
                 TextWrapping="Wrap" />
         </StackPanel>
 
@@ -32,12 +32,10 @@
             Grid.Row="1"
             Orientation="Horizontal"
             Spacing="8">
-            <Button
-                x:Name="AddManualAuthenticationTextBoxButton"
-                Click="OnAddManualAuthenticationTextBoxButtonClicked">
+            <Button x:Name="AddManualAuthenticationTextBoxButton" Click="OnAddManualAuthenticationTextBoxButtonClicked">
                 <StackPanel Orientation="Horizontal" Spacing="6">
                     <FontIcon FontSize="14" Glyph="&#xE710;" />
-                    <TextBlock Text="입력 칸 추가" />
+                    <TextBlock x:Uid="ManualPasteAddAccountPage_AddInputTextBlock" />
                 </StackPanel>
             </Button>
             <Button
@@ -46,7 +44,7 @@
                 Style="{StaticResource AccentButtonStyle}">
                 <StackPanel Orientation="Horizontal" Spacing="6">
                     <FontIcon FontSize="14" Glyph="&#xE8B5;" />
-                    <TextBlock Text="붙여넣은 계정 불러오기" />
+                    <TextBlock x:Uid="ManualPasteAddAccountPage_LoadInputsTextBlock" />
                 </StackPanel>
             </Button>
             <ProgressRing
@@ -75,12 +73,11 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <TextBox
-                                x:Name="ManualAuthenticationTextBox"
+                                x:Uid="ManualPasteAddAccountPage_ManualAuthenticationTextBox"
                                 Grid.Column="0"
                                 Height="128"
                                 AcceptsReturn="True"
                                 FontFamily="Consolas"
-                                PlaceholderText="auth.json 내용을 붙여넣으세요"
                                 Text="{x:Bind AuthenticationDocumentText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 TextWrapping="NoWrap" />
                             <Button
@@ -91,17 +88,16 @@
                                 Click="OnRemoveManualAuthenticationTextBoxButtonClicked"
                                 CommandParameter="{x:Bind}">
                                 <ToolTipService.ToolTip>
-                                    <ToolTip Content="입력 칸 삭제" />
+                                    <ToolTip x:Uid="ManualPasteAddAccountPage_RemoveInputToolTip" />
                                 </ToolTipService.ToolTip>
                                 <FontIcon FontSize="14" Glyph="&#xE711;" />
                             </Button>
                         </Grid>
                         <InfoBar
+                            x:Uid="ManualPasteAddAccountPage_InputErrorInfoBar"
                             Grid.Row="1"
                             IsOpen="{x:Bind HasError, Mode=OneWay}"
-                            Message="이 auth.json을 불러오지 못했습니다."
-                            Severity="Error"
-                            Title="검증 실패" />
+                            Severity="Error" />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
@@ -109,10 +105,9 @@
 
         <InfoBar
             x:Name="ManualErrorInfoBar"
+            x:Uid="ManualPasteAddAccountPage_ErrorInfoBar"
             Grid.Row="3"
             IsOpen="False"
-            Message="일부 auth.json을 불러오는 데 실패했습니다."
-            Severity="Error"
-            Title="계정 추가 실패" />
+            Severity="Error" />
     </Grid>
 </Page>

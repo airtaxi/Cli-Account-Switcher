@@ -62,7 +62,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     public bool HasSelectedAccounts => SelectedAccountIdentifiers.Count > 0;
 
-    public string SelectedAccountCountText => SelectedAccountIdentifiers.Count == 0 ? "선택 없음" : $"{SelectedAccountIdentifiers.Count}개 선택됨";
+    public string SelectedAccountCountText => SelectedAccountIdentifiers.Count == 0 ? GetLocalizedString("AccountsPageViewModel_NoSelectedAccounts") : GetFormattedString("AccountsPageViewModel_SelectedAccountCountFormat", SelectedAccountIdentifiers.Count);
 
     public void ReloadAccounts()
     {
@@ -140,4 +140,8 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     partial void OnSearchTextChanged(string value) => ApplyFilter();
 
     partial void OnSelectedPlanFilterChanged(string value) => ApplyFilter();
+
+    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
+
+    private static string GetFormattedString(string resourceName, params object[] arguments) => App.LocalizationService.GetFormattedString(resourceName, arguments);
 }

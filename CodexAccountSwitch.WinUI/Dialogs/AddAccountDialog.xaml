@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentDialog
     x:Class="CodexAccountSwitch.WinUI.Dialogs.AddAccountDialog"
+    x:Uid="AddAccountDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dev="using:DevWinUI"
     xmlns:local="using:CodexAccountSwitch.WinUI.Dialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="계정 추가"
-    CloseButtonText="취소"
     Closing="OnAddAccountDialogClosing"
     DefaultButton="Close"
     Style="{StaticResource DefaultContentDialogStyle}"
@@ -31,17 +30,17 @@
             SelectionChanged="OnAddAccountModeSelectorBarSelectionChanged">
             <SelectorBarItem
                 x:Name="OAuthSelectorBarItem"
-                Tag="OAuth"
-                Text="OAuth 인증" />
+                x:Uid="AddAccountDialog_OAuthSelectorBarItem"
+                Tag="OAuth" />
             <SelectorBarItem
-                Tag="ManualPaste"
-                Text="수동 붙여넣기" />
+                x:Uid="AddAccountDialog_ManualPasteSelectorBarItem"
+                Tag="ManualPaste" />
             <SelectorBarItem
-                Tag="CurrentAccount"
-                Text="로그인된 계정" />
+                x:Uid="AddAccountDialog_CurrentAccountSelectorBarItem"
+                Tag="CurrentAccount" />
             <SelectorBarItem
-                Tag="File"
-                Text="파일 불러오기" />
+                x:Uid="AddAccountDialog_FileSelectorBarItem"
+                Tag="File" />
         </dev:SelectorBarSegmented>
 
         <Frame

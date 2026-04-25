@@ -18,12 +18,12 @@
 
         <StackPanel Grid.Row="0" Spacing="6">
             <TextBlock
+                x:Uid="FileAddAccountPage_TitleTextBlock"
                 FontSize="22"
-                FontWeight="SemiBold"
-                Text="파일 불러오기" />
+                FontWeight="SemiBold" />
             <TextBlock
+                x:Uid="FileAddAccountPage_DescriptionTextBlock"
                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                Text="PC에 저장된 auth.json 파일을 선택하고 Usage 요청으로 계정을 검증합니다."
                 TextWrapping="Wrap" />
         </StackPanel>
 
@@ -37,7 +37,7 @@
                 Style="{StaticResource AccentButtonStyle}">
                 <StackPanel Orientation="Horizontal" Spacing="6">
                     <FontIcon FontSize="14" Glyph="&#xE8E5;" />
-                    <TextBlock Text="auth.json 파일 선택" />
+                    <TextBlock x:Uid="FileAddAccountPage_ImportButtonTextBlock" />
                 </StackPanel>
             </Button>
             <ProgressRing
@@ -56,22 +56,19 @@
             BorderThickness="1"
             CornerRadius="8">
             <StackPanel Spacing="6">
+                <TextBlock x:Uid="FileAddAccountPage_SupportedFormatHeaderTextBlock" FontWeight="SemiBold" />
                 <TextBlock
-                    FontWeight="SemiBold"
-                    Text="지원 형식" />
-                <TextBlock
+                    x:Uid="FileAddAccountPage_SupportedFormatDescriptionTextBlock"
                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                    Text=".json 파일 하나를 선택합니다. Codex auth.json 형식이어야 합니다."
                     TextWrapping="Wrap" />
             </StackPanel>
         </Border>
 
         <InfoBar
             x:Name="FileErrorInfoBar"
+            x:Uid="FileAddAccountPage_ErrorInfoBar"
             Grid.Row="3"
             IsOpen="False"
-            Message="auth.json 파일을 불러오는 중 오류가 발생했습니다."
-            Severity="Error"
-            Title="계정 추가 실패" />
+            Severity="Error" />
     </Grid>
 </Page>

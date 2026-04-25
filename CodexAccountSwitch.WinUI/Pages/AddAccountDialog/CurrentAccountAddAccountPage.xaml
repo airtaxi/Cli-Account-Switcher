@@ -18,12 +18,12 @@
 
         <StackPanel Grid.Row="0" Spacing="6">
             <TextBlock
+                x:Uid="CurrentAccountAddAccountPage_TitleTextBlock"
                 FontSize="22"
-                FontWeight="SemiBold"
-                Text="로그인된 계정 불러오기" />
+                FontWeight="SemiBold" />
             <TextBlock
+                x:Uid="CurrentAccountAddAccountPage_DescriptionTextBlock"
                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                Text="현재 Codex에 로그인된 .codex/auth.json을 읽고 Usage 요청으로 계정을 검증합니다."
                 TextWrapping="Wrap" />
         </StackPanel>
 
@@ -37,7 +37,7 @@
                 Style="{StaticResource AccentButtonStyle}">
                 <StackPanel Orientation="Horizontal" Spacing="6">
                     <FontIcon FontSize="14" Glyph="&#xE8B5;" />
-                    <TextBlock Text="로그인된 계정 가져오기" />
+                    <TextBlock x:Uid="CurrentAccountAddAccountPage_ImportButtonTextBlock" />
                 </StackPanel>
             </Button>
             <ProgressRing
@@ -56,9 +56,7 @@
             BorderThickness="1"
             CornerRadius="8">
             <StackPanel Spacing="6">
-                <TextBlock
-                    FontWeight="SemiBold"
-                    Text="읽을 파일" />
+                <TextBlock x:Uid="CurrentAccountAddAccountPage_FilePathHeaderTextBlock" FontWeight="SemiBold" />
                 <TextBlock
                     FontFamily="Consolas"
                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
@@ -69,10 +67,9 @@
 
         <InfoBar
             x:Name="CurrentAccountErrorInfoBar"
+            x:Uid="CurrentAccountAddAccountPage_ErrorInfoBar"
             Grid.Row="3"
             IsOpen="False"
-            Message="로그인된 계정을 불러오는 중 오류가 발생했습니다."
-            Severity="Error"
-            Title="계정 추가 실패" />
+            Severity="Error" />
     </Grid>
 </Page>

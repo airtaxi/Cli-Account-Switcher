@@ -22,7 +22,7 @@ public sealed partial class AccountsPage : Page
         InitializeComponent();
     }
 
-    private async void OnRefreshAllAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments) => await RunWithLoadingAsync("전체 계정 사용량을 새로고침하는 중입니다.", async () => await App.CodexAccountService.RefreshAllAccountsAsync());
+    private async void OnRefreshAllAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments) => await RunWithLoadingAsync(GetLocalizedString("AccountsPage_RefreshAllAccountsLoadingMessage"), async () => await App.CodexAccountService.RefreshAllAccountsAsync());
 
     private async void OnAddAccountButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
@@ -38,7 +38,7 @@ public sealed partial class AccountsPage : Page
     {
         var selectedAccountIdentifiers = ViewModel.SelectedAccountIdentifiers;
         if (selectedAccountIdentifiers.Count == 0) return;
-        await RunWithLoadingAsync("선택한 계정 사용량을 새로고침하는 중입니다.", async () => await App.CodexAccountService.RefreshAccountsAsync(selectedAccountIdentifiers));
+        await RunWithLoadingAsync(GetLocalizedString("AccountsPage_RefreshSelectedAccountsLoadingMessage"), async () => await App.CodexAccountService.RefreshAccountsAsync(selectedAccountIdentifiers));
     }
 
     private async void OnDeleteSelectedAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
@@ -46,7 +46,7 @@ public sealed partial class AccountsPage : Page
         var selectedAccountIdentifiers = ViewModel.SelectedAccountIdentifiers;
         if (selectedAccountIdentifiers.Count == 0) return;
 
-        var contentDialogResult = await this.ShowDialogAsync("선택 계정 삭제", $"{selectedAccountIdentifiers.Count}개 계정을 삭제할까요?", "삭제", "취소");
+        var contentDialogResult = await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteSelectedAccountsDialogTitle"), GetFormattedString("AccountsPage_DeleteSelectedAccountsDialogMessage", selectedAccountIdentifiers.Count), GetLocalizedString("AccountsPage_DeleteButtonText"), GetLocalizedString("DialogHelper_CancelButtonText"));
         if (contentDialogResult != ContentDialogResult.Primary) return;
 
         await App.CodexAccountService.DeleteAccountsAsync(selectedAccountIdentifiers);
@@ -60,7 +60,7 @@ public sealed partial class AccountsPage : Page
         if (storageFile is null) return;
 
         await App.CodexAccountService.ExportBackupAsync(storageFile.Path);
-        await this.ShowDialogAsync("백업 내보내기", "계정 백업을 저장했습니다.");
+        await this.ShowDialogAsync(GetLocalizedString("AccountsPage_ExportBackupDialogTitle"), GetLocalizedString("AccountsPage_ExportBackupDialogMessage"));
     }
 
     private async void OnImportBackupButtonClicked(object sender, RoutedEventArgs routedEventArguments)
@@ -69,7 +69,7 @@ public sealed partial class AccountsPage : Page
         var storageFile = await fileOpenPicker.PickSingleFileAsync();
         if (storageFile is null) return;
 
-        MainWindow.ShowLoading("백업 파일의 계정을 검증하는 중입니다.");
+        MainWindow.ShowLoading(GetLocalizedString("AccountsPage_ImportBackupLoadingMessage"));
         var codexAccountBackupImportResult = default(CodexAccountBackupImportResult);
         try
         {
@@ -82,17 +82,17 @@ public sealed partial class AccountsPage : Page
             MainWindow.HideLoading();
         }
 
-        await this.ShowDialogAsync("백업 불러오기", BuildBackupImportResultText(codexAccountBackupImportResult.SuccessCount, codexAccountBackupImportResult.FailureCount, codexAccountBackupImportResult.DuplicateCount));
+        await this.ShowDialogAsync(GetLocalizedString("AccountsPage_ImportBackupDialogTitle"), BuildBackupImportResultText(codexAccountBackupImportResult.SuccessCount, codexAccountBackupImportResult.FailureCount, codexAccountBackupImportResult.DuplicateCount));
     }
 
     private async void OnDeleteExpiredAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
-        var contentDialogResult = await this.ShowDialogAsync("만료 계정 정리", "토큰이 만료된 계정을 계정 목록에서 삭제할까요?", "삭제", "취소");
+        var contentDialogResult = await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogMessage"), GetLocalizedString("AccountsPage_DeleteButtonText"), GetLocalizedString("DialogHelper_CancelButtonText"));
         if (contentDialogResult != ContentDialogResult.Primary) return;
 
         var deletedCount = await App.CodexAccountService.DeleteExpiredAccountsAsync();
         ViewModel.ReloadAccounts();
-        await this.ShowDialogAsync("만료 계정 정리", deletedCount == 0 ? "삭제할 만료 계정이 없습니다." : $"{deletedCount}개 계정을 삭제했습니다.");
+        await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), deletedCount == 0 ? GetLocalizedString("AccountsPage_DeleteExpiredAccountsNoAccountsMessage") : GetFormattedString("AccountsPage_DeleteExpiredAccountsDeletedMessageFormat", deletedCount));
     }
 
     private async void OnSwitchAccountButtonClicked(object sender, RoutedEventArgs routedEventArguments)
@@ -109,7 +109,7 @@ public sealed partial class AccountsPage : Page
         var accountIdentifier = ReadCommandParameter(sender);
         if (string.IsNullOrWhiteSpace(accountIdentifier)) return;
 
-        var customAlias = await this.ShowInputDialogAsync("계정 이름 변경", "새 이름", true);
+        var customAlias = await this.ShowInputDialogAsync(GetLocalizedString("AccountsPage_RenameAccountDialogTitle"), GetLocalizedString("AccountsPage_RenameAccountPlaceholderText"), true);
         if (string.IsNullOrWhiteSpace(customAlias)) return;
 
         await App.CodexAccountService.RenameAccountAsync(accountIdentifier, customAlias);
@@ -121,7 +121,7 @@ public sealed partial class AccountsPage : Page
         var accountIdentifier = ReadCommandParameter(sender);
         if (string.IsNullOrWhiteSpace(accountIdentifier)) return;
 
-        await RunWithLoadingAsync("계정 사용량을 새로고침하는 중입니다.", async () => await App.CodexAccountService.RefreshAccountsAsync([accountIdentifier]));
+        await RunWithLoadingAsync(GetLocalizedString("AccountsPage_RefreshAccountLoadingMessage"), async () => await App.CodexAccountService.RefreshAccountsAsync([accountIdentifier]));
     }
 
     private async void OnDeleteAccountButtonClicked(object sender, RoutedEventArgs routedEventArguments)
@@ -129,7 +129,7 @@ public sealed partial class AccountsPage : Page
         var accountIdentifier = ReadCommandParameter(sender);
         if (string.IsNullOrWhiteSpace(accountIdentifier)) return;
 
-        var contentDialogResult = await this.ShowDialogAsync("계정 삭제", "이 계정을 삭제할까요?", "삭제", "취소");
+        var contentDialogResult = await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteAccountDialogTitle"), GetLocalizedString("AccountsPage_DeleteAccountDialogMessage"), GetLocalizedString("AccountsPage_DeleteButtonText"), GetLocalizedString("DialogHelper_CancelButtonText"));
         if (contentDialogResult != ContentDialogResult.Primary) return;
 
         await App.CodexAccountService.DeleteAccountsAsync([accountIdentifier]);
@@ -180,7 +180,7 @@ public sealed partial class AccountsPage : Page
             SuggestedFileName = $"codex-accounts-{DateTimeOffset.Now.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture)}"
         };
         InitializeWithWindow.Initialize(fileSavePicker, WindowNative.GetWindowHandle(MainWindow.Instance));
-        fileSavePicker.FileTypeChoices.Add("ZIP 백업", [".zip"]);
+        fileSavePicker.FileTypeChoices.Add(GetLocalizedString("AccountsPage_ZipBackupFileTypeChoice"), [".zip"]);
         return fileSavePicker;
     }
 
@@ -190,11 +190,15 @@ public sealed partial class AccountsPage : Page
     {
         var resultLines = new[]
         {
-            successCount > 0 ? $"{successCount}개 성공" : "",
-            failureCount > 0 ? $"{failureCount}개 실패" : "",
-            duplicateCount > 0 ? $"{duplicateCount}개 중복" : ""
+            successCount > 0 ? GetFormattedString("AccountsPage_ImportBackupSuccessCountFormat", successCount) : "",
+            failureCount > 0 ? GetFormattedString("AccountsPage_ImportBackupFailureCountFormat", failureCount) : "",
+            duplicateCount > 0 ? GetFormattedString("AccountsPage_ImportBackupDuplicateCountFormat", duplicateCount) : ""
         }.Where(resultLine => !string.IsNullOrWhiteSpace(resultLine)).ToArray();
 
-        return resultLines.Length == 0 ? "불러올 계정이 없습니다." : string.Join(Environment.NewLine, resultLines);
+        return resultLines.Length == 0 ? GetLocalizedString("AccountsPage_ImportBackupEmptyResultMessage") : string.Join(Environment.NewLine, resultLines);
     }
+
+    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
+
+    private static string GetFormattedString(string resourceName, params object[] arguments) => App.LocalizationService.GetFormattedString(resourceName, arguments);
 }

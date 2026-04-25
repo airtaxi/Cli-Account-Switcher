@@ -73,7 +73,7 @@ public sealed partial class ManualPasteAddAccountPage : Page
                 return;
             }
 
-            ManualErrorInfoBar.Message = successCount == 0 && failureCount == 0 ? "붙여넣은 auth.json이 없습니다." : "일부 auth.json을 불러오는 데 실패했습니다.";
+            ManualErrorInfoBar.Message = successCount == 0 && failureCount == 0 ? GetLocalizedString("ManualPasteAddAccountPage_NoInputMessage") : GetLocalizedString("ManualPasteAddAccountPage_PartialFailureMessage");
             ManualErrorInfoBar.IsOpen = true;
         }
         finally
@@ -83,4 +83,6 @@ public sealed partial class ManualPasteAddAccountPage : Page
             ManualValidationProgressRing.Visibility = Visibility.Collapsed;
         }
     }
+
+    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 }
