@@ -35,6 +35,9 @@ public sealed partial class CodexAccountViewModel(CodexAccount codexAccount, App
     [NotifyPropertyChangedFor(nameof(SearchText))]
     public partial CodexAccount CodexAccount { get; set; } = codexAccount;
 
+    [ObservableProperty]
+    public partial bool IsSelected { get; set; }
+
     public string AccountIdentifier => CodexAccount.AccountIdentifier;
 
     public string DisplayName => CodexAccount.DisplayName;

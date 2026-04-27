@@ -15,6 +15,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     private readonly ApplicationSettings _applicationSettings;
     private readonly DispatcherQueue _dispatcherQueue;
     private readonly HashSet<string> _selectedAccountIdentifiers = new(StringComparer.Ordinal);
+    private bool _isSynchronizingAccountSelection;
     private bool _disposed;
 
     public AccountsPageViewModel(CodexAccountService codexAccountService, ApplicationSettings applicationSettings, DispatcherQueue dispatcherQueue)
@@ -53,6 +54,9 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     [NotifyPropertyChangedFor(nameof(SelectedAccountCountText))]
     public partial IReadOnlyList<string> SelectedAccountIdentifiers { get; set; } = [];
 
+    [ObservableProperty]
+    public partial bool? FilteredAccountsSelectionState { get; set; } = false;
+
     public bool HasAccounts => AccountCount > 0;
 
     public bool HasNoAccounts => AccountCount == 0;
@@ -76,7 +80,32 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     {
         _selectedAccountIdentifiers.Clear();
         foreach (var accountIdentifier in accountIdentifiers.Where(accountIdentifier => !string.IsNullOrWhiteSpace(accountIdentifier))) _selectedAccountIdentifiers.Add(accountIdentifier);
+        _isSynchronizingAccountSelection = true;
+        try
+        {
+            foreach (var accountViewModel in Accounts) accountViewModel.IsSelected = _selectedAccountIdentifiers.Contains(accountViewModel.AccountIdentifier);
+        }
+        finally
+        {
+            _isSynchronizingAccountSelection = false;
+        }
         SelectedAccountIdentifiers = [.. _selectedAccountIdentifiers];
+        RefreshFilteredAccountsSelectionState();
+    }
+
+    public void SetFilteredAccountsSelection(bool isSelected)
+    {
+        _isSynchronizingAccountSelection = true;
+        try
+        {
+            foreach (var accountViewModel in FilteredAccounts) accountViewModel.IsSelected = isSelected;
+        }
+        finally
+        {
+            _isSynchronizingAccountSelection = false;
+        }
+
+        RefreshSelectedAccountIdentifiersFromAccountViewModels();
     }
 
     public void Dispose()
@@ -84,6 +113,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         if (_disposed) return;
         _disposed = true;
         _applicationSettings.PropertyChanged -= OnApplicationSettingsPropertyChanged;
+        foreach (var accountViewModel in Accounts) accountViewModel.PropertyChanged -= OnAccountViewModelPropertyChanged;
         WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CodexAccount>>(this);
     }
 
@@ -100,15 +130,23 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         else _dispatcherQueue.TryEnqueue(() => ApplyAccountChange(valueChangedMessage.Value));
     }
 
+    private void OnAccountViewModelPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArguments)
+    {
+        if (propertyChangedEventArguments.PropertyName != nameof(CodexAccountViewModel.IsSelected)) return;
+        if (_isSynchronizingAccountSelection) return;
+        RefreshSelectedAccountIdentifiersFromAccountViewModels();
+    }
+
     private void ApplyAccountChange(CodexAccount codexAccount)
     {
         var existingAccountViewModel = Accounts.FirstOrDefault(accountViewModel => string.Equals(accountViewModel.AccountIdentifier, codexAccount.AccountIdentifier, StringComparison.Ordinal));
-        if (existingAccountViewModel is null) Accounts.Add(new CodexAccountViewModel(codexAccount, _applicationSettings));
+        if (existingAccountViewModel is null) Accounts.Add(CreateAccountViewModel(codexAccount));
         else existingAccountViewModel.Update(codexAccount);
 
         SortAccounts();
         ApplyFilter();
         RefreshAccountStateProperties();
+        RefreshSelectedAccountIdentifiersFromAccountViewModels();
     }
 
     private void SynchronizeAccounts(IReadOnlyList<CodexAccount> codexAccounts)
@@ -116,17 +154,32 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         var accountIdentifiers = codexAccounts.Select(codexAccount => codexAccount.AccountIdentifier).ToHashSet(StringComparer.Ordinal);
         for (var accountIndex = Accounts.Count - 1; accountIndex >= 0; accountIndex--)
         {
-            if (!accountIdentifiers.Contains(Accounts[accountIndex].AccountIdentifier)) Accounts.RemoveAt(accountIndex);
+            var accountViewModel = Accounts[accountIndex];
+            if (accountIdentifiers.Contains(accountViewModel.AccountIdentifier)) continue;
+            accountViewModel.PropertyChanged -= OnAccountViewModelPropertyChanged;
+            _selectedAccountIdentifiers.Remove(accountViewModel.AccountIdentifier);
+            Accounts.RemoveAt(accountIndex);
         }
 
         foreach (var codexAccount in codexAccounts)
         {
             var existingAccountViewModel = Accounts.FirstOrDefault(accountViewModel => string.Equals(accountViewModel.AccountIdentifier, codexAccount.AccountIdentifier, StringComparison.Ordinal));
-            if (existingAccountViewModel is null) Accounts.Add(new CodexAccountViewModel(codexAccount, _applicationSettings));
+            if (existingAccountViewModel is null) Accounts.Add(CreateAccountViewModel(codexAccount));
             else existingAccountViewModel.Update(codexAccount);
         }
 
         SortAccounts();
+        RefreshSelectedAccountIdentifiersFromAccountViewModels();
+    }
+
+    private CodexAccountViewModel CreateAccountViewModel(CodexAccount codexAccount)
+    {
+        var accountViewModel = new CodexAccountViewModel(codexAccount, _applicationSettings)
+        {
+            IsSelected = _selectedAccountIdentifiers.Contains(codexAccount.AccountIdentifier)
+        };
+        accountViewModel.PropertyChanged += OnAccountViewModelPropertyChanged;
+        return accountViewModel;
     }
 
     private void SortAccounts()
@@ -160,6 +213,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
             else if (currentAccountIndex != accountIndex) FilteredAccounts.Move(currentAccountIndex, accountIndex);
         }
         RefreshAccountCounts();
+        RefreshFilteredAccountsSelectionState();
     }
 
     private static bool IsAccountVisible(CodexAccountViewModel accountViewModel, string normalizedSearchText, string normalizedSelectedPlanFilter)
@@ -171,6 +225,26 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     }
 
     private void RefreshAccountStateProperties() => RefreshAccountCounts();
+
+    private void RefreshSelectedAccountIdentifiersFromAccountViewModels()
+    {
+        _selectedAccountIdentifiers.Clear();
+        foreach (var accountViewModel in Accounts.Where(accountViewModel => accountViewModel.IsSelected)) _selectedAccountIdentifiers.Add(accountViewModel.AccountIdentifier);
+        SelectedAccountIdentifiers = [.. _selectedAccountIdentifiers];
+        RefreshFilteredAccountsSelectionState();
+    }
+
+    private void RefreshFilteredAccountsSelectionState()
+    {
+        if (FilteredAccounts.Count == 0)
+        {
+            FilteredAccountsSelectionState = false;
+            return;
+        }
+
+        var selectedFilteredAccountCount = FilteredAccounts.Count(accountViewModel => accountViewModel.IsSelected);
+        FilteredAccountsSelectionState = selectedFilteredAccountCount == 0 ? false : selectedFilteredAccountCount == FilteredAccounts.Count ? true : null;
+    }
 
     private void RefreshUsageWarningThresholdProperties()
     {
