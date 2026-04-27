@@ -153,6 +153,7 @@ public sealed class CodexAccountService : IDisposable
         if (string.IsNullOrWhiteSpace(activeAccountIdentifier)) return;
 
         await RefreshAccountsUsageAsync(account => string.Equals(account.AccountIdentifier, activeAccountIdentifier, StringComparison.Ordinal), cancellationToken);
+        ResetActiveUsageRefreshSchedule();
     }
 
     public async Task SwitchActiveAccountAsync(string accountIdentifier, CancellationToken cancellationToken = default)
@@ -507,6 +508,8 @@ public sealed class CodexAccountService : IDisposable
         SetNextActiveUsageRefreshTime(IsActiveUsageRefreshEnabled ? currentTime.Add(ActiveUsageRefreshInterval) : null);
         SetNextInactiveUsageRefreshTime(IsInactiveUsageRefreshEnabled ? currentTime.Add(InactiveUsageRefreshInterval) : null);
     }
+
+    private void ResetActiveUsageRefreshSchedule() => SetNextActiveUsageRefreshTime(IsActiveUsageRefreshEnabled ? DateTimeOffset.UtcNow.Add(ActiveUsageRefreshInterval) : null);
 
     private DateTimeOffset? GetNextUsageRefreshTime(bool isActiveAccountRefresh)
     {
