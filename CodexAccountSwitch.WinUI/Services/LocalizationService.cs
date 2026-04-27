@@ -9,7 +9,7 @@ namespace CodexAccountSwitch.WinUI.Services;
 
 public sealed class LocalizationService
 {
-    private static readonly List<string> s_supportedLanguageTags = ["en-US", "ko-KR"];
+    private static readonly List<string> s_supportedLanguageTags = ["en-US", "ko-KR", "ja-JP", "zh-Hans", "zh-Hant"];
     private ResourceLoader _resourceLoader;
 
     public event Action LanguageChanged;
@@ -60,9 +60,25 @@ public sealed class LocalizationService
 
     private static string ResolveSupportedLanguageTag(string languageTag)
     {
-        if (!string.IsNullOrWhiteSpace(languageTag) && s_supportedLanguageTags.Contains(languageTag)) return languageTag;
+        var normalizedLanguageTag = NormalizeSupportedLanguageTag(languageTag);
+        if (!string.IsNullOrWhiteSpace(normalizedLanguageTag)) return normalizedLanguageTag;
 
-        var installedUserInterfaceCultureName = CultureInfo.InstalledUICulture.Name;
-        return s_supportedLanguageTags.Contains(installedUserInterfaceCultureName) ? installedUserInterfaceCultureName : s_supportedLanguageTags[0];
+        normalizedLanguageTag = NormalizeSupportedLanguageTag(CultureInfo.InstalledUICulture.Name);
+        return string.IsNullOrWhiteSpace(normalizedLanguageTag) ? s_supportedLanguageTags[0] : normalizedLanguageTag;
+    }
+
+    private static string NormalizeSupportedLanguageTag(string languageTag)
+    {
+        if (string.IsNullOrWhiteSpace(languageTag)) return "";
+        if (s_supportedLanguageTags.Contains(languageTag)) return languageTag;
+
+        try
+        {
+            var cultureInfo = CultureInfo.GetCultureInfo(languageTag);
+            if (s_supportedLanguageTags.Contains(cultureInfo.Parent.Name)) return cultureInfo.Parent.Name;
+        }
+        catch (CultureNotFoundException) { }
+
+        return "";
     }
 }

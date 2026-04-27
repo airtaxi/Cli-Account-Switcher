@@ -705,6 +705,15 @@
   <data name="SettingsPage_EnglishLanguageComboBoxItem.Content" xml:space="preserve">
     <value>English</value>
   </data>
+  <data name="SettingsPage_JapaneseLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>Japanese</value>
+  </data>
+  <data name="SettingsPage_SimplifiedChineseLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>Simplified Chinese</value>
+  </data>
+  <data name="SettingsPage_TraditionalChineseLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>Traditional Chinese</value>
+  </data>
   <data name="SettingsPage_ThemeSettingsCard.Header" xml:space="preserve">
     <value>Theme</value>
   </data>

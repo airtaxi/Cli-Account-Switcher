@@ -280,6 +280,9 @@ public sealed partial class SettingsPage : Page
     {
         "ko-KR" => 1,
         "en-US" => 2,
+        "ja-JP" => 3,
+        "zh-Hans" => 4,
+        "zh-Hant" => 5,
         _ => 0
     };
 

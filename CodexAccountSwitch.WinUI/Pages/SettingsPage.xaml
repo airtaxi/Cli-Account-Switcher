@@ -33,6 +33,9 @@
                             <ComboBoxItem x:Uid="SettingsPage_SystemDefaultLanguageComboBoxItem" Tag="" />
                             <ComboBoxItem x:Uid="SettingsPage_KoreanLanguageComboBoxItem" Tag="ko-KR" />
                             <ComboBoxItem x:Uid="SettingsPage_EnglishLanguageComboBoxItem" Tag="en-US" />
+                            <ComboBoxItem x:Uid="SettingsPage_JapaneseLanguageComboBoxItem" Tag="ja-JP" />
+                            <ComboBoxItem x:Uid="SettingsPage_SimplifiedChineseLanguageComboBoxItem" Tag="zh-Hans" />
+                            <ComboBoxItem x:Uid="SettingsPage_TraditionalChineseLanguageComboBoxItem" Tag="zh-Hant" />
                         </ComboBox>
                     </dev:SettingsCard>
 

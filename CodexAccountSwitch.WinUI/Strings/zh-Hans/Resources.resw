@@ -118,136 +118,136 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AppDisplayName" xml:space="preserve">
-    <value>Codex 계정 전환기</value>
+    <value>Codex 账号切换器</value>
   </data>
   <data name="AppDescription" xml:space="preserve">
-    <value>로컬 Codex 계정 백업 및 전환 관리자</value>
+    <value>本地 Codex 账号备份和切换管理器</value>
   </data>
   <data name="MainWindow_AppTitleBar.Title" xml:space="preserve">
-    <value>Codex 계정 전환기</value>
+    <value>Codex 账号切换器</value>
   </data>
   <data name="MainWindow_TrayAuthorMenuFlyoutItem.Text" xml:space="preserve">
-    <value>제작자: 이호원 (airtaxi)</value>
+    <value>作者：Howon Lee (airtaxi)</value>
   </data>
   <data name="MainWindow_OpenDashboardPageMenuFlyoutItem.Text" xml:space="preserve">
-    <value>대시보드 열기</value>
+    <value>打开仪表板</value>
   </data>
   <data name="MainWindow_OpenAccountsPageMenuFlyoutItem.Text" xml:space="preserve">
-    <value>계정 페이지 열기</value>
+    <value>打开账号页面</value>
   </data>
   <data name="MainWindow_CloseProgramMenuFlyoutItem.Text" xml:space="preserve">
-    <value>프로그램 종료</value>
+    <value>退出</value>
   </data>
   <data name="MainPage_DashboardSelectorBarItem.Text" xml:space="preserve">
-    <value>대시보드</value>
+    <value>仪表板</value>
   </data>
   <data name="MainPage_AccountsSelectorBarItem.Text" xml:space="preserve">
-    <value>계정</value>
+    <value>账号</value>
   </data>
   <data name="MainPage_AboutSelectorBarItem.Text" xml:space="preserve">
-    <value>정보</value>
+    <value>关于</value>
   </data>
   <data name="MainPage_SettingsSelectorBarItem.Text" xml:space="preserve">
-    <value>설정</value>
+    <value>设置</value>
   </data>
   <data name="DialogHelper_DefaultInputTitle" xml:space="preserve">
-    <value>입력</value>
+    <value>输入</value>
   </data>
   <data name="DialogHelper_ConfirmButtonText" xml:space="preserve">
-    <value>확인</value>
+    <value>确定</value>
   </data>
   <data name="DialogHelper_CancelButtonText" xml:space="preserve">
-    <value>취소</value>
+    <value>取消</value>
   </data>
   <data name="AddAccountDialog.Title" xml:space="preserve">
-    <value>계정 추가</value>
+    <value>添加账号</value>
   </data>
   <data name="AddAccountDialog.CloseButtonText" xml:space="preserve">
-    <value>취소</value>
+    <value>取消</value>
   </data>
   <data name="AddAccountDialog_OAuthSelectorBarItem.Text" xml:space="preserve">
-    <value>OAuth 인증</value>
+    <value>OAuth</value>
   </data>
   <data name="AddAccountDialog_ManualPasteSelectorBarItem.Text" xml:space="preserve">
-    <value>수동 붙여넣기</value>
+    <value>手动粘贴</value>
   </data>
   <data name="AddAccountDialog_CurrentAccountSelectorBarItem.Text" xml:space="preserve">
-    <value>로그인된 계정</value>
+    <value>已登录账号</value>
   </data>
   <data name="AddAccountDialog_FileSelectorBarItem.Text" xml:space="preserve">
-    <value>파일 불러오기</value>
+    <value>加载文件</value>
   </data>
   <data name="CodexAccountViewModel_UnknownPlan" xml:space="preserve">
-    <value>알 수 없음</value>
+    <value>未知</value>
   </data>
   <data name="CodexAccountViewModel_TokenExpiredStatus" xml:space="preserve">
-    <value>토큰 만료</value>
+    <value>令牌已过期</value>
   </data>
   <data name="CodexAccountViewModel_ActiveStatus" xml:space="preserve">
-    <value>활성</value>
+    <value>活跃</value>
   </data>
   <data name="CodexAccountViewModel_WaitingStatus" xml:space="preserve">
-    <value>대기</value>
+    <value>等待中</value>
   </data>
   <data name="CodexAccountViewModel_NotRefreshed" xml:space="preserve">
-    <value>아직 갱신되지 않음</value>
+    <value>尚未刷新</value>
   </data>
   <data name="CodexAccountViewModel_LastUsageRefreshFormat" xml:space="preserve">
-    <value>마지막 갱신: {0}</value>
+    <value>上次刷新：{0}</value>
   </data>
   <data name="CodexAccountViewModel_NoAccessToken" xml:space="preserve">
-    <value>없음</value>
+    <value>无</value>
   </data>
   <data name="CodexAccountViewModel_UnknownUsage" xml:space="preserve">
-    <value>사용량 알 수 없음</value>
+    <value>无法获取用量</value>
   </data>
   <data name="CodexAccountViewModel_UnknownResetTime" xml:space="preserve">
-    <value>재설정 시간 알 수 없음</value>
+    <value>无法获取重置时间</value>
   </data>
   <data name="CodexAccountViewModel_PrimaryUsageWindowLabel" xml:space="preserve">
-    <value>5시간 한도</value>
+    <value>5 小时限制</value>
   </data>
   <data name="CodexAccountViewModel_SecondaryUsageWindowLabel" xml:space="preserve">
-    <value>7일 한도</value>
+    <value>7 天限制</value>
   </data>
   <data name="CodexAccountViewModel_ResetAfterFormat" xml:space="preserve">
-    <value>{0:hh\:mm\:ss} 후 재설정</value>
+    <value>将在 {0:hh\:mm\:ss} 后重置</value>
   </data>
   <data name="CodexAccountViewModel_ResetAfterWithSingleDayFormat" xml:space="preserve">
-    <value>1일 {0:hh\:mm\:ss} 후 재설정</value>
+    <value>将在 1 天 {0:hh\:mm\:ss} 后重置</value>
   </data>
   <data name="CodexAccountViewModel_ResetAfterWithMultipleDaysFormat" xml:space="preserve">
-    <value>{0}일 {1:hh\:mm\:ss} 후 재설정</value>
+    <value>将在 {0} 天 {1:hh\:mm\:ss} 后重置</value>
   </data>
   <data name="CodexAccountViewModel_UsageRemainingOnlyFormat" xml:space="preserve">
-    <value>{0}% 남음</value>
+    <value>剩余 {0}%</value>
   </data>
   <data name="CodexAccountViewModel_UsageRemainingFormat" xml:space="preserve">
-    <value>{0}% 남음 · {1}</value>
+    <value>剩余 {0}% · {1}</value>
   </data>
   <data name="AccountsPageViewModel_NoSelectedAccounts" xml:space="preserve">
-    <value>선택 없음</value>
+    <value>未选择</value>
   </data>
   <data name="AccountsPageViewModel_SelectedAccountCountFormat" xml:space="preserve">
-    <value>{0}개 선택됨</value>
+    <value>已选择 {0} 项</value>
   </data>
   <data name="AccountsPage_TitleTextBlock.Text" xml:space="preserve">
-    <value>계정 관리</value>
+    <value>账号管理</value>
   </data>
   <data name="AccountsPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>Codex auth.json 계정을 저장하고 사용량과 활성 상태를 관리합니다.</value>
+    <value>保存 Codex auth.json 账号，并管理用量和活跃状态。</value>
   </data>
   <data name="AccountsPage_RefreshAllAccountsTextBlock.Text" xml:space="preserve">
-    <value>새로고침</value>
+    <value>刷新</value>
   </data>
   <data name="AccountsPage_AddAccountTextBlock.Text" xml:space="preserve">
-    <value>계정 추가</value>
+    <value>添加账号</value>
   </data>
   <data name="AccountsPage_AccountSearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
-    <value>계정 이름, 이메일, 플랜 검색</value>
+    <value>搜索账号名称、邮箱或方案</value>
   </data>
   <data name="AccountsPage_AllPlanFilterSelectorBarItem.Text" xml:space="preserve">
-    <value>전체</value>
+    <value>全部</value>
   </data>
   <data name="AccountsPage_FreePlanFilterSelectorBarItem.Text" xml:space="preserve">
     <value>Free</value>
@@ -265,674 +265,674 @@
     <value>Pro</value>
   </data>
   <data name="AccountsPage_RefreshSelectedAccountsTextBlock.Text" xml:space="preserve">
-    <value>선택 새로고침</value>
+    <value>刷新所选</value>
   </data>
   <data name="AccountsPage_DeleteSelectedAccountsTextBlock.Text" xml:space="preserve">
-    <value>선택 삭제</value>
+    <value>删除所选</value>
   </data>
   <data name="AccountsPage_ExportBackupTextBlock.Text" xml:space="preserve">
-    <value>백업 내보내기</value>
+    <value>导出备份</value>
   </data>
   <data name="AccountsPage_ImportBackupTextBlock.Text" xml:space="preserve">
-    <value>백업 불러오기</value>
+    <value>导入备份</value>
   </data>
   <data name="AccountsPage_DeleteExpiredAccountsTextBlock.Text" xml:space="preserve">
-    <value>만료 계정 정리</value>
+    <value>清理过期账号</value>
   </data>
   <data name="AccountsPage_AccountHeaderTextBlock.Text" xml:space="preserve">
-    <value>계정</value>
+    <value>账号</value>
   </data>
   <data name="AccountsPage_PlanHeaderTextBlock.Text" xml:space="preserve">
-    <value>플랜</value>
+    <value>方案</value>
   </data>
   <data name="AccountsPage_UsageHeaderTextBlock.Text" xml:space="preserve">
-    <value>사용량</value>
+    <value>用量</value>
   </data>
   <data name="AccountsPage_StatusHeaderTextBlock.Text" xml:space="preserve">
-    <value>상태</value>
+    <value>状态</value>
   </data>
   <data name="AccountsPage_ActionsHeaderTextBlock.Text" xml:space="preserve">
-    <value>작업</value>
+    <value>操作</value>
   </data>
   <data name="AccountsPage_SwitchAccountToolTip.Content" xml:space="preserve">
-    <value>전환</value>
+    <value>切换</value>
   </data>
   <data name="AccountsPage_RenameAccountToolTip.Content" xml:space="preserve">
-    <value>이름 변경</value>
+    <value>重命名</value>
   </data>
   <data name="AccountsPage_RefreshAccountToolTip.Content" xml:space="preserve">
-    <value>새로고침</value>
+    <value>刷新</value>
   </data>
   <data name="AccountsPage_DeleteAccountToolTip.Content" xml:space="preserve">
-    <value>삭제</value>
+    <value>删除</value>
   </data>
   <data name="AccountsPage_NoAccountsTitleTextBlock.Text" xml:space="preserve">
-    <value>등록된 계정이 없습니다.</value>
+    <value>尚未注册账号。</value>
   </data>
   <data name="AccountsPage_NoAccountsDescriptionTextBlock.Text" xml:space="preserve">
-    <value>계정 추가 버튼으로 auth.json을 가져오세요.</value>
+    <value>使用“添加账号”导入 auth.json。</value>
   </data>
   <data name="AccountsPage_NoFilteredAccountsTitleTextBlock.Text" xml:space="preserve">
-    <value>조건에 맞는 계정이 없습니다.</value>
+    <value>没有符合筛选条件的账号。</value>
   </data>
   <data name="AccountsPage_NoFilteredAccountsDescriptionTextBlock.Text" xml:space="preserve">
-    <value>검색어나 플랜 필터를 조정하세요.</value>
+    <value>请调整搜索文本或方案筛选。</value>
   </data>
   <data name="AccountsPage_RefreshAllAccountsLoadingMessage" xml:space="preserve">
-    <value>전체 계정 사용량을 새로고침하는 중입니다.</value>
+    <value>正在刷新所有账号的用量。</value>
   </data>
   <data name="AccountsPage_RefreshSelectedAccountsLoadingMessage" xml:space="preserve">
-    <value>선택한 계정 사용량을 새로고침하는 중입니다.</value>
+    <value>正在刷新所选账号的用量。</value>
   </data>
   <data name="AccountsPage_DeleteSelectedAccountsDialogTitle" xml:space="preserve">
-    <value>선택 계정 삭제</value>
+    <value>删除所选账号</value>
   </data>
   <data name="AccountsPage_DeleteSelectedAccountsDialogMessage" xml:space="preserve">
-    <value>{0}개 계정을 삭제할까요?</value>
+    <value>要删除 {0} 个账号吗？</value>
   </data>
   <data name="AccountsPage_DeleteButtonText" xml:space="preserve">
-    <value>삭제</value>
+    <value>删除</value>
   </data>
   <data name="AccountsPage_ExportBackupDialogTitle" xml:space="preserve">
-    <value>백업 내보내기</value>
+    <value>导出备份</value>
   </data>
   <data name="AccountsPage_ExportBackupDialogMessage" xml:space="preserve">
-    <value>계정 백업을 저장했습니다.</value>
+    <value>账号备份已保存。</value>
   </data>
   <data name="AccountsPage_ImportBackupLoadingMessage" xml:space="preserve">
-    <value>백업 파일의 계정을 검증하는 중입니다.</value>
+    <value>正在验证备份文件中的账号。</value>
   </data>
   <data name="AccountsPage_ImportBackupDialogTitle" xml:space="preserve">
-    <value>백업 불러오기</value>
+    <value>导入备份</value>
   </data>
   <data name="AccountsPage_DeleteExpiredAccountsDialogTitle" xml:space="preserve">
-    <value>만료 계정 정리</value>
+    <value>清理过期账号</value>
   </data>
   <data name="AccountsPage_DeleteExpiredAccountsDialogMessage" xml:space="preserve">
-    <value>토큰이 만료된 계정을 계정 목록에서 삭제할까요?</value>
+    <value>要从账号列表中删除令牌已过期的账号吗？</value>
   </data>
   <data name="AccountsPage_DeleteExpiredAccountsNoAccountsMessage" xml:space="preserve">
-    <value>삭제할 만료 계정이 없습니다.</value>
+    <value>没有可删除的过期账号。</value>
   </data>
   <data name="AccountsPage_DeleteExpiredAccountsDeletedMessageFormat" xml:space="preserve">
-    <value>{0}개 계정을 삭제했습니다.</value>
+    <value>已删除 {0} 个账号。</value>
   </data>
   <data name="AccountsPage_RenameAccountDialogTitle" xml:space="preserve">
-    <value>계정 이름 변경</value>
+    <value>重命名账号</value>
   </data>
   <data name="AccountsPage_RenameAccountPlaceholderText" xml:space="preserve">
-    <value>공란 시 이메일로 재설정</value>
+    <value>留空将重置为邮箱</value>
   </data>
   <data name="AccountsPage_RefreshAccountLoadingMessage" xml:space="preserve">
-    <value>계정 사용량을 새로고침하는 중입니다.</value>
+    <value>正在刷新账号用量。</value>
   </data>
   <data name="AccountsPage_DeleteAccountDialogTitle" xml:space="preserve">
-    <value>계정 삭제</value>
+    <value>删除账号</value>
   </data>
   <data name="AccountsPage_DeleteAccountDialogMessage" xml:space="preserve">
-    <value>이 계정을 삭제할까요?</value>
+    <value>要删除此账号吗？</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationDialogTitle" xml:space="preserve">
-    <value>Codex 앱 재시작</value>
+    <value>重启 Codex</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationDialogMessage" xml:space="preserve">
-    <value>계정 전환이 완료되었습니다. 변경된 계정으로 바로 사용하려면 Codex 앱을 재시작해야 합니다. 지금 재시작할까요?</value>
+    <value>账号已切换。若要立即使用切换后的账号，请重启 Codex。现在重启吗？</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationButtonText" xml:space="preserve">
-    <value>재시작</value>
+    <value>重启</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationLoadingMessage" xml:space="preserve">
-    <value>Codex 앱을 재시작하는 중입니다.</value>
+    <value>正在重启 Codex。</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationFailedDialogTitle" xml:space="preserve">
-    <value>재시작 실패</value>
+    <value>重启失败</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationFailedDialogMessage" xml:space="preserve">
-    <value>Codex 앱을 자동으로 재시작하지 못했습니다. Codex 앱을 직접 닫았다가 다시 열어 주세요.</value>
+    <value>无法自动重启 Codex。请手动关闭 Codex 后重新打开。</value>
   </data>
   <data name="AccountsPage_ZipBackupFileTypeChoice" xml:space="preserve">
-    <value>ZIP 백업</value>
+    <value>ZIP 备份</value>
   </data>
   <data name="AccountsPage_ImportBackupSuccessCountFormat" xml:space="preserve">
-    <value>{0}개 성공</value>
+    <value>{0} 个成功</value>
   </data>
   <data name="AccountsPage_ImportBackupFailureCountFormat" xml:space="preserve">
-    <value>{0}개 실패</value>
+    <value>{0} 个失败</value>
   </data>
   <data name="AccountsPage_ImportBackupDuplicateCountFormat" xml:space="preserve">
-    <value>{0}개 중복</value>
+    <value>{0} 个重复</value>
   </data>
   <data name="AccountsPage_ImportBackupEmptyResultMessage" xml:space="preserve">
-    <value>불러올 계정이 없습니다.</value>
+    <value>没有可导入的账号。</value>
   </data>
   <data name="OAuthAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
-    <value>OAuth 인증</value>
+    <value>OAuth</value>
   </data>
   <data name="OAuthAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>브라우저에서 Codex 인증을 완료하면 계정 사용량 검증 후 자동으로 추가됩니다.</value>
+    <value>在浏览器中完成 Codex 身份验证后，账号会在用量验证后添加。</value>
   </data>
   <data name="OAuthAddAccountPage_OpenBrowserTextBlock.Text" xml:space="preserve">
-    <value>브라우저에서 인증 시작</value>
+    <value>在浏览器中开始身份验证</value>
   </data>
   <data name="OAuthAddAccountPage_WaitingTextBlock.Text" xml:space="preserve">
-    <value>인증 콜백을 기다리는 중입니다.</value>
+    <value>正在等待身份验证回调。</value>
   </data>
   <data name="OAuthAddAccountPage_ManualAddressDescriptionTextBlock.Text" xml:space="preserve">
-    <value>브라우저를 자동으로 열 수 없습니다. 아래 주소를 복사해서 브라우저에 붙여넣고 인증을 진행하세요.</value>
+    <value>无法自动打开浏览器。请复制下面的地址，粘贴到浏览器中并继续身份验证。</value>
   </data>
   <data name="OAuthAddAccountPage_CopyAddressToolTip.Content" xml:space="preserve">
-    <value>복사</value>
+    <value>复制</value>
   </data>
   <data name="OAuthAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
-    <value>OAuth 인증 또는 계정 검증 중 오류가 발생했습니다.</value>
+    <value>OAuth 身份验证或账号验证期间发生错误。</value>
   </data>
   <data name="OAuthAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
-    <value>계정 추가 실패</value>
+    <value>添加账号失败</value>
   </data>
   <data name="CurrentAccountAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
-    <value>로그인된 계정 불러오기</value>
+    <value>导入已登录账号</value>
   </data>
   <data name="CurrentAccountAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>현재 Codex에 로그인된 .codex/auth.json을 읽고 Usage 요청으로 계정을 검증합니다.</value>
+    <value>读取当前已登录 Codex 的 .codex/auth.json，并通过用量请求验证账号。</value>
   </data>
   <data name="CurrentAccountAddAccountPage_ImportButtonTextBlock.Text" xml:space="preserve">
-    <value>로그인된 계정 가져오기</value>
+    <value>导入已登录账号</value>
   </data>
   <data name="CurrentAccountAddAccountPage_FilePathHeaderTextBlock.Text" xml:space="preserve">
-    <value>읽을 파일</value>
+    <value>要读取的文件</value>
   </data>
   <data name="CurrentAccountAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
-    <value>로그인된 계정을 불러오는 중 오류가 발생했습니다.</value>
+    <value>导入已登录账号时发生错误。</value>
   </data>
   <data name="CurrentAccountAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
-    <value>계정 추가 실패</value>
+    <value>添加账号失败</value>
   </data>
   <data name="FileAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
-    <value>파일 불러오기</value>
+    <value>加载文件</value>
   </data>
   <data name="FileAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>PC에 저장된 auth.json 파일을 선택하고 Usage 요청으로 계정을 검증합니다.</value>
+    <value>选择此电脑上保存的 auth.json 文件，并通过用量请求验证账号。</value>
   </data>
   <data name="FileAddAccountPage_ImportButtonTextBlock.Text" xml:space="preserve">
-    <value>auth.json 파일 선택</value>
+    <value>选择 auth.json 文件</value>
   </data>
   <data name="FileAddAccountPage_SupportedFormatHeaderTextBlock.Text" xml:space="preserve">
-    <value>지원 형식</value>
+    <value>支持的格式</value>
   </data>
   <data name="FileAddAccountPage_SupportedFormatDescriptionTextBlock.Text" xml:space="preserve">
-    <value>.json 파일 하나를 선택합니다. Codex auth.json 형식이어야 합니다.</value>
+    <value>请选择一个 .json 文件。它必须使用 Codex auth.json 格式。</value>
   </data>
   <data name="FileAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
-    <value>auth.json 파일을 불러오는 중 오류가 발생했습니다.</value>
+    <value>导入 auth.json 文件时发生错误。</value>
   </data>
   <data name="FileAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
-    <value>계정 추가 실패</value>
+    <value>添加账号失败</value>
   </data>
   <data name="ManualPasteAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
-    <value>수동 붙여넣기</value>
+    <value>手动粘贴</value>
   </data>
   <data name="ManualPasteAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>auth.json 내용을 하나 이상 붙여넣고 한 번에 불러옵니다.</value>
+    <value>粘贴一个或多个 auth.json 文档并一起导入。</value>
   </data>
   <data name="ManualPasteAddAccountPage_AddInputTextBlock.Text" xml:space="preserve">
-    <value>입력 칸 추가</value>
+    <value>添加输入</value>
   </data>
   <data name="ManualPasteAddAccountPage_LoadInputsTextBlock.Text" xml:space="preserve">
-    <value>붙여넣은 계정 불러오기</value>
+    <value>导入粘贴的账号</value>
   </data>
   <data name="ManualPasteAddAccountPage_ManualAuthenticationTextBox.PlaceholderText" xml:space="preserve">
-    <value>auth.json 내용을 붙여넣으세요</value>
+    <value>粘贴 auth.json 内容</value>
   </data>
   <data name="ManualPasteAddAccountPage_RemoveInputToolTip.Content" xml:space="preserve">
-    <value>입력 칸 삭제</value>
+    <value>删除输入</value>
   </data>
   <data name="ManualPasteAddAccountPage_InputErrorInfoBar.Message" xml:space="preserve">
-    <value>이 auth.json을 불러오지 못했습니다.</value>
+    <value>无法导入此 auth.json。</value>
   </data>
   <data name="ManualPasteAddAccountPage_InputErrorInfoBar.Title" xml:space="preserve">
-    <value>검증 실패</value>
+    <value>验证失败</value>
   </data>
   <data name="ManualPasteAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
-    <value>일부 auth.json을 불러오는 데 실패했습니다.</value>
+    <value>部分 auth.json 文档无法导入。</value>
   </data>
   <data name="ManualPasteAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
-    <value>계정 추가 실패</value>
+    <value>添加账号失败</value>
   </data>
   <data name="ManualPasteAddAccountPage_NoInputMessage" xml:space="preserve">
-    <value>붙여넣은 auth.json이 없습니다.</value>
+    <value>未粘贴 auth.json 内容。</value>
   </data>
   <data name="ManualPasteAddAccountPage_PartialFailureMessage" xml:space="preserve">
-    <value>일부 auth.json을 불러오는 데 실패했습니다.</value>
+    <value>部分 auth.json 文档无法导入。</value>
   </data>
   <data name="DashboardPage_TitleTextBlock.Text" xml:space="preserve">
-    <value>대시보드</value>
+    <value>仪表板</value>
   </data>
   <data name="DashboardPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>계정 할당량과 현재 활성 계정 상태를 한눈에 확인합니다.</value>
+    <value>一目了然地查看账号配额和当前活跃账号。</value>
   </data>
   <data name="DashboardPage_TotalAccountLabelTextBlock.Text" xml:space="preserve">
-    <value>총 계정 수</value>
+    <value>账号总数</value>
   </data>
   <data name="DashboardPage_TotalAccountDescriptionTextBlock.Text" xml:space="preserve">
-    <value>저장된 Codex 계정 기준입니다.</value>
+    <value>基于已保存的 Codex 账号。</value>
   </data>
   <data name="DashboardPage_PrimaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
-    <value>5시간 평균 할당량</value>
+    <value>5 小时平均配额</value>
   </data>
   <data name="DashboardPage_PrimaryLowUsageAccountLabelTextBlock.Text" xml:space="preserve">
-    <value>5시간 저할당량 계정</value>
+    <value>5 小时低配额账号</value>
   </data>
   <data name="DashboardPage_SecondaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
-    <value>7일 평균 할당량</value>
+    <value>7 天平均配额</value>
   </data>
   <data name="DashboardPage_SecondaryLowUsageAccountLabelTextBlock.Text" xml:space="preserve">
-    <value>7일 저할당량 계정</value>
+    <value>7 天低配额账号</value>
   </data>
   <data name="DashboardPage_LowUsageMetricDescriptionTextBlock.Text" xml:space="preserve">
-    <value>설정된 경고 기준 이하</value>
+    <value>低于已配置的警告阈值</value>
   </data>
   <data name="DashboardPage_SecondaryLowUsageMetricDescriptionTextBlock.Text" xml:space="preserve">
-    <value>설정된 경고 기준 이하</value>
+    <value>低于已配置的警告阈值</value>
   </data>
   <data name="DashboardPage_ActiveAccountSectionTitleTextBlock.Text" xml:space="preserve">
-    <value>활성 계정 할당량</value>
+    <value>活跃账号配额</value>
   </data>
   <data name="DashboardPage_ActiveAccountSectionDescriptionTextBlock.Text" xml:space="preserve">
-    <value>현재 활성 계정의 남은 할당량입니다.</value>
+    <value>当前活跃账号的剩余配额。</value>
   </data>
   <data name="DashboardPage_ManageAccountsTextBlock.Text" xml:space="preserve">
-    <value>계정 관리로 이동</value>
+    <value>前往账号管理</value>
   </data>
   <data name="DashboardPage_RefreshActiveAccountTextBlock.Text" xml:space="preserve">
-    <value>활성 계정 새로고침</value>
+    <value>刷新活跃账号</value>
   </data>
   <data name="DashboardPage_CurrentActiveAccountLabelTextBlock.Text" xml:space="preserve">
-    <value>현재 활성 계정</value>
+    <value>当前活跃账号</value>
   </data>
   <data name="DashboardPage_ActivePrimaryUsageLabelTextBlock.Text" xml:space="preserve">
-    <value>5시간 잔여량</value>
+    <value>5 小时剩余</value>
   </data>
   <data name="DashboardPage_ActiveSecondaryUsageLabelTextBlock.Text" xml:space="preserve">
-    <value>7일 잔여량</value>
+    <value>7 天剩余</value>
   </data>
   <data name="DashboardPage_NoActiveAccountTitleTextBlock.Text" xml:space="preserve">
-    <value>활성 계정이 없습니다.</value>
+    <value>没有活跃账号。</value>
   </data>
   <data name="DashboardPage_NoActiveAccountDescriptionTextBlock.Text" xml:space="preserve">
-    <value>계정 관리에서 사용할 계정을 전환하면 이곳에 잔여량이 표시됩니다.</value>
+    <value>在账号管理中切换账号后，此处会显示剩余配额。</value>
   </data>
   <data name="DashboardPage_LowUsageAccountsSectionTitleTextBlock.Text" xml:space="preserve">
-    <value>저할당량 계정 목록</value>
+    <value>低配额账号</value>
   </data>
   <data name="DashboardPage_LowUsageAccountsSectionDescriptionTextBlock.Text" xml:space="preserve">
-    <value>5시간 또는 7일 잔여량이 경고 기준 이하인 계정만 표시합니다.</value>
+    <value>仅显示 5 小时或 7 天剩余配额低于警告阈值的账号。</value>
   </data>
   <data name="DashboardPage_NoLowUsageAccountsTitleTextBlock.Text" xml:space="preserve">
-    <value>저할당량 계정이 없습니다.</value>
+    <value>没有低配额账号。</value>
   </data>
   <data name="DashboardPageViewModel_AccountCountFormat" xml:space="preserve">
-    <value>{0}개</value>
+    <value>{0}</value>
   </data>
   <data name="DashboardPageViewModel_LowUsageAccountCountFormat" xml:space="preserve">
-    <value>{0}개</value>
+    <value>{0}</value>
   </data>
   <data name="DashboardPageViewModel_NoLowUsageAccounts" xml:space="preserve">
-    <value>없음</value>
+    <value>无</value>
   </data>
   <data name="DashboardLowUsageAccountViewModel_LowUsageFormat" xml:space="preserve">
     <value>{0}: {1}</value>
   </data>
   <data name="AboutPage_TitleTextBlock.Text" xml:space="preserve">
-    <value>Codex 계정 전환기</value>
+    <value>Codex 账号切换器</value>
   </data>
   <data name="AboutPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>로컬 Codex 계정을 백업하고 빠르게 전환하는 WinUI 앱입니다.</value>
+    <value>用于备份本地 Codex 账号并在账号之间快速切换的 WinUI 应用。</value>
   </data>
   <data name="AboutPage_VersionHeaderTextBlock.Text" xml:space="preserve">
-    <value>버전</value>
+    <value>版本</value>
   </data>
   <data name="AboutPage_CopyrightHeaderTextBlock.Text" xml:space="preserve">
-    <value>저작권</value>
+    <value>版权</value>
   </data>
   <data name="AboutPage_ProjectSettingsGroup.Header" xml:space="preserve">
-    <value>프로젝트</value>
+    <value>项目</value>
   </data>
   <data name="AboutPage_ProjectSettingsGroup.Description" xml:space="preserve">
-    <value>GitHub 저장소, 제작자, 영감을 준 원본 프로젝트입니다.</value>
+    <value>GitHub 仓库、作者以及启发此应用的原始项目。</value>
   </data>
   <data name="AboutPage_GitHubRepositorySettingsCard.Header" xml:space="preserve">
-    <value>GitHub 저장소</value>
+    <value>GitHub 仓库</value>
   </data>
   <data name="AboutPage_GitHubRepositorySettingsCard.Description" xml:space="preserve">
-    <value>소스 코드와 이슈를 확인합니다.</value>
+    <value>查看源代码和问题。</value>
   </data>
   <data name="AboutPage_GitHubRepositoryButtonTextBlock.Text" xml:space="preserve">
-    <value>저장소 열기</value>
+    <value>打开仓库</value>
   </data>
   <data name="AboutPage_CreatorSettingsCard.Header" xml:space="preserve">
-    <value>이호원 (airtaxi)</value>
+    <value>Howon Lee (airtaxi)</value>
   </data>
   <data name="AboutPage_CreatorSettingsCard.Description" xml:space="preserve">
-    <value>제작자</value>
+    <value>作者</value>
   </data>
   <data name="AboutPage_CreatorGitHubButtonTextBlock.Text" xml:space="preserve">
-    <value>GitHub 프로필 열기</value>
+    <value>打开 GitHub 个人资料</value>
   </data>
   <data name="AboutPage_InspirationSettingsCard.Header" xml:space="preserve">
-    <value>감사 인사</value>
+    <value>特别鸣谢</value>
   </data>
   <data name="AboutPage_InspirationSettingsCard.Description" xml:space="preserve">
-    <value>isxlan0/Codex_AccountSwitch에서 영감을 받았습니다. 좋은 아이디어를 공유해 주셔서 감사합니다.</value>
+    <value>灵感来自 isxlan0/Codex_AccountSwitch。感谢分享原始想法。</value>
   </data>
   <data name="AboutPage_InspirationRepositoryButtonTextBlock.Text" xml:space="preserve">
-    <value>원본 저장소 열기</value>
+    <value>打开原始仓库</value>
   </data>
   <data name="AboutPage_LicenseSettingsGroup.Header" xml:space="preserve">
-    <value>라이선스</value>
+    <value>许可证</value>
   </data>
   <data name="AboutPage_LicenseSettingsGroup.Description" xml:space="preserve">
-    <value>앱과 NuGet 패키지 라이선스 정보를 확인합니다.</value>
+    <value>查看应用许可证和 NuGet 包许可证信息。</value>
   </data>
   <data name="AboutPage_AppLicenseSettingsCard.Header" xml:space="preserve">
-    <value>앱 라이선스</value>
+    <value>应用许可证</value>
   </data>
   <data name="AboutPage_AppLicenseSettingsCard.Description" xml:space="preserve">
-    <value>이 앱은 MIT License로 배포됩니다.</value>
+    <value>此应用基于 MIT License 分发。</value>
   </data>
   <data name="AboutPage_AppLicenseContentTextBlock.Text" xml:space="preserve">
     <value>MIT License</value>
   </data>
   <data name="AboutPage_ThirdPartyLicensesSettingsCard.Header" xml:space="preserve">
-    <value>써드파티 라이선스</value>
+    <value>第三方许可证</value>
   </data>
   <data name="AboutPage_ThirdPartyLicensesSettingsCard.Description" xml:space="preserve">
-    <value>앱에서 직접 참조하는 NuGet 패키지를 확인합니다.</value>
+    <value>查看应用直接引用的 NuGet 包。</value>
   </data>
   <data name="AboutPage_ThirdPartyLicensesButtonTextBlock.Text" xml:space="preserve">
-    <value>NuGet 패키지 보기</value>
+    <value>查看 NuGet 包</value>
   </data>
   <data name="ThirdPartyLicensesDialog.Title" xml:space="preserve">
-    <value>써드파티 라이선스</value>
+    <value>第三方许可证</value>
   </data>
   <data name="ThirdPartyLicensesDialog.CloseButtonText" xml:space="preserve">
-    <value>닫기</value>
+    <value>关闭</value>
   </data>
   <data name="ThirdPartyLicensesDialog_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>앱에서 직접 참조하는 NuGet 패키지와 라이선스 정보를 나열합니다.</value>
+    <value>此应用直接引用的 NuGet 包及其许可证信息。</value>
   </data>
   <data name="ThirdPartyLicensesDialog_NuGetPackageHeaderTextBlock.Text" xml:space="preserve">
-    <value>NuGet 패키지</value>
+    <value>NuGet 包</value>
   </data>
   <data name="ThirdPartyLicensesDialog_NuGetPackageDescriptionTextBlock.Text" xml:space="preserve">
-    <value>패키지명, 버전, 라이선스, 제작자 정보를 확인할 수 있습니다.</value>
+    <value>查看包标识符、版本、许可证和作者信息。</value>
   </data>
   <data name="ThirdPartyLicensesDialog_VersionHeaderTextBlock.Text" xml:space="preserve">
-    <value>버전</value>
+    <value>版本</value>
   </data>
   <data name="ThirdPartyLicensesDialog_LicenseHeaderTextBlock.Text" xml:space="preserve">
-    <value>라이선스</value>
+    <value>许可证</value>
   </data>
   <data name="ThirdPartyLicensesDialog_ProjectButtonTextBlock.Text" xml:space="preserve">
-    <value>프로젝트</value>
+    <value>项目</value>
   </data>
   <data name="ThirdPartyLicensePackage_WindowsSoftwareDevelopmentKitLicense" xml:space="preserve">
-    <value>Windows SDK 라이선스</value>
+    <value>Windows SDK 许可证</value>
   </data>
   <data name="SettingsPage_TitleTextBlock.Text" xml:space="preserve">
-    <value>설정</value>
+    <value>设置</value>
   </data>
   <data name="SettingsPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>앱 표시, 업데이트, 시작 동작, 계정 자동 관리 방식을 조정합니다.</value>
+    <value>调整应用显示、更新、启动行为和自动账号管理。</value>
   </data>
   <data name="SettingsPage_GeneralSettingsGroup.Header" xml:space="preserve">
-    <value>일반 설정</value>
+    <value>常规设置</value>
   </data>
   <data name="SettingsPage_GeneralSettingsGroup.Description" xml:space="preserve">
-    <value>언어, 테마, 업데이트 확인, 시스템 시작 동작을 설정합니다.</value>
+    <value>配置语言、主题、更新检查和系统启动行为。</value>
   </data>
   <data name="SettingsPage_LanguageSettingsCard.Header" xml:space="preserve">
-    <value>언어</value>
+    <value>语言</value>
   </data>
   <data name="SettingsPage_LanguageSettingsCard.Description" xml:space="preserve">
-    <value>앱에서 사용할 표시 언어를 선택합니다. 변경 후 재시작을 권장합니다.</value>
+    <value>选择应用显示语言。建议更改后重启。</value>
   </data>
   <data name="SettingsPage_SystemDefaultLanguageComboBoxItem.Content" xml:space="preserve">
-    <value>시스템 기본값</value>
+    <value>系统默认</value>
   </data>
   <data name="SettingsPage_KoreanLanguageComboBoxItem.Content" xml:space="preserve">
-    <value>한국어</value>
+    <value>韩语</value>
   </data>
   <data name="SettingsPage_EnglishLanguageComboBoxItem.Content" xml:space="preserve">
-    <value>영어</value>
+    <value>英语</value>
   </data>
   <data name="SettingsPage_JapaneseLanguageComboBoxItem.Content" xml:space="preserve">
-    <value>일본어</value>
+    <value>日语</value>
   </data>
   <data name="SettingsPage_SimplifiedChineseLanguageComboBoxItem.Content" xml:space="preserve">
-    <value>중국어 간체</value>
+    <value>简体中文</value>
   </data>
   <data name="SettingsPage_TraditionalChineseLanguageComboBoxItem.Content" xml:space="preserve">
-    <value>중국어 번체</value>
+    <value>繁体中文</value>
   </data>
   <data name="SettingsPage_ThemeSettingsCard.Header" xml:space="preserve">
-    <value>테마</value>
+    <value>主题</value>
   </data>
   <data name="SettingsPage_ThemeSettingsCard.Description" xml:space="preserve">
-    <value>앱과 다이얼로그의 색상 테마를 즉시 변경합니다.</value>
+    <value>立即更改应用和对话框的颜色主题。</value>
   </data>
   <data name="SettingsPage_SystemDefaultThemeComboBoxItem.Content" xml:space="preserve">
-    <value>시스템 기본값</value>
+    <value>系统默认</value>
   </data>
   <data name="SettingsPage_LightThemeComboBoxItem.Content" xml:space="preserve">
-    <value>라이트</value>
+    <value>浅色</value>
   </data>
   <data name="SettingsPage_DarkThemeComboBoxItem.Content" xml:space="preserve">
-    <value>다크</value>
+    <value>深色</value>
   </data>
   <data name="SettingsPage_UpdateCheckSettingsCard.Header" xml:space="preserve">
-    <value>업데이트 확인</value>
+    <value>检查更新</value>
   </data>
   <data name="SettingsPage_UpdateCheckSettingsCard.Description" xml:space="preserve">
-    <value>현재 앱 버전과 Microsoft Store 업데이트를 확인합니다.</value>
+    <value>查看当前应用版本和 Microsoft Store 更新。</value>
   </data>
   <data name="SettingsPage_ApplicationVersionFormat" xml:space="preserve">
-    <value>현재 버전: {0}</value>
+    <value>当前版本：{0}</value>
   </data>
   <data name="SettingsPage_CheckForUpdatesButtonTextBlock.Text" xml:space="preserve">
-    <value>확인</value>
+    <value>检查</value>
   </data>
   <data name="SettingsPage_CheckForUpdatesLoadingMessage" xml:space="preserve">
-    <value>Microsoft Store 업데이트를 확인하는 중입니다.</value>
+    <value>正在检查 Microsoft Store 更新。</value>
   </data>
   <data name="SettingsPage_AutomaticUpdateCheckSettingsCard.Header" xml:space="preserve">
-    <value>자동 업데이트 확인</value>
+    <value>自动检查更新</value>
   </data>
   <data name="SettingsPage_AutomaticUpdateCheckSettingsCard.Description" xml:space="preserve">
-    <value>8시간마다 Store 업데이트를 확인하고 발견 시 알림을 표시합니다.</value>
+    <value>每 8 小时检查 Store 更新，发现更新时显示通知。</value>
   </data>
   <data name="SettingsPage_StartupLaunchSettingsCard.Header" xml:space="preserve">
-    <value>시스템 시작 시 자동 실행</value>
+    <value>系统启动时运行</value>
   </data>
   <data name="SettingsPage_StartupLaunchSettingsCard.Description" xml:space="preserve">
-    <value>Windows 로그인 후 Codex Account Switch를 자동으로 실행합니다.</value>
+    <value>Windows 登录后自动运行 Codex Account Switch。</value>
   </data>
   <data name="SettingsPage_AccountSettingsGroup.Header" xml:space="preserve">
-    <value>계정 설정</value>
+    <value>账号设置</value>
   </data>
   <data name="SettingsPage_AccountSettingsGroup.Description" xml:space="preserve">
-    <value>계정 상태 확인, 자동 새로고침, 저할당량 기준과 알림 저장값을 설정합니다.</value>
+    <value>配置账号健康检查、自动刷新、低配额阈值和已保存的通知标志。</value>
   </data>
   <data name="SettingsPage_ExpiredAccountAutomaticDeletionSettingsCard.Header" xml:space="preserve">
-    <value>비정상 계정 자동 삭제</value>
+    <value>自动删除无效账号</value>
   </data>
   <data name="SettingsPage_ExpiredAccountAutomaticDeletionSettingsCard.Description" xml:space="preserve">
-    <value>새로고침 중 인증이 거부된 계정을 자동으로 목록에서 제거합니다.</value>
+    <value>刷新期间身份验证被拒绝时，自动从列表中删除账号。</value>
   </data>
   <data name="SettingsPage_ExpiredAccountNotificationSettingsCard.Header" xml:space="preserve">
-    <value>비정상 계정 발견 시 알림</value>
+    <value>发现无效账号时通知</value>
   </data>
   <data name="SettingsPage_ExpiredAccountNotificationSettingsCard.Description" xml:space="preserve">
-    <value>만료되었거나 사용할 수 없는 계정을 발견하면 Windows 알림을 표시합니다.</value>
+    <value>检测到过期或无法使用的账号时显示 Windows 通知。</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
-    <value>활성 계정 자동 새로고침</value>
+    <value>活跃账号自动刷新</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>활성 계정의 사용량을 지정한 분 단위 간격으로 새로고침합니다.</value>
+    <value>按所选分钟间隔刷新活跃账号的用量。</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
-    <value>새로고침 간격</value>
+    <value>刷新间隔</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
-    <value>활성 계정 사용량을 몇 분마다 새로고침할지 설정합니다.</value>
+    <value>设置活跃账号用量每隔多少分钟刷新一次。</value>
   </data>
   <data name="SettingsPage_ActiveAccountNextUsageRefreshSettingsCard.Header" xml:space="preserve">
-    <value>다음 새로고침</value>
+    <value>下次刷新</value>
   </data>
   <data name="SettingsPage_ActiveAccountNextUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>활성 계정 사용량이 다시 새로고침되기까지 남은 시간입니다.</value>
+    <value>活跃账号用量再次刷新前的剩余时间。</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
-    <value>비활성 계정 자동 새로고침</value>
+    <value>非活跃账号自动刷新</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>비활성 계정의 사용량을 지정한 분 단위 간격으로 새로고침합니다.</value>
+    <value>按所选分钟间隔刷新非活跃账号的用量。</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
-    <value>새로고침 간격</value>
+    <value>刷新间隔</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
-    <value>비활성 계정 사용량을 몇 분마다 새로고침할지 설정합니다.</value>
+    <value>设置非活跃账号用量每隔多少分钟刷新一次。</value>
   </data>
   <data name="SettingsPage_InactiveAccountNextUsageRefreshSettingsCard.Header" xml:space="preserve">
-    <value>다음 새로고침</value>
+    <value>下次刷新</value>
   </data>
   <data name="SettingsPage_InactiveAccountNextUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>비활성 계정 사용량이 다시 새로고침되기까지 남은 시간입니다.</value>
+    <value>非活跃账号用量再次刷新前的剩余时间。</value>
   </data>
   <data name="SettingsPage_RefreshRemainingDisabledText" xml:space="preserve">
-    <value>자동 새로고침 꺼짐</value>
+    <value>自动刷新已关闭</value>
   </data>
   <data name="SettingsPage_RefreshRemainingFormat" xml:space="preserve">
-    <value>다음 새로고침까지 {0:00}:{1:00}:{2:00}</value>
+    <value>下次刷新还有 {0:00}:{1:00}:{2:00}</value>
   </data>
   <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Header" xml:space="preserve">
-    <value>5시간 저할당량 기준</value>
+    <value>5 小时低配额阈值</value>
   </data>
   <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
-    <value>5시간 한도 잔여량이 이 비율 이하가 되면 저할당량으로 표시합니다.</value>
+    <value>当 5 小时限制的剩余用量等于或低于此百分比时标记为低配额。</value>
   </data>
   <data name="SettingsPage_SecondaryUsageWarningThresholdSettingsCard.Header" xml:space="preserve">
-    <value>7일 저할당량 기준</value>
+    <value>7 天低配额阈值</value>
   </data>
   <data name="SettingsPage_SecondaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
-    <value>7일 한도 잔여량이 이 비율 이하가 되면 저할당량으로 표시합니다.</value>
+    <value>当 7 天限制的剩余用量等于或低于此百分比时标记为低配额。</value>
   </data>
   <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Header" xml:space="preserve">
-    <value>5시간 저할당량 알림</value>
+    <value>5 小时低配额通知</value>
   </data>
   <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
-    <value>5시간 저할당량 도달 알림 사용 여부를 저장합니다.</value>
+    <value>保存是否启用 5 小时低配额通知。</value>
   </data>
   <data name="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard.Header" xml:space="preserve">
-    <value>7일 저할당량 알림</value>
+    <value>7 天低配额通知</value>
   </data>
   <data name="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
-    <value>7일 저할당량 도달 알림 사용 여부를 저장합니다.</value>
+    <value>保存是否启用 7 天低配额通知。</value>
   </data>
   <data name="SettingsPage_LanguageRestartDialogTitle" xml:space="preserve">
-    <value>재시작 권장</value>
+    <value>建议重启</value>
   </data>
   <data name="SettingsPage_LanguageRestartDialogMessage" xml:space="preserve">
-    <value>언어 설정이 저장되었습니다. 모든 화면에 안정적으로 반영하려면 앱을 재시작하는 것을 권장합니다.</value>
+    <value>语言设置已保存。建议重启应用，以可靠应用到每个屏幕。</value>
   </data>
   <data name="SettingsPage_UpdateAvailableDialogTitle" xml:space="preserve">
-    <value>업데이트 사용 가능</value>
+    <value>有可用更新</value>
   </data>
   <data name="SettingsPage_UpdateAvailableDialogMessageFormat" xml:space="preserve">
     <value>{1}
-Microsoft Store에서 사용 가능한 업데이트 {0}개를 찾았습니다.</value>
+Microsoft Store 中有 {0} 个可用更新。</value>
   </data>
   <data name="SettingsPage_OpenStoreButtonText" xml:space="preserve">
-    <value>Store 열기</value>
+    <value>打开 Store</value>
   </data>
   <data name="SettingsPage_NoUpdateDialogTitle" xml:space="preserve">
-    <value>최신 버전</value>
+    <value>已是最新</value>
   </data>
   <data name="SettingsPage_NoUpdateDialogMessage" xml:space="preserve">
-    <value>현재 설치된 앱이 최신 상태입니다.</value>
+    <value>已安装的应用已经是最新版本。</value>
   </data>
   <data name="SettingsPage_UpdateCheckFailedDialogTitle" xml:space="preserve">
-    <value>업데이트 확인 실패</value>
+    <value>更新检查失败</value>
   </data>
   <data name="SettingsPage_UpdateCheckFailedDialogMessage" xml:space="preserve">
-    <value>Microsoft Store 업데이트 정보를 확인하지 못했습니다. 패키지 설치 상태와 네트워크 연결을 확인해 주세요.</value>
+    <value>无法检查 Microsoft Store 更新信息。请确认包安装状态和网络连接。</value>
   </data>
   <data name="SettingsPage_StartupRegistrationFailedDialogTitle" xml:space="preserve">
-    <value>자동 실행 설정 실패</value>
+    <value>启动设置失败</value>
   </data>
   <data name="SettingsPage_StartupRegistrationFailedDialogMessage" xml:space="preserve">
-    <value>Windows 시작 작업 설정을 적용하지 못했습니다. 패키지 매니페스트 등록 상태 또는 Windows 시작 앱 권한을 확인해 주세요.</value>
+    <value>无法应用 Windows 启动任务设置。请检查包清单注册或 Windows 启动应用权限。</value>
   </data>
   <data name="Notification_ExpiredAccountDetectedTitle" xml:space="preserve">
-    <value>비정상 계정 발견</value>
+    <value>发现无效账号</value>
   </data>
   <data name="Notification_ExpiredAccountDetectedMessageFormat" xml:space="preserve">
-    <value>{0} 계정을 사용할 수 없습니다. 설정에 따라 상태를 갱신했습니다.</value>
+    <value>{0} 无法使用。已根据你的设置更新账号状态。</value>
   </data>
   <data name="Notification_UsageLowQuotaDetectedTitle" xml:space="preserve">
-    <value>저할당량 감지</value>
+    <value>检测到低配额</value>
   </data>
   <data name="Notification_UsageLowQuotaDetectedMessageFormat" xml:space="preserve">
-    <value>{0} 계정의 {1} 잔여 할당량이 {2}%입니다.</value>
+    <value>{0} 的 {1} 剩余配额为 {2}%。</value>
   </data>
   <data name="Notification_UsageLowQuotaDetectedWithSwitchSuggestionMessageFormat" xml:space="preserve">
-    <value>{0} 계정의 {1} 잔여 할당량이 {2}%입니다. 기준보다 여유 있는 다른 계정이 있습니다. 이 알림을 눌러 계정 관리에서 전환해 보세요.</value>
+    <value>{0} 的 {1} 剩余配额为 {2}%。另一个账号的配额高于警告阈值。选择此通知可从账号管理切换账号。</value>
   </data>
   <data name="Notification_PrimaryUsageLowQuotaWindowName" xml:space="preserve">
-    <value>5시간</value>
+    <value>5 小时</value>
   </data>
   <data name="Notification_SecondaryUsageLowQuotaWindowName" xml:space="preserve">
-    <value>7일</value>
+    <value>7 天</value>
   </data>
   <data name="Notification_StoreUpdateAvailableTitle" xml:space="preserve">
-    <value>Codex Account Switch 업데이트</value>
+    <value>Codex Account Switch 更新</value>
   </data>
   <data name="Notification_StoreUpdateAvailableMessageFormat" xml:space="preserve">
-    <value>Microsoft Store에서 사용 가능한 업데이트 {0}개가 있습니다.</value>
+    <value>Microsoft Store 中有 {0} 个可用更新。</value>
   </data>
   <data name="Notification_OpenStoreButtonText" xml:space="preserve">
-    <value>Store 열기</value>
+    <value>打开 Store</value>
   </data>
   <data name="SettingsPage_UpdateSettingsCard.Header" xml:space="preserve">
-    <value>업데이트 확인</value>
+    <value>检查更新</value>
   </data>
   <data name="SettingsPage_UpdateSettingsCard.Description" xml:space="preserve">
-    <value>현재 앱 버전과 Microsoft Store 업데이트를 확인합니다.</value>
+    <value>查看当前应用版本和 Microsoft Store 更新。</value>
   </data>
   <data name="SettingsPage_AutomaticUpdateSettingsCard.Header" xml:space="preserve">
-    <value>자동 업데이트 확인</value>
+    <value>自动检查更新</value>
   </data>
   <data name="SettingsPage_AutomaticUpdateSettingsCard.Description" xml:space="preserve">
-    <value>8시간마다 Store 업데이트를 확인하고 발견 시 알림을 표시합니다.</value>
+    <value>每 8 小时检查 Store 更新，发现更新时显示通知。</value>
   </data>
   <data name="SettingsPage_RestartRecommendedDialogTitle" xml:space="preserve">
-    <value>재시작 권장</value>
+    <value>建议重启</value>
   </data>
   <data name="SettingsPage_RestartRecommendedDialogMessage" xml:space="preserve">
-    <value>언어 설정이 저장되었습니다. 모든 화면에 안정적으로 반영하려면 앱을 재시작하는 것을 권장합니다.</value>
+    <value>语言设置已保存。建议重启应用，以可靠应用到每个屏幕。</value>
   </data>
   <data name="SettingsPage_NoUpdateDialogMessageFormat" xml:space="preserve">
     <value>{0}
-현재 설치된 앱이 최신 상태입니다.</value>
+已安装的应用已经是最新版本。</value>
   </data>
   <data name="SettingsPage_AutomaticRefreshDisabledText" xml:space="preserve">
-    <value>자동 새로고침 꺼짐</value>
+    <value>自动刷新已关闭</value>
   </data>
   <data name="SettingsPage_NextUsageRefreshFormat" xml:space="preserve">
-    <value>다음 새로고침까지 {0}</value>
+    <value>下次刷新还有 {0}</value>
   </data>
   <data name="SettingsPage_RemainingTimeWithDaysFormat" xml:space="preserve">
-    <value>{0}일 {1}</value>
+    <value>{0} 天 {1}</value>
   </data>
 </root>
