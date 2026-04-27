@@ -6,7 +6,7 @@ using System.Globalization;
 
 namespace CodexAccountSwitch.WinUI.ViewModels;
 
-public sealed partial class CodexAccountViewModel(CodexAccount codexAccount) : ObservableObject
+public sealed partial class CodexAccountViewModel(CodexAccount codexAccount, ApplicationSettings applicationSettings) : ObservableObject
 {
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AccountIdentifier))]
@@ -29,6 +29,8 @@ public sealed partial class CodexAccountViewModel(CodexAccount codexAccount) : O
     [NotifyPropertyChangedFor(nameof(SecondaryUsageResetText))]
     [NotifyPropertyChangedFor(nameof(PrimaryUsageRemainingPercentage))]
     [NotifyPropertyChangedFor(nameof(SecondaryUsageRemainingPercentage))]
+    [NotifyPropertyChangedFor(nameof(IsPrimaryUsageUnderWarningThreshold))]
+    [NotifyPropertyChangedFor(nameof(IsSecondaryUsageUnderWarningThreshold))]
     [NotifyPropertyChangedFor(nameof(LastUsageRefreshText))]
     [NotifyPropertyChangedFor(nameof(SearchText))]
     public partial CodexAccount CodexAccount { get; set; } = codexAccount;
@@ -73,6 +75,10 @@ public sealed partial class CodexAccountViewModel(CodexAccount codexAccount) : O
 
     public int SecondaryUsageRemainingPercentage => ClampUsageRemainingPercentage(CodexAccount.LastCodexUsageSnapshot.SecondaryWindow);
 
+    public bool IsPrimaryUsageUnderWarningThreshold => IsUsageUnderWarningThreshold(CodexAccount.LastCodexUsageSnapshot.PrimaryWindow, applicationSettings.PrimaryUsageWarningThresholdPercentage);
+
+    public bool IsSecondaryUsageUnderWarningThreshold => IsUsageUnderWarningThreshold(CodexAccount.LastCodexUsageSnapshot.SecondaryWindow, applicationSettings.SecondaryUsageWarningThresholdPercentage);
+
     public string LastUsageRefreshText => GetFormattedString("CodexAccountViewModel_LastUsageRefreshFormat", CodexAccount.LastUsageRefreshTime is null ? GetLocalizedString("CodexAccountViewModel_NotRefreshed") : CodexAccount.LastUsageRefreshTime.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.CurrentCulture));
 
     public string SearchText => $"{DisplayName} {EmailAddress} {PlanText} {AccountIdentifier}";
@@ -107,8 +113,16 @@ public sealed partial class CodexAccountViewModel(CodexAccount codexAccount) : O
         OnPropertyChanged(nameof(SecondaryUsageResetText));
         OnPropertyChanged(nameof(PrimaryUsageRemainingPercentage));
         OnPropertyChanged(nameof(SecondaryUsageRemainingPercentage));
+        OnPropertyChanged(nameof(IsPrimaryUsageUnderWarningThreshold));
+        OnPropertyChanged(nameof(IsSecondaryUsageUnderWarningThreshold));
         OnPropertyChanged(nameof(LastUsageRefreshText));
         OnPropertyChanged(nameof(SearchText));
+    }
+
+    public void RefreshUsageWarningThresholdProperties()
+    {
+        OnPropertyChanged(nameof(IsPrimaryUsageUnderWarningThreshold));
+        OnPropertyChanged(nameof(IsSecondaryUsageUnderWarningThreshold));
     }
 
     private static string BuildAccessTokenPreview(string accessToken)
@@ -139,6 +153,10 @@ public sealed partial class CodexAccountViewModel(CodexAccount codexAccount) : O
     }
 
     private static int ClampUsageRemainingPercentage(CodexUsageWindow codexUsageWindow) => codexUsageWindow.RemainingPercentage < 0 ? 0 : Math.Clamp(codexUsageWindow.RemainingPercentage, 0, 100);
+
+    private static bool IsUsageUnderWarningThreshold(CodexUsageWindow codexUsageWindow, int usageWarningThresholdPercentage) => codexUsageWindow.RemainingPercentage >= 0 && codexUsageWindow.RemainingPercentage <= NormalizeUsageWarningThresholdPercentage(usageWarningThresholdPercentage);
+
+    private static int NormalizeUsageWarningThresholdPercentage(int usageWarningThresholdPercentage) => Math.Clamp(usageWarningThresholdPercentage, 0, 100);
 
     private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 

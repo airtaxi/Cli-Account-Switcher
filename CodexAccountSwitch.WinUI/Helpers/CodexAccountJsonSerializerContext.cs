@@ -14,6 +14,7 @@ namespace CodexAccountSwitch.WinUI.Helpers;
 [JsonSerializable(typeof(CodexAuthenticationTokenDocument))]
 [JsonSerializable(typeof(CodexUsageSnapshot))]
 [JsonSerializable(typeof(CodexUsageWindow))]
+[JsonSerializable(typeof(ApplicationSettings))]
 public sealed partial class CodexAccountJsonSerializerContext : JsonSerializerContext
 {
 }

@@ -255,12 +255,13 @@
                                     MinWidth="76"
                                     Padding="8,3"
                                     VerticalAlignment="Top"
-                                    Background="{ThemeResource ControlFillColorSecondaryBrush}"
+                                    Background="{x:Bind IsPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource PrimaryUsageLimitBadgeBackgroundBrushConverter}}"
                                     CornerRadius="{ThemeResource ControlCornerRadius}">
                                     <TextBlock
                                         HorizontalAlignment="Center"
                                         FontSize="12"
                                         FontWeight="SemiBold"
+                                        Foreground="{x:Bind IsPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageLimitBadgeForegroundBrushConverter}}"
                                         Text="{x:Bind PrimaryUsageWindowLabelText, Mode=OneWay}" />
                                 </Border>
                                 <StackPanel Grid.Column="1" Spacing="3">
@@ -281,6 +282,7 @@
                                     </Grid>
                                     <ProgressBar
                                         Height="3"
+                                        Foreground="{x:Bind IsPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
                                         Maximum="100"
                                         Value="{x:Bind PrimaryUsageRemainingPercentage, Mode=OneWay}" />
                                 </StackPanel>
@@ -289,12 +291,13 @@
                                     MinWidth="76"
                                     Padding="8,3"
                                     VerticalAlignment="Top"
-                                    Background="{ThemeResource ControlFillColorTertiaryBrush}"
+                                    Background="{x:Bind IsSecondaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource SecondaryUsageLimitBadgeBackgroundBrushConverter}}"
                                     CornerRadius="{ThemeResource ControlCornerRadius}">
                                     <TextBlock
                                         HorizontalAlignment="Center"
                                         FontSize="12"
                                         FontWeight="SemiBold"
+                                        Foreground="{x:Bind IsSecondaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageLimitBadgeForegroundBrushConverter}}"
                                         Text="{x:Bind SecondaryUsageWindowLabelText, Mode=OneWay}" />
                                 </Border>
                                 <StackPanel
@@ -318,6 +321,7 @@
                                     </Grid>
                                     <ProgressBar
                                         Height="3"
+                                        Foreground="{x:Bind IsSecondaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
                                         Maximum="100"
                                         Value="{x:Bind SecondaryUsageRemainingPercentage, Mode=OneWay}" />
                                 </StackPanel>

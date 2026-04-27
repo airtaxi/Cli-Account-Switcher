@@ -18,16 +18,40 @@
                 <ResourceDictionary x:Key="Light">
                     <Color x:Key="ThemeColor">#FFFFFF</Color>
                     <Color x:Key="ReverseThemeColor">#000000</Color>
+                    <SolidColorBrush x:Key="UsageNormalProgressBarForegroundBrush" Color="{ThemeResource SystemAccentColor}" />
+                    <SolidColorBrush x:Key="UsageWarningLimitBadgeBackgroundBrush" Color="#FDE7E9" />
+                    <SolidColorBrush x:Key="UsageWarningLimitBadgeForegroundBrush" Color="#A4262C" />
+                    <SolidColorBrush x:Key="UsageWarningProgressBarForegroundBrush" Color="#C42B1C" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <Color x:Key="ThemeColor">#000000</Color>
                     <Color x:Key="ReverseThemeColor">#FFFFFF</Color>
+                    <SolidColorBrush x:Key="UsageNormalProgressBarForegroundBrush" Color="{ThemeResource SystemAccentColor}" />
+                    <SolidColorBrush x:Key="UsageWarningLimitBadgeBackgroundBrush" Color="#5A1F20" />
+                    <SolidColorBrush x:Key="UsageWarningLimitBadgeForegroundBrush" Color="#FFDAD6" />
+                    <SolidColorBrush x:Key="UsageWarningProgressBarForegroundBrush" Color="#FF9A9A" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
 
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
             <converters:BoolNegationConverter x:Key="BoolNegationConverter" />
             <converters:VisibilityToBoolConverter x:Key="VisibilityToBoolConverter" />
+            <converters:BoolToObjectConverter
+                x:Key="PrimaryUsageLimitBadgeBackgroundBrushConverter"
+                FalseValue="{ThemeResource ControlFillColorSecondaryBrush}"
+                TrueValue="{ThemeResource UsageWarningLimitBadgeBackgroundBrush}" />
+            <converters:BoolToObjectConverter
+                x:Key="SecondaryUsageLimitBadgeBackgroundBrushConverter"
+                FalseValue="{ThemeResource ControlFillColorTertiaryBrush}"
+                TrueValue="{ThemeResource UsageWarningLimitBadgeBackgroundBrush}" />
+            <converters:BoolToObjectConverter
+                x:Key="UsageLimitBadgeForegroundBrushConverter"
+                FalseValue="{ThemeResource TextFillColorPrimaryBrush}"
+                TrueValue="{ThemeResource UsageWarningLimitBadgeForegroundBrush}" />
+            <converters:BoolToObjectConverter
+                x:Key="UsageProgressBarForegroundBrushConverter"
+                FalseValue="{ThemeResource UsageNormalProgressBarForegroundBrush}"
+                TrueValue="{ThemeResource UsageWarningProgressBarForegroundBrush}" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

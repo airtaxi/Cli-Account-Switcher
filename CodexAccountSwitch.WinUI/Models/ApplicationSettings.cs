@@ -1,10 +1,23 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI.Xaml;
 
 namespace CodexAccountSwitch.WinUI.Models;
 
-public sealed class ApplicationSettings
+public sealed partial class ApplicationSettings : ObservableObject
 {
-    public ElementTheme Theme { get; set; } = ElementTheme.Default;
+    public const int DefaultPrimaryUsageWarningThresholdPercentage = 15;
 
-    public string LanguageOverride { get; set; } = null;
+    public const int DefaultSecondaryUsageWarningThresholdPercentage = 15;
+
+    [ObservableProperty]
+    public partial ElementTheme Theme { get; set; } = ElementTheme.Default;
+
+    [ObservableProperty]
+    public partial string LanguageOverride { get; set; } = "";
+
+    [ObservableProperty]
+    public partial int PrimaryUsageWarningThresholdPercentage { get; set; } = DefaultPrimaryUsageWarningThresholdPercentage;
+
+    [ObservableProperty]
+    public partial int SecondaryUsageWarningThresholdPercentage { get; set; } = DefaultSecondaryUsageWarningThresholdPercentage;
 }

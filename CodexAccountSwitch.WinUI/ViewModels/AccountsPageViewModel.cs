@@ -5,20 +5,24 @@ using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.UI.Dispatching;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace CodexAccountSwitch.WinUI.ViewModels;
 
 public sealed partial class AccountsPageViewModel : ObservableObject, IDisposable
 {
     private readonly CodexAccountService _codexAccountService;
+    private readonly ApplicationSettings _applicationSettings;
     private readonly DispatcherQueue _dispatcherQueue;
     private readonly HashSet<string> _selectedAccountIdentifiers = new(StringComparer.Ordinal);
     private bool _disposed;
 
-    public AccountsPageViewModel(CodexAccountService codexAccountService, DispatcherQueue dispatcherQueue)
+    public AccountsPageViewModel(CodexAccountService codexAccountService, ApplicationSettings applicationSettings, DispatcherQueue dispatcherQueue)
     {
         _codexAccountService = codexAccountService;
+        _applicationSettings = applicationSettings;
         _dispatcherQueue = dispatcherQueue;
+        _applicationSettings.PropertyChanged += OnApplicationSettingsPropertyChanged;
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<CodexAccount>>(this, OnCodexAccountChangedMessageReceived);
         ReloadAccounts();
     }
@@ -79,7 +83,15 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     {
         if (_disposed) return;
         _disposed = true;
+        _applicationSettings.PropertyChanged -= OnApplicationSettingsPropertyChanged;
         WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CodexAccount>>(this);
+    }
+
+    private void OnApplicationSettingsPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArguments)
+    {
+        if (propertyChangedEventArguments.PropertyName is not nameof(ApplicationSettings.PrimaryUsageWarningThresholdPercentage) and not nameof(ApplicationSettings.SecondaryUsageWarningThresholdPercentage)) return;
+        if (_dispatcherQueue.HasThreadAccess) RefreshUsageWarningThresholdProperties();
+        else _dispatcherQueue.TryEnqueue(RefreshUsageWarningThresholdProperties);
     }
 
     private void OnCodexAccountChangedMessageReceived(object recipient, ValueChangedMessage<CodexAccount> valueChangedMessage)
@@ -91,7 +103,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     private void ApplyAccountChange(CodexAccount codexAccount)
     {
         var existingAccountViewModel = Accounts.FirstOrDefault(accountViewModel => string.Equals(accountViewModel.AccountIdentifier, codexAccount.AccountIdentifier, StringComparison.Ordinal));
-        if (existingAccountViewModel is null) Accounts.Add(new CodexAccountViewModel(codexAccount));
+        if (existingAccountViewModel is null) Accounts.Add(new CodexAccountViewModel(codexAccount, _applicationSettings));
         else existingAccountViewModel.Update(codexAccount);
 
         SortAccounts();
@@ -110,7 +122,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         foreach (var codexAccount in codexAccounts)
         {
             var existingAccountViewModel = Accounts.FirstOrDefault(accountViewModel => string.Equals(accountViewModel.AccountIdentifier, codexAccount.AccountIdentifier, StringComparison.Ordinal));
-            if (existingAccountViewModel is null) Accounts.Add(new CodexAccountViewModel(codexAccount));
+            if (existingAccountViewModel is null) Accounts.Add(new CodexAccountViewModel(codexAccount, _applicationSettings));
             else existingAccountViewModel.Update(codexAccount);
         }
 
@@ -159,6 +171,11 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     }
 
     private void RefreshAccountStateProperties() => RefreshAccountCounts();
+
+    private void RefreshUsageWarningThresholdProperties()
+    {
+        foreach (var accountViewModel in Accounts) accountViewModel.RefreshUsageWarningThresholdProperties();
+    }
 
     private void RefreshAccountCounts()
     {

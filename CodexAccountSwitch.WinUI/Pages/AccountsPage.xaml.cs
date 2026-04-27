@@ -18,7 +18,7 @@ public sealed partial class AccountsPage : Page
 
     public AccountsPage()
     {
-        ViewModel = new AccountsPageViewModel(App.CodexAccountService, DispatcherQueue);
+        ViewModel = new AccountsPageViewModel(App.CodexAccountService, App.ApplicationSettings, DispatcherQueue);
         InitializeComponent();
     }
 
