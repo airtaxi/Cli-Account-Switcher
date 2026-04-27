@@ -198,7 +198,7 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="2*" />
-                                    <ColumnDefinition Width="0.7*" />
+                                    <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="4*" />
                                     <ColumnDefinition Width="0.8*" />
                                     <ColumnDefinition Width="172" />
@@ -254,7 +254,7 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="2*" />
-                                        <ColumnDefinition Width="0.7*" />
+                                        <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="4*" />
                                         <ColumnDefinition Width="0.8*" />
                                         <ColumnDefinition Width="172" />
@@ -267,7 +267,10 @@
                                         VerticalAlignment="Center"
                                         IsChecked="{x:Bind IsSelected, Mode=TwoWay}" />
 
-                                    <StackPanel Grid.Column="1" Spacing="3">
+                                    <StackPanel
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Spacing="3">
                                         <TextBlock
                                             FontSize="16"
                                             FontWeight="SemiBold"
@@ -295,7 +298,7 @@
                                         Grid.Column="3"
                                         VerticalAlignment="Center"
                                         ColumnSpacing="8"
-                                        RowSpacing="8">
+                                        RowSpacing="6">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
@@ -308,7 +311,7 @@
                                         <Border
                                             MinWidth="76"
                                             Padding="8,3"
-                                            VerticalAlignment="Top"
+                                            VerticalAlignment="Center"
                                             Background="{x:Bind IsPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource PrimaryUsageLimitBadgeBackgroundBrushConverter}}"
                                             CornerRadius="{ThemeResource ControlCornerRadius}">
                                             <TextBlock
@@ -318,7 +321,10 @@
                                                 Foreground="{x:Bind IsPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageLimitBadgeForegroundBrushConverter}}"
                                                 Text="{x:Bind PrimaryUsageWindowLabelText, Mode=OneWay}" />
                                         </Border>
-                                        <StackPanel Grid.Column="1" Spacing="3">
+                                        <StackPanel
+                                            Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            Spacing="3">
                                             <Grid ColumnSpacing="8">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto" />
@@ -335,7 +341,6 @@
                                                     TextTrimming="CharacterEllipsis" />
                                             </Grid>
                                             <ProgressBar
-                                                Height="3"
                                                 Foreground="{x:Bind IsPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
                                                 Maximum="100"
                                                 Value="{x:Bind PrimaryUsageRemainingPercentage, Mode=OneWay}" />
@@ -344,7 +349,7 @@
                                             Grid.Row="1"
                                             MinWidth="76"
                                             Padding="8,3"
-                                            VerticalAlignment="Top"
+                                            VerticalAlignment="Center"
                                             Background="{x:Bind IsSecondaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource SecondaryUsageLimitBadgeBackgroundBrushConverter}}"
                                             CornerRadius="{ThemeResource ControlCornerRadius}">
                                             <TextBlock
@@ -357,6 +362,7 @@
                                         <StackPanel
                                             Grid.Row="1"
                                             Grid.Column="1"
+                                            VerticalAlignment="Center"
                                             Spacing="3">
                                             <Grid ColumnSpacing="8">
                                                 <Grid.ColumnDefinitions>
@@ -374,7 +380,6 @@
                                                     TextTrimming="CharacterEllipsis" />
                                             </Grid>
                                             <ProgressBar
-                                                Height="3"
                                                 Foreground="{x:Bind IsSecondaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
                                                 Maximum="100"
                                                 Value="{x:Bind SecondaryUsageRemainingPercentage, Mode=OneWay}" />
@@ -384,6 +389,7 @@
                                             Grid.ColumnSpan="2"
                                             FontSize="12"
                                             Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                            LineHeight="12"
                                             Text="{x:Bind LastUsageRefreshText, Mode=OneWay}"
                                             TextTrimming="CharacterEllipsis" />
                                     </Grid>
