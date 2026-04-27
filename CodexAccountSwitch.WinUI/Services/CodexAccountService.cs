@@ -292,10 +292,14 @@ public sealed class CodexAccountService : IDisposable
         try
         {
             var codexUsageSnapshot = await _codexUsageClient.GetUsageAsync(codexAccount.CodexAuthenticationDocument, cancellationToken);
+            var wasPrimaryUsageUnderWarningThreshold = IsUsageUnderWarningThreshold(codexAccount.LastCodexUsageSnapshot.PrimaryWindow, _applicationSettingsService.Settings.PrimaryUsageWarningThresholdPercentage);
+            var wasSecondaryUsageUnderWarningThreshold = IsUsageUnderWarningThreshold(codexAccount.LastCodexUsageSnapshot.SecondaryWindow, _applicationSettingsService.Settings.SecondaryUsageWarningThresholdPercentage);
+
             codexAccount.LastCodexUsageSnapshot = codexUsageSnapshot;
             codexAccount.LastUsageRefreshTime = DateTimeOffset.UtcNow;
             codexAccount.MarkAsValid();
             UpdateEmailAddress(codexAccount, codexUsageSnapshot);
+            ShowLowQuotaNotifications(codexAccount, wasPrimaryUsageUnderWarningThreshold, wasSecondaryUsageUnderWarningThreshold);
             await SaveAccountsAsync(cancellationToken);
             SendAccountChangedMessage(codexAccount);
         }
@@ -445,6 +449,27 @@ public sealed class CodexAccountService : IDisposable
         codexAccount.MarkAsExpired();
         await SaveAccountsAsync(cancellationToken);
         SendAccountChangedMessage(codexAccount);
+    }
+
+    private void ShowLowQuotaNotifications(CodexAccount codexAccount, bool wasPrimaryUsageUnderWarningThreshold, bool wasSecondaryUsageUnderWarningThreshold)
+    {
+        var applicationSettings = _applicationSettingsService.Settings;
+        var isPrimaryUsageUnderWarningThreshold = IsUsageUnderWarningThreshold(codexAccount.LastCodexUsageSnapshot.PrimaryWindow, applicationSettings.PrimaryUsageWarningThresholdPercentage);
+        var isSecondaryUsageUnderWarningThreshold = IsUsageUnderWarningThreshold(codexAccount.LastCodexUsageSnapshot.SecondaryWindow, applicationSettings.SecondaryUsageWarningThresholdPercentage);
+        var hasPrimaryUsageAlternativeAccountOverWarningThreshold = HasAlternativeAccountOverWarningThreshold(codexAccount, alternativeCodexAccount => alternativeCodexAccount.LastCodexUsageSnapshot.PrimaryWindow, applicationSettings.PrimaryUsageWarningThresholdPercentage);
+        var hasSecondaryUsageAlternativeAccountOverWarningThreshold = HasAlternativeAccountOverWarningThreshold(codexAccount, alternativeCodexAccount => alternativeCodexAccount.LastCodexUsageSnapshot.SecondaryWindow, applicationSettings.SecondaryUsageWarningThresholdPercentage);
+
+        if (!wasPrimaryUsageUnderWarningThreshold && isPrimaryUsageUnderWarningThreshold && applicationSettings.IsPrimaryUsageLowQuotaNotificationEnabled) _applicationNotificationService.ShowPrimaryUsageLowQuotaNotification(codexAccount.DisplayName, codexAccount.LastCodexUsageSnapshot.PrimaryWindow.RemainingPercentage, hasPrimaryUsageAlternativeAccountOverWarningThreshold);
+        if (!wasSecondaryUsageUnderWarningThreshold && isSecondaryUsageUnderWarningThreshold && applicationSettings.IsSecondaryUsageLowQuotaNotificationEnabled) _applicationNotificationService.ShowSecondaryUsageLowQuotaNotification(codexAccount.DisplayName, codexAccount.LastCodexUsageSnapshot.SecondaryWindow.RemainingPercentage, hasSecondaryUsageAlternativeAccountOverWarningThreshold);
+    }
+
+    private bool HasAlternativeAccountOverWarningThreshold(CodexAccount sourceCodexAccount, Func<CodexAccount, CodexUsageWindow> codexUsageWindowSelector, int usageWarningThresholdPercentage)
+    {
+        var codexAccounts = GetAccounts();
+        if (codexAccounts.Count < 2) return false;
+
+        var normalizedUsageWarningThresholdPercentage = NormalizeUsageWarningThresholdPercentage(usageWarningThresholdPercentage);
+        return codexAccounts.Any(codexAccount => !string.Equals(codexAccount.AccountIdentifier, sourceCodexAccount.AccountIdentifier, StringComparison.Ordinal) && codexUsageWindowSelector(codexAccount).RemainingPercentage > normalizedUsageWarningThresholdPercentage);
     }
 
     private void ApplyApplicationSettings()
@@ -627,6 +652,10 @@ public sealed class CodexAccountService : IDisposable
     {
         if (!string.IsNullOrWhiteSpace(codexUsageSnapshot.EmailAddress)) codexAccount.CodexAuthenticationDocument.EmailAddress = codexUsageSnapshot.EmailAddress;
     }
+
+    private static bool IsUsageUnderWarningThreshold(CodexUsageWindow codexUsageWindow, int usageWarningThresholdPercentage) => codexUsageWindow.RemainingPercentage >= 0 && codexUsageWindow.RemainingPercentage <= NormalizeUsageWarningThresholdPercentage(usageWarningThresholdPercentage);
+
+    private static int NormalizeUsageWarningThresholdPercentage(int usageWarningThresholdPercentage) => Math.Clamp(usageWarningThresholdPercentage, 0, 100);
 
     private static void SendAccountChangedMessage(CodexAccount codexAccount) => WeakReferenceMessenger.Default.Send(new ValueChangedMessage<CodexAccount>(codexAccount));
 

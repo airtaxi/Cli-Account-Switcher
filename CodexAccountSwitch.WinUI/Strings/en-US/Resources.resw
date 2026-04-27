@@ -856,6 +856,21 @@
   <data name="Notification_ExpiredAccountDetectedMessageFormat" xml:space="preserve">
     <value>{0} cannot be used. The account state was updated based on your settings.</value>
   </data>
+  <data name="Notification_UsageLowQuotaDetectedTitle" xml:space="preserve">
+    <value>Low quota detected</value>
+  </data>
+  <data name="Notification_UsageLowQuotaDetectedMessageFormat" xml:space="preserve">
+    <value>{0}'s {1} remaining quota is {2}%.</value>
+  </data>
+  <data name="Notification_UsageLowQuotaDetectedWithSwitchSuggestionMessageFormat" xml:space="preserve">
+    <value>{0}'s {1} remaining quota is {2}%. Another account has quota above the warning threshold. Select this notification to switch accounts from Account Management.</value>
+  </data>
+  <data name="Notification_PrimaryUsageLowQuotaWindowName" xml:space="preserve">
+    <value>5-hour</value>
+  </data>
+  <data name="Notification_SecondaryUsageLowQuotaWindowName" xml:space="preserve">
+    <value>7-day</value>
+  </data>
   <data name="Notification_StoreUpdateAvailableTitle" xml:space="preserve">
     <value>Codex Account Switch update</value>
   </data>

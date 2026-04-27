@@ -856,6 +856,21 @@ Microsoft Store에서 사용 가능한 업데이트 {0}개를 찾았습니다.</
   <data name="Notification_ExpiredAccountDetectedMessageFormat" xml:space="preserve">
     <value>{0} 계정을 사용할 수 없습니다. 설정에 따라 상태를 갱신했습니다.</value>
   </data>
+  <data name="Notification_UsageLowQuotaDetectedTitle" xml:space="preserve">
+    <value>저할당량 감지</value>
+  </data>
+  <data name="Notification_UsageLowQuotaDetectedMessageFormat" xml:space="preserve">
+    <value>{0} 계정의 {1} 잔여 할당량이 {2}%입니다.</value>
+  </data>
+  <data name="Notification_UsageLowQuotaDetectedWithSwitchSuggestionMessageFormat" xml:space="preserve">
+    <value>{0} 계정의 {1} 잔여 할당량이 {2}%입니다. 기준보다 여유 있는 다른 계정이 있습니다. 이 알림을 눌러 계정 관리에서 전환해 보세요.</value>
+  </data>
+  <data name="Notification_PrimaryUsageLowQuotaWindowName" xml:space="preserve">
+    <value>5시간</value>
+  </data>
+  <data name="Notification_SecondaryUsageLowQuotaWindowName" xml:space="preserve">
+    <value>7일</value>
+  </data>
   <data name="Notification_StoreUpdateAvailableTitle" xml:space="preserve">
     <value>Codex Account Switch 업데이트</value>
   </data>

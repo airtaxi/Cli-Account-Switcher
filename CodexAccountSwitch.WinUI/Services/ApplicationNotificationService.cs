@@ -6,6 +6,10 @@ namespace CodexAccountSwitch.WinUI.Services;
 
 public sealed class ApplicationNotificationService
 {
+    public const string NotificationActionArgumentName = "action";
+
+    public const string AccountsNavigationNotificationAction = "openAccounts";
+
     public void ShowExpiredAccountDetectedNotification(string accountDisplayName)
     {
         var notificationTitle = GetLocalizedString("Notification_ExpiredAccountDetectedTitle");
@@ -21,7 +25,23 @@ public sealed class ApplicationNotificationService
         ShowNotification(notificationTitle, notificationMessage, notificationButton);
     }
 
-    private static void ShowNotification(string notificationTitle, string notificationMessage, AppNotificationButton notificationButton = null)
+    public void ShowPrimaryUsageLowQuotaNotification(string accountDisplayName, int usageRemainingPercentage, bool hasAlternativeAccountOverWarningThreshold)
+    {
+        var notificationTitle = GetLocalizedString("Notification_UsageLowQuotaDetectedTitle");
+        var usageWindowName = GetLocalizedString("Notification_PrimaryUsageLowQuotaWindowName");
+        var notificationMessage = GetUsageLowQuotaNotificationMessage(accountDisplayName, usageWindowName, usageRemainingPercentage, hasAlternativeAccountOverWarningThreshold);
+        ShowNotification(notificationTitle, notificationMessage, notificationAction: AccountsNavigationNotificationAction);
+    }
+
+    public void ShowSecondaryUsageLowQuotaNotification(string accountDisplayName, int usageRemainingPercentage, bool hasAlternativeAccountOverWarningThreshold)
+    {
+        var notificationTitle = GetLocalizedString("Notification_UsageLowQuotaDetectedTitle");
+        var usageWindowName = GetLocalizedString("Notification_SecondaryUsageLowQuotaWindowName");
+        var notificationMessage = GetUsageLowQuotaNotificationMessage(accountDisplayName, usageWindowName, usageRemainingPercentage, hasAlternativeAccountOverWarningThreshold);
+        ShowNotification(notificationTitle, notificationMessage, notificationAction: AccountsNavigationNotificationAction);
+    }
+
+    private static void ShowNotification(string notificationTitle, string notificationMessage, AppNotificationButton notificationButton = null, string notificationAction = "")
     {
         try
         {
@@ -32,6 +52,7 @@ public sealed class ApplicationNotificationService
                 .AddText(notificationMessage);
 
             if (notificationButton is not null) appNotificationBuilder.AddButton(notificationButton);
+            if (!string.IsNullOrWhiteSpace(notificationAction)) appNotificationBuilder.AddArgument(NotificationActionArgumentName, notificationAction);
 
             AppNotificationManager.Default.Show(appNotificationBuilder.BuildNotification());
         }
@@ -39,4 +60,10 @@ public sealed class ApplicationNotificationService
     }
 
     private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
+
+    private static string GetUsageLowQuotaNotificationMessage(string accountDisplayName, string usageWindowName, int usageRemainingPercentage, bool hasAlternativeAccountOverWarningThreshold)
+    {
+        var notificationMessageResourceName = hasAlternativeAccountOverWarningThreshold ? "Notification_UsageLowQuotaDetectedWithSwitchSuggestionMessageFormat" : "Notification_UsageLowQuotaDetectedMessageFormat";
+        return App.LocalizationService.GetFormattedString(notificationMessageResourceName, accountDisplayName, usageWindowName, usageRemainingPercentage);
+    }
 }

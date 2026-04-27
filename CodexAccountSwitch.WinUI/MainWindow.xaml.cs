@@ -53,6 +53,13 @@ public sealed partial class MainWindow : WindowEx
         else Instance.DispatcherQueue.TryEnqueue(HideLoadingCore);
     }
 
+    public static void NavigateToMainPageSection(MainPageNavigationSection mainPageNavigationSection)
+    {
+        if (Instance is null) return;
+        if (Instance.DispatcherQueue.HasThreadAccess) Instance.NavigateToMainPageSectionCore(mainPageNavigationSection);
+        else Instance.DispatcherQueue.TryEnqueue(() => Instance.NavigateToMainPageSectionCore(mainPageNavigationSection));
+    }
+
     private static void ShowLoadingCore(string message)
     {
         Instance.AppFrame.IsEnabled = false;
@@ -106,6 +113,13 @@ public sealed partial class MainWindow : WindowEx
     private void OnMainPageNavigationSectionChangedMessageReceived(object messageRecipient, ValueChangedMessage<MainPageNavigationSection> valueChangedMessage) => SelectMainPageNavigationSection(valueChangedMessage.Value);
 
     private void OnApplicationThemeServiceThemeChanged(ElementTheme theme) => App.ApplicationThemeService.ApplyThemeToWindow(this);
+
+    private void NavigateToMainPageSectionCore(MainPageNavigationSection mainPageNavigationSection)
+    {
+        Activate();
+        SelectMainPageNavigationSection(mainPageNavigationSection);
+        WeakReferenceMessenger.Default.Send(new ValueChangedMessage<MainPageNavigationSection>(mainPageNavigationSection));
+    }
 
     private void SelectMainPageNavigationSection(MainPageNavigationSection mainPageNavigationSection)
     {
