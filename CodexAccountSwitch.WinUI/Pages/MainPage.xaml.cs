@@ -18,6 +18,7 @@ public sealed partial class MainPage : Page
         DashboardSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_DashboardSelectorBarItem/Text");
         AccountsSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_AccountsSelectorBarItem/Text");
         AboutSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_AboutSelectorBarItem/Text");
+        SettingsSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_SettingsSelectorBarItem/Text");
     }
 
     private void NavigateToSelectedSection()
@@ -34,6 +35,7 @@ public sealed partial class MainPage : Page
         "Dashboard" => typeof(DashboardPage),
         "Accounts" => typeof(AccountsPage),
         "About" => typeof(AboutPage),
+        "Settings" => typeof(SettingsPage),
         _ => throw new InvalidOperationException($"Unknown section tag: {selectedSectionTag}")
     };
 
