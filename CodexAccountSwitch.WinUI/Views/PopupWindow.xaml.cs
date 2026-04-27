@@ -8,7 +8,7 @@ using System;
 using System.Threading.Tasks;
 using WinUIEx;
 
-namespace CodexAccountSwitch.WinUI;
+namespace CodexAccountSwitch.WinUI.Views;
 
 public sealed partial class PopupWindow : WindowEx, IDisposable
 {

@@ -13,7 +13,7 @@ using WinRT.Interop;
 using WinUIEx;
 using TitleBar = Microsoft.UI.Xaml.Controls.TitleBar;
 
-namespace CodexAccountSwitch.WinUI;
+namespace CodexAccountSwitch.WinUI.Views;
 
 public sealed partial class MainWindow : WindowEx
 {
