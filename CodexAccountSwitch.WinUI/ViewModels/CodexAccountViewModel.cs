@@ -10,6 +10,7 @@ public sealed partial class CodexAccountViewModel(CodexAccount codexAccount, App
 {
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AccountIdentifier))]
+    [NotifyPropertyChangedFor(nameof(CustomAlias))]
     [NotifyPropertyChangedFor(nameof(DisplayName))]
     [NotifyPropertyChangedFor(nameof(EmailAddress))]
     [NotifyPropertyChangedFor(nameof(PlanType))]
@@ -39,6 +40,8 @@ public sealed partial class CodexAccountViewModel(CodexAccount codexAccount, App
     public partial bool IsSelected { get; set; }
 
     public string AccountIdentifier => CodexAccount.AccountIdentifier;
+
+    public string CustomAlias => CodexAccount.CustomAlias;
 
     public string DisplayName => CodexAccount.DisplayName;
 
@@ -97,6 +100,7 @@ public sealed partial class CodexAccountViewModel(CodexAccount codexAccount, App
     {
         OnPropertyChanged(nameof(CodexAccount));
         OnPropertyChanged(nameof(AccountIdentifier));
+        OnPropertyChanged(nameof(CustomAlias));
         OnPropertyChanged(nameof(DisplayName));
         OnPropertyChanged(nameof(EmailAddress));
         OnPropertyChanged(nameof(PlanType));

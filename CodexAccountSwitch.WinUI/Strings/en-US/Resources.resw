@@ -349,7 +349,7 @@
     <value>Rename Account</value>
   </data>
   <data name="AccountsPage_RenameAccountPlaceholderText" xml:space="preserve">
-    <value>New name</value>
+    <value>Leave blank to reset to email</value>
   </data>
   <data name="AccountsPage_RefreshAccountLoadingMessage" xml:space="preserve">
     <value>Refreshing account usage.</value>

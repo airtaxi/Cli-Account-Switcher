@@ -349,7 +349,7 @@
     <value>계정 이름 변경</value>
   </data>
   <data name="AccountsPage_RenameAccountPlaceholderText" xml:space="preserve">
-    <value>새 이름</value>
+    <value>공란 시 이메일로 재설정</value>
   </data>
   <data name="AccountsPage_RefreshAccountLoadingMessage" xml:space="preserve">
     <value>계정 사용량을 새로고침하는 중입니다.</value>

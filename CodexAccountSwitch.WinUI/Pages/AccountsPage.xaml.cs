@@ -109,10 +109,11 @@ public sealed partial class AccountsPage : Page
         var accountIdentifier = ReadCommandParameter(sender);
         if (string.IsNullOrWhiteSpace(accountIdentifier)) return;
 
-        var currentAccountDisplayName = ViewModel.Accounts.FirstOrDefault(accountViewModel => string.Equals(accountViewModel.AccountIdentifier, accountIdentifier, StringComparison.Ordinal))?.DisplayName ?? "";
-        var customAlias = await this.ShowInputDialogAsync(GetLocalizedString("AccountsPage_RenameAccountDialogTitle"), GetLocalizedString("AccountsPage_RenameAccountPlaceholderText"), true, defaultText: currentAccountDisplayName);
-        if (string.IsNullOrWhiteSpace(customAlias)) return;
+        var currentAccountViewModel = ViewModel.Accounts.FirstOrDefault(accountViewModel => string.Equals(accountViewModel.AccountIdentifier, accountIdentifier, StringComparison.Ordinal));
+        if (currentAccountViewModel is null) return;
 
+        var customAlias = await this.ShowInputDialogAsync(GetLocalizedString("AccountsPage_RenameAccountDialogTitle"), GetLocalizedString("AccountsPage_RenameAccountPlaceholderText"), true, defaultText: currentAccountViewModel.CustomAlias);
+        if (customAlias is null) return;
         await App.CodexAccountService.RenameAccountAsync(accountIdentifier, customAlias);
         ViewModel.ReloadAccounts();
     }
