@@ -6,7 +6,10 @@ using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
+using Windows.Storage.Pickers;
+using WinRT.Interop;
 
 namespace CodexAccountSwitch.WinUI.Pages;
 
@@ -14,6 +17,7 @@ public sealed partial class SettingsPage : Page
 {
     private const int MinimumUsageRefreshIntervalMinutes = 1;
     private const int MaximumUsageRefreshIntervalMinutes = 1440;
+    private const string ApplicationSettingsFileExtension = ".casc";
     private bool _isSynchronizingControls;
     private readonly DispatcherTimer _refreshCountdownDispatcherTimer = new() { Interval = TimeSpan.FromSeconds(1) };
 
@@ -67,6 +71,68 @@ public sealed partial class SettingsPage : Page
         {
             _isSynchronizingControls = false;
         }
+    }
+
+    private async void OnExportApplicationSettingsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
+    {
+        var fileSavePicker = CreateApplicationSettingsFileSavePicker();
+        var storageFile = await fileSavePicker.PickSaveFileAsync();
+        if (storageFile is null) return;
+
+        ExportApplicationSettingsButton.IsEnabled = false;
+        try
+        {
+            await App.ApplicationSettingsService.ExportSettingsAsync(storageFile.Path);
+            await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ExportApplicationSettingsDialogTitle"), GetLocalizedString("SettingsPage_ExportApplicationSettingsDialogMessage"));
+        }
+        catch
+        {
+            await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ExportApplicationSettingsFailedDialogTitle"), GetLocalizedString("SettingsPage_ExportApplicationSettingsFailedDialogMessage"));
+        }
+        finally
+        {
+            ExportApplicationSettingsButton.IsEnabled = true;
+        }
+    }
+
+    private async void OnImportApplicationSettingsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
+    {
+        var fileOpenPicker = CreateApplicationSettingsFileOpenPicker();
+        var storageFile = await fileOpenPicker.PickSingleFileAsync();
+        if (storageFile is null) return;
+
+        var previousLanguageOverride = App.ApplicationSettings.LanguageOverride;
+        var wasApplicationSettingsImported = false;
+
+        ImportApplicationSettingsButton.IsEnabled = false;
+        MainWindow.ShowLoading(GetLocalizedString("SettingsPage_ImportApplicationSettingsLoadingMessage"));
+        try
+        {
+            await App.ApplicationSettingsService.ImportSettingsAsync(storageFile.Path);
+            App.ApplicationThemeService.ApplyTheme(App.ApplicationSettings.Theme);
+            App.LocalizationService.ApplyLanguageTag(App.ApplicationSettings.LanguageOverride);
+            var isStartupLaunchApplied = await App.StartupRegistrationService.SetStartupLaunchEnabledAsync(App.ApplicationSettings.IsStartupLaunchEnabled);
+            if (!isStartupLaunchApplied) await RefreshStartupLaunchStateFromSystemAsync();
+            wasApplicationSettingsImported = true;
+        }
+        catch { }
+        finally
+        {
+            MainWindow.HideLoading();
+            ImportApplicationSettingsButton.IsEnabled = true;
+        }
+
+        if (!wasApplicationSettingsImported)
+        {
+            await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ImportApplicationSettingsFailedDialogTitle"), GetLocalizedString("SettingsPage_ImportApplicationSettingsFailedDialogMessage"));
+            return;
+        }
+
+        var didLanguageOverrideChange = !string.Equals(previousLanguageOverride, App.ApplicationSettings.LanguageOverride, StringComparison.Ordinal);
+        SynchronizeControlsFromSettings();
+        RefreshUsageRefreshCountdownTexts();
+        await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ImportApplicationSettingsDialogTitle"), GetLocalizedString(didLanguageOverrideChange ? "SettingsPage_ImportApplicationSettingsLanguageChangedDialogMessage" : "SettingsPage_ImportApplicationSettingsDialogMessage"));
+        if (didLanguageOverrideChange) WeakReferenceMessenger.Default.Send(new ValueChangedMessage<MainPageNavigationSection>(MainPageNavigationSection.Settings));
     }
 
     private async void OnLanguageComboBoxSelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArguments)
@@ -275,6 +341,29 @@ public sealed partial class SettingsPage : Page
     }
 
     private static string ReadSelectedComboBoxTag(ComboBox comboBox) => comboBox.SelectedItem is ComboBoxItem { Tag: string tag } ? tag : "";
+
+    private static FileOpenPicker CreateApplicationSettingsFileOpenPicker()
+    {
+        var fileOpenPicker = new FileOpenPicker
+        {
+            SuggestedStartLocation = PickerLocationId.DocumentsLibrary
+        };
+        InitializeWithWindow.Initialize(fileOpenPicker, WindowNative.GetWindowHandle(MainWindow.Instance));
+        fileOpenPicker.FileTypeFilter.Add(ApplicationSettingsFileExtension);
+        return fileOpenPicker;
+    }
+
+    private static FileSavePicker CreateApplicationSettingsFileSavePicker()
+    {
+        var fileSavePicker = new FileSavePicker
+        {
+            SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
+            SuggestedFileName = $"codex-account-switch-settings-{DateTimeOffset.Now.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture)}"
+        };
+        InitializeWithWindow.Initialize(fileSavePicker, WindowNative.GetWindowHandle(MainWindow.Instance));
+        fileSavePicker.FileTypeChoices.Add(GetLocalizedString("SettingsPage_ApplicationSettingsFileTypeChoice"), [ApplicationSettingsFileExtension]);
+        return fileSavePicker;
+    }
 
     private static int GetLanguageSelectedIndex(string languageOverride) => languageOverride switch
     {

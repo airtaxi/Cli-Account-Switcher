@@ -756,6 +756,63 @@
   <data name="SettingsPage_StartupLaunchSettingsCard.Description" xml:space="preserve">
     <value>Windows サインイン後に Codex Account Switch を自動的に実行します。</value>
   </data>
+  <data name="SettingsPage_ApplicationSettingsTransferSettingsExpander.Header" xml:space="preserve">
+    <value>設定のインポート/エクスポート</value>
+  </data>
+  <data name="SettingsPage_ApplicationSettingsTransferSettingsExpander.Description" xml:space="preserve">
+    <value>アカウント一覧を含めずに、アプリ設定を .casc ファイルとして保存または読み込みます。</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsSettingsCard.Header" xml:space="preserve">
+    <value>設定をエクスポート</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsSettingsCard.Description" xml:space="preserve">
+    <value>現在のアプリ設定を .casc ファイルに保存します。</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsButtonTextBlock.Text" xml:space="preserve">
+    <value>エクスポート</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsSettingsCard.Header" xml:space="preserve">
+    <value>設定をインポート</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsSettingsCard.Description" xml:space="preserve">
+    <value>.casc ファイルからアプリ設定を読み込み、現在の設定に適用します。</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsButtonTextBlock.Text" xml:space="preserve">
+    <value>インポート</value>
+  </data>
+  <data name="SettingsPage_ApplicationSettingsFileTypeChoice" xml:space="preserve">
+    <value>Codex Account Switch 設定ファイル</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsDialogTitle" xml:space="preserve">
+    <value>設定をエクスポート</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsDialogMessage" xml:space="preserve">
+    <value>アプリ設定をエクスポートしました。</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsFailedDialogTitle" xml:space="preserve">
+    <value>設定のエクスポートに失敗しました</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsFailedDialogMessage" xml:space="preserve">
+    <value>アプリ設定をエクスポートできませんでした。ファイルへのアクセス権限を確認してください。</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsLoadingMessage" xml:space="preserve">
+    <value>アプリ設定をインポートしています。</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsDialogTitle" xml:space="preserve">
+    <value>設定をインポート</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsDialogMessage" xml:space="preserve">
+    <value>アプリ設定をインポートして適用しました。</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsLanguageChangedDialogMessage" xml:space="preserve">
+    <value>アプリ設定をインポートして適用しました。言語が変更されたため、設定ページを再読み込みします。すべての画面に確実に反映するには、アプリを再起動することをおすすめします。</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsFailedDialogTitle" xml:space="preserve">
+    <value>設定のインポートに失敗しました</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsFailedDialogMessage" xml:space="preserve">
+    <value>選択した .casc ファイルからアプリ設定をインポートできませんでした。ファイル形式とアクセス権限を確認してください。</value>
+  </data>
   <data name="SettingsPage_AccountSettingsGroup.Header" xml:space="preserve">
     <value>アカウント設定</value>
   </data>

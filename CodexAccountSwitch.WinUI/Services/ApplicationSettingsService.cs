@@ -29,6 +29,22 @@ public sealed class ApplicationSettingsService
         SettingsChanged?.Invoke(this, EventArgs.Empty);
     }
 
+    public async Task ExportSettingsAsync(string applicationSettingsFilePath, CancellationToken cancellationToken = default)
+    {
+        NormalizeSettings(Settings);
+        await using var applicationSettingsFileStream = File.Create(applicationSettingsFilePath);
+        await JsonSerializer.SerializeAsync(applicationSettingsFileStream, Settings, CodexAccountJsonSerializerContext.Default.ApplicationSettings, cancellationToken);
+    }
+
+    public async Task ImportSettingsAsync(string applicationSettingsFilePath, CancellationToken cancellationToken = default)
+    {
+        await using var applicationSettingsFileStream = File.OpenRead(applicationSettingsFilePath);
+        var importedApplicationSettings = await JsonSerializer.DeserializeAsync(applicationSettingsFileStream, CodexAccountJsonSerializerContext.Default.ApplicationSettings, cancellationToken) ?? throw new InvalidDataException();
+        NormalizeSettings(importedApplicationSettings);
+        CopySettings(importedApplicationSettings, Settings);
+        await SaveSettingsAsync(cancellationToken);
+    }
+
     private static ApplicationSettings LoadSettings()
     {
         try
@@ -52,6 +68,25 @@ public sealed class ApplicationSettingsService
         applicationSettings.InactiveAccountUsageRefreshIntervalSeconds = NormalizeRefreshIntervalSeconds(applicationSettings.InactiveAccountUsageRefreshIntervalSeconds, ApplicationSettings.DefaultInactiveAccountUsageRefreshIntervalSeconds);
         applicationSettings.PrimaryUsageWarningThresholdPercentage = NormalizePercentage(applicationSettings.PrimaryUsageWarningThresholdPercentage);
         applicationSettings.SecondaryUsageWarningThresholdPercentage = NormalizePercentage(applicationSettings.SecondaryUsageWarningThresholdPercentage);
+    }
+
+    private static void CopySettings(ApplicationSettings sourceApplicationSettings, ApplicationSettings destinationApplicationSettings)
+    {
+        destinationApplicationSettings.SchemaVersion = sourceApplicationSettings.SchemaVersion;
+        destinationApplicationSettings.Theme = sourceApplicationSettings.Theme;
+        destinationApplicationSettings.LanguageOverride = sourceApplicationSettings.LanguageOverride;
+        destinationApplicationSettings.IsAutomaticUpdateCheckEnabled = sourceApplicationSettings.IsAutomaticUpdateCheckEnabled;
+        destinationApplicationSettings.IsStartupLaunchEnabled = sourceApplicationSettings.IsStartupLaunchEnabled;
+        destinationApplicationSettings.IsExpiredAccountAutomaticDeletionEnabled = sourceApplicationSettings.IsExpiredAccountAutomaticDeletionEnabled;
+        destinationApplicationSettings.IsExpiredAccountNotificationEnabled = sourceApplicationSettings.IsExpiredAccountNotificationEnabled;
+        destinationApplicationSettings.IsActiveAccountUsageAutomaticRefreshEnabled = sourceApplicationSettings.IsActiveAccountUsageAutomaticRefreshEnabled;
+        destinationApplicationSettings.ActiveAccountUsageRefreshIntervalSeconds = sourceApplicationSettings.ActiveAccountUsageRefreshIntervalSeconds;
+        destinationApplicationSettings.IsInactiveAccountUsageAutomaticRefreshEnabled = sourceApplicationSettings.IsInactiveAccountUsageAutomaticRefreshEnabled;
+        destinationApplicationSettings.InactiveAccountUsageRefreshIntervalSeconds = sourceApplicationSettings.InactiveAccountUsageRefreshIntervalSeconds;
+        destinationApplicationSettings.PrimaryUsageWarningThresholdPercentage = sourceApplicationSettings.PrimaryUsageWarningThresholdPercentage;
+        destinationApplicationSettings.SecondaryUsageWarningThresholdPercentage = sourceApplicationSettings.SecondaryUsageWarningThresholdPercentage;
+        destinationApplicationSettings.IsPrimaryUsageLowQuotaNotificationEnabled = sourceApplicationSettings.IsPrimaryUsageLowQuotaNotificationEnabled;
+        destinationApplicationSettings.IsSecondaryUsageLowQuotaNotificationEnabled = sourceApplicationSettings.IsSecondaryUsageLowQuotaNotificationEnabled;
     }
 
     private static string NormalizeLanguageOverride(string languageOverride) => languageOverride is "ko-KR" or "en-US" or "ja-JP" or "zh-Hans" or "zh-Hant" ? languageOverride : "";

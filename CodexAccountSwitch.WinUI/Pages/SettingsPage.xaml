@@ -84,6 +84,30 @@
                         </dev:SettingsCard.HeaderIcon>
                         <ToggleSwitch x:Name="StartupLaunchToggleSwitch" Toggled="OnStartupLaunchToggleSwitchToggled" />
                     </dev:SettingsCard>
+
+                    <dev:SettingsExpander x:Uid="SettingsPage_ApplicationSettingsTransferSettingsExpander">
+                        <dev:SettingsExpander.HeaderIcon>
+                            <FontIcon Glyph="&#xE8A5;" />
+                        </dev:SettingsExpander.HeaderIcon>
+                        <dev:SettingsExpander.Items>
+                            <dev:SettingsCard x:Uid="SettingsPage_ExportApplicationSettingsSettingsCard">
+                                <Button x:Name="ExportApplicationSettingsButton" Click="OnExportApplicationSettingsButtonClicked">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <FontIcon FontSize="14" Glyph="&#xEDE1;" />
+                                        <TextBlock x:Uid="SettingsPage_ExportApplicationSettingsButtonTextBlock" />
+                                    </StackPanel>
+                                </Button>
+                            </dev:SettingsCard>
+                            <dev:SettingsCard x:Uid="SettingsPage_ImportApplicationSettingsSettingsCard">
+                                <Button x:Name="ImportApplicationSettingsButton" Click="OnImportApplicationSettingsButtonClicked">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <FontIcon FontSize="14" Glyph="&#xE8B5;" />
+                                        <TextBlock x:Uid="SettingsPage_ImportApplicationSettingsButtonTextBlock" />
+                                    </StackPanel>
+                                </Button>
+                            </dev:SettingsCard>
+                        </dev:SettingsExpander.Items>
+                    </dev:SettingsExpander>
                 </dev:SimpleSettingsGroup>
 
                 <dev:SimpleSettingsGroup x:Uid="SettingsPage_AccountSettingsGroup">
