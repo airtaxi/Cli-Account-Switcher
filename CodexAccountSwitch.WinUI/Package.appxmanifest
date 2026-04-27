@@ -4,20 +4,21 @@
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   xmlns:systemai="http://schemas.microsoft.com/appx/manifest/systemai/windows10"
-  IgnorableNamespaces="uap rescap systemai">
+  IgnorableNamespaces="uap uap5 rescap systemai">
 
   <Identity
-    Name="df874008-1993-4d3c-ba27-bd1eb6d6cd28"
-    Publisher="CN=kck41"
+    Name="49536HowonLee.CodexAccountSwitch"
+    Publisher="CN=7713B07B-6F8A-4FB4-877B-2FA9AF531D39"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="df874008-1993-4d3c-ba27-bd1eb6d6cd28" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>ms-resource:AppDisplayName</DisplayName>
-    <PublisherDisplayName>kck41</PublisherDisplayName>
+    <PublisherDisplayName>Howon Lee</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -43,6 +44,14 @@
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"  Square71x71Logo="Assets\SmallTile.png" Square310x310Logo="Assets\LargeTile.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
+      <Extensions>
+        <uap5:Extension Category="windows.startupTask">
+          <uap5:StartupTask
+            TaskId="CodexAccountSwitchStartup"
+            Enabled="true"
+            DisplayName="Codex Account Switch" />
+        </uap5:Extension>
+      </Extensions>
     </Application>
   </Applications>
 

@@ -17,6 +17,8 @@ public sealed partial class ThirdPartyLicensesDialog : ContentDialog
         ThirdPartyLicensePackages = thirdPartyLicensePackages;
 
         InitializeComponent();
+        App.ApplicationThemeService.ApplyThemeToElement(this);
+        App.ApplicationThemeService.ThemeChanged += OnApplicationThemeServiceThemeChanged;
     }
 
     private async void OnPackageProjectButtonClicked(object sender, RoutedEventArgs routedEventArguments)
@@ -25,4 +27,8 @@ public sealed partial class ThirdPartyLicensesDialog : ContentDialog
 
         await Launcher.LaunchUriAsync(new Uri(projectAddress));
     }
+
+    private void OnApplicationThemeServiceThemeChanged(ElementTheme theme) => App.ApplicationThemeService.ApplyThemeToElement(this);
+
+    private void OnThirdPartyLicensesDialogClosed(ContentDialog sender, ContentDialogClosedEventArgs contentDialogClosedEventArguments) => App.ApplicationThemeService.ThemeChanged -= OnApplicationThemeServiceThemeChanged;
 }

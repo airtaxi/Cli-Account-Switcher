@@ -31,6 +31,9 @@ public sealed partial class MainWindow : WindowEx
 
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<MainPageNavigationSection>>(this, OnMainPageNavigationSectionChangedMessageReceived);
 
+        App.ApplicationThemeService.ApplyThemeToWindow(this);
+        App.ApplicationThemeService.ThemeChanged += OnApplicationThemeServiceThemeChanged;
+
         this.CenterOnScreen();
         AppFrame.Navigate(typeof(MainPage));
 
@@ -40,28 +43,34 @@ public sealed partial class MainWindow : WindowEx
 
     public static void ShowLoading(string message = null)
     {
-        Instance.DispatcherQueue.TryEnqueue(() =>
-        {
-            Instance.AppFrame.IsEnabled = false;
-
-            if (string.IsNullOrWhiteSpace(message)) Instance.LoadingTextBlock.Visibility = Visibility.Collapsed;
-            else
-            {
-                Instance.LoadingTextBlock.Visibility = Visibility.Visible;
-                Instance.LoadingTextBlock.Text = message;
-            }
-
-            Instance.LoadingGrid.Visibility = Visibility.Visible;
-        });
+        if (Instance.DispatcherQueue.HasThreadAccess) ShowLoadingCore(message);
+        else Instance.DispatcherQueue.TryEnqueue(() => ShowLoadingCore(message));
     }
 
     public static void HideLoading()
     {
-        Instance.DispatcherQueue.TryEnqueue(() =>
+        if (Instance.DispatcherQueue.HasThreadAccess) HideLoadingCore();
+        else Instance.DispatcherQueue.TryEnqueue(HideLoadingCore);
+    }
+
+    private static void ShowLoadingCore(string message)
+    {
+        Instance.AppFrame.IsEnabled = false;
+
+        if (string.IsNullOrWhiteSpace(message)) Instance.LoadingTextBlock.Visibility = Visibility.Collapsed;
+        else
         {
-            Instance.LoadingGrid.Visibility = Visibility.Collapsed;
-            Instance.AppFrame.IsEnabled = true;
-        });
+            Instance.LoadingTextBlock.Visibility = Visibility.Visible;
+            Instance.LoadingTextBlock.Text = message;
+        }
+
+        Instance.LoadingGrid.Visibility = Visibility.Visible;
+    }
+
+    private static void HideLoadingCore()
+    {
+        Instance.LoadingGrid.Visibility = Visibility.Collapsed;
+        Instance.AppFrame.IsEnabled = true;
     }
 
     private void RefreshLocalizedText()
@@ -95,6 +104,8 @@ public sealed partial class MainWindow : WindowEx
     }
 
     private void OnMainPageNavigationSectionChangedMessageReceived(object messageRecipient, ValueChangedMessage<MainPageNavigationSection> valueChangedMessage) => SelectMainPageNavigationSection(valueChangedMessage.Value);
+
+    private void OnApplicationThemeServiceThemeChanged(ElementTheme theme) => App.ApplicationThemeService.ApplyThemeToWindow(this);
 
     private void SelectMainPageNavigationSection(MainPageNavigationSection mainPageNavigationSection)
     {
@@ -133,7 +144,9 @@ public sealed partial class MainWindow : WindowEx
     private void OnMainWindowClosed(object sender, WindowEventArgs windowEventArguments)
     {
         WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<MainPageNavigationSection>>(this);
+        App.ApplicationThemeService.ThemeChanged -= OnApplicationThemeServiceThemeChanged;
         App.LocalizationService.LanguageChanged -= RefreshLocalizedText;
+        App.StoreUpdateService.Dispose();
         App.CodexAccountService.Dispose();
     }
 }

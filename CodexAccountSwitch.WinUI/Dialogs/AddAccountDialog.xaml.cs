@@ -1,5 +1,6 @@
 using CodexAccountSwitch.WinUI.Pages.AddAccountDialog;
 using CodexAccountSwitch.WinUI.Services;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
 namespace CodexAccountSwitch.WinUI.Dialogs;
@@ -11,6 +12,8 @@ public sealed partial class AddAccountDialog : ContentDialog
     public AddAccountDialog(CodexAccountService codexAccountService)
     {
         InitializeComponent();
+        App.ApplicationThemeService.ApplyThemeToElement(this);
+        App.ApplicationThemeService.ThemeChanged += OnApplicationThemeServiceThemeChanged;
         _addAccountDialogContext = new AddAccountDialogContext(codexAccountService, this);
         NavigateToSelectedPage();
     }
@@ -33,8 +36,11 @@ public sealed partial class AddAccountDialog : ContentDialog
 
     private void OnAddAccountModeSelectorBarSelectionChanged(SelectorBar sender, SelectorBarSelectionChangedEventArgs selectorBarSelectionChangedEventArguments) => NavigateToSelectedPage();
 
+    private void OnApplicationThemeServiceThemeChanged(ElementTheme theme) => App.ApplicationThemeService.ApplyThemeToElement(this);
+
     private async void OnAddAccountDialogClosing(ContentDialog sender, ContentDialogClosingEventArgs contentDialogClosingEventArguments)
     {
+        App.ApplicationThemeService.ThemeChanged -= OnApplicationThemeServiceThemeChanged;
         var contentDialogClosingDeferral = contentDialogClosingEventArguments.GetDeferral();
         try { await _addAccountDialogContext.DisposeOAuthSessionAsync(); }
         finally { contentDialogClosingDeferral.Complete(); }

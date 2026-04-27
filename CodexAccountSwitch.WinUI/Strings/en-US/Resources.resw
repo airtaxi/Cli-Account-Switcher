@@ -645,4 +645,237 @@
   <data name="ThirdPartyLicensePackage_WindowsSoftwareDevelopmentKitLicense" xml:space="preserve">
     <value>Windows SDK license</value>
   </data>
+  <data name="SettingsPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SettingsPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Adjust app display, updates, startup behavior, and automatic account management.</value>
+  </data>
+  <data name="SettingsPage_GeneralSettingsGroup.Header" xml:space="preserve">
+    <value>General settings</value>
+  </data>
+  <data name="SettingsPage_GeneralSettingsGroup.Description" xml:space="preserve">
+    <value>Configure language, theme, update checks, and system startup behavior.</value>
+  </data>
+  <data name="SettingsPage_LanguageSettingsCard.Header" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="SettingsPage_LanguageSettingsCard.Description" xml:space="preserve">
+    <value>Select the display language for the app. Restarting after a change is recommended.</value>
+  </data>
+  <data name="SettingsPage_SystemDefaultLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>System default</value>
+  </data>
+  <data name="SettingsPage_KoreanLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>Korean</value>
+  </data>
+  <data name="SettingsPage_EnglishLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="SettingsPage_ThemeSettingsCard.Header" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="SettingsPage_ThemeSettingsCard.Description" xml:space="preserve">
+    <value>Change the color theme for the app and dialogs immediately.</value>
+  </data>
+  <data name="SettingsPage_SystemDefaultThemeComboBoxItem.Content" xml:space="preserve">
+    <value>System default</value>
+  </data>
+  <data name="SettingsPage_LightThemeComboBoxItem.Content" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="SettingsPage_DarkThemeComboBoxItem.Content" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="SettingsPage_UpdateCheckSettingsCard.Header" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
+  <data name="SettingsPage_UpdateCheckSettingsCard.Description" xml:space="preserve">
+    <value>Review the current app version and Microsoft Store updates.</value>
+  </data>
+  <data name="SettingsPage_ApplicationVersionFormat" xml:space="preserve">
+    <value>Current version: {0}</value>
+  </data>
+  <data name="SettingsPage_CheckForUpdatesButtonTextBlock.Text" xml:space="preserve">
+    <value>Check</value>
+  </data>
+  <data name="SettingsPage_CheckForUpdatesLoadingMessage" xml:space="preserve">
+    <value>Checking Microsoft Store updates.</value>
+  </data>
+  <data name="SettingsPage_AutomaticUpdateCheckSettingsCard.Header" xml:space="preserve">
+    <value>Automatic update checks</value>
+  </data>
+  <data name="SettingsPage_AutomaticUpdateCheckSettingsCard.Description" xml:space="preserve">
+    <value>Check for Store updates every 8 hours and show a notification when one is found.</value>
+  </data>
+  <data name="SettingsPage_StartupLaunchSettingsCard.Header" xml:space="preserve">
+    <value>Launch at system startup</value>
+  </data>
+  <data name="SettingsPage_StartupLaunchSettingsCard.Description" xml:space="preserve">
+    <value>Run Codex Account Switch automatically after Windows sign-in.</value>
+  </data>
+  <data name="SettingsPage_AccountSettingsGroup.Header" xml:space="preserve">
+    <value>Account settings</value>
+  </data>
+  <data name="SettingsPage_AccountSettingsGroup.Description" xml:space="preserve">
+    <value>Configure account health checks, automatic refresh, low-quota thresholds, and saved notification flags.</value>
+  </data>
+  <data name="SettingsPage_ExpiredAccountAutomaticDeletionSettingsCard.Header" xml:space="preserve">
+    <value>Automatically delete invalid accounts</value>
+  </data>
+  <data name="SettingsPage_ExpiredAccountAutomaticDeletionSettingsCard.Description" xml:space="preserve">
+    <value>Remove accounts from the list automatically when authentication is rejected during refresh.</value>
+  </data>
+  <data name="SettingsPage_ExpiredAccountNotificationSettingsCard.Header" xml:space="preserve">
+    <value>Notify when invalid accounts are found</value>
+  </data>
+  <data name="SettingsPage_ExpiredAccountNotificationSettingsCard.Description" xml:space="preserve">
+    <value>Show a Windows notification when an expired or unusable account is detected.</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
+    <value>Active account automatic refresh</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
+    <value>Refresh usage for the active account at the selected minute interval.</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
+    <value>Refresh interval</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
+    <value>Set how often active account usage refreshes, in minutes.</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountNextUsageRefreshSettingsCard.Header" xml:space="preserve">
+    <value>Next refresh</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountNextUsageRefreshSettingsCard.Description" xml:space="preserve">
+    <value>Time remaining before active account usage refreshes again.</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
+    <value>Inactive account automatic refresh</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
+    <value>Refresh usage for inactive accounts at the selected minute interval.</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
+    <value>Refresh interval</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
+    <value>Set how often inactive account usage refreshes, in minutes.</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountNextUsageRefreshSettingsCard.Header" xml:space="preserve">
+    <value>Next refresh</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountNextUsageRefreshSettingsCard.Description" xml:space="preserve">
+    <value>Time remaining before inactive account usage refreshes again.</value>
+  </data>
+  <data name="SettingsPage_RefreshRemainingDisabledText" xml:space="preserve">
+    <value>Automatic refresh is off</value>
+  </data>
+  <data name="SettingsPage_RefreshRemainingFormat" xml:space="preserve">
+    <value>Next refresh in {0:00}:{1:00}:{2:00}</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Header" xml:space="preserve">
+    <value>5-hour low-quota threshold</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
+    <value>Mark the 5-hour limit as low quota when remaining usage is at or below this percentage.</value>
+  </data>
+  <data name="SettingsPage_SecondaryUsageWarningThresholdSettingsCard.Header" xml:space="preserve">
+    <value>7-day low-quota threshold</value>
+  </data>
+  <data name="SettingsPage_SecondaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
+    <value>Mark the 7-day limit as low quota when remaining usage is at or below this percentage.</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Header" xml:space="preserve">
+    <value>5-hour low-quota notification</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
+    <value>Save whether 5-hour low-quota notifications should be enabled.</value>
+  </data>
+  <data name="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard.Header" xml:space="preserve">
+    <value>7-day low-quota notification</value>
+  </data>
+  <data name="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
+    <value>Save whether 7-day low-quota notifications should be enabled.</value>
+  </data>
+  <data name="SettingsPage_LanguageRestartDialogTitle" xml:space="preserve">
+    <value>Restart recommended</value>
+  </data>
+  <data name="SettingsPage_LanguageRestartDialogMessage" xml:space="preserve">
+    <value>The language setting has been saved. Restart the app to apply it reliably to every screen.</value>
+  </data>
+  <data name="SettingsPage_UpdateAvailableDialogTitle" xml:space="preserve">
+    <value>Update available</value>
+  </data>
+  <data name="SettingsPage_UpdateAvailableDialogMessageFormat" xml:space="preserve">
+    <value>{1}
+{0} update(s) are available from Microsoft Store.</value>
+  </data>
+  <data name="SettingsPage_OpenStoreButtonText" xml:space="preserve">
+    <value>Open Store</value>
+  </data>
+  <data name="SettingsPage_NoUpdateDialogTitle" xml:space="preserve">
+    <value>You're up to date</value>
+  </data>
+  <data name="SettingsPage_NoUpdateDialogMessage" xml:space="preserve">
+    <value>The installed app is already up to date.</value>
+  </data>
+  <data name="SettingsPage_UpdateCheckFailedDialogTitle" xml:space="preserve">
+    <value>Update check failed</value>
+  </data>
+  <data name="SettingsPage_UpdateCheckFailedDialogMessage" xml:space="preserve">
+    <value>Microsoft Store update information could not be checked. Please verify the package installation state and network connection.</value>
+  </data>
+  <data name="SettingsPage_StartupRegistrationFailedDialogTitle" xml:space="preserve">
+    <value>Startup setting failed</value>
+  </data>
+  <data name="SettingsPage_StartupRegistrationFailedDialogMessage" xml:space="preserve">
+    <value>The Windows startup task setting could not be applied. Please check package manifest registration or Windows startup app permissions.</value>
+  </data>
+  <data name="Notification_ExpiredAccountDetectedTitle" xml:space="preserve">
+    <value>Invalid account found</value>
+  </data>
+  <data name="Notification_ExpiredAccountDetectedMessageFormat" xml:space="preserve">
+    <value>{0} cannot be used. The account state was updated based on your settings.</value>
+  </data>
+  <data name="Notification_StoreUpdateAvailableTitle" xml:space="preserve">
+    <value>Codex Account Switch update</value>
+  </data>
+  <data name="Notification_StoreUpdateAvailableMessageFormat" xml:space="preserve">
+    <value>{0} update(s) are available from Microsoft Store.</value>
+  </data>
+  <data name="Notification_OpenStoreButtonText" xml:space="preserve">
+    <value>Open Store</value>
+  </data>
+  <data name="SettingsPage_UpdateSettingsCard.Header" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
+  <data name="SettingsPage_UpdateSettingsCard.Description" xml:space="preserve">
+    <value>Review the current app version and Microsoft Store updates.</value>
+  </data>
+  <data name="SettingsPage_AutomaticUpdateSettingsCard.Header" xml:space="preserve">
+    <value>Automatic update checks</value>
+  </data>
+  <data name="SettingsPage_AutomaticUpdateSettingsCard.Description" xml:space="preserve">
+    <value>Check for Store updates every 8 hours and show a notification when one is found.</value>
+  </data>
+  <data name="SettingsPage_RestartRecommendedDialogTitle" xml:space="preserve">
+    <value>Restart recommended</value>
+  </data>
+  <data name="SettingsPage_RestartRecommendedDialogMessage" xml:space="preserve">
+    <value>The language setting has been saved. Restart the app to apply it reliably to every screen.</value>
+  </data>
+  <data name="SettingsPage_NoUpdateDialogMessageFormat" xml:space="preserve">
+    <value>{0}
+The installed app is already up to date.</value>
+  </data>
+  <data name="SettingsPage_AutomaticRefreshDisabledText" xml:space="preserve">
+    <value>Automatic refresh is off</value>
+  </data>
+  <data name="SettingsPage_NextUsageRefreshFormat" xml:space="preserve">
+    <value>Next refresh in {0}</value>
+  </data>
+  <data name="SettingsPage_RemainingTimeWithDaysFormat" xml:space="preserve">
+    <value>{0} day(s) {1}</value>
+  </data>
 </root>

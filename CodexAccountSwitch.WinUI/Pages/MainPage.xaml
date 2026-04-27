@@ -8,5 +8,8 @@
     Unloaded="OnMainPageUnloaded"
     mc:Ignorable="d">
 
-    <Frame x:Name="SectionContentFrame" Background="{ThemeResource LayerOnMicaBaseAltFillColorDefault}" />
+    <Frame
+        x:Name="SectionContentFrame"
+        Background="{ThemeResource LayerOnMicaBaseAltFillColorDefault}"
+        IsNavigationStackEnabled="False" />
 </Page>

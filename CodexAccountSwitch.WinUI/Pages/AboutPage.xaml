@@ -13,11 +13,11 @@
         <Style x:Key="AboutPageIconBorderStyle" TargetType="Border">
             <Setter Property="Width" Value="82" />
             <Setter Property="Height" Value="82" />
-            <Setter Property="Padding" Value="10" />
+            <Setter Property="Padding" Value="8" />
             <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
             <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="{ThemeResource OverlayCornerRadius}" />
+            <Setter Property="CornerRadius" Value="16" />
         </Style>
     </Page.Resources>
 
@@ -30,7 +30,12 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Border Grid.Column="0" Style="{StaticResource AboutPageIconBorderStyle}">
+                    <Border
+                        Grid.Column="0"
+                        Width="120"
+                        Height="120"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource AboutPageIconBorderStyle}">
                         <Image
                             AutomationProperties.AccessibilityView="Raw"
                             Source="ms-appx:///Assets/Icon.png"
@@ -49,7 +54,11 @@
                                 TextWrapping="Wrap" />
                         </StackPanel>
 
-                        <Grid ColumnSpacing="16" RowSpacing="4">
+                        <!--  Margin for compensation of the line height of the textblocks  -->
+                        <Grid
+                            Margin="0,0,0,10"
+                            ColumnSpacing="16"
+                            RowSpacing="4">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />

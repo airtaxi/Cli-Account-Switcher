@@ -15,7 +15,7 @@
         <MicaBackdrop />
     </Window.SystemBackdrop>
 
-    <Grid>
+    <Grid x:Name="RootGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -34,7 +34,6 @@
             <TitleBar.Content>
                 <dev:SelectorBarSegmented
                     x:Name="PageSelectorBar"
-                    HorizontalAlignment="Center"
                     SelectedItem="{x:Bind DashboardSelectorBarItem}"
                     SelectionChanged="OnPageSelectorBarSelectionChanged">
                     <SelectorBarItem

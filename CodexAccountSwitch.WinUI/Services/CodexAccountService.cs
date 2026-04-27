@@ -29,21 +29,34 @@ public sealed class CodexAccountService : IDisposable
     private readonly SemaphoreSlim _saveSemaphore = new(1, 1);
     private readonly SemaphoreSlim _refreshSemaphore = new(1, 1);
     private readonly CancellationTokenSource _backgroundCancellationTokenSource = new();
+    private readonly ApplicationSettingsService _applicationSettingsService;
+    private readonly ApplicationNotificationService _applicationNotificationService;
     private readonly HttpClient _httpClient;
     private readonly CodexAuthenticationDocumentSerializer _codexAuthenticationDocumentSerializer = new();
     private readonly CodexOAuthClient _codexOAuthClient;
     private readonly CodexUsageClient _codexUsageClient;
+    private readonly object _refreshScheduleLock = new();
     private FileSystemWatcher _authenticationFileSystemWatcher;
+    private DateTimeOffset? _nextActiveUsageRefreshTime;
+    private DateTimeOffset? _nextInactiveUsageRefreshTime;
+    private bool _isUsageRefreshScheduleInitialized;
     private bool _disposed;
 
     public TimeSpan ActiveStatusRefreshInterval { get; set; } = TimeSpan.FromMinutes(1);
 
-    public TimeSpan ActiveUsageRefreshInterval { get; set; } = TimeSpan.FromMinutes(2);
+    public TimeSpan ActiveUsageRefreshInterval { get; private set; } = TimeSpan.FromSeconds(ApplicationSettings.DefaultActiveAccountUsageRefreshIntervalSeconds);
 
-    public TimeSpan InactiveUsageRefreshInterval { get; set; } = TimeSpan.FromMinutes(15);
+    public TimeSpan InactiveUsageRefreshInterval { get; private set; } = TimeSpan.FromSeconds(ApplicationSettings.DefaultInactiveAccountUsageRefreshIntervalSeconds);
 
-    public CodexAccountService()
+    public bool IsActiveUsageRefreshEnabled { get; private set; } = true;
+
+    public bool IsInactiveUsageRefreshEnabled { get; private set; } = true;
+
+    public CodexAccountService(ApplicationSettingsService applicationSettingsService, ApplicationNotificationService applicationNotificationService)
     {
+        _applicationSettingsService = applicationSettingsService;
+        _applicationNotificationService = applicationNotificationService;
+
         var codexApiClientOptions = new CodexApiClientOptions
         {
             CodexHomeDirectoryPath = Constants.CodexHomeDirectory
@@ -55,6 +68,7 @@ public sealed class CodexAccountService : IDisposable
         _codexOAuthClient = new CodexOAuthClient(_httpClient, codexApiClientOptions, codexRequestMessageFactory);
         _codexUsageClient = new CodexUsageClient(_httpClient, codexRequestMessageFactory);
 
+        ApplyApplicationSettings();
         LoadAccounts();
     }
 
@@ -63,16 +77,27 @@ public sealed class CodexAccountService : IDisposable
         lock (_accountsLock) return [.. _accounts];
     }
 
+    public TimeSpan? GetActiveUsageRefreshRemainingTime()
+    {
+        lock (_refreshScheduleLock) return GetUsageRefreshRemainingTime(_nextActiveUsageRefreshTime, IsActiveUsageRefreshEnabled);
+    }
+
+    public TimeSpan? GetInactiveUsageRefreshRemainingTime()
+    {
+        lock (_refreshScheduleLock) return GetUsageRefreshRemainingTime(_nextInactiveUsageRefreshTime, IsInactiveUsageRefreshEnabled);
+    }
+
     public void Start()
     {
         ThrowIfDisposed();
+        _applicationSettingsService.SettingsChanged += OnApplicationSettingsServiceSettingsChanged;
         StartAuthenticationFileSystemWatcher();
         _ = RunActiveStatusRefreshLoopAsync();
         _ = RunActiveUsageRefreshLoopAsync();
         _ = RunInactiveUsageRefreshLoopAsync();
         _ = RefreshActiveStatusesSilentlyAsync();
-        _ = RefreshAccountsUsageSilentlyAsync(account => account.IsActive);
-        _ = RefreshAccountsUsageSilentlyAsync(account => !account.IsActive);
+        if (IsActiveUsageRefreshEnabled) _ = RefreshAccountsUsageSilentlyAsync(account => account.IsActive);
+        if (IsInactiveUsageRefreshEnabled) _ = RefreshAccountsUsageSilentlyAsync(account => !account.IsActive);
     }
 
     public CodexOAuthSession CreateOAuthSession() => _codexOAuthClient.CreateSession();
@@ -144,6 +169,7 @@ public sealed class CodexAccountService : IDisposable
 
         lock (_accountsLock) _accounts.RemoveAll(account => accountIdentifierSet.Contains(account.AccountIdentifier));
         await SaveAccountsAsync(cancellationToken);
+        SendAccountsChangedMessage();
     }
 
     public async Task<int> DeleteExpiredAccountsAsync(CancellationToken cancellationToken = default)
@@ -151,6 +177,7 @@ public sealed class CodexAccountService : IDisposable
         int deletedCount;
         lock (_accountsLock) deletedCount = _accounts.RemoveAll(account => account.IsTokenExpired);
         if (deletedCount > 0) await SaveAccountsAsync(cancellationToken);
+        if (deletedCount > 0) SendAccountsChangedMessage();
         return deletedCount;
     }
 
@@ -216,6 +243,7 @@ public sealed class CodexAccountService : IDisposable
         if (_disposed) return;
         _disposed = true;
         _backgroundCancellationTokenSource.Cancel();
+        _applicationSettingsService.SettingsChanged -= OnApplicationSettingsServiceSettingsChanged;
         _authenticationFileSystemWatcher?.Dispose();
         _backgroundCancellationTokenSource.Dispose();
         _saveSemaphore.Dispose();
@@ -273,9 +301,7 @@ public sealed class CodexAccountService : IDisposable
         }
         catch (CodexApiException codexApiException) when (codexApiException.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden)
         {
-            codexAccount.MarkAsExpired();
-            await SaveAccountsAsync(cancellationToken);
-            SendAccountChangedMessage(codexAccount);
+            await HandleExpiredAccountAsync(codexAccount, cancellationToken);
         }
     }
 
@@ -347,23 +373,137 @@ public sealed class CodexAccountService : IDisposable
 
     private async Task RunActiveUsageRefreshLoopAsync()
     {
-        using var periodicTimer = new PeriodicTimer(ActiveUsageRefreshInterval);
         try
         {
-            while (await periodicTimer.WaitForNextTickAsync(_backgroundCancellationTokenSource.Token)) await RefreshAccountsUsageSilentlyAsync(account => account.IsActive);
+            while (!_backgroundCancellationTokenSource.IsCancellationRequested)
+            {
+                if (!IsActiveUsageRefreshEnabled)
+                {
+                    SetNextActiveUsageRefreshTime(null);
+                    await Task.Delay(TimeSpan.FromSeconds(1), _backgroundCancellationTokenSource.Token);
+                    continue;
+                }
+
+                if (!await WaitForNextRefreshAsync(true, ActiveUsageRefreshInterval)) continue;
+                await RefreshAccountsUsageSilentlyAsync(account => account.IsActive);
+                SetNextActiveUsageRefreshTime(DateTimeOffset.UtcNow.Add(ActiveUsageRefreshInterval));
+            }
         }
         catch (OperationCanceledException) { }
     }
 
     private async Task RunInactiveUsageRefreshLoopAsync()
     {
-        using var periodicTimer = new PeriodicTimer(InactiveUsageRefreshInterval);
         try
         {
-            while (await periodicTimer.WaitForNextTickAsync(_backgroundCancellationTokenSource.Token)) await RefreshAccountsUsageSilentlyAsync(account => !account.IsActive);
+            while (!_backgroundCancellationTokenSource.IsCancellationRequested)
+            {
+                if (!IsInactiveUsageRefreshEnabled)
+                {
+                    SetNextInactiveUsageRefreshTime(null);
+                    await Task.Delay(TimeSpan.FromSeconds(1), _backgroundCancellationTokenSource.Token);
+                    continue;
+                }
+
+                if (!await WaitForNextRefreshAsync(false, InactiveUsageRefreshInterval)) continue;
+                await RefreshAccountsUsageSilentlyAsync(account => !account.IsActive);
+                SetNextInactiveUsageRefreshTime(DateTimeOffset.UtcNow.Add(InactiveUsageRefreshInterval));
+            }
         }
         catch (OperationCanceledException) { }
     }
+
+    private async Task<bool> WaitForNextRefreshAsync(bool isActiveAccountRefresh, TimeSpan refreshInterval)
+    {
+        var nextRefreshTime = GetNextUsageRefreshTime(isActiveAccountRefresh);
+        if (nextRefreshTime is null)
+        {
+            SetNextUsageRefreshTime(isActiveAccountRefresh, DateTimeOffset.UtcNow.Add(refreshInterval));
+            return false;
+        }
+
+        var remainingTime = nextRefreshTime.Value - DateTimeOffset.UtcNow;
+        if (remainingTime <= TimeSpan.Zero) return true;
+
+        await Task.Delay(GetRefreshSchedulePollingDelay(remainingTime), _backgroundCancellationTokenSource.Token);
+        return false;
+    }
+
+    private async Task HandleExpiredAccountAsync(CodexAccount codexAccount, CancellationToken cancellationToken)
+    {
+        var wasTokenExpired = codexAccount.IsTokenExpired;
+        if (!wasTokenExpired && _applicationSettingsService.Settings.IsExpiredAccountNotificationEnabled) _applicationNotificationService.ShowExpiredAccountDetectedNotification(codexAccount.DisplayName);
+
+        if (_applicationSettingsService.Settings.IsExpiredAccountAutomaticDeletionEnabled)
+        {
+            lock (_accountsLock) _accounts.RemoveAll(account => string.Equals(account.AccountIdentifier, codexAccount.AccountIdentifier, StringComparison.Ordinal));
+            await SaveAccountsAsync(cancellationToken);
+            SendAccountsChangedMessage();
+            return;
+        }
+
+        codexAccount.MarkAsExpired();
+        await SaveAccountsAsync(cancellationToken);
+        SendAccountChangedMessage(codexAccount);
+    }
+
+    private void ApplyApplicationSettings()
+    {
+        var applicationSettings = _applicationSettingsService.Settings;
+        var activeUsageRefreshInterval = TimeSpan.FromSeconds(applicationSettings.ActiveAccountUsageRefreshIntervalSeconds);
+        var inactiveUsageRefreshInterval = TimeSpan.FromSeconds(applicationSettings.InactiveAccountUsageRefreshIntervalSeconds);
+        var isActiveUsageRefreshEnabled = applicationSettings.IsActiveAccountUsageAutomaticRefreshEnabled;
+        var isInactiveUsageRefreshEnabled = applicationSettings.IsInactiveAccountUsageAutomaticRefreshEnabled;
+        var shouldResetUsageRefreshSchedules = !_isUsageRefreshScheduleInitialized || ActiveUsageRefreshInterval != activeUsageRefreshInterval || InactiveUsageRefreshInterval != inactiveUsageRefreshInterval || IsActiveUsageRefreshEnabled != isActiveUsageRefreshEnabled || IsInactiveUsageRefreshEnabled != isInactiveUsageRefreshEnabled;
+
+        ActiveUsageRefreshInterval = activeUsageRefreshInterval;
+        InactiveUsageRefreshInterval = inactiveUsageRefreshInterval;
+        IsActiveUsageRefreshEnabled = isActiveUsageRefreshEnabled;
+        IsInactiveUsageRefreshEnabled = isInactiveUsageRefreshEnabled;
+        if (!shouldResetUsageRefreshSchedules) return;
+
+        ResetUsageRefreshSchedules();
+        _isUsageRefreshScheduleInitialized = true;
+    }
+
+    private void ResetUsageRefreshSchedules()
+    {
+        var currentTime = DateTimeOffset.UtcNow;
+        SetNextActiveUsageRefreshTime(IsActiveUsageRefreshEnabled ? currentTime.Add(ActiveUsageRefreshInterval) : null);
+        SetNextInactiveUsageRefreshTime(IsInactiveUsageRefreshEnabled ? currentTime.Add(InactiveUsageRefreshInterval) : null);
+    }
+
+    private DateTimeOffset? GetNextUsageRefreshTime(bool isActiveAccountRefresh)
+    {
+        lock (_refreshScheduleLock) return isActiveAccountRefresh ? _nextActiveUsageRefreshTime : _nextInactiveUsageRefreshTime;
+    }
+
+    private void SetNextUsageRefreshTime(bool isActiveAccountRefresh, DateTimeOffset? nextRefreshTime)
+    {
+        if (isActiveAccountRefresh) SetNextActiveUsageRefreshTime(nextRefreshTime);
+        else SetNextInactiveUsageRefreshTime(nextRefreshTime);
+    }
+
+    private void SetNextActiveUsageRefreshTime(DateTimeOffset? nextRefreshTime)
+    {
+        lock (_refreshScheduleLock) _nextActiveUsageRefreshTime = nextRefreshTime;
+    }
+
+    private void SetNextInactiveUsageRefreshTime(DateTimeOffset? nextRefreshTime)
+    {
+        lock (_refreshScheduleLock) _nextInactiveUsageRefreshTime = nextRefreshTime;
+    }
+
+    private TimeSpan? GetUsageRefreshRemainingTime(DateTimeOffset? nextRefreshTime, bool isUsageRefreshEnabled)
+    {
+        if (!isUsageRefreshEnabled || nextRefreshTime is null) return null;
+        var remainingTime = nextRefreshTime.Value - DateTimeOffset.UtcNow;
+        return remainingTime <= TimeSpan.Zero ? TimeSpan.Zero : remainingTime;
+    }
+
+    private static TimeSpan GetRefreshSchedulePollingDelay(TimeSpan remainingTime) => remainingTime < TimeSpan.FromSeconds(1) ? remainingTime : TimeSpan.FromSeconds(1);
+
+    private void OnApplicationSettingsServiceSettingsChanged(object sender, EventArgs eventArguments) => ApplyApplicationSettings();
 
     private async Task RefreshActiveStatusesSilentlyAsync()
     {
@@ -489,6 +629,8 @@ public sealed class CodexAccountService : IDisposable
     }
 
     private static void SendAccountChangedMessage(CodexAccount codexAccount) => WeakReferenceMessenger.Default.Send(new ValueChangedMessage<CodexAccount>(codexAccount));
+
+    private void SendAccountsChangedMessage() => WeakReferenceMessenger.Default.Send(new ValueChangedMessage<CodexAccountStoreDocument>(CreateStoreDocumentSnapshot()));
 
     private void ThrowIfDisposed()
     {

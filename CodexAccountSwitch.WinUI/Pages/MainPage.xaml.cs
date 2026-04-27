@@ -20,7 +20,6 @@ public sealed partial class MainPage : Page
     {
         var selectedPageType = GetSelectedPageType(mainPageNavigationSection);
 
-        if (SectionContentFrame.CurrentSourcePageType == selectedPageType) return;
         SectionContentFrame.Navigate(selectedPageType);
     }
 

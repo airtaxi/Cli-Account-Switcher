@@ -65,7 +65,7 @@ public sealed partial class AboutPage : Page
 
     private static string FormatCurrentApplicationVersion(PackageVersion packageVersion) => $"v{packageVersion.Major}.{packageVersion.Minor}.{packageVersion.Build}";
 
-    private static string GetCurrentApplicationVersion() => FormatCurrentApplicationVersion(Package.Current.Id.Version);
+    public static string GetCurrentApplicationVersion() => FormatCurrentApplicationVersion(Package.Current.Id.Version);
 
     private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 }

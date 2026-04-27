@@ -21,9 +21,10 @@ public sealed class LocalizationService
     public void ApplyLanguageTag(string languageTag)
     {
         var resolvedLanguageTag = ResolveSupportedLanguageTag(languageTag);
-        if (CurrentLanguageTag == resolvedLanguageTag && string.Equals(ApplicationLanguages.PrimaryLanguageOverride, resolvedLanguageTag, StringComparison.Ordinal)) return;
+        var primaryLanguageOverride = string.IsNullOrWhiteSpace(languageTag) ? resolvedLanguageTag : languageTag;
+        if (CurrentLanguageTag == resolvedLanguageTag && string.Equals(ApplicationLanguages.PrimaryLanguageOverride, primaryLanguageOverride, StringComparison.Ordinal)) return;
 
-        ApplicationLanguages.PrimaryLanguageOverride = resolvedLanguageTag;
+        ApplicationLanguages.PrimaryLanguageOverride = primaryLanguageOverride;
         ApplyCurrentThreadCultures(resolvedLanguageTag);
 
         _resourceLoader = new ResourceLoader();

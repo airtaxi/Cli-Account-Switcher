@@ -20,6 +20,7 @@ public static class DialogHelper
             DefaultButton = ContentDialogButton.Primary,
             XamlRoot = element.XamlRoot
         };
+        App.ApplicationThemeService.RegisterThemeTarget(dialog);
         var textBox = new TextBox();
         if (numberOnly) textBox.BeforeTextChanging += (textBoxSender, textBoxBeforeTextChangingEventArguments) => textBoxBeforeTextChangingEventArguments.Cancel = textBoxBeforeTextChangingEventArguments.NewText.Any(character => !char.IsDigit(character));
         textBox.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -49,6 +50,7 @@ public static class DialogHelper
             XamlRoot = xamlRoot,
             DefaultButton = ContentDialogButton.Primary
         };
+        App.ApplicationThemeService.RegisterThemeTarget(dialog);
 
         if (!string.IsNullOrEmpty(secondaryButtonText)) dialog.SecondaryButtonText = secondaryButtonText;
         return dialog;

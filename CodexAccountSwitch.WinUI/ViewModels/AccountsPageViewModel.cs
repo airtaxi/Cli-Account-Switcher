@@ -25,6 +25,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         _dispatcherQueue = dispatcherQueue;
         _applicationSettings.PropertyChanged += OnApplicationSettingsPropertyChanged;
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<CodexAccount>>(this, OnCodexAccountChangedMessageReceived);
+        WeakReferenceMessenger.Default.Register<ValueChangedMessage<CodexAccountStoreDocument>>(this, OnCodexAccountStoreDocumentChangedMessageReceived);
         ReloadAccounts();
     }
 
@@ -115,6 +116,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         _applicationSettings.PropertyChanged -= OnApplicationSettingsPropertyChanged;
         foreach (var accountViewModel in Accounts) accountViewModel.PropertyChanged -= OnAccountViewModelPropertyChanged;
         WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CodexAccount>>(this);
+        WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CodexAccountStoreDocument>>(this);
     }
 
     private void OnApplicationSettingsPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArguments)
@@ -128,6 +130,12 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     {
         if (_dispatcherQueue.HasThreadAccess) ApplyAccountChange(valueChangedMessage.Value);
         else _dispatcherQueue.TryEnqueue(() => ApplyAccountChange(valueChangedMessage.Value));
+    }
+
+    private void OnCodexAccountStoreDocumentChangedMessageReceived(object recipient, ValueChangedMessage<CodexAccountStoreDocument> valueChangedMessage)
+    {
+        if (_dispatcherQueue.HasThreadAccess) ApplyAccountStoreDocumentChange(valueChangedMessage.Value);
+        else _dispatcherQueue.TryEnqueue(() => ApplyAccountStoreDocumentChange(valueChangedMessage.Value));
     }
 
     private void OnAccountViewModelPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArguments)
@@ -147,6 +155,13 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         ApplyFilter();
         RefreshAccountStateProperties();
         RefreshSelectedAccountIdentifiersFromAccountViewModels();
+    }
+
+    private void ApplyAccountStoreDocumentChange(CodexAccountStoreDocument codexAccountStoreDocument)
+    {
+        SynchronizeAccounts(codexAccountStoreDocument.Accounts);
+        ApplyFilter();
+        RefreshAccountStateProperties();
     }
 
     private void SynchronizeAccounts(IReadOnlyList<CodexAccount> codexAccounts)

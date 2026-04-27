@@ -24,6 +24,7 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
         _dispatcherQueue = dispatcherQueue;
         _applicationSettings.PropertyChanged += OnApplicationSettingsPropertyChanged;
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<CodexAccount>>(this, OnCodexAccountChangedMessageReceived);
+        WeakReferenceMessenger.Default.Register<ValueChangedMessage<CodexAccountStoreDocument>>(this, OnCodexAccountStoreDocumentChangedMessageReceived);
         ReloadDashboard();
     }
 
@@ -110,6 +111,7 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
         _disposed = true;
         _applicationSettings.PropertyChanged -= OnApplicationSettingsPropertyChanged;
         WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CodexAccount>>(this);
+        WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CodexAccountStoreDocument>>(this);
     }
 
     private void OnApplicationSettingsPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArguments)
@@ -120,6 +122,12 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
     }
 
     private void OnCodexAccountChangedMessageReceived(object recipient, ValueChangedMessage<CodexAccount> valueChangedMessage)
+    {
+        if (_dispatcherQueue.HasThreadAccess) ReloadDashboard();
+        else _dispatcherQueue.TryEnqueue(ReloadDashboard);
+    }
+
+    private void OnCodexAccountStoreDocumentChangedMessageReceived(object recipient, ValueChangedMessage<CodexAccountStoreDocument> valueChangedMessage)
     {
         if (_dispatcherQueue.HasThreadAccess) ReloadDashboard();
         else _dispatcherQueue.TryEnqueue(ReloadDashboard);

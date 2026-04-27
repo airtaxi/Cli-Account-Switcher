@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:CodexAccountSwitch.WinUI.Models"
     x:Uid="ThirdPartyLicensesDialog"
+    Closed="OnThirdPartyLicensesDialogClosed"
     DataContext="{x:Bind This}"
     DefaultButton="Close"
     Style="{StaticResource DefaultContentDialogStyle}"
