@@ -145,6 +145,16 @@ public sealed class CodexAccountService : IDisposable
         await RefreshAccountsUsageAsync(account => accountIdentifierSet.Contains(account.AccountIdentifier), cancellationToken);
     }
 
+    public async Task RefreshActiveAccountAsync(CancellationToken cancellationToken = default)
+    {
+        await RefreshActiveStatusesAsync(cancellationToken);
+
+        var activeAccountIdentifier = GetAccounts().FirstOrDefault(account => account.IsActive)?.AccountIdentifier;
+        if (string.IsNullOrWhiteSpace(activeAccountIdentifier)) return;
+
+        await RefreshAccountsUsageAsync(account => string.Equals(account.AccountIdentifier, activeAccountIdentifier, StringComparison.Ordinal), cancellationToken);
+    }
+
     public async Task SwitchActiveAccountAsync(string accountIdentifier, CancellationToken cancellationToken = default)
     {
         var codexAccount = FindAccount(accountIdentifier) ?? throw new InvalidOperationException("The account does not exist.");

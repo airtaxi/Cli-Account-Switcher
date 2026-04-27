@@ -1,3 +1,4 @@
+using CodexAccountSwitch.WinUI.Helpers;
 using CodexAccountSwitch.WinUI.Models;
 using CodexAccountSwitch.WinUI.Pages;
 using CodexAccountSwitch.WinUI.Services;
@@ -20,6 +21,7 @@ public sealed partial class MainWindow : WindowEx
     private const uint WindowsMessageQueryEndSession = 0x0011;
     private const uint WindowsMessageEndSession = 0x0016;
     private const nuint MainWindowSubclassIdentifier = 1;
+    private const int ActiveAccountQuotaPopupHorizontalOffset = 220;
 
     private delegate nint WindowSubclassProcedure(nint windowHandle, uint message, nint messageWordParameter, nint messageLongParameter, nuint subclassIdentifier, nuint referenceData);
 
@@ -31,6 +33,7 @@ public sealed partial class MainWindow : WindowEx
     private static partial nint DefSubclassProc(nint windowHandle, uint message, nint messageWordParameter, nint messageLongParameter);
 
     private readonly WindowSubclassProcedure _windowSubclassProcedure;
+    private PopupWindow _activeAccountQuotaPopupWindow;
     private bool _isApplyingNavigationSelection;
     private bool _isSystemShutdownInProgress;
 
@@ -48,9 +51,9 @@ public sealed partial class MainWindow : WindowEx
         SetTitleBar(AppTitleBar);
 
         // When the app is launched by StartupTask, the window is not activated, so tray commands are wired in code instead of XAML.
-        TaskbarIcon.LeftClickCommand = OpenDashboardPageCommand;
         OpenAccountsPageMenuFlyoutItem.Command = OpenAccountsPageCommand;
         OpenDashboardPageMenuFlyoutItem.Command = OpenDashboardPageCommand;
+        TaskbarIcon.LeftClickCommand = OpenActiveAccountQuotaPopupCommand;
 
         _windowSubclassProcedure = WindowSubclassProc;
         SetWindowSubclass(this.GetWindowHandle(), _windowSubclassProcedure, MainWindowSubclassIdentifier, 0);
@@ -151,7 +154,53 @@ public sealed partial class MainWindow : WindowEx
     [RelayCommand]
     private void OpenAccountsPage() => NavigateToMainPageSection(MainPageNavigationSection.Accounts);
 
+    [RelayCommand]
+    private void OpenActiveAccountQuotaPopup()
+    {
+        _activeAccountQuotaPopupWindow?.Close();
+
+        var activeAccountQuotaPopupWindow = new PopupWindow();
+        _activeAccountQuotaPopupWindow = activeAccountQuotaPopupWindow;
+        activeAccountQuotaPopupWindow.Closed += OnActiveAccountQuotaPopupWindowClosed;
+
+        var rasterizationScale = (double)activeAccountQuotaPopupWindow.GetDpiForWindow() / 96;
+        var taskbarRectangle = TaskbarHelper.GetTaskbarRectangle();
+        var taskbarPosition = TaskbarHelper.GetTaskbarPosition();
+
+        var positionX = taskbarRectangle.Right - ((activeAccountQuotaPopupWindow.Width + ActiveAccountQuotaPopupHorizontalOffset) * rasterizationScale);
+        var positionY = taskbarRectangle.Top - (activeAccountQuotaPopupWindow.Height * rasterizationScale);
+
+        switch (taskbarPosition)
+        {
+            case TaskbarPosition.Top:
+                positionX = taskbarRectangle.Right - ((activeAccountQuotaPopupWindow.Width + ActiveAccountQuotaPopupHorizontalOffset) * rasterizationScale);
+                positionY = taskbarRectangle.Bottom;
+                break;
+
+            case TaskbarPosition.Left:
+                positionX = taskbarRectangle.Right;
+                positionY = taskbarRectangle.Bottom - (activeAccountQuotaPopupWindow.Height * rasterizationScale);
+                break;
+
+            case TaskbarPosition.Right:
+                positionX = taskbarRectangle.Left - (activeAccountQuotaPopupWindow.Width * rasterizationScale);
+                positionY = taskbarRectangle.Bottom - (activeAccountQuotaPopupWindow.Height * rasterizationScale);
+                break;
+        }
+
+        activeAccountQuotaPopupWindow.Move((int)positionX, (int)positionY);
+        activeAccountQuotaPopupWindow.Activate();
+    }
+
     private void OnCloseProgramMenuFlyoutItemClicked(object sender, RoutedEventArgs routedEventArguments) => Environment.Exit(0);
+
+    private void OnActiveAccountQuotaPopupWindowClosed(object sender, WindowEventArgs windowEventArguments)
+    {
+        if (sender is not PopupWindow activeAccountQuotaPopupWindow) return;
+
+        activeAccountQuotaPopupWindow.Closed -= OnActiveAccountQuotaPopupWindowClosed;
+        if (ReferenceEquals(_activeAccountQuotaPopupWindow, activeAccountQuotaPopupWindow)) _activeAccountQuotaPopupWindow = null;
+    }
 
     private nint WindowSubclassProc(nint windowHandle, uint message, nint messageWordParameter, nint messageLongParameter, nuint subclassIdentifier, nuint referenceData)
     {
@@ -221,6 +270,7 @@ public sealed partial class MainWindow : WindowEx
         WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<MainPageNavigationSection>>(this);
         App.ApplicationThemeService.ThemeChanged -= OnApplicationThemeServiceThemeChanged;
         App.LocalizationService.LanguageChanged -= RefreshLocalizedText;
+        _activeAccountQuotaPopupWindow?.Close();
         App.StoreUpdateService.Dispose();
         App.CodexAccountService.Dispose();
     }

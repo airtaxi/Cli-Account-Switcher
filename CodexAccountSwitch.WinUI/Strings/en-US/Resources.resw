@@ -543,6 +543,9 @@
   <data name="DashboardPage_ManageAccountsTextBlock.Text" xml:space="preserve">
     <value>Go to Account Management</value>
   </data>
+  <data name="DashboardPage_RefreshActiveAccountTextBlock.Text" xml:space="preserve">
+    <value>Refresh Active Account</value>
+  </data>
   <data name="DashboardPage_CurrentActiveAccountLabelTextBlock.Text" xml:space="preserve">
     <value>Current Active account</value>
   </data>

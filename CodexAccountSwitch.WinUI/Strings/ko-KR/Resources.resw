@@ -543,6 +543,9 @@
   <data name="DashboardPage_ManageAccountsTextBlock.Text" xml:space="preserve">
     <value>계정 관리로 이동</value>
   </data>
+  <data name="DashboardPage_RefreshActiveAccountTextBlock.Text" xml:space="preserve">
+    <value>활성 계정 새로고침</value>
+  </data>
   <data name="DashboardPage_CurrentActiveAccountLabelTextBlock.Text" xml:space="preserve">
     <value>현재 활성 계정</value>
   </data>

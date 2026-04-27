@@ -3,6 +3,7 @@
     x:Class="CodexAccountSwitch.WinUI.Pages.DashboardPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:CodexAccountSwitch.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dev="using:DevWinUI"
     xmlns:local="using:CodexAccountSwitch.WinUI.Pages"
@@ -231,174 +232,10 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Border Grid.Column="0" Style="{StaticResource DashboardCardBorderStyle}">
-                        <Grid RowSpacing="12">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-
-                            <StackPanel Grid.Row="0" Spacing="4">
-                                <TextBlock
-                                    x:Uid="DashboardPage_ActiveAccountSectionTitleTextBlock"
-                                    FontSize="20"
-                                    FontWeight="SemiBold"
-                                    MaxLines="1"
-                                    TextTrimming="WordEllipsis" />
-                                <TextBlock
-                                    x:Uid="DashboardPage_ActiveAccountSectionDescriptionTextBlock"
-                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                    MaxLines="1"
-                                    TextTrimming="WordEllipsis"
-                                    TextWrapping="Wrap" />
-                            </StackPanel>
-
-                            <StackPanel
-                                Grid.Row="1"
-                                Spacing="12"
-                                Visibility="{x:Bind ViewModel.HasActiveAccount, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-                                <Grid ColumnSpacing="12">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <Border Grid.Column="0" Style="{StaticResource DashboardIconBadgeBorderStyle}">
-                                        <FontIcon
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"
-                                            Glyph="&#xE77B;" />
-                                    </Border>
-
-                                    <StackPanel Grid.Column="1" Spacing="3">
-                                        <TextBlock
-                                            x:Uid="DashboardPage_CurrentActiveAccountLabelTextBlock"
-                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                            TextTrimming="WordEllipsis" />
-                                        <TextBlock
-                                            FontSize="22"
-                                            FontWeight="SemiBold"
-                                            Text="{x:Bind ViewModel.ActiveAccountDisplayNameText, Mode=OneWay}"
-                                            TextTrimming="WordEllipsis" />
-                                        <TextBlock
-                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                            Text="{x:Bind ViewModel.ActiveAccountEmailAddressText, Mode=OneWay}"
-                                            TextTrimming="WordEllipsis" />
-                                        <TextBlock
-                                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                            Text="{x:Bind ViewModel.ActiveAccountPlanText, Mode=OneWay}"
-                                            TextTrimming="WordEllipsis" />
-                                    </StackPanel>
-                                </Grid>
-
-                                <TextBlock
-                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                    Text="{x:Bind ViewModel.ActiveAccountLastUsageRefreshText, Mode=OneWay}"
-                                    TextTrimming="WordEllipsis" />
-
-                                <Grid ColumnSpacing="12" RowSpacing="12">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <StackPanel Grid.Column="0" Spacing="8">
-                                        <Grid ColumnSpacing="8">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock
-                                                x:Uid="DashboardPage_ActivePrimaryUsageLabelTextBlock"
-                                                Grid.Column="0"
-                                                MaxLines="1"
-                                                Style="{StaticResource DashboardMetricLabelTextBlockStyle}"
-                                                TextTrimming="WordEllipsis" />
-                                            <TextBlock
-                                                Grid.Column="1"
-                                                FontWeight="SemiBold"
-                                                MaxLines="1"
-                                                Text="{x:Bind ViewModel.ActiveAccountPrimaryUsageRemainingText, Mode=OneWay}"
-                                                TextTrimming="WordEllipsis" />
-                                        </Grid>
-                                        <ProgressBar
-                                            Foreground="{x:Bind ViewModel.IsActiveAccountPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
-                                            Maximum="100"
-                                            Value="{x:Bind ViewModel.ActiveAccountPrimaryUsageRemainingPercentage, Mode=OneWay}" />
-                                    </StackPanel>
-
-                                    <StackPanel Grid.Column="1" Spacing="8">
-                                        <Grid ColumnSpacing="8">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock
-                                                x:Uid="DashboardPage_ActiveSecondaryUsageLabelTextBlock"
-                                                Grid.Column="0"
-                                                MaxLines="1"
-                                                Style="{StaticResource DashboardMetricLabelTextBlockStyle}"
-                                                TextTrimming="WordEllipsis" />
-                                            <TextBlock
-                                                Grid.Column="1"
-                                                FontWeight="SemiBold"
-                                                MaxLines="1"
-                                                Text="{x:Bind ViewModel.ActiveAccountSecondaryUsageRemainingText, Mode=OneWay}"
-                                                TextTrimming="WordEllipsis" />
-                                        </Grid>
-                                        <ProgressBar
-                                            Foreground="{x:Bind ViewModel.IsActiveAccountSecondaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
-                                            Maximum="100"
-                                            Value="{x:Bind ViewModel.ActiveAccountSecondaryUsageRemainingPercentage, Mode=OneWay}" />
-                                    </StackPanel>
-                                </Grid>
-                            </StackPanel>
-
-                            <StackPanel
-                                Grid.Row="1"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Spacing="8"
-                                Visibility="{x:Bind ViewModel.HasNoActiveAccount, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-                                <FontIcon
-                                    HorizontalAlignment="Center"
-                                    FontSize="38"
-                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                    Glyph="&#xE77B;" />
-                                <TextBlock
-                                    x:Uid="DashboardPage_NoActiveAccountTitleTextBlock"
-                                    HorizontalAlignment="Center"
-                                    FontSize="18"
-                                    FontWeight="SemiBold"
-                                    MaxLines="1"
-                                    TextTrimming="WordEllipsis" />
-                                <TextBlock
-                                    x:Uid="DashboardPage_NoActiveAccountDescriptionTextBlock"
-                                    HorizontalAlignment="Center"
-                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                    MaxLines="1"
-                                    TextAlignment="Center"
-                                    TextTrimming="WordEllipsis"
-                                    TextWrapping="Wrap" />
-                            </StackPanel>
-
-                            <Button
-                                x:Name="ManageAccountsButton"
-                                Grid.Row="2"
-                                HorizontalAlignment="Stretch"
-                                Click="OnManageAccountsButtonClicked">
-                                <StackPanel
-                                    HorizontalAlignment="Center"
-                                    Orientation="Horizontal"
-                                    Spacing="6">
-                                    <FontIcon FontSize="14" Glyph="&#xE8A7;" />
-                                    <TextBlock x:Uid="DashboardPage_ManageAccountsTextBlock" />
-                                </StackPanel>
-                            </Button>
-                        </Grid>
-                    </Border>
+                    <controls:ActiveAccountQuotaControl
+                        Grid.Column="0"
+                        ShouldUseMainWindowNavigation="False"
+                        ViewModel="{x:Bind ViewModel}" />
 
                     <Border Grid.Column="1" Style="{StaticResource DashboardCardBorderStyle}">
                         <Grid RowSpacing="14">
