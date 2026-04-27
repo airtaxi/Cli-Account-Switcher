@@ -526,13 +526,13 @@
     <value>활성 계정 할당량</value>
   </data>
   <data name="DashboardPage_ActiveAccountSectionDescriptionTextBlock.Text" xml:space="preserve">
-    <value>현재 Active 계정의 남은 할당량입니다.</value>
+    <value>현재 활성 계정의 남은 할당량입니다.</value>
   </data>
   <data name="DashboardPage_ManageAccountsTextBlock.Text" xml:space="preserve">
     <value>계정 관리로 이동</value>
   </data>
   <data name="DashboardPage_CurrentActiveAccountLabelTextBlock.Text" xml:space="preserve">
-    <value>현재 Active 계정</value>
+    <value>현재 활성 계정</value>
   </data>
   <data name="DashboardPage_ActivePrimaryUsageLabelTextBlock.Text" xml:space="preserve">
     <value>5시간 잔여량</value>

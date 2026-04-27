@@ -201,7 +201,7 @@
                                     <ColumnDefinition Width="0.7*" />
                                     <ColumnDefinition Width="4*" />
                                     <ColumnDefinition Width="0.8*" />
-                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="172" />
                                 </Grid.ColumnDefinitions>
                                 <CheckBox
                                     x:Name="SelectAllAccountsCheckBox"
@@ -223,11 +223,14 @@
                                 <TextBlock
                                     x:Uid="AccountsPage_PlanHeaderTextBlock"
                                     Grid.Column="2"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
                                     FontWeight="SemiBold" />
                                 <TextBlock
                                     x:Uid="AccountsPage_UsageHeaderTextBlock"
                                     Grid.Column="3"
                                     HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
                                     FontWeight="SemiBold" />
                                 <TextBlock
                                     x:Uid="AccountsPage_StatusHeaderTextBlock"
@@ -239,6 +242,7 @@
                                     x:Uid="AccountsPage_ActionsHeaderTextBlock"
                                     Grid.Column="5"
                                     HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
                                     FontWeight="SemiBold" />
                             </Grid>
                         </Border>
@@ -253,7 +257,7 @@
                                         <ColumnDefinition Width="0.7*" />
                                         <ColumnDefinition Width="4*" />
                                         <ColumnDefinition Width="0.8*" />
-                                        <ColumnDefinition Width="200" />
+                                        <ColumnDefinition Width="172" />
                                     </Grid.ColumnDefinitions>
 
                                     <CheckBox
@@ -283,6 +287,7 @@
 
                                     <TextBlock
                                         Grid.Column="2"
+                                        HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Text="{x:Bind PlanText, Mode=OneWay}" />
 
