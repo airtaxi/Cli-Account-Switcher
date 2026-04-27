@@ -63,8 +63,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     public void ReloadAccounts()
     {
-        Accounts.Clear();
-        foreach (var codexAccount in _codexAccountService.GetAccounts().OrderByDescending(account => account.IsActive).ThenBy(account => account.DisplayName, StringComparer.CurrentCultureIgnoreCase)) Accounts.Add(new CodexAccountViewModel(codexAccount));
+        SynchronizeAccounts(_codexAccountService.GetAccounts());
         ApplyFilter();
         RefreshAccountStateProperties();
     }
@@ -100,21 +99,54 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         RefreshAccountStateProperties();
     }
 
+    private void SynchronizeAccounts(IReadOnlyList<CodexAccount> codexAccounts)
+    {
+        var accountIdentifiers = codexAccounts.Select(codexAccount => codexAccount.AccountIdentifier).ToHashSet(StringComparer.Ordinal);
+        for (var accountIndex = Accounts.Count - 1; accountIndex >= 0; accountIndex--)
+        {
+            if (!accountIdentifiers.Contains(Accounts[accountIndex].AccountIdentifier)) Accounts.RemoveAt(accountIndex);
+        }
+
+        foreach (var codexAccount in codexAccounts)
+        {
+            var existingAccountViewModel = Accounts.FirstOrDefault(accountViewModel => string.Equals(accountViewModel.AccountIdentifier, codexAccount.AccountIdentifier, StringComparison.Ordinal));
+            if (existingAccountViewModel is null) Accounts.Add(new CodexAccountViewModel(codexAccount));
+            else existingAccountViewModel.Update(codexAccount);
+        }
+
+        SortAccounts();
+    }
+
     private void SortAccounts()
     {
-        var sortedAccounts = Accounts.OrderByDescending(accountViewModel => accountViewModel.IsActive).ThenBy(accountViewModel => accountViewModel.DisplayName, StringComparer.CurrentCultureIgnoreCase).ToList();
-        Accounts.Clear();
-        foreach (var accountViewModel in sortedAccounts) Accounts.Add(accountViewModel);
+        var sortedAccountViewModels = Accounts.OrderByDescending(accountViewModel => accountViewModel.IsActive).ThenBy(accountViewModel => accountViewModel.DisplayName, StringComparer.CurrentCultureIgnoreCase).ToList();
+        for (var accountIndex = 0; accountIndex < sortedAccountViewModels.Count; accountIndex++)
+        {
+            var accountViewModel = sortedAccountViewModels[accountIndex];
+            var currentAccountIndex = Accounts.IndexOf(accountViewModel);
+            if (currentAccountIndex != accountIndex) Accounts.Move(currentAccountIndex, accountIndex);
+        }
     }
 
     private void ApplyFilter()
     {
         var normalizedSearchText = (SearchText ?? "").Trim();
         var normalizedSelectedPlanFilter = string.IsNullOrWhiteSpace(SelectedPlanFilter) ? "All" : SelectedPlanFilter.Trim();
-        var filteredAccounts = Accounts.Where(accountViewModel => IsAccountVisible(accountViewModel, normalizedSearchText, normalizedSelectedPlanFilter)).ToList();
+        var filteredAccountViewModels = Accounts.Where(accountViewModel => IsAccountVisible(accountViewModel, normalizedSearchText, normalizedSelectedPlanFilter)).ToList();
+        var filteredAccountViewModelSet = filteredAccountViewModels.ToHashSet();
 
-        FilteredAccounts.Clear();
-        foreach (var accountViewModel in filteredAccounts) FilteredAccounts.Add(accountViewModel);
+        for (var accountIndex = FilteredAccounts.Count - 1; accountIndex >= 0; accountIndex--)
+        {
+            if (!filteredAccountViewModelSet.Contains(FilteredAccounts[accountIndex])) FilteredAccounts.RemoveAt(accountIndex);
+        }
+
+        for (var accountIndex = 0; accountIndex < filteredAccountViewModels.Count; accountIndex++)
+        {
+            var accountViewModel = filteredAccountViewModels[accountIndex];
+            var currentAccountIndex = FilteredAccounts.IndexOf(accountViewModel);
+            if (currentAccountIndex < 0) FilteredAccounts.Insert(accountIndex, accountViewModel);
+            else if (currentAccountIndex != accountIndex) FilteredAccounts.Move(currentAccountIndex, accountIndex);
+        }
         RefreshAccountCounts();
     }
 
