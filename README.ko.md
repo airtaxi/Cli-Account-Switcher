@@ -2,6 +2,10 @@
 
 🌐 [English](README.md)
 
+[![Microsoft Store에서 다운로드](https://get.microsoft.com/images/en-US%20dark.svg)](https://apps.microsoft.com/detail/9N25QV7VTL54)
+
+![Codex Account Switch WinUI 스크린샷](.github/Assets/KO.jpg)
+
 Codex Account Switch WinUI는 여러 Codex 인증 계정을 관리하고, Codex가 현재 사용할 활성 계정을 빠르게 전환하기 위한 Windows 데스크톱 유틸리티입니다.
 
 앱은 저장된 계정 목록을 자체 로컬 앱 데이터 폴더에 보관하고, 선택한 인증 문서를 `%USERPROFILE%\.codex\auth.json`에 기록해 활성 Codex 계정을 전환합니다.

@@ -2,6 +2,10 @@
 
 🌐 [한국어](README.ko.md)
 
+[![Download from Microsoft Store](https://get.microsoft.com/images/en-US%20dark.svg)](https://apps.microsoft.com/detail/9N25QV7VTL54)
+
+![Codex Account Switch WinUI screenshot](.github/Assets/EN.jpg)
+
 Codex Account Switch WinUI is a Windows desktop utility for managing multiple Codex authentication accounts and quickly switching the account currently used by Codex.
 
 The app stores saved account records in its own local application data folder and switches the active Codex account by writing the selected authentication document to `%USERPROFILE%\.codex\auth.json`.
