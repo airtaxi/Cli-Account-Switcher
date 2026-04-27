@@ -549,4 +549,100 @@
   <data name="DashboardLowUsageAccountViewModel_LowUsageFormat" xml:space="preserve">
     <value>{0}: {1}</value>
   </data>
+  <data name="AboutPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Codex 계정 전환기</value>
+  </data>
+  <data name="AboutPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>로컬 Codex 계정을 백업하고 빠르게 전환하는 WinUI 앱입니다.</value>
+  </data>
+  <data name="AboutPage_VersionHeaderTextBlock.Text" xml:space="preserve">
+    <value>버전</value>
+  </data>
+  <data name="AboutPage_CopyrightHeaderTextBlock.Text" xml:space="preserve">
+    <value>저작권</value>
+  </data>
+  <data name="AboutPage_ProjectSettingsGroup.Header" xml:space="preserve">
+    <value>프로젝트</value>
+  </data>
+  <data name="AboutPage_ProjectSettingsGroup.Description" xml:space="preserve">
+    <value>GitHub 저장소, 제작자, 영감을 준 원본 프로젝트입니다.</value>
+  </data>
+  <data name="AboutPage_GitHubRepositorySettingsCard.Header" xml:space="preserve">
+    <value>GitHub 저장소</value>
+  </data>
+  <data name="AboutPage_GitHubRepositorySettingsCard.Description" xml:space="preserve">
+    <value>소스 코드와 이슈를 확인합니다.</value>
+  </data>
+  <data name="AboutPage_GitHubRepositoryButtonTextBlock.Text" xml:space="preserve">
+    <value>저장소 열기</value>
+  </data>
+  <data name="AboutPage_CreatorSettingsCard.Header" xml:space="preserve">
+    <value>이호원 (airtaxi)</value>
+  </data>
+  <data name="AboutPage_CreatorSettingsCard.Description" xml:space="preserve">
+    <value>제작자</value>
+  </data>
+  <data name="AboutPage_CreatorGitHubButtonTextBlock.Text" xml:space="preserve">
+    <value>GitHub 프로필 열기</value>
+  </data>
+  <data name="AboutPage_InspirationSettingsCard.Header" xml:space="preserve">
+    <value>감사 인사</value>
+  </data>
+  <data name="AboutPage_InspirationSettingsCard.Description" xml:space="preserve">
+    <value>isxlan0/Codex_AccountSwitch에서 영감을 받았습니다. 좋은 아이디어를 공유해 주셔서 감사합니다.</value>
+  </data>
+  <data name="AboutPage_InspirationRepositoryButtonTextBlock.Text" xml:space="preserve">
+    <value>원본 저장소 열기</value>
+  </data>
+  <data name="AboutPage_LicenseSettingsGroup.Header" xml:space="preserve">
+    <value>라이선스</value>
+  </data>
+  <data name="AboutPage_LicenseSettingsGroup.Description" xml:space="preserve">
+    <value>앱과 NuGet 패키지 라이선스 정보를 확인합니다.</value>
+  </data>
+  <data name="AboutPage_AppLicenseSettingsCard.Header" xml:space="preserve">
+    <value>앱 라이선스</value>
+  </data>
+  <data name="AboutPage_AppLicenseSettingsCard.Description" xml:space="preserve">
+    <value>이 앱은 MIT License로 배포됩니다.</value>
+  </data>
+  <data name="AboutPage_AppLicenseContentTextBlock.Text" xml:space="preserve">
+    <value>MIT License</value>
+  </data>
+  <data name="AboutPage_ThirdPartyLicensesSettingsCard.Header" xml:space="preserve">
+    <value>써드파티 라이선스</value>
+  </data>
+  <data name="AboutPage_ThirdPartyLicensesSettingsCard.Description" xml:space="preserve">
+    <value>앱에서 직접 참조하는 NuGet 패키지를 확인합니다.</value>
+  </data>
+  <data name="AboutPage_ThirdPartyLicensesButtonTextBlock.Text" xml:space="preserve">
+    <value>NuGet 패키지 보기</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog.Title" xml:space="preserve">
+    <value>써드파티 라이선스</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog.CloseButtonText" xml:space="preserve">
+    <value>닫기</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>앱에서 직접 참조하는 NuGet 패키지와 라이선스 정보를 나열합니다.</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_NuGetPackageHeaderTextBlock.Text" xml:space="preserve">
+    <value>NuGet 패키지</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_NuGetPackageDescriptionTextBlock.Text" xml:space="preserve">
+    <value>패키지명, 버전, 라이선스, 제작자 정보를 확인할 수 있습니다.</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_VersionHeaderTextBlock.Text" xml:space="preserve">
+    <value>버전</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_LicenseHeaderTextBlock.Text" xml:space="preserve">
+    <value>라이선스</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_ProjectButtonTextBlock.Text" xml:space="preserve">
+    <value>프로젝트</value>
+  </data>
+  <data name="ThirdPartyLicensePackage_WindowsSoftwareDevelopmentKitLicense" xml:space="preserve">
+    <value>Windows SDK 라이선스</value>
+  </data>
 </root>
