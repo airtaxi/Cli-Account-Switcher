@@ -167,7 +167,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*" />
                             <ColumnDefinition Width="0.7*" />
-                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="4*" />
                             <ColumnDefinition Width="0.8*" />
                             <ColumnDefinition Width="200" />
                         </Grid.ColumnDefinitions>
@@ -203,13 +203,13 @@
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="viewModels:CodexAccountViewModel">
                         <Grid
-                            MinHeight="92"
+                            MinHeight="112"
                             Padding="12"
                             ColumnSpacing="12">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" />
                                 <ColumnDefinition Width="0.7*" />
-                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="4*" />
                                 <ColumnDefinition Width="0.8*" />
                                 <ColumnDefinition Width="200" />
                             </Grid.ColumnDefinitions>
@@ -237,21 +237,98 @@
                                 VerticalAlignment="Center"
                                 Text="{x:Bind PlanText, Mode=OneWay}" />
 
-                            <StackPanel
+                            <Grid
                                 Grid.Column="2"
                                 VerticalAlignment="Center"
-                                Spacing="3">
-                                <TextBlock Text="{x:Bind PrimaryUsageText, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
+                                ColumnSpacing="8"
+                                RowSpacing="8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Border
+                                    MinWidth="76"
+                                    Padding="8,3"
+                                    VerticalAlignment="Top"
+                                    Background="{ThemeResource ControlFillColorSecondaryBrush}"
+                                    CornerRadius="{ThemeResource ControlCornerRadius}">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontSize="12"
+                                        FontWeight="SemiBold"
+                                        Text="{x:Bind PrimaryUsageWindowLabelText, Mode=OneWay}" />
+                                </Border>
+                                <StackPanel Grid.Column="1" Spacing="3">
+                                    <Grid ColumnSpacing="8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                            FontWeight="SemiBold"
+                                            Text="{x:Bind PrimaryUsageRemainingText, Mode=OneWay}"
+                                            TextTrimming="CharacterEllipsis" />
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Text="{x:Bind PrimaryUsageResetText, Mode=OneWay}"
+                                            TextTrimming="CharacterEllipsis" />
+                                    </Grid>
+                                    <ProgressBar
+                                        Height="3"
+                                        Maximum="100"
+                                        Value="{x:Bind PrimaryUsageRemainingPercentage, Mode=OneWay}" />
+                                </StackPanel>
+                                <Border
+                                    Grid.Row="1"
+                                    MinWidth="76"
+                                    Padding="8,3"
+                                    VerticalAlignment="Top"
+                                    Background="{ThemeResource ControlFillColorTertiaryBrush}"
+                                    CornerRadius="{ThemeResource ControlCornerRadius}">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontSize="12"
+                                        FontWeight="SemiBold"
+                                        Text="{x:Bind SecondaryUsageWindowLabelText, Mode=OneWay}" />
+                                </Border>
+                                <StackPanel
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Spacing="3">
+                                    <Grid ColumnSpacing="8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                            FontWeight="SemiBold"
+                                            Text="{x:Bind SecondaryUsageRemainingText, Mode=OneWay}"
+                                            TextTrimming="CharacterEllipsis" />
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Text="{x:Bind SecondaryUsageResetText, Mode=OneWay}"
+                                            TextTrimming="CharacterEllipsis" />
+                                    </Grid>
+                                    <ProgressBar
+                                        Height="3"
+                                        Maximum="100"
+                                        Value="{x:Bind SecondaryUsageRemainingPercentage, Mode=OneWay}" />
+                                </StackPanel>
                                 <TextBlock
-                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                    Text="{x:Bind SecondaryUsageText, Mode=OneWay}"
-                                    TextTrimming="CharacterEllipsis" />
-                                <TextBlock
+                                    Grid.Row="2"
+                                    Grid.ColumnSpan="2"
                                     FontSize="12"
                                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                     Text="{x:Bind LastUsageRefreshText, Mode=OneWay}"
                                     TextTrimming="CharacterEllipsis" />
-                            </StackPanel>
+                            </Grid>
 
                             <Border
                                 Grid.Column="3"

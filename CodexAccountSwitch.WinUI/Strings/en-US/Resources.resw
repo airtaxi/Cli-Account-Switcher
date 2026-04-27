@@ -180,6 +180,9 @@
   <data name="CodexAccountViewModel_NotRefreshed" xml:space="preserve">
     <value>Not refreshed yet</value>
   </data>
+  <data name="CodexAccountViewModel_LastUsageRefreshFormat" xml:space="preserve">
+    <value>Last refreshed: {0}</value>
+  </data>
   <data name="CodexAccountViewModel_NoAccessToken" xml:space="preserve">
     <value>None</value>
   </data>
@@ -189,8 +192,23 @@
   <data name="CodexAccountViewModel_UnknownResetTime" xml:space="preserve">
     <value>Reset time unavailable</value>
   </data>
+  <data name="CodexAccountViewModel_PrimaryUsageWindowLabel" xml:space="preserve">
+    <value>5-hour limit</value>
+  </data>
+  <data name="CodexAccountViewModel_SecondaryUsageWindowLabel" xml:space="preserve">
+    <value>7-day limit</value>
+  </data>
   <data name="CodexAccountViewModel_ResetAfterFormat" xml:space="preserve">
     <value>resets in {0:hh\:mm\:ss}</value>
+  </data>
+  <data name="CodexAccountViewModel_ResetAfterWithSingleDayFormat" xml:space="preserve">
+    <value>resets in 1 day {0:hh\:mm\:ss}</value>
+  </data>
+  <data name="CodexAccountViewModel_ResetAfterWithMultipleDaysFormat" xml:space="preserve">
+    <value>resets in {0} days {1:hh\:mm\:ss}</value>
+  </data>
+  <data name="CodexAccountViewModel_UsageRemainingOnlyFormat" xml:space="preserve">
+    <value>{0}% remaining</value>
   </data>
   <data name="CodexAccountViewModel_UsageRemainingFormat" xml:space="preserve">
     <value>{0}% remaining · {1}</value>

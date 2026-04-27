@@ -21,6 +21,14 @@ public sealed partial class CodexAccountViewModel(CodexAccount codexAccount) : O
     [NotifyPropertyChangedFor(nameof(AccessTokenPreview))]
     [NotifyPropertyChangedFor(nameof(PrimaryUsageText))]
     [NotifyPropertyChangedFor(nameof(SecondaryUsageText))]
+    [NotifyPropertyChangedFor(nameof(PrimaryUsageWindowLabelText))]
+    [NotifyPropertyChangedFor(nameof(SecondaryUsageWindowLabelText))]
+    [NotifyPropertyChangedFor(nameof(PrimaryUsageRemainingText))]
+    [NotifyPropertyChangedFor(nameof(SecondaryUsageRemainingText))]
+    [NotifyPropertyChangedFor(nameof(PrimaryUsageResetText))]
+    [NotifyPropertyChangedFor(nameof(SecondaryUsageResetText))]
+    [NotifyPropertyChangedFor(nameof(PrimaryUsageRemainingPercentage))]
+    [NotifyPropertyChangedFor(nameof(SecondaryUsageRemainingPercentage))]
     [NotifyPropertyChangedFor(nameof(LastUsageRefreshText))]
     [NotifyPropertyChangedFor(nameof(SearchText))]
     public partial CodexAccount CodexAccount { get; set; } = codexAccount;
@@ -49,7 +57,23 @@ public sealed partial class CodexAccountViewModel(CodexAccount codexAccount) : O
 
     public string SecondaryUsageText => FormatUsageWindow(CodexAccount.LastCodexUsageSnapshot.SecondaryWindow);
 
-    public string LastUsageRefreshText => CodexAccount.LastUsageRefreshTime is null ? GetLocalizedString("CodexAccountViewModel_NotRefreshed") : CodexAccount.LastUsageRefreshTime.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.CurrentCulture);
+    public string PrimaryUsageWindowLabelText => GetLocalizedString("CodexAccountViewModel_PrimaryUsageWindowLabel");
+
+    public string SecondaryUsageWindowLabelText => GetLocalizedString("CodexAccountViewModel_SecondaryUsageWindowLabel");
+
+    public string PrimaryUsageRemainingText => FormatUsageRemaining(CodexAccount.LastCodexUsageSnapshot.PrimaryWindow);
+
+    public string SecondaryUsageRemainingText => FormatUsageRemaining(CodexAccount.LastCodexUsageSnapshot.SecondaryWindow);
+
+    public string PrimaryUsageResetText => FormatUsageReset(CodexAccount.LastCodexUsageSnapshot.PrimaryWindow);
+
+    public string SecondaryUsageResetText => FormatUsageReset(CodexAccount.LastCodexUsageSnapshot.SecondaryWindow);
+
+    public int PrimaryUsageRemainingPercentage => ClampUsageRemainingPercentage(CodexAccount.LastCodexUsageSnapshot.PrimaryWindow);
+
+    public int SecondaryUsageRemainingPercentage => ClampUsageRemainingPercentage(CodexAccount.LastCodexUsageSnapshot.SecondaryWindow);
+
+    public string LastUsageRefreshText => GetFormattedString("CodexAccountViewModel_LastUsageRefreshFormat", CodexAccount.LastUsageRefreshTime is null ? GetLocalizedString("CodexAccountViewModel_NotRefreshed") : CodexAccount.LastUsageRefreshTime.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.CurrentCulture));
 
     public string SearchText => $"{DisplayName} {EmailAddress} {PlanText} {AccountIdentifier}";
 
@@ -75,6 +99,14 @@ public sealed partial class CodexAccountViewModel(CodexAccount codexAccount) : O
         OnPropertyChanged(nameof(AccessTokenPreview));
         OnPropertyChanged(nameof(PrimaryUsageText));
         OnPropertyChanged(nameof(SecondaryUsageText));
+        OnPropertyChanged(nameof(PrimaryUsageWindowLabelText));
+        OnPropertyChanged(nameof(SecondaryUsageWindowLabelText));
+        OnPropertyChanged(nameof(PrimaryUsageRemainingText));
+        OnPropertyChanged(nameof(SecondaryUsageRemainingText));
+        OnPropertyChanged(nameof(PrimaryUsageResetText));
+        OnPropertyChanged(nameof(SecondaryUsageResetText));
+        OnPropertyChanged(nameof(PrimaryUsageRemainingPercentage));
+        OnPropertyChanged(nameof(SecondaryUsageRemainingPercentage));
         OnPropertyChanged(nameof(LastUsageRefreshText));
         OnPropertyChanged(nameof(SearchText));
     }
@@ -89,9 +121,24 @@ public sealed partial class CodexAccountViewModel(CodexAccount codexAccount) : O
     {
         if (codexUsageWindow.RemainingPercentage < 0) return GetLocalizedString("CodexAccountViewModel_UnknownUsage");
 
-        var resetText = codexUsageWindow.ResetAfterSeconds < 0 ? GetLocalizedString("CodexAccountViewModel_UnknownResetTime") : GetFormattedString("CodexAccountViewModel_ResetAfterFormat", TimeSpan.FromSeconds(codexUsageWindow.ResetAfterSeconds));
+        var resetText = FormatUsageReset(codexUsageWindow);
         return GetFormattedString("CodexAccountViewModel_UsageRemainingFormat", codexUsageWindow.RemainingPercentage, resetText);
     }
+
+    private static string FormatUsageRemaining(CodexUsageWindow codexUsageWindow) => codexUsageWindow.RemainingPercentage < 0 ? GetLocalizedString("CodexAccountViewModel_UnknownUsage") : GetFormattedString("CodexAccountViewModel_UsageRemainingOnlyFormat", codexUsageWindow.RemainingPercentage);
+
+    private static string FormatUsageReset(CodexUsageWindow codexUsageWindow)
+    {
+        if (codexUsageWindow.ResetAfterSeconds < 0) return GetLocalizedString("CodexAccountViewModel_UnknownResetTime");
+
+        var resetAfterTimeSpan = TimeSpan.FromSeconds(codexUsageWindow.ResetAfterSeconds);
+        var wholeDayCount = resetAfterTimeSpan.Days;
+        if (wholeDayCount == 1) return GetFormattedString("CodexAccountViewModel_ResetAfterWithSingleDayFormat", resetAfterTimeSpan);
+        if (wholeDayCount > 1) return GetFormattedString("CodexAccountViewModel_ResetAfterWithMultipleDaysFormat", wholeDayCount, resetAfterTimeSpan);
+        return GetFormattedString("CodexAccountViewModel_ResetAfterFormat", resetAfterTimeSpan);
+    }
+
+    private static int ClampUsageRemainingPercentage(CodexUsageWindow codexUsageWindow) => codexUsageWindow.RemainingPercentage < 0 ? 0 : Math.Clamp(codexUsageWindow.RemainingPercentage, 0, 100);
 
     private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 

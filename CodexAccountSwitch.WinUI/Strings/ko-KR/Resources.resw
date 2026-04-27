@@ -180,6 +180,9 @@
   <data name="CodexAccountViewModel_NotRefreshed" xml:space="preserve">
     <value>아직 갱신되지 않음</value>
   </data>
+  <data name="CodexAccountViewModel_LastUsageRefreshFormat" xml:space="preserve">
+    <value>마지막 갱신: {0}</value>
+  </data>
   <data name="CodexAccountViewModel_NoAccessToken" xml:space="preserve">
     <value>없음</value>
   </data>
@@ -189,8 +192,23 @@
   <data name="CodexAccountViewModel_UnknownResetTime" xml:space="preserve">
     <value>재설정 시간 알 수 없음</value>
   </data>
+  <data name="CodexAccountViewModel_PrimaryUsageWindowLabel" xml:space="preserve">
+    <value>5시간 한도</value>
+  </data>
+  <data name="CodexAccountViewModel_SecondaryUsageWindowLabel" xml:space="preserve">
+    <value>7일 한도</value>
+  </data>
   <data name="CodexAccountViewModel_ResetAfterFormat" xml:space="preserve">
     <value>{0:hh\:mm\:ss} 후 재설정</value>
+  </data>
+  <data name="CodexAccountViewModel_ResetAfterWithSingleDayFormat" xml:space="preserve">
+    <value>1일 {0:hh\:mm\:ss} 후 재설정</value>
+  </data>
+  <data name="CodexAccountViewModel_ResetAfterWithMultipleDaysFormat" xml:space="preserve">
+    <value>{0}일 {1:hh\:mm\:ss} 후 재설정</value>
+  </data>
+  <data name="CodexAccountViewModel_UsageRemainingOnlyFormat" xml:space="preserve">
+    <value>{0}% 남음</value>
   </data>
   <data name="CodexAccountViewModel_UsageRemainingFormat" xml:space="preserve">
     <value>{0}% 남음 · {1}</value>
