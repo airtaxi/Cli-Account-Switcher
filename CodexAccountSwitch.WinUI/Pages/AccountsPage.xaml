@@ -12,6 +12,18 @@
     Unloaded="OnAccountsPageUnloaded"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <Style x:Key="AccountActionButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="MinWidth" Value="40" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+    </Page.Resources>
+
     <Grid Padding="24" RowSpacing="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -151,17 +163,20 @@
                 SelectionChanged="OnAccountsListViewSelectionChanged"
                 SelectionMode="Multiple">
                 <ListView.Header>
-                    <Grid Padding="12,0,12,8" ColumnSpacing="12">
+                    <Grid Padding="56,0,24,0" ColumnSpacing="12">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2.2*" />
+                            <ColumnDefinition Width="2*" />
                             <ColumnDefinition Width="0.7*" />
                             <ColumnDefinition Width="2*" />
                             <ColumnDefinition Width="0.8*" />
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="200" />
                         </Grid.ColumnDefinitions>
                         <TextBlock
                             x:Uid="AccountsPage_AccountHeaderTextBlock"
                             Grid.Column="0"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
                             FontWeight="SemiBold" />
                         <TextBlock
                             x:Uid="AccountsPage_PlanHeaderTextBlock"
@@ -170,10 +185,13 @@
                         <TextBlock
                             x:Uid="AccountsPage_UsageHeaderTextBlock"
                             Grid.Column="2"
+                            HorizontalAlignment="Left"
                             FontWeight="SemiBold" />
                         <TextBlock
                             x:Uid="AccountsPage_StatusHeaderTextBlock"
                             Grid.Column="3"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
                             FontWeight="SemiBold" />
                         <TextBlock
                             x:Uid="AccountsPage_ActionsHeaderTextBlock"
@@ -189,11 +207,11 @@
                             Padding="12"
                             ColumnSpacing="12">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2.2*" />
+                                <ColumnDefinition Width="2*" />
                                 <ColumnDefinition Width="0.7*" />
                                 <ColumnDefinition Width="2*" />
                                 <ColumnDefinition Width="0.8*" />
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="200" />
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="0" Spacing="3">
@@ -238,7 +256,7 @@
                             <Border
                                 Grid.Column="3"
                                 Padding="10,5"
-                                HorizontalAlignment="Left"
+                                HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Background="{ThemeResource ControlFillColorSecondaryBrush}"
                                 CornerRadius="12">
@@ -255,40 +273,36 @@
                                 Orientation="Horizontal"
                                 Spacing="4">
                                 <Button
-                                    Width="34"
-                                    Height="34"
                                     Click="OnSwitchAccountButtonClicked"
-                                    CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}">
+                                    CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}"
+                                    Style="{StaticResource AccountActionButtonStyle}">
                                     <ToolTipService.ToolTip>
                                         <ToolTip x:Uid="AccountsPage_SwitchAccountToolTip" />
                                     </ToolTipService.ToolTip>
                                     <FontIcon FontSize="14" Glyph="&#xE8AB;" />
                                 </Button>
                                 <Button
-                                    Width="34"
-                                    Height="34"
                                     Click="OnRenameAccountButtonClicked"
-                                    CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}">
+                                    CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}"
+                                    Style="{StaticResource AccountActionButtonStyle}">
                                     <ToolTipService.ToolTip>
                                         <ToolTip x:Uid="AccountsPage_RenameAccountToolTip" />
                                     </ToolTipService.ToolTip>
                                     <FontIcon FontSize="14" Glyph="&#xE70F;" />
                                 </Button>
                                 <Button
-                                    Width="34"
-                                    Height="34"
                                     Click="OnRefreshAccountButtonClicked"
-                                    CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}">
+                                    CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}"
+                                    Style="{StaticResource AccountActionButtonStyle}">
                                     <ToolTipService.ToolTip>
                                         <ToolTip x:Uid="AccountsPage_RefreshAccountToolTip" />
                                     </ToolTipService.ToolTip>
                                     <FontIcon FontSize="14" Glyph="&#xE72C;" />
                                 </Button>
                                 <Button
-                                    Width="34"
-                                    Height="34"
                                     Click="OnDeleteAccountButtonClicked"
-                                    CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}">
+                                    CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}"
+                                    Style="{StaticResource AccountActionButtonStyle}">
                                     <ToolTipService.ToolTip>
                                         <ToolTip x:Uid="AccountsPage_DeleteAccountToolTip" />
                                     </ToolTipService.ToolTip>
