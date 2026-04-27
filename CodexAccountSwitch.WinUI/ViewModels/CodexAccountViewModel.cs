@@ -53,7 +53,31 @@ public sealed partial class CodexAccountViewModel(CodexAccount codexAccount) : O
 
     public string SearchText => $"{DisplayName} {EmailAddress} {PlanText} {AccountIdentifier}";
 
-    public void Update(CodexAccount codexAccount) => CodexAccount = codexAccount;
+    public void Update(CodexAccount codexAccount)
+    {
+        // The service mutates CodexAccount in place, so the generated setter will not notify calculated properties when the reference is unchanged.
+        if (!ReferenceEquals(CodexAccount, codexAccount)) CodexAccount = codexAccount;
+        else RefreshCodexAccountProperties();
+    }
+
+    private void RefreshCodexAccountProperties()
+    {
+        OnPropertyChanged(nameof(CodexAccount));
+        OnPropertyChanged(nameof(AccountIdentifier));
+        OnPropertyChanged(nameof(DisplayName));
+        OnPropertyChanged(nameof(EmailAddress));
+        OnPropertyChanged(nameof(PlanType));
+        OnPropertyChanged(nameof(PlanFilterKey));
+        OnPropertyChanged(nameof(PlanText));
+        OnPropertyChanged(nameof(IsActive));
+        OnPropertyChanged(nameof(IsTokenExpired));
+        OnPropertyChanged(nameof(StatusText));
+        OnPropertyChanged(nameof(AccessTokenPreview));
+        OnPropertyChanged(nameof(PrimaryUsageText));
+        OnPropertyChanged(nameof(SecondaryUsageText));
+        OnPropertyChanged(nameof(LastUsageRefreshText));
+        OnPropertyChanged(nameof(SearchText));
+    }
 
     private static string BuildAccessTokenPreview(string accessToken)
     {
