@@ -3,12 +3,16 @@ using CodexAccountSwitch.WinUI.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.Windows.AppLifecycle;
 using Microsoft.Windows.AppNotifications;
+using WinUIEx;
 
 namespace CodexAccountSwitch.WinUI;
 
 public partial class App : Application
 {
-    private Window _window;
+    private static App s_currentApplication;
+    private static MainWindow s_mainWindow;
+    private static bool s_shouldShowMainWindowAfterLaunch;
+    private static AppActivationArguments s_pendingApplicationActivationArguments;
     private MainPageNavigationSection? _pendingNotificationNavigationSection;
 
     // Services
@@ -32,6 +36,8 @@ public partial class App : Application
 
     public App()
     {
+        s_currentApplication = this;
+
         InitializeComponent();
 
         // Initialize services
@@ -50,10 +56,44 @@ public partial class App : Application
 
     protected override void OnLaunched(LaunchActivatedEventArgs launchActivatedEventArguments)
     {
-        _window = new MainWindow();
-        _window.Activate();
+        var applicationActivationArguments = AppInstance.GetCurrent().GetActivatedEventArgs();
+
+        s_mainWindow = new MainWindow();
+        if (!IsStartupTaskActivation(applicationActivationArguments) || s_shouldShowMainWindowAfterLaunch) ShowMainWindow();
+        s_shouldShowMainWindowAfterLaunch = false;
+
         ApplyPendingNotificationNavigationSection();
+        ApplyPendingApplicationActivationArguments();
         _ = StartupRegistrationService.SetStartupLaunchEnabledAsync(ApplicationSettings.IsStartupLaunchEnabled);
+    }
+
+    public static void ShowMainWindow()
+    {
+        if (s_mainWindow is null)
+        {
+            s_shouldShowMainWindowAfterLaunch = true;
+            return;
+        }
+
+        s_mainWindow.DispatcherQueue.TryEnqueue(() =>
+        {
+            s_mainWindow.Activate();
+            s_mainWindow.BringToFront();
+        });
+    }
+
+    public static void HandleApplicationInstanceActivated(AppActivationArguments applicationActivationArguments)
+    {
+        if (IsStartupTaskActivation(applicationActivationArguments)) return;
+
+        if (s_currentApplication is null)
+        {
+            s_pendingApplicationActivationArguments = applicationActivationArguments;
+            ShowMainWindow();
+            return;
+        }
+
+        s_currentApplication.ProcessRedirectedActivationArguments(applicationActivationArguments);
     }
 
     private void RegisterAppNotificationManager()
@@ -62,7 +102,7 @@ public partial class App : Application
         {
             if (!AppNotificationManager.IsSupported()) return;
 
-            AppNotificationManager.Default.NotificationInvoked += OnAppNotificationManagerNotificationInvoked;
+            AppNotificationManager.Default.NotificationInvoked += OnApplicationNotificationManagerNotificationInvoked;
             AppNotificationManager.Default.Register();
             ProcessLaunchActivationArguments();
         }
@@ -71,17 +111,34 @@ public partial class App : Application
 
     private void ProcessLaunchActivationArguments()
     {
-        var appActivationArguments = AppInstance.GetCurrent().GetActivatedEventArgs();
-        if (appActivationArguments?.Kind != ExtendedActivationKind.AppNotification) return;
-        if (appActivationArguments.Data is AppNotificationActivatedEventArgs appNotificationActivatedEventArguments) ProcessAppNotificationActivatedEventArguments(appNotificationActivatedEventArguments);
+        var applicationActivationArguments = AppInstance.GetCurrent().GetActivatedEventArgs();
+        ProcessNotificationActivationArguments(applicationActivationArguments);
     }
 
-    private void OnAppNotificationManagerNotificationInvoked(AppNotificationManager appNotificationManager, AppNotificationActivatedEventArgs appNotificationActivatedEventArguments) => ProcessAppNotificationActivatedEventArguments(appNotificationActivatedEventArguments);
-
-    private void ProcessAppNotificationActivatedEventArguments(AppNotificationActivatedEventArgs appNotificationActivatedEventArguments)
+    private void OnApplicationNotificationManagerNotificationInvoked(AppNotificationManager applicationNotificationManager, AppNotificationActivatedEventArgs applicationNotificationActivatedEventArguments)
     {
-        if (!TryGetNotificationAction(appNotificationActivatedEventArguments, out var notificationAction)) return;
+        ShowMainWindow();
+        ProcessApplicationNotificationActivatedEventArguments(applicationNotificationActivatedEventArguments);
+    }
+
+    private void ProcessApplicationNotificationActivatedEventArguments(AppNotificationActivatedEventArgs applicationNotificationActivatedEventArguments)
+    {
+        if (!TryGetNotificationAction(applicationNotificationActivatedEventArguments, out var notificationAction)) return;
         if (string.Equals(notificationAction, ApplicationNotificationService.AccountsNavigationNotificationAction, StringComparison.Ordinal)) NavigateToMainPageSection(MainPageNavigationSection.Accounts);
+    }
+
+    private void ProcessRedirectedActivationArguments(AppActivationArguments applicationActivationArguments)
+    {
+        if (IsStartupTaskActivation(applicationActivationArguments)) return;
+
+        ShowMainWindow();
+        ProcessNotificationActivationArguments(applicationActivationArguments);
+    }
+
+    private void ProcessNotificationActivationArguments(AppActivationArguments applicationActivationArguments)
+    {
+        if (applicationActivationArguments?.Kind != ExtendedActivationKind.AppNotification) return;
+        if (applicationActivationArguments.Data is AppNotificationActivatedEventArgs applicationNotificationActivatedEventArguments) ProcessApplicationNotificationActivatedEventArguments(applicationNotificationActivatedEventArguments);
     }
 
     private void NavigateToMainPageSection(MainPageNavigationSection mainPageNavigationSection)
@@ -104,10 +161,21 @@ public partial class App : Application
         MainWindow.NavigateToMainPageSection(pendingNotificationNavigationSection);
     }
 
-    private static bool TryGetNotificationAction(AppNotificationActivatedEventArgs appNotificationActivatedEventArguments, out string notificationAction)
+    private void ApplyPendingApplicationActivationArguments()
     {
-        var hasNotificationAction = appNotificationActivatedEventArguments.Arguments.TryGetValue(ApplicationNotificationService.NotificationActionArgumentName, out notificationAction);
+        if (s_pendingApplicationActivationArguments is null) return;
+
+        var pendingApplicationActivationArguments = s_pendingApplicationActivationArguments;
+        s_pendingApplicationActivationArguments = null;
+        ProcessRedirectedActivationArguments(pendingApplicationActivationArguments);
+    }
+
+    private static bool TryGetNotificationAction(AppNotificationActivatedEventArgs applicationNotificationActivatedEventArguments, out string notificationAction)
+    {
+        var hasNotificationAction = applicationNotificationActivatedEventArguments.Arguments.TryGetValue(ApplicationNotificationService.NotificationActionArgumentName, out notificationAction);
         notificationAction ??= "";
         return hasNotificationAction && !string.IsNullOrWhiteSpace(notificationAction);
     }
+
+    private static bool IsStartupTaskActivation(AppActivationArguments applicationActivationArguments) => applicationActivationArguments?.Kind == ExtendedActivationKind.StartupTask;
 }

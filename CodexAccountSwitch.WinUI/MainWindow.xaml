@@ -7,6 +7,7 @@
     xmlns:dev="using:DevWinUI"
     xmlns:local="using:CodexAccountSwitch.WinUI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:tb="using:H.NotifyIcon"
     xmlns:winuiex="using:WinUIEx"
     Closed="OnMainWindowClosed"
     mc:Ignorable="d">
@@ -20,6 +21,25 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
+        <tb:TaskbarIcon
+            x:Name="TaskbarIcon"
+            ContextMenuMode="SecondWindow"
+            MenuActivation="RightClick"
+            NoLeftClickDelay="True">
+            <tb:TaskbarIcon.IconSource>
+                <tb:GeneratedIconSource BackgroundSource="ms-appx:///Assets/Icon.png" />
+            </tb:TaskbarIcon.IconSource>
+            <tb:TaskbarIcon.ContextFlyout>
+                <MenuFlyout AreOpenCloseAnimationsEnabled="True">
+                    <MenuFlyoutItem x:Name="TrayAuthorMenuFlyoutItem" IsEnabled="False" />
+                    <MenuFlyoutItem x:Name="OpenDashboardPageMenuFlyoutItem" />
+                    <MenuFlyoutItem x:Name="OpenAccountsPageMenuFlyoutItem" />
+                    <MenuFlyoutSeparator />
+                    <MenuFlyoutItem x:Name="CloseProgramMenuFlyoutItem" Click="OnCloseProgramMenuFlyoutItemClicked" />
+                </MenuFlyout>
+            </tb:TaskbarIcon.ContextFlyout>
+        </tb:TaskbarIcon>
 
         <TitleBar
             x:Name="AppTitleBar"

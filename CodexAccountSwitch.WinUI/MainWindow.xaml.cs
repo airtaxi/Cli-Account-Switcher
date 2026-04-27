@@ -1,11 +1,13 @@
 using CodexAccountSwitch.WinUI.Models;
 using CodexAccountSwitch.WinUI.Pages;
 using CodexAccountSwitch.WinUI.Services;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
+using System.Runtime.InteropServices;
 using WinRT.Interop;
 using WinUIEx;
 using TitleBar = Microsoft.UI.Xaml.Controls.TitleBar;
@@ -14,7 +16,23 @@ namespace CodexAccountSwitch.WinUI;
 
 public sealed partial class MainWindow : WindowEx
 {
+    private const uint WindowsMessageClose = 0x0010;
+    private const uint WindowsMessageQueryEndSession = 0x0011;
+    private const uint WindowsMessageEndSession = 0x0016;
+    private const nuint MainWindowSubclassIdentifier = 1;
+
+    private delegate nint WindowSubclassProcedure(nint windowHandle, uint message, nint messageWordParameter, nint messageLongParameter, nuint subclassIdentifier, nuint referenceData);
+
+    [LibraryImport("comctl32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool SetWindowSubclass(nint windowHandle, WindowSubclassProcedure windowSubclassProcedure, nuint subclassIdentifier, nuint referenceData);
+
+    [LibraryImport("comctl32.dll")]
+    private static partial nint DefSubclassProc(nint windowHandle, uint message, nint messageWordParameter, nint messageLongParameter);
+
+    private readonly WindowSubclassProcedure _windowSubclassProcedure;
     private bool _isApplyingNavigationSelection;
+    private bool _isSystemShutdownInProgress;
 
     public static MainWindow Instance { get; private set; }
 
@@ -28,6 +46,14 @@ public sealed partial class MainWindow : WindowEx
 
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
+
+        // When the app is launched by StartupTask, the window is not activated, so tray commands are wired in code instead of XAML.
+        TaskbarIcon.LeftClickCommand = OpenDashboardPageCommand;
+        OpenAccountsPageMenuFlyoutItem.Command = OpenAccountsPageCommand;
+        OpenDashboardPageMenuFlyoutItem.Command = OpenDashboardPageCommand;
+
+        _windowSubclassProcedure = WindowSubclassProc;
+        SetWindowSubclass(this.GetWindowHandle(), _windowSubclassProcedure, MainWindowSubclassIdentifier, 0);
 
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<MainPageNavigationSection>>(this, OnMainPageNavigationSectionChangedMessageReceived);
 
@@ -90,6 +116,11 @@ public sealed partial class MainWindow : WindowEx
         AccountsSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_AccountsSelectorBarItem/Text");
         AboutSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_AboutSelectorBarItem/Text");
         SettingsSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_SettingsSelectorBarItem/Text");
+        TaskbarIcon.ToolTipText = App.LocalizationService.GetLocalizedString("AppDisplayName");
+        TrayAuthorMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_TrayAuthorMenuFlyoutItem/Text");
+        OpenDashboardPageMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_OpenDashboardPageMenuFlyoutItem/Text");
+        OpenAccountsPageMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_OpenAccountsPageMenuFlyoutItem/Text");
+        CloseProgramMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_CloseProgramMenuFlyoutItem/Text");
     }
 
     private void OnAppFrameNavigated(object sender, NavigationEventArgs navigationEventArguments)
@@ -114,9 +145,39 @@ public sealed partial class MainWindow : WindowEx
 
     private void OnApplicationThemeServiceThemeChanged(ElementTheme theme) => App.ApplicationThemeService.ApplyThemeToWindow(this);
 
+    [RelayCommand]
+    private void OpenDashboardPage() => NavigateToMainPageSection(MainPageNavigationSection.Dashboard);
+
+    [RelayCommand]
+    private void OpenAccountsPage() => NavigateToMainPageSection(MainPageNavigationSection.Accounts);
+
+    private void OnCloseProgramMenuFlyoutItemClicked(object sender, RoutedEventArgs routedEventArguments) => Environment.Exit(0);
+
+    private nint WindowSubclassProc(nint windowHandle, uint message, nint messageWordParameter, nint messageLongParameter, nuint subclassIdentifier, nuint referenceData)
+    {
+        switch (message)
+        {
+            case WindowsMessageQueryEndSession:
+                _isSystemShutdownInProgress = true;
+                return 1;
+
+            case WindowsMessageEndSession:
+                if (messageWordParameter != 0) Environment.Exit(0);
+                return 0;
+
+            case WindowsMessageClose:
+                if (_isSystemShutdownInProgress) break;
+                this.Hide();
+                return 0;
+        }
+
+        return DefSubclassProc(windowHandle, message, messageWordParameter, messageLongParameter);
+    }
+
     private void NavigateToMainPageSectionCore(MainPageNavigationSection mainPageNavigationSection)
     {
         Activate();
+        BringToFront();
         SelectMainPageNavigationSection(mainPageNavigationSection);
         WeakReferenceMessenger.Default.Send(new ValueChangedMessage<MainPageNavigationSection>(mainPageNavigationSection));
     }

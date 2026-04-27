@@ -126,6 +126,18 @@
   <data name="MainWindow_AppTitleBar.Title" xml:space="preserve">
     <value>Codex 계정 전환기</value>
   </data>
+  <data name="MainWindow_TrayAuthorMenuFlyoutItem.Text" xml:space="preserve">
+    <value>제작자: 이호원 (airtaxi)</value>
+  </data>
+  <data name="MainWindow_OpenDashboardPageMenuFlyoutItem.Text" xml:space="preserve">
+    <value>대시보드 열기</value>
+  </data>
+  <data name="MainWindow_OpenAccountsPageMenuFlyoutItem.Text" xml:space="preserve">
+    <value>계정 페이지 열기</value>
+  </data>
+  <data name="MainWindow_CloseProgramMenuFlyoutItem.Text" xml:space="preserve">
+    <value>프로그램 종료</value>
+  </data>
   <data name="MainPage_DashboardSelectorBarItem.Text" xml:space="preserve">
     <value>대시보드</value>
   </data>

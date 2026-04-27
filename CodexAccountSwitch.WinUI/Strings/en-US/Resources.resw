@@ -126,6 +126,18 @@
   <data name="MainWindow_AppTitleBar.Title" xml:space="preserve">
     <value>Codex Account Switch</value>
   </data>
+  <data name="MainWindow_TrayAuthorMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Author: Howon Lee (airtaxi)</value>
+  </data>
+  <data name="MainWindow_OpenDashboardPageMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Open Dashboard</value>
+  </data>
+  <data name="MainWindow_OpenAccountsPageMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Open Accounts page</value>
+  </data>
+  <data name="MainWindow_CloseProgramMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Exit</value>
+  </data>
   <data name="MainPage_DashboardSelectorBarItem.Text" xml:space="preserve">
     <value>Dashboard</value>
   </data>
@@ -583,7 +595,7 @@
     <value>Project</value>
   </data>
   <data name="AboutPage_ProjectSettingsGroup.Description" xml:space="preserve">
-    <value>GitHub repository, creator, and the original project that inspired this app.</value>
+    <value>GitHub repository, author, and the original project that inspired this app.</value>
   </data>
   <data name="AboutPage_GitHubRepositorySettingsCard.Header" xml:space="preserve">
     <value>GitHub repository</value>
@@ -598,7 +610,7 @@
     <value>Howon Lee (airtaxi)</value>
   </data>
   <data name="AboutPage_CreatorSettingsCard.Description" xml:space="preserve">
-    <value>Creator</value>
+    <value>Author</value>
   </data>
   <data name="AboutPage_CreatorGitHubButtonTextBlock.Text" xml:space="preserve">
     <value>Open GitHub profile</value>
