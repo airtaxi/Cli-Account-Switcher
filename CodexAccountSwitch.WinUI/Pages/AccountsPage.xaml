@@ -84,6 +84,7 @@
                 <SelectorBarItem x:Uid="AccountsPage_FreePlanFilterSelectorBarItem" Tag="free" />
                 <SelectorBarItem x:Uid="AccountsPage_PlusPlanFilterSelectorBarItem" Tag="plus" />
                 <SelectorBarItem x:Uid="AccountsPage_TeamPlanFilterSelectorBarItem" Tag="team" />
+                <SelectorBarItem x:Uid="AccountsPage_ProLitePlanFilterSelectorBarItem" Tag="prolite" />
                 <SelectorBarItem x:Uid="AccountsPage_ProPlanFilterSelectorBarItem" Tag="pro" />
             </dev:SelectorBarSegmented>
         </Grid>

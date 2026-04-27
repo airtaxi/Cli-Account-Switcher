@@ -12,7 +12,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 {
     private readonly CodexAccountService _codexAccountService;
     private readonly DispatcherQueue _dispatcherQueue;
-    private readonly HashSet<string> _selectedAccountIdentifiers = [with(StringComparer.Ordinal)];
+    private readonly HashSet<string> _selectedAccountIdentifiers = new(StringComparer.Ordinal);
     private bool _disposed;
 
     public AccountsPageViewModel(CodexAccountService codexAccountService, DispatcherQueue dispatcherQueue)

@@ -13,7 +13,7 @@ public sealed class CodexApiClientOptions
 
     public string OAuthClientId { get; set; } = "app_EMoamEEZ73f0CkXaXp7hrann";
 
-    public bool UseDynamicOAuthRedirectPort { get; set; } = true;
+    public bool UseDynamicOAuthRedirectPort { get; set; } = false;
 
     public int OAuthRedirectPort { get; set; } = 1455;
 

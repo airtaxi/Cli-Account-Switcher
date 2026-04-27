@@ -228,6 +228,9 @@
   <data name="AccountsPage_TeamPlanFilterSelectorBarItem.Text" xml:space="preserve">
     <value>Team</value>
   </data>
+  <data name="AccountsPage_ProLitePlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Pro Lite</value>
+  </data>
   <data name="AccountsPage_ProPlanFilterSelectorBarItem.Text" xml:space="preserve">
     <value>Pro</value>
   </data>

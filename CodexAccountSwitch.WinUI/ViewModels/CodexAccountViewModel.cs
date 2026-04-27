@@ -35,7 +35,7 @@ public sealed partial class CodexAccountViewModel(CodexAccount codexAccount) : O
 
     public string PlanFilterKey => string.IsNullOrWhiteSpace(PlanType) ? "" : PlanType.Trim().ToLowerInvariant();
 
-    public string PlanText => string.IsNullOrWhiteSpace(PlanType) ? GetLocalizedString("CodexAccountViewModel_UnknownPlan") : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(PlanType.ToLowerInvariant());
+    public string PlanText => string.IsNullOrWhiteSpace(PlanType) ? GetLocalizedString("CodexAccountViewModel_UnknownPlan") : PlanType == "prolite" ? GetLocalizedString("AccountsPage_ProLitePlanFilterSelectorBarItem/Text") : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(PlanType.ToLowerInvariant());
 
     public bool IsActive => CodexAccount.IsActive;
 

@@ -46,8 +46,7 @@ public sealed class CodexAccountService : IDisposable
     {
         var codexApiClientOptions = new CodexApiClientOptions
         {
-            CodexHomeDirectoryPath = Constants.CodexHomeDirectory,
-            UseDynamicOAuthRedirectPort = true
+            CodexHomeDirectoryPath = Constants.CodexHomeDirectory
         };
         var codexClientMetadataProvider = new CodexClientMetadataProvider(codexApiClientOptions);
         var codexRequestMessageFactory = new CodexRequestMessageFactory(codexApiClientOptions, codexClientMetadataProvider);
