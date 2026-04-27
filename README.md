@@ -11,6 +11,7 @@ The app stores saved account records in its own local application data folder an
 - Add Codex accounts with OAuth sign-in, the current `auth.json`, a JSON file, or pasted authentication JSON.
 - Switch the active Codex account from the Accounts screen.
 - View Codex plan information and remaining usage for the 5-hour and weekly windows.
+- Click the tray icon to open a quick active account usage popup without opening the full window.
 - Refresh account usage and detect expired accounts.
 - Back up and restore saved accounts.
 
@@ -18,6 +19,7 @@ The app stores saved account records in its own local application data folder an
 
 - **Dashboard**: active account summary, average remaining usage, and low-usage account list.
 - **Accounts**: searchable and filterable account list with switch, refresh, rename, delete, backup, and restore actions.
+- **Tray icon popup**: quick active account quota view with refresh support from the tray icon.
 - **Settings**: language, theme, startup launch, update checks, refresh intervals, warning thresholds, notifications, and settings import/export.
 - **About**: app version and third-party license information.
 
