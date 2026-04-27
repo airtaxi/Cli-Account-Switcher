@@ -360,6 +360,24 @@
   <data name="AccountsPage_DeleteAccountDialogMessage" xml:space="preserve">
     <value>Delete this account?</value>
   </data>
+  <data name="AccountsPage_RestartCodexApplicationDialogTitle" xml:space="preserve">
+    <value>Restart Codex</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationDialogMessage" xml:space="preserve">
+    <value>The account has been switched. Restart Codex to use the changed account immediately. Restart now?</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationButtonText" xml:space="preserve">
+    <value>Restart</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationLoadingMessage" xml:space="preserve">
+    <value>Restarting Codex.</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationFailedDialogTitle" xml:space="preserve">
+    <value>Restart failed</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationFailedDialogMessage" xml:space="preserve">
+    <value>Codex could not be restarted automatically. Please close Codex and open it again manually.</value>
+  </data>
   <data name="AccountsPage_ZipBackupFileTypeChoice" xml:space="preserve">
     <value>ZIP Backup</value>
   </data>

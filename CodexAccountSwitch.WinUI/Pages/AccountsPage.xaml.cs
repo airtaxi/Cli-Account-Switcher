@@ -102,6 +102,7 @@ public sealed partial class AccountsPage : Page
 
         await App.CodexAccountService.SwitchActiveAccountAsync(accountIdentifier);
         ViewModel.ReloadAccounts();
+        await AskToRestartCodexApplicationAsync();
     }
 
     private async void OnRenameAccountButtonClicked(object sender, RoutedEventArgs routedEventArguments)
@@ -160,6 +161,19 @@ public sealed partial class AccountsPage : Page
         {
             MainWindow.HideLoading();
         }
+    }
+
+    private async Task AskToRestartCodexApplicationAsync()
+    {
+        var contentDialogResult = await this.ShowDialogAsync(GetLocalizedString("AccountsPage_RestartCodexApplicationDialogTitle"), GetLocalizedString("AccountsPage_RestartCodexApplicationDialogMessage"), GetLocalizedString("AccountsPage_RestartCodexApplicationButtonText"), GetLocalizedString("DialogHelper_CancelButtonText"));
+        if (contentDialogResult != ContentDialogResult.Primary) return;
+
+        MainWindow.ShowLoading(GetLocalizedString("AccountsPage_RestartCodexApplicationLoadingMessage"));
+        var wasCodexApplicationRestarted = false;
+        try { wasCodexApplicationRestarted = await App.CodexApplicationRestartService.RestartCodexApplicationAsync(); }
+        finally { MainWindow.HideLoading(); }
+
+        if (!wasCodexApplicationRestarted) await this.ShowDialogAsync(GetLocalizedString("AccountsPage_RestartCodexApplicationFailedDialogTitle"), GetLocalizedString("AccountsPage_RestartCodexApplicationFailedDialogMessage"));
     }
 
     private static FileOpenPicker CreateZipFileOpenPicker()

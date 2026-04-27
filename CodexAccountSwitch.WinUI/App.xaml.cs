@@ -26,6 +26,8 @@ public partial class App : Application
 
     public static CodexAccountService CodexAccountService { get; private set; }
 
+    public static CodexApplicationRestartService CodexApplicationRestartService { get; private set; }
+
     public App()
     {
         InitializeComponent();
@@ -38,6 +40,7 @@ public partial class App : Application
         StartupRegistrationService = new StartupRegistrationService();
         StoreUpdateService = new StoreUpdateService(ApplicationSettings, ApplicationNotificationService);
         CodexAccountService = new CodexAccountService(ApplicationSettingsService, ApplicationNotificationService);
+        CodexApplicationRestartService = new CodexApplicationRestartService();
         RegisterAppNotificationManager();
         StoreUpdateService.Start();
         CodexAccountService.Start();
