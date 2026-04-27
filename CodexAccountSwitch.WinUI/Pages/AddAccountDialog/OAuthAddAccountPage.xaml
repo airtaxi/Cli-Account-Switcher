@@ -47,11 +47,11 @@
             Orientation="Horizontal"
             Spacing="10"
             Visibility="Collapsed">
-            <dev:LoadingIndicator
+            <ProgressRing
                 Width="24"
                 Height="24"
                 Foreground="{ThemeResource SystemAccentColor}"
-                Mode="Arcs" />
+                IsIndeterminate="True" />
             <TextBlock x:Uid="OAuthAddAccountPage_WaitingTextBlock" VerticalAlignment="Center" />
         </StackPanel>
 
