@@ -162,7 +162,7 @@ public sealed partial class SettingsPage : Page
     {
         if (_isSynchronizingControls) return;
 
-        var languageOverride = ReadSelectedComboBoxTag(LanguageComboBox);
+        var languageOverride = GetLanguageOverrideFromSelectedIndex(LanguageComboBox.SelectedIndex);
         if (App.ApplicationSettings.LanguageOverride == languageOverride) return;
 
         App.ApplicationSettings.LanguageOverride = languageOverride;
@@ -176,12 +176,7 @@ public sealed partial class SettingsPage : Page
     {
         if (_isSynchronizingControls) return;
 
-        var theme = ReadSelectedComboBoxTag(ThemeComboBox) switch
-        {
-            "Light" => ElementTheme.Light,
-            "Dark" => ElementTheme.Dark,
-            _ => ElementTheme.Default
-        };
+        var theme = GetThemeFromSelectedIndex(ThemeComboBox.SelectedIndex);
 
         if (App.ApplicationSettings.Theme == theme) return;
 
@@ -363,8 +358,6 @@ public sealed partial class SettingsPage : Page
         return GetFormattedString("SettingsPage_RefreshRemainingFormat", (int)normalizedRemainingTime.TotalHours, normalizedRemainingTime.Minutes, normalizedRemainingTime.Seconds);
     }
 
-    private static string ReadSelectedComboBoxTag(ComboBox comboBox) => comboBox.SelectedItem is ComboBoxItem { Tag: string tag } ? tag : "";
-
     private static FileOpenPicker CreateApplicationSettingsFileOpenPicker()
     {
         var fileOpenPicker = new FileOpenPicker
@@ -411,11 +404,28 @@ public sealed partial class SettingsPage : Page
         _ => 0
     };
 
+    private static string GetLanguageOverrideFromSelectedIndex(int selectedIndex) => selectedIndex switch
+    {
+        1 => "ko-KR",
+        2 => "en-US",
+        3 => "ja-JP",
+        4 => "zh-Hans",
+        5 => "zh-Hant",
+        _ => ""
+    };
+
     private static int GetThemeSelectedIndex(ElementTheme theme) => theme switch
     {
         ElementTheme.Light => 1,
         ElementTheme.Dark => 2,
         _ => 0
+    };
+
+    private static ElementTheme GetThemeFromSelectedIndex(int selectedIndex) => selectedIndex switch
+    {
+        1 => ElementTheme.Light,
+        2 => ElementTheme.Dark,
+        _ => ElementTheme.Default
     };
 
     private void SetNumberBoxValue(NumberBox numberBox, int value)

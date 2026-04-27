@@ -30,12 +30,12 @@
                             x:Name="LanguageComboBox"
                             MinWidth="220"
                             SelectionChanged="OnLanguageComboBoxSelectionChanged">
-                            <ComboBoxItem x:Uid="SettingsPage_SystemDefaultLanguageComboBoxItem" Tag="" />
-                            <ComboBoxItem x:Uid="SettingsPage_KoreanLanguageComboBoxItem" Tag="ko-KR" />
-                            <ComboBoxItem x:Uid="SettingsPage_EnglishLanguageComboBoxItem" Tag="en-US" />
-                            <ComboBoxItem x:Uid="SettingsPage_JapaneseLanguageComboBoxItem" Tag="ja-JP" />
-                            <ComboBoxItem x:Uid="SettingsPage_SimplifiedChineseLanguageComboBoxItem" Tag="zh-Hans" />
-                            <ComboBoxItem x:Uid="SettingsPage_TraditionalChineseLanguageComboBoxItem" Tag="zh-Hant" />
+                            <ComboBoxItem x:Uid="SettingsPage_SystemDefaultLanguageComboBoxItem" />
+                            <ComboBoxItem x:Uid="SettingsPage_KoreanLanguageComboBoxItem" />
+                            <ComboBoxItem x:Uid="SettingsPage_EnglishLanguageComboBoxItem" />
+                            <ComboBoxItem x:Uid="SettingsPage_JapaneseLanguageComboBoxItem" />
+                            <ComboBoxItem x:Uid="SettingsPage_SimplifiedChineseLanguageComboBoxItem" />
+                            <ComboBoxItem x:Uid="SettingsPage_TraditionalChineseLanguageComboBoxItem" />
                         </ComboBox>
                     </dev:SettingsCard>
 
@@ -47,9 +47,9 @@
                             x:Name="ThemeComboBox"
                             MinWidth="220"
                             SelectionChanged="OnThemeComboBoxSelectionChanged">
-                            <ComboBoxItem x:Uid="SettingsPage_SystemDefaultThemeComboBoxItem" Tag="Default" />
-                            <ComboBoxItem x:Uid="SettingsPage_LightThemeComboBoxItem" Tag="Light" />
-                            <ComboBoxItem x:Uid="SettingsPage_DarkThemeComboBoxItem" Tag="Dark" />
+                            <ComboBoxItem x:Uid="SettingsPage_SystemDefaultThemeComboBoxItem" />
+                            <ComboBoxItem x:Uid="SettingsPage_LightThemeComboBoxItem" />
+                            <ComboBoxItem x:Uid="SettingsPage_DarkThemeComboBoxItem" />
                         </ComboBox>
                     </dev:SettingsCard>
 

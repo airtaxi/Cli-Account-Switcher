@@ -31,6 +31,7 @@ If the project structure differs, search for these concepts instead:
 - saved language override normalization
 - language selection `ComboBoxItem` entries
 - `GetLanguageSelectedIndex` or equivalent selection mapping
+- `GetLanguageOverrideFromSelectedIndex` or equivalent selected-index-to-language mapping
 - `Strings/*/Resources.resw`
 
 ## Workflow
@@ -41,8 +42,8 @@ If the project structure differs, search for these concepts instead:
 4. Add each language tag to the supported language list in `LocalizationService`.
 5. If the service only exact-matches culture names, add parent-culture fallback so tags such as `zh-CN` can resolve to `zh-Hans` when appropriate.
 6. Add each language tag to the settings normalization allow-list so saved overrides are not discarded.
-7. Add language choices to the settings UI ComboBox, using `x:Uid` keys and `Tag` values matching the language tags.
-8. Update the settings page selected-index mapping to match the ComboBox order.
+7. Add language choices to the settings UI ComboBox using `x:Uid` keys only. Do not use `Tag` values for language tags; string `Tag` values can fail under NativeAOT type preservation.
+8. Update both settings page index mappings to match the ComboBox order: saved language tag to selected index, and selected index back to saved language tag.
 9. Add localized language-name resource keys to every existing `.resw` file, not only the new ones.
 10. Create `Strings/<language-tag>/Resources.resw` for each new language with the full key set from the template.
 11. Do not build or validate unless the user explicitly asks.
@@ -77,9 +78,9 @@ private static string NormalizeLanguageOverride(string languageOverride) => lang
 `SettingsPage.xaml`:
 
 ```xml
-<ComboBoxItem x:Uid="SettingsPage_JapaneseLanguageComboBoxItem" Tag="ja-JP" />
-<ComboBoxItem x:Uid="SettingsPage_SimplifiedChineseLanguageComboBoxItem" Tag="zh-Hans" />
-<ComboBoxItem x:Uid="SettingsPage_TraditionalChineseLanguageComboBoxItem" Tag="zh-Hant" />
+<ComboBoxItem x:Uid="SettingsPage_JapaneseLanguageComboBoxItem" />
+<ComboBoxItem x:Uid="SettingsPage_SimplifiedChineseLanguageComboBoxItem" />
+<ComboBoxItem x:Uid="SettingsPage_TraditionalChineseLanguageComboBoxItem" />
 ```
 
 `SettingsPage.xaml.cs`:
@@ -93,6 +94,16 @@ private static int GetLanguageSelectedIndex(string languageOverride) => language
     "zh-Hans" => 4,
     "zh-Hant" => 5,
     _ => 0
+};
+
+private static string GetLanguageOverrideFromSelectedIndex(int selectedIndex) => selectedIndex switch
+{
+    1 => "ko-KR",
+    2 => "en-US",
+    3 => "ja-JP",
+    4 => "zh-Hans",
+    5 => "zh-Hant",
+    _ => ""
 };
 ```
 
