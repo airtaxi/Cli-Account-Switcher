@@ -12,7 +12,7 @@
   <Identity
     Name="49536HowonLee.CodexAccountSwitch"
     Publisher="CN=7713B07B-6F8A-4FB4-877B-2FA9AF531D39"
-    Version="1.0.0.0" />
+    Version="1.0.1.0" />
 
   <mp:PhoneIdentity PhoneProductId="df874008-1993-4d3c-ba27-bd1eb6d6cd28" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
