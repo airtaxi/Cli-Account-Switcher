@@ -108,6 +108,18 @@
                             </dev:SettingsCard>
                         </dev:SettingsExpander.Items>
                     </dev:SettingsExpander>
+
+                    <dev:SettingsCard x:Uid="SettingsPage_IntegratedLogExportSettingsCard">
+                        <dev:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE7BA;" />
+                        </dev:SettingsCard.HeaderIcon>
+                        <Button x:Name="ExportIntegratedLogButton" Click="OnExportIntegratedLogButtonClicked">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <FontIcon FontSize="14" Glyph="&#xEDE1;" />
+                                <TextBlock x:Uid="SettingsPage_ExportIntegratedLogButtonTextBlock" />
+                            </StackPanel>
+                        </Button>
+                    </dev:SettingsCard>
                 </dev:SimpleSettingsGroup>
 
                 <dev:SimpleSettingsGroup x:Uid="SettingsPage_AccountSettingsGroup">

@@ -813,6 +813,36 @@
   <data name="SettingsPage_ImportApplicationSettingsFailedDialogMessage" xml:space="preserve">
     <value>無法從所選 .casc 檔案匯入應用程式設定。請檢查檔案格式和存取權限。</value>
   </data>
+  <data name="SettingsPage_IntegratedLogExportSettingsCard.Header" xml:space="preserve">
+    <value>下載整合日誌</value>
+  </data>
+  <data name="SettingsPage_IntegratedLogExportSettingsCard.Description" xml:space="preserve">
+    <value>將應用程式執行期間記錄的日誌儲存為檔案。（最多 1,000 筆）</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogButtonTextBlock.Text" xml:space="preserve">
+    <value>儲存</value>
+  </data>
+  <data name="SettingsPage_IntegratedLogFileTypeChoice" xml:space="preserve">
+    <value>文字檔</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogEmptyDialogTitle" xml:space="preserve">
+    <value>沒有日誌</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogEmptyDialogMessage" xml:space="preserve">
+    <value>目前應用程式工作階段中沒有記錄的日誌。</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogDialogTitle" xml:space="preserve">
+    <value>日誌匯出完成</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogDialogMessage" xml:space="preserve">
+    <value>日誌已儲存。</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogFailedDialogTitle" xml:space="preserve">
+    <value>日誌匯出失敗</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogFailedDialogMessage" xml:space="preserve">
+    <value>無法儲存日誌。請檢查檔案存取權限。</value>
+  </data>
   <data name="SettingsPage_AccountSettingsGroup.Header" xml:space="preserve">
     <value>帳號設定</value>
   </data>

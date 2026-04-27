@@ -813,6 +813,36 @@
   <data name="SettingsPage_ImportApplicationSettingsFailedDialogMessage" xml:space="preserve">
     <value>選択した .casc ファイルからアプリ設定をインポートできませんでした。ファイル形式とアクセス権限を確認してください。</value>
   </data>
+  <data name="SettingsPage_IntegratedLogExportSettingsCard.Header" xml:space="preserve">
+    <value>統合ログをダウンロード</value>
+  </data>
+  <data name="SettingsPage_IntegratedLogExportSettingsCard.Description" xml:space="preserve">
+    <value>アプリ実行中に記録したログをファイルに保存します。（最大 1,000 件）</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogButtonTextBlock.Text" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="SettingsPage_IntegratedLogFileTypeChoice" xml:space="preserve">
+    <value>テキスト ファイル</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogEmptyDialogTitle" xml:space="preserve">
+    <value>ログはありません</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogEmptyDialogMessage" xml:space="preserve">
+    <value>現在のアプリ セッションには記録されたログがありません。</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogDialogTitle" xml:space="preserve">
+    <value>ログ保存が完了しました</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogDialogMessage" xml:space="preserve">
+    <value>ログを保存しました。</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogFailedDialogTitle" xml:space="preserve">
+    <value>ログのエクスポートに失敗しました</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogFailedDialogMessage" xml:space="preserve">
+    <value>ログを保存できませんでした。ファイルのアクセス権限を確認してください。</value>
+  </data>
   <data name="SettingsPage_AccountSettingsGroup.Header" xml:space="preserve">
     <value>アカウント設定</value>
   </data>

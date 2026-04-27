@@ -4,6 +4,8 @@ using CodexAccountSwitch.WinUI.Views;
 using Microsoft.UI.Xaml;
 using Microsoft.Windows.AppLifecycle;
 using Microsoft.Windows.AppNotifications;
+using System.Diagnostics;
+using System.Text;
 using WinUIEx;
 
 namespace CodexAccountSwitch.WinUI;
@@ -35,6 +37,8 @@ public partial class App : Application
 
     public static CodexApplicationRestartService CodexApplicationRestartService { get; private set; }
 
+    public static FileLogService FileLogService { get; private set; }
+
     public App()
     {
         s_currentApplication = this;
@@ -42,6 +46,10 @@ public partial class App : Application
         InitializeComponent();
 
         // Initialize services
+        FileLogService = new FileLogService();
+        UnhandledException += OnApplicationUnhandledException;
+        AppDomain.CurrentDomain.UnhandledException += OnCurrentDomainUnhandledException;
+        TaskScheduler.UnobservedTaskException += OnTaskSchedulerUnobservedTaskException;
         ApplicationSettingsService = new ApplicationSettingsService();
         LocalizationService = new LocalizationService(ApplicationSettings.LanguageOverride);
         ApplicationThemeService = new ApplicationThemeService(ApplicationSettings.Theme);
@@ -176,6 +184,52 @@ public partial class App : Application
         var hasNotificationAction = applicationNotificationActivatedEventArguments.Arguments.TryGetValue(ApplicationNotificationService.NotificationActionArgumentName, out notificationAction);
         notificationAction ??= "";
         return hasNotificationAction && !string.IsNullOrWhiteSpace(notificationAction);
+    }
+
+    private static void OnApplicationUnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs unhandledExceptionEventArguments)
+    {
+        WriteException("Microsoft.UI.Xaml.Application.UnhandledException", unhandledExceptionEventArguments.Exception);
+        unhandledExceptionEventArguments.Handled = true;
+    }
+
+    private static void OnCurrentDomainUnhandledException(object sender, System.UnhandledExceptionEventArgs unhandledExceptionEventArguments)
+    {
+        if (unhandledExceptionEventArguments.ExceptionObject is Exception exception) WriteException("AppDomain.CurrentDomain.UnhandledException", exception);
+    }
+
+    private static void OnTaskSchedulerUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs unobservedTaskExceptionEventArguments)
+    {
+        WriteException("TaskScheduler.UnobservedTaskException", unobservedTaskExceptionEventArguments.Exception);
+        unobservedTaskExceptionEventArguments.SetObserved();
+    }
+
+    private static void WriteException(string source, Exception exception)
+    {
+        Debug.WriteLine(CreateExceptionMessage(source, exception));
+        FileLogService?.WriteError(nameof(App), $"Unhandled exception reported by {source}.", exception);
+    }
+
+    private static string CreateExceptionMessage(string source, Exception exception)
+    {
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append('[');
+        stringBuilder.Append(source);
+        stringBuilder.Append("] ");
+
+        var currentException = exception;
+        while (currentException is not null)
+        {
+            stringBuilder.Append(currentException.GetType().FullName);
+            stringBuilder.Append(": ");
+            stringBuilder.Append(currentException.Message);
+            stringBuilder.AppendLine();
+            stringBuilder.AppendLine(currentException.StackTrace);
+
+            currentException = currentException.InnerException;
+            if (currentException is not null) stringBuilder.AppendLine("--->");
+        }
+
+        return stringBuilder.ToString();
     }
 
     private static bool IsStartupTaskActivation(AppActivationArguments applicationActivationArguments) => applicationActivationArguments?.Kind == ExtendedActivationKind.StartupTask;

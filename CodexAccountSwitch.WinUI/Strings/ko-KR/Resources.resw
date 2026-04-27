@@ -813,6 +813,36 @@
   <data name="SettingsPage_ImportApplicationSettingsFailedDialogMessage" xml:space="preserve">
     <value>선택한 .casc 파일에서 앱 설정을 불러오지 못했습니다. 파일 형식과 접근 권한을 확인해 주세요.</value>
   </data>
+  <data name="SettingsPage_IntegratedLogExportSettingsCard.Header" xml:space="preserve">
+    <value>통합 로그 다운로드</value>
+  </data>
+  <data name="SettingsPage_IntegratedLogExportSettingsCard.Description" xml:space="preserve">
+    <value>앱 실행 중 기록된 로그를 파일로 저장합니다. (최대 1,000건)</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogButtonTextBlock.Text" xml:space="preserve">
+    <value>저장</value>
+  </data>
+  <data name="SettingsPage_IntegratedLogFileTypeChoice" xml:space="preserve">
+    <value>텍스트 파일</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogEmptyDialogTitle" xml:space="preserve">
+    <value>로그 없음</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogEmptyDialogMessage" xml:space="preserve">
+    <value>현재 앱 세션에 기록된 로그가 없습니다.</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogDialogTitle" xml:space="preserve">
+    <value>로그 저장 완료</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogDialogMessage" xml:space="preserve">
+    <value>로그를 저장했습니다.</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogFailedDialogTitle" xml:space="preserve">
+    <value>로그 내보내기 실패</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogFailedDialogMessage" xml:space="preserve">
+    <value>로그를 저장하지 못했습니다. 파일 접근 권한을 확인해 주세요.</value>
+  </data>
   <data name="SettingsPage_AccountSettingsGroup.Header" xml:space="preserve">
     <value>계정 설정</value>
   </data>

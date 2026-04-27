@@ -18,6 +18,7 @@ public sealed partial class SettingsPage : Page
     private const int MinimumUsageRefreshIntervalMinutes = 1;
     private const int MaximumUsageRefreshIntervalMinutes = 1440;
     private const string ApplicationSettingsFileExtension = ".casc";
+    private const string LogFileExtension = ".txt";
     private bool _isSynchronizingControls;
     private readonly DispatcherTimer _refreshCountdownDispatcherTimer = new() { Interval = TimeSpan.FromSeconds(1) };
 
@@ -133,6 +134,28 @@ public sealed partial class SettingsPage : Page
         RefreshUsageRefreshCountdownTexts();
         await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ImportApplicationSettingsDialogTitle"), GetLocalizedString(didLanguageOverrideChange ? "SettingsPage_ImportApplicationSettingsLanguageChangedDialogMessage" : "SettingsPage_ImportApplicationSettingsDialogMessage"));
         if (didLanguageOverrideChange) WeakReferenceMessenger.Default.Send(new ValueChangedMessage<MainPageNavigationSection>(MainPageNavigationSection.Settings));
+    }
+
+    private async void OnExportIntegratedLogButtonClicked(object sender, RoutedEventArgs routedEventArguments)
+    {
+        ExportIntegratedLogButton.IsEnabled = false;
+        try
+        {
+            if (!App.FileLogService.HasLogs())
+            {
+                await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ExportIntegratedLogEmptyDialogTitle"), GetLocalizedString("SettingsPage_ExportIntegratedLogEmptyDialogMessage"));
+                return;
+            }
+
+            var fileSavePicker = CreateIntegratedLogFileSavePicker();
+            var storageFile = await fileSavePicker.PickSaveFileAsync();
+            if (storageFile is null) return;
+
+            await App.FileLogService.ExportAsync(storageFile.Path);
+            await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ExportIntegratedLogDialogTitle"), GetLocalizedString("SettingsPage_ExportIntegratedLogDialogMessage"));
+        }
+        catch { await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ExportIntegratedLogFailedDialogTitle"), GetLocalizedString("SettingsPage_ExportIntegratedLogFailedDialogMessage")); }
+        finally { ExportIntegratedLogButton.IsEnabled = true; }
     }
 
     private async void OnLanguageComboBoxSelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArguments)
@@ -362,6 +385,19 @@ public sealed partial class SettingsPage : Page
         };
         InitializeWithWindow.Initialize(fileSavePicker, WindowNative.GetWindowHandle(MainWindow.Instance));
         fileSavePicker.FileTypeChoices.Add(GetLocalizedString("SettingsPage_ApplicationSettingsFileTypeChoice"), [ApplicationSettingsFileExtension]);
+        return fileSavePicker;
+    }
+
+    private static FileSavePicker CreateIntegratedLogFileSavePicker()
+    {
+        var fileSavePicker = new FileSavePicker
+        {
+            DefaultFileExtension = LogFileExtension,
+            SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
+            SuggestedFileName = $"codex-account-switch-logs-{DateTimeOffset.Now.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture)}"
+        };
+        InitializeWithWindow.Initialize(fileSavePicker, WindowNative.GetWindowHandle(MainWindow.Instance));
+        fileSavePicker.FileTypeChoices.Add(GetLocalizedString("SettingsPage_IntegratedLogFileTypeChoice"), [LogFileExtension]);
         return fileSavePicker;
     }
 

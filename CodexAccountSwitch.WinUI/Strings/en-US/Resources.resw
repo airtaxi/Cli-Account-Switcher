@@ -813,6 +813,36 @@
   <data name="SettingsPage_ImportApplicationSettingsFailedDialogMessage" xml:space="preserve">
     <value>The app settings could not be imported from the selected .casc file. Please check the file format and access permissions.</value>
   </data>
+  <data name="SettingsPage_IntegratedLogExportSettingsCard.Header" xml:space="preserve">
+    <value>Download integrated logs</value>
+  </data>
+  <data name="SettingsPage_IntegratedLogExportSettingsCard.Description" xml:space="preserve">
+    <value>Save the logs recorded during the current app session to a file. (Up to 1,000 entries)</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogButtonTextBlock.Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SettingsPage_IntegratedLogFileTypeChoice" xml:space="preserve">
+    <value>Text file</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogEmptyDialogTitle" xml:space="preserve">
+    <value>No logs</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogEmptyDialogMessage" xml:space="preserve">
+    <value>There are no logs recorded in the current app session.</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogDialogTitle" xml:space="preserve">
+    <value>Log export completed</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogDialogMessage" xml:space="preserve">
+    <value>The log was saved.</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogFailedDialogTitle" xml:space="preserve">
+    <value>Log export failed</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogFailedDialogMessage" xml:space="preserve">
+    <value>The log could not be saved. Check file access permissions and try again.</value>
+  </data>
   <data name="SettingsPage_AccountSettingsGroup.Header" xml:space="preserve">
     <value>Account settings</value>
   </data>
