@@ -474,4 +474,79 @@
   <data name="ManualPasteAddAccountPage_PartialFailureMessage" xml:space="preserve">
     <value>Some auth.json documents could not be imported.</value>
   </data>
+  <data name="DashboardPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="DashboardPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Check account quotas and the current active account at a glance.</value>
+  </data>
+  <data name="DashboardPage_TotalAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>Total Accounts</value>
+  </data>
+  <data name="DashboardPage_TotalAccountDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Based on saved Codex accounts.</value>
+  </data>
+  <data name="DashboardPage_PrimaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>5-hour average quota</value>
+  </data>
+  <data name="DashboardPage_PrimaryLowUsageAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>5-hour low-quota accounts</value>
+  </data>
+  <data name="DashboardPage_SecondaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>7-day average quota</value>
+  </data>
+  <data name="DashboardPage_SecondaryLowUsageAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>7-day low-quota accounts</value>
+  </data>
+  <data name="DashboardPage_LowUsageMetricDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Below the configured warning threshold</value>
+  </data>
+  <data name="DashboardPage_SecondaryLowUsageMetricDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Below the configured warning threshold</value>
+  </data>
+  <data name="DashboardPage_ActiveAccountSectionTitleTextBlock.Text" xml:space="preserve">
+    <value>Active account quota</value>
+  </data>
+  <data name="DashboardPage_ActiveAccountSectionDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Remaining quota for the current Active account.</value>
+  </data>
+  <data name="DashboardPage_ManageAccountsTextBlock.Text" xml:space="preserve">
+    <value>Go to Account Management</value>
+  </data>
+  <data name="DashboardPage_CurrentActiveAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>Current Active account</value>
+  </data>
+  <data name="DashboardPage_ActivePrimaryUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>5-hour remaining</value>
+  </data>
+  <data name="DashboardPage_ActiveSecondaryUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>7-day remaining</value>
+  </data>
+  <data name="DashboardPage_NoActiveAccountTitleTextBlock.Text" xml:space="preserve">
+    <value>No active account.</value>
+  </data>
+  <data name="DashboardPage_NoActiveAccountDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Switch to an account in Account Management to show remaining quota here.</value>
+  </data>
+  <data name="DashboardPage_LowUsageAccountsSectionTitleTextBlock.Text" xml:space="preserve">
+    <value>Low-quota accounts</value>
+  </data>
+  <data name="DashboardPage_LowUsageAccountsSectionDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Only accounts whose 5-hour or 7-day remaining quota is below the warning threshold are shown.</value>
+  </data>
+  <data name="DashboardPage_NoLowUsageAccountsTitleTextBlock.Text" xml:space="preserve">
+    <value>No low-quota accounts.</value>
+  </data>
+  <data name="DashboardPageViewModel_AccountCountFormat" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="DashboardPageViewModel_LowUsageAccountCountFormat" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="DashboardPageViewModel_NoLowUsageAccounts" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="DashboardLowUsageAccountViewModel_LowUsageFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
 </root>

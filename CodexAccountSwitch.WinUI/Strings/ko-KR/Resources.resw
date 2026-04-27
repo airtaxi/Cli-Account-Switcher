@@ -474,4 +474,79 @@
   <data name="ManualPasteAddAccountPage_PartialFailureMessage" xml:space="preserve">
     <value>일부 auth.json을 불러오는 데 실패했습니다.</value>
   </data>
+  <data name="DashboardPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>대시보드</value>
+  </data>
+  <data name="DashboardPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>계정 할당량과 현재 활성 계정 상태를 한눈에 확인합니다.</value>
+  </data>
+  <data name="DashboardPage_TotalAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>총 계정 수</value>
+  </data>
+  <data name="DashboardPage_TotalAccountDescriptionTextBlock.Text" xml:space="preserve">
+    <value>저장된 Codex 계정 기준입니다.</value>
+  </data>
+  <data name="DashboardPage_PrimaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>5시간 평균 할당량</value>
+  </data>
+  <data name="DashboardPage_PrimaryLowUsageAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>5시간 저할당량 계정</value>
+  </data>
+  <data name="DashboardPage_SecondaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>7일 평균 할당량</value>
+  </data>
+  <data name="DashboardPage_SecondaryLowUsageAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>7일 저할당량 계정</value>
+  </data>
+  <data name="DashboardPage_LowUsageMetricDescriptionTextBlock.Text" xml:space="preserve">
+    <value>설정된 경고 기준 이하</value>
+  </data>
+  <data name="DashboardPage_SecondaryLowUsageMetricDescriptionTextBlock.Text" xml:space="preserve">
+    <value>설정된 경고 기준 이하</value>
+  </data>
+  <data name="DashboardPage_ActiveAccountSectionTitleTextBlock.Text" xml:space="preserve">
+    <value>활성 계정 할당량</value>
+  </data>
+  <data name="DashboardPage_ActiveAccountSectionDescriptionTextBlock.Text" xml:space="preserve">
+    <value>현재 Active 계정의 남은 할당량입니다.</value>
+  </data>
+  <data name="DashboardPage_ManageAccountsTextBlock.Text" xml:space="preserve">
+    <value>계정 관리로 이동</value>
+  </data>
+  <data name="DashboardPage_CurrentActiveAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>현재 Active 계정</value>
+  </data>
+  <data name="DashboardPage_ActivePrimaryUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>5시간 잔여량</value>
+  </data>
+  <data name="DashboardPage_ActiveSecondaryUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>7일 잔여량</value>
+  </data>
+  <data name="DashboardPage_NoActiveAccountTitleTextBlock.Text" xml:space="preserve">
+    <value>활성 계정이 없습니다.</value>
+  </data>
+  <data name="DashboardPage_NoActiveAccountDescriptionTextBlock.Text" xml:space="preserve">
+    <value>계정 관리에서 사용할 계정을 전환하면 이곳에 잔여량이 표시됩니다.</value>
+  </data>
+  <data name="DashboardPage_LowUsageAccountsSectionTitleTextBlock.Text" xml:space="preserve">
+    <value>저할당량 계정 목록</value>
+  </data>
+  <data name="DashboardPage_LowUsageAccountsSectionDescriptionTextBlock.Text" xml:space="preserve">
+    <value>5시간 또는 7일 잔여량이 경고 기준 이하인 계정만 표시합니다.</value>
+  </data>
+  <data name="DashboardPage_NoLowUsageAccountsTitleTextBlock.Text" xml:space="preserve">
+    <value>저할당량 계정이 없습니다.</value>
+  </data>
+  <data name="DashboardPageViewModel_AccountCountFormat" xml:space="preserve">
+    <value>{0}개</value>
+  </data>
+  <data name="DashboardPageViewModel_LowUsageAccountCountFormat" xml:space="preserve">
+    <value>{0}개</value>
+  </data>
+  <data name="DashboardPageViewModel_NoLowUsageAccounts" xml:space="preserve">
+    <value>없음</value>
+  </data>
+  <data name="DashboardLowUsageAccountViewModel_LowUsageFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
 </root>

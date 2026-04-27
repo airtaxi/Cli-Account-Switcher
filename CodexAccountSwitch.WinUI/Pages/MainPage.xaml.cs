@@ -21,6 +21,12 @@ public sealed partial class MainPage : Page
         SettingsSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_SettingsSelectorBarItem/Text");
     }
 
+    public void NavigateToAccountsSection()
+    {
+        PageSelectorBar.SelectedItem = AccountsSelectorBarItem;
+        NavigateToSelectedSection();
+    }
+
     private void NavigateToSelectedSection()
     {
         var selectedSectionTag = PageSelectorBar.SelectedItem?.Tag as string ?? "Dashboard";
