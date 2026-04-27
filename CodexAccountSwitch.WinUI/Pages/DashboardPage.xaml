@@ -45,11 +45,14 @@
                         <TextBlock
                             x:Uid="DashboardPage_TitleTextBlock"
                             FontSize="28"
-                            FontWeight="SemiBold" />
+                            FontWeight="SemiBold"
+                            MaxLines="1"
+                            TextTrimming="WordEllipsis" />
                         <TextBlock
                             x:Uid="DashboardPage_DescriptionTextBlock"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            TextWrapping="Wrap" />
+                            MaxLines="1"
+                            TextTrimming="WordEllipsis" />
                     </StackPanel>
 
                     <StackPanel
@@ -95,7 +98,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Border Style="{StaticResource DashboardCardBorderStyle}">
-                            <StackPanel Spacing="10">
+                            <StackPanel VerticalAlignment="Center" Spacing="10">
                                 <Grid ColumnSpacing="12">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
@@ -108,53 +111,70 @@
                                             Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"
                                             Glyph="&#xE748;" />
                                     </Border>
-                                    <TextBlock
-                                        x:Uid="DashboardPage_TotalAccountLabelTextBlock"
-                                        Grid.Column="1"
-                                        VerticalAlignment="Center"
-                                        MaxLines="1"
-                                        Style="{StaticResource DashboardMetricLabelTextBlockStyle}"
-                                        TextTrimming="CharacterEllipsis" />
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock
+                                            x:Uid="DashboardPage_TotalAccountLabelTextBlock"
+                                            VerticalAlignment="Center"
+                                            MaxLines="1"
+                                            Style="{StaticResource DashboardMetricLabelTextBlockStyle}"
+                                            TextTrimming="WordEllipsis" />
+                                        <TextBlock
+                                            x:Uid="DashboardPage_TotalAccountDescriptionTextBlock"
+                                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                            MaxLines="1"
+                                            TextTrimming="WordEllipsis"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
                                 </Grid>
 
                                 <TextBlock
                                     FontSize="24"
                                     FontWeight="SemiBold"
-                                    Text="{x:Bind ViewModel.AccountCountText, Mode=OneWay}" />
+                                    Text="{x:Bind ViewModel.AccountCountText, Mode=OneWay}"
+                                    TextTrimming="WordEllipsis" />
+                            </StackPanel>
+                        </Border>
 
+                        <Border Grid.Column="1" Style="{StaticResource DashboardCardBorderStyle}">
+                            <StackPanel VerticalAlignment="Center" Spacing="10">
                                 <TextBlock
-                                    x:Uid="DashboardPage_TotalAccountDescriptionTextBlock"
+                                    x:Uid="DashboardPage_PrimaryLowUsageAccountLabelTextBlock"
+                                    MaxLines="1"
+                                    Style="{StaticResource DashboardMetricLabelTextBlockStyle}"
+                                    TextTrimming="WordEllipsis" />
+                                <TextBlock
+                                    FontSize="24"
+                                    FontWeight="SemiBold"
+                                    MaxLines="1"
+                                    Text="{x:Bind ViewModel.PrimaryLowUsageAccountCountText, Mode=OneWay}"
+                                    TextTrimming="WordEllipsis" />
+                                <TextBlock
+                                    x:Uid="DashboardPage_LowUsageMetricDescriptionTextBlock"
                                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                    MaxLines="2"
+                                    MaxLines="1"
                                     TextTrimming="WordEllipsis"
                                     TextWrapping="Wrap" />
                             </StackPanel>
                         </Border>
 
-                        <Border Grid.Column="1" Style="{StaticResource DashboardCardBorderStyle}">
-                            <StackPanel Spacing="10">
-                                <TextBlock x:Uid="DashboardPage_PrimaryLowUsageAccountLabelTextBlock" Style="{StaticResource DashboardMetricLabelTextBlockStyle}" />
-                                <TextBlock
-                                    FontSize="24"
-                                    FontWeight="SemiBold"
-                                    Text="{x:Bind ViewModel.PrimaryLowUsageAccountCountText, Mode=OneWay}" />
-                                <TextBlock
-                                    x:Uid="DashboardPage_LowUsageMetricDescriptionTextBlock"
-                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                    TextWrapping="Wrap" />
-                            </StackPanel>
-                        </Border>
-
                         <Border Grid.Column="2" Style="{StaticResource DashboardCardBorderStyle}">
-                            <StackPanel Spacing="10">
-                                <TextBlock x:Uid="DashboardPage_SecondaryLowUsageAccountLabelTextBlock" Style="{StaticResource DashboardMetricLabelTextBlockStyle}" />
+                            <StackPanel VerticalAlignment="Center" Spacing="10">
+                                <TextBlock
+                                    x:Uid="DashboardPage_SecondaryLowUsageAccountLabelTextBlock"
+                                    MaxLines="1"
+                                    Style="{StaticResource DashboardMetricLabelTextBlockStyle}"
+                                    TextTrimming="WordEllipsis" />
                                 <TextBlock
                                     FontSize="24"
                                     FontWeight="SemiBold"
-                                    Text="{x:Bind ViewModel.SecondaryLowUsageAccountCountText, Mode=OneWay}" />
+                                    MaxLines="1"
+                                    Text="{x:Bind ViewModel.SecondaryLowUsageAccountCountText, Mode=OneWay}"
+                                    TextTrimming="WordEllipsis" />
                                 <TextBlock
                                     x:Uid="DashboardPage_SecondaryLowUsageMetricDescriptionTextBlock"
                                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                    MaxLines="1"
+                                    TextTrimming="WordEllipsis"
                                     TextWrapping="Wrap" />
                             </StackPanel>
                         </Border>
@@ -167,30 +187,39 @@
                         </Grid.ColumnDefinitions>
 
                         <Border Style="{StaticResource DashboardCardBorderStyle}">
-                            <StackPanel Spacing="10">
-                                <TextBlock x:Uid="DashboardPage_PrimaryAverageUsageLabelTextBlock" Style="{StaticResource DashboardMetricLabelTextBlockStyle}" />
+                            <StackPanel VerticalAlignment="Center" Spacing="10">
+                                <TextBlock
+                                    x:Uid="DashboardPage_PrimaryAverageUsageLabelTextBlock"
+                                    MaxLines="1"
+                                    Style="{StaticResource DashboardMetricLabelTextBlockStyle}"
+                                    TextTrimming="WordEllipsis" />
                                 <TextBlock
                                     FontSize="24"
                                     FontWeight="SemiBold"
-                                    Text="{x:Bind ViewModel.PrimaryAverageUsageRemainingText, Mode=OneWay}" />
-                                <ProgressBar
-                                    Height="4"
-                                    Maximum="100"
-                                    Value="{x:Bind ViewModel.PrimaryAverageUsageRemainingPercentage, Mode=OneWay}" />
+                                    MaxLines="1"
+                                    Text="{x:Bind ViewModel.PrimaryAverageUsageRemainingText, Mode=OneWay}"
+                                    TextTrimming="WordEllipsis" />
+                                <ProgressBar Maximum="100" Value="{x:Bind ViewModel.PrimaryAverageUsageRemainingPercentage, Mode=OneWay}" />
                             </StackPanel>
                         </Border>
 
-                        <Border Grid.Column="1" Style="{StaticResource DashboardCardBorderStyle}">
+                        <Border
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource DashboardCardBorderStyle}">
                             <StackPanel Spacing="10">
-                                <TextBlock x:Uid="DashboardPage_SecondaryAverageUsageLabelTextBlock" Style="{StaticResource DashboardMetricLabelTextBlockStyle}" />
+                                <TextBlock
+                                    x:Uid="DashboardPage_SecondaryAverageUsageLabelTextBlock"
+                                    MaxLines="1"
+                                    Style="{StaticResource DashboardMetricLabelTextBlockStyle}"
+                                    TextTrimming="WordEllipsis" />
                                 <TextBlock
                                     FontSize="24"
                                     FontWeight="SemiBold"
-                                    Text="{x:Bind ViewModel.SecondaryAverageUsageRemainingText, Mode=OneWay}" />
-                                <ProgressBar
-                                    Height="4"
-                                    Maximum="100"
-                                    Value="{x:Bind ViewModel.SecondaryAverageUsageRemainingPercentage, Mode=OneWay}" />
+                                    MaxLines="1"
+                                    Text="{x:Bind ViewModel.SecondaryAverageUsageRemainingText, Mode=OneWay}"
+                                    TextTrimming="WordEllipsis" />
+                                <ProgressBar Maximum="100" Value="{x:Bind ViewModel.SecondaryAverageUsageRemainingPercentage, Mode=OneWay}" />
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -216,10 +245,12 @@
                                     FontSize="20"
                                     FontWeight="SemiBold"
                                     MaxLines="1"
-                                    TextTrimming="CharacterEllipsis" />
+                                    TextTrimming="WordEllipsis" />
                                 <TextBlock
                                     x:Uid="DashboardPage_ActiveAccountSectionDescriptionTextBlock"
                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    MaxLines="1"
+                                    TextTrimming="WordEllipsis"
                                     TextWrapping="Wrap" />
                             </StackPanel>
 
@@ -242,27 +273,30 @@
                                     </Border>
 
                                     <StackPanel Grid.Column="1" Spacing="3">
-                                        <TextBlock x:Uid="DashboardPage_CurrentActiveAccountLabelTextBlock" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                        <TextBlock
+                                            x:Uid="DashboardPage_CurrentActiveAccountLabelTextBlock"
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            TextTrimming="WordEllipsis" />
                                         <TextBlock
                                             FontSize="22"
                                             FontWeight="SemiBold"
                                             Text="{x:Bind ViewModel.ActiveAccountDisplayNameText, Mode=OneWay}"
-                                            TextTrimming="CharacterEllipsis" />
+                                            TextTrimming="WordEllipsis" />
                                         <TextBlock
                                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                             Text="{x:Bind ViewModel.ActiveAccountEmailAddressText, Mode=OneWay}"
-                                            TextTrimming="CharacterEllipsis" />
+                                            TextTrimming="WordEllipsis" />
                                         <TextBlock
                                             Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                             Text="{x:Bind ViewModel.ActiveAccountPlanText, Mode=OneWay}"
-                                            TextTrimming="CharacterEllipsis" />
+                                            TextTrimming="WordEllipsis" />
                                     </StackPanel>
                                 </Grid>
 
                                 <TextBlock
                                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                     Text="{x:Bind ViewModel.ActiveAccountLastUsageRefreshText, Mode=OneWay}"
-                                    TextTrimming="CharacterEllipsis" />
+                                    TextTrimming="WordEllipsis" />
 
                                 <Grid ColumnSpacing="12" RowSpacing="12">
                                     <Grid.ColumnDefinitions>
@@ -281,16 +315,15 @@
                                                 Grid.Column="0"
                                                 MaxLines="1"
                                                 Style="{StaticResource DashboardMetricLabelTextBlockStyle}"
-                                                TextTrimming="CharacterEllipsis" />
+                                                TextTrimming="WordEllipsis" />
                                             <TextBlock
                                                 Grid.Column="1"
                                                 FontWeight="SemiBold"
                                                 MaxLines="1"
                                                 Text="{x:Bind ViewModel.ActiveAccountPrimaryUsageRemainingText, Mode=OneWay}"
-                                                TextTrimming="CharacterEllipsis" />
+                                                TextTrimming="WordEllipsis" />
                                         </Grid>
                                         <ProgressBar
-                                            Height="4"
                                             Foreground="{x:Bind ViewModel.IsActiveAccountPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
                                             Maximum="100"
                                             Value="{x:Bind ViewModel.ActiveAccountPrimaryUsageRemainingPercentage, Mode=OneWay}" />
@@ -307,16 +340,15 @@
                                                 Grid.Column="0"
                                                 MaxLines="1"
                                                 Style="{StaticResource DashboardMetricLabelTextBlockStyle}"
-                                                TextTrimming="CharacterEllipsis" />
+                                                TextTrimming="WordEllipsis" />
                                             <TextBlock
                                                 Grid.Column="1"
                                                 FontWeight="SemiBold"
                                                 MaxLines="1"
                                                 Text="{x:Bind ViewModel.ActiveAccountSecondaryUsageRemainingText, Mode=OneWay}"
-                                                TextTrimming="CharacterEllipsis" />
+                                                TextTrimming="WordEllipsis" />
                                         </Grid>
                                         <ProgressBar
-                                            Height="4"
                                             Foreground="{x:Bind ViewModel.IsActiveAccountSecondaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
                                             Maximum="100"
                                             Value="{x:Bind ViewModel.ActiveAccountSecondaryUsageRemainingPercentage, Mode=OneWay}" />
@@ -339,12 +371,16 @@
                                     x:Uid="DashboardPage_NoActiveAccountTitleTextBlock"
                                     HorizontalAlignment="Center"
                                     FontSize="18"
-                                    FontWeight="SemiBold" />
+                                    FontWeight="SemiBold"
+                                    MaxLines="1"
+                                    TextTrimming="WordEllipsis" />
                                 <TextBlock
                                     x:Uid="DashboardPage_NoActiveAccountDescriptionTextBlock"
                                     HorizontalAlignment="Center"
                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    MaxLines="1"
                                     TextAlignment="Center"
+                                    TextTrimming="WordEllipsis"
                                     TextWrapping="Wrap" />
                             </StackPanel>
 
@@ -377,10 +413,12 @@
                                     FontSize="20"
                                     FontWeight="SemiBold"
                                     MaxLines="1"
-                                    TextTrimming="CharacterEllipsis" />
+                                    TextTrimming="WordEllipsis" />
                                 <TextBlock
                                     x:Uid="DashboardPage_LowUsageAccountsSectionDescriptionTextBlock"
                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    MaxLines="1"
+                                    TextTrimming="WordEllipsis"
                                     TextWrapping="Wrap" />
                             </StackPanel>
 
@@ -408,16 +446,16 @@
                                                     FontSize="16"
                                                     FontWeight="SemiBold"
                                                     Text="{x:Bind DisplayName}"
-                                                    TextTrimming="CharacterEllipsis" />
+                                                    TextTrimming="WordEllipsis" />
                                                 <TextBlock
                                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                                     Text="{x:Bind EmailAddress}"
-                                                    TextTrimming="CharacterEllipsis" />
+                                                    TextTrimming="WordEllipsis" />
                                                 <TextBlock
                                                     FontSize="12"
                                                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                                     Text="{x:Bind LastUsageRefreshText}"
-                                                    TextTrimming="CharacterEllipsis" />
+                                                    TextTrimming="WordEllipsis" />
                                             </StackPanel>
 
                                             <StackPanel
@@ -428,9 +466,8 @@
                                                     <TextBlock
                                                         FontWeight="SemiBold"
                                                         Text="{x:Bind PrimaryUsageWarningText}"
-                                                        TextTrimming="CharacterEllipsis" />
+                                                        TextTrimming="WordEllipsis" />
                                                     <ProgressBar
-                                                        Height="4"
                                                         Foreground="{ThemeResource UsageWarningProgressBarForegroundBrush}"
                                                         Maximum="100"
                                                         Value="{x:Bind PrimaryUsageRemainingPercentage}" />
@@ -439,9 +476,8 @@
                                                     <TextBlock
                                                         FontWeight="SemiBold"
                                                         Text="{x:Bind SecondaryUsageWarningText}"
-                                                        TextTrimming="CharacterEllipsis" />
+                                                        TextTrimming="WordEllipsis" />
                                                     <ProgressBar
-                                                        Height="4"
                                                         Foreground="{ThemeResource UsageWarningProgressBarForegroundBrush}"
                                                         Maximum="100"
                                                         Value="{x:Bind SecondaryUsageRemainingPercentage}" />
@@ -480,7 +516,8 @@
                                     x:Uid="DashboardPage_NoLowUsageAccountsTitleTextBlock"
                                     HorizontalAlignment="Center"
                                     FontSize="18"
-                                    FontWeight="SemiBold" />
+                                    FontWeight="SemiBold"
+                                    TextTrimming="WordEllipsis" />
                             </StackPanel>
                         </Grid>
                     </Border>
