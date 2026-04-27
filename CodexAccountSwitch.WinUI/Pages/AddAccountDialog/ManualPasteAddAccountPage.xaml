@@ -84,6 +84,7 @@
                                 Grid.Column="1"
                                 Width="34"
                                 Height="34"
+                                Padding="0"
                                 VerticalAlignment="Top"
                                 Click="OnRemoveManualAuthenticationTextBoxButtonClicked"
                                 CommandParameter="{x:Bind}">
