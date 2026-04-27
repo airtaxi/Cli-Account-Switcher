@@ -1,9 +1,11 @@
-using CodexAccountSwitch.WinUI.Services;
+using CodexAccountSwitch.WinUI.Models;
 using CodexAccountSwitch.WinUI.Pages;
+using CodexAccountSwitch.WinUI.Services;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
-using System;
 using WinRT.Interop;
 using WinUIEx;
 using TitleBar = Microsoft.UI.Xaml.Controls.TitleBar;
@@ -12,7 +14,9 @@ namespace CodexAccountSwitch.WinUI;
 
 public sealed partial class MainWindow : WindowEx
 {
-    public static MainWindow Instance { get; private set;  }
+    private bool _isApplyingNavigationSelection;
+
+    public static MainWindow Instance { get; private set; }
 
     public MainWindow()
     {
@@ -24,6 +28,8 @@ public sealed partial class MainWindow : WindowEx
 
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
+
+        WeakReferenceMessenger.Default.Register<ValueChangedMessage<MainPageNavigationSection>>(this, OnMainPageNavigationSectionChangedMessageReceived);
 
         this.CenterOnScreen();
         AppFrame.Navigate(typeof(MainPage));
@@ -63,22 +69,70 @@ public sealed partial class MainWindow : WindowEx
         var localizedWindowTitle = App.LocalizationService.GetLocalizedString("MainWindow_AppTitleBar/Title");
         Title = localizedWindowTitle;
         AppTitleBar.Title = localizedWindowTitle;
+
+        DashboardSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_DashboardSelectorBarItem/Text");
+        AccountsSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_AccountsSelectorBarItem/Text");
+        AboutSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_AboutSelectorBarItem/Text");
+        SettingsSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_SettingsSelectorBarItem/Text");
     }
 
-    private void OnAppFrameNavigated(object sender, NavigationEventArgs args)
+    private void OnAppFrameNavigated(object sender, NavigationEventArgs navigationEventArguments)
     {
         var frame = sender as Frame;
 
         AppTitleBar.IsBackButtonVisible = frame?.CanGoBack == true;
     }
 
-    private void OnAppTitleBarBackRequested(TitleBar sender, object args)
+    private void OnAppTitleBarBackRequested(TitleBar sender, object eventArguments)
     {
         if (AppFrame.CanGoBack) AppFrame.GoBack();
     }
 
-    private void OnClosed(object sender, WindowEventArgs args)
+    private void OnPageSelectorBarSelectionChanged(SelectorBar sender, SelectorBarSelectionChangedEventArgs selectorBarSelectionChangedEventArguments)
     {
+        if (_isApplyingNavigationSelection) return;
+        WeakReferenceMessenger.Default.Send(new ValueChangedMessage<MainPageNavigationSection>(GetSelectedNavigationSection(sender.SelectedItem)));
+    }
+
+    private void OnMainPageNavigationSectionChangedMessageReceived(object messageRecipient, ValueChangedMessage<MainPageNavigationSection> valueChangedMessage) => SelectMainPageNavigationSection(valueChangedMessage.Value);
+
+    private void SelectMainPageNavigationSection(MainPageNavigationSection mainPageNavigationSection)
+    {
+        var selectorBarItem = GetSelectorBarItem(mainPageNavigationSection);
+        if (PageSelectorBar.SelectedItem == selectorBarItem) return;
+
+        _isApplyingNavigationSelection = true;
+        try
+        {
+            PageSelectorBar.SelectedItem = selectorBarItem;
+        }
+        finally
+        {
+            _isApplyingNavigationSelection = false;
+        }
+    }
+
+    private SelectorBarItem GetSelectorBarItem(MainPageNavigationSection mainPageNavigationSection) => mainPageNavigationSection switch
+    {
+        MainPageNavigationSection.Dashboard => DashboardSelectorBarItem,
+        MainPageNavigationSection.Accounts => AccountsSelectorBarItem,
+        MainPageNavigationSection.About => AboutSelectorBarItem,
+        MainPageNavigationSection.Settings => SettingsSelectorBarItem,
+        _ => throw new ArgumentOutOfRangeException(nameof(mainPageNavigationSection), mainPageNavigationSection, "Unknown main page navigation section.")
+    };
+
+    private static MainPageNavigationSection GetSelectedNavigationSection(SelectorBarItem selectorBarItem) => (selectorBarItem?.Tag as string) switch
+    {
+        "Dashboard" => MainPageNavigationSection.Dashboard,
+        "Accounts" => MainPageNavigationSection.Accounts,
+        "About" => MainPageNavigationSection.About,
+        "Settings" => MainPageNavigationSection.Settings,
+        _ => MainPageNavigationSection.Dashboard
+    };
+
+    private void OnMainWindowClosed(object sender, WindowEventArgs windowEventArguments)
+    {
+        WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<MainPageNavigationSection>>(this);
         App.LocalizationService.LanguageChanged -= RefreshLocalizedText;
         App.CodexAccountService.Dispose();
     }

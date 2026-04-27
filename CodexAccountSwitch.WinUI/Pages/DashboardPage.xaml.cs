@@ -1,8 +1,10 @@
 using CodexAccountSwitch.WinUI.Helpers;
+using CodexAccountSwitch.WinUI.Models;
 using CodexAccountSwitch.WinUI.ViewModels;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media;
 using System;
 using System.Threading.Tasks;
 
@@ -40,22 +42,7 @@ public sealed partial class DashboardPage : Page
         await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), deletedAccountCount == 0 ? GetLocalizedString("AccountsPage_DeleteExpiredAccountsNoAccountsMessage") : GetFormattedString("AccountsPage_DeleteExpiredAccountsDeletedMessageFormat", deletedAccountCount));
     }
 
-    private void OnManageAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
-    {
-        var parentDependencyObject = VisualTreeHelper.GetParent(this);
-        while (parentDependencyObject is not null)
-        {
-            if (parentDependencyObject is MainPage mainPage)
-            {
-                mainPage.NavigateToAccountsSection();
-                return;
-            }
-
-            parentDependencyObject = VisualTreeHelper.GetParent(parentDependencyObject);
-        }
-
-        Frame.Navigate(typeof(AccountsPage));
-    }
+    private void OnManageAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments) => WeakReferenceMessenger.Default.Send(new ValueChangedMessage<MainPageNavigationSection>(MainPageNavigationSection.Accounts));
 
     private void OnDashboardPageUnloaded(object sender, RoutedEventArgs routedEventArguments) => ViewModel.Dispose();
 

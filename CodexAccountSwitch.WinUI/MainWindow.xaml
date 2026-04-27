@@ -8,7 +8,7 @@
     xmlns:local="using:CodexAccountSwitch.WinUI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:winuiex="using:WinUIEx"
-    Closed="OnClosed"
+    Closed="OnMainWindowClosed"
     mc:Ignorable="d">
 
     <Window.SystemBackdrop>
@@ -31,6 +31,46 @@
             <TitleBar.IconSource>
                 <ImageIconSource ImageSource="ms-appx:///Assets/Icon.png" />
             </TitleBar.IconSource>
+            <TitleBar.Content>
+                <dev:SelectorBarSegmented
+                    x:Name="PageSelectorBar"
+                    HorizontalAlignment="Center"
+                    SelectedItem="{x:Bind DashboardSelectorBarItem}"
+                    SelectionChanged="OnPageSelectorBarSelectionChanged">
+                    <SelectorBarItem
+                        x:Name="DashboardSelectorBarItem"
+                        x:Uid="MainPage_DashboardSelectorBarItem"
+                        Tag="Dashboard">
+                        <SelectorBarItem.Icon>
+                            <FontIcon Glyph="&#xECA5;" />
+                        </SelectorBarItem.Icon>
+                    </SelectorBarItem>
+                    <SelectorBarItem
+                        x:Name="AccountsSelectorBarItem"
+                        x:Uid="MainPage_AccountsSelectorBarItem"
+                        Tag="Accounts">
+                        <SelectorBarItem.Icon>
+                            <FontIcon Glyph="&#xE748;" />
+                        </SelectorBarItem.Icon>
+                    </SelectorBarItem>
+                    <SelectorBarItem
+                        x:Name="AboutSelectorBarItem"
+                        x:Uid="MainPage_AboutSelectorBarItem"
+                        Tag="About">
+                        <SelectorBarItem.Icon>
+                            <FontIcon Glyph="&#xE946;" />
+                        </SelectorBarItem.Icon>
+                    </SelectorBarItem>
+                    <SelectorBarItem
+                        x:Name="SettingsSelectorBarItem"
+                        x:Uid="MainPage_SettingsSelectorBarItem"
+                        Tag="Settings">
+                        <SelectorBarItem.Icon>
+                            <FontIcon Glyph="&#xE713;" />
+                        </SelectorBarItem.Icon>
+                    </SelectorBarItem>
+                </dev:SelectorBarSegmented>
+            </TitleBar.Content>
         </TitleBar>
 
         <Frame
