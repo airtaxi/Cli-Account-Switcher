@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="CliAccountSwitcher.WinUI.Pages.AccountsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dev="using:DevWinUI"
+    xmlns:local="using:CliAccountSwitcher.WinUI.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="using:CliAccountSwitcher.WinUI.ViewModels"
+    DataContext="{x:Bind ViewModel}"
+    Unloaded="OnAccountsPageUnloaded"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <Style x:Key="AccountActionButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="MinWidth" Value="40" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="AccountsListSurfaceBorderStyle" TargetType="Border">
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="Background" Value="{ThemeResource LayerFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+        <Style x:Key="AccountsListHeaderBorderStyle" TargetType="Border">
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+        <Style x:Key="AccountsListItemContainerStyle" TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="0,4" />
+        </Style>
+        <Style x:Key="AccountsListItemBorderStyle" TargetType="Border">
+            <Setter Property="MinHeight" Value="112" />
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+    </Page.Resources>
+
+    <Grid Padding="24" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" ColumnSpacing="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Spacing="4">
+                <TextBlock
+                    x:Uid="AccountsPage_TitleTextBlock"
+                    FontSize="28"
+                    FontWeight="SemiBold" />
+                <TextBlock x:Uid="AccountsPage_DescriptionTextBlock" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+
+            <StackPanel
+                Grid.Column="1"
+                Orientation="Horizontal"
+                Spacing="8">
+                <Button x:Name="RefreshAllAccountsButton" Click="OnRefreshAllAccountsButtonClicked">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <FontIcon FontSize="14" Glyph="&#xE72C;" />
+                        <TextBlock x:Uid="AccountsPage_RefreshAllAccountsTextBlock" />
+                    </StackPanel>
+                </Button>
+                <Button
+                    x:Name="AddAccountButton"
+                    Click="OnAddAccountButtonClicked"
+                    Style="{StaticResource AccentButtonStyle}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <FontIcon FontSize="14" Glyph="&#xE710;" />
+                        <TextBlock x:Uid="AccountsPage_AddAccountTextBlock" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid
+            Grid.Row="1"
+            ColumnSpacing="8"
+            RowSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <AutoSuggestBox
+                x:Name="AccountSearchAutoSuggestBox"
+                x:Uid="AccountsPage_AccountSearchAutoSuggestBox"
+                Grid.Column="0"
+                QueryIcon="Find"
+                TextChanged="OnAccountSearchAutoSuggestBoxTextChanged" />
+
+            <dev:SelectorBarSegmented
+                x:Name="PlanFilterSelectorBar"
+                Grid.Column="1"
+                SelectedItem="{x:Bind AllPlanFilterSelectorBarItem}"
+                SelectionChanged="OnPlanFilterSelectorBarSelectionChanged">
+                <SelectorBarItem
+                    x:Name="AllPlanFilterSelectorBarItem"
+                    x:Uid="AccountsPage_AllPlanFilterSelectorBarItem"
+                    Tag="All" />
+                <SelectorBarItem x:Uid="AccountsPage_FreePlanFilterSelectorBarItem" Tag="free" />
+                <SelectorBarItem x:Uid="AccountsPage_PlusPlanFilterSelectorBarItem" Tag="plus" />
+                <SelectorBarItem x:Uid="AccountsPage_TeamPlanFilterSelectorBarItem" Tag="team" />
+                <SelectorBarItem x:Uid="AccountsPage_ProLitePlanFilterSelectorBarItem" Tag="prolite" />
+                <SelectorBarItem x:Uid="AccountsPage_ProPlanFilterSelectorBarItem" Tag="pro" />
+            </dev:SelectorBarSegmented>
+        </Grid>
+
+        <Grid Grid.Row="2" ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="{x:Bind ViewModel.SelectedAccountCountText, Mode=OneWay}" />
+
+            <StackPanel
+                Grid.Column="1"
+                Orientation="Horizontal"
+                Spacing="8">
+                <Button
+                    x:Name="RefreshSelectedAccountsButton"
+                    Click="OnRefreshSelectedAccountsButtonClicked"
+                    IsEnabled="{x:Bind ViewModel.HasSelectedAccounts, Mode=OneWay}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <FontIcon FontSize="14" Glyph="&#xE72C;" />
+                        <TextBlock x:Uid="AccountsPage_RefreshSelectedAccountsTextBlock" />
+                    </StackPanel>
+                </Button>
+                <Button
+                    x:Name="DeleteSelectedAccountsButton"
+                    Click="OnDeleteSelectedAccountsButtonClicked"
+                    IsEnabled="{x:Bind ViewModel.HasSelectedAccounts, Mode=OneWay}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <FontIcon FontSize="14" Glyph="&#xE74D;" />
+                        <TextBlock x:Uid="AccountsPage_DeleteSelectedAccountsTextBlock" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="ExportBackupButton" Click="OnExportBackupButtonClicked">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <FontIcon FontSize="14" Glyph="&#xEDE1;" />
+                        <TextBlock x:Uid="AccountsPage_ExportBackupTextBlock" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="ImportBackupButton" Click="OnImportBackupButtonClicked">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <FontIcon FontSize="14" Glyph="&#xE8B5;" />
+                        <TextBlock x:Uid="AccountsPage_ImportBackupTextBlock" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="DeleteExpiredAccountsButton" Click="OnDeleteExpiredAccountsButtonClicked">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <FontIcon FontSize="14" Glyph="&#xE711;" />
+                        <TextBlock x:Uid="AccountsPage_DeleteExpiredAccountsTextBlock" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Border Grid.Row="3" Style="{StaticResource AccountsListSurfaceBorderStyle}">
+            <Grid>
+                <ListView
+                    x:Name="AccountsListView"
+                    Background="Transparent"
+                    ItemContainerStyle="{StaticResource AccountsListItemContainerStyle}"
+                    ItemsSource="{x:Bind ViewModel.FilteredAccounts, Mode=OneWay}"
+                    SelectionMode="None">
+                    <ListView.Header>
+                        <Border Style="{StaticResource AccountsListHeaderBorderStyle}">
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="4*" />
+                                    <ColumnDefinition Width="0.8*" />
+                                    <ColumnDefinition Width="172" />
+                                </Grid.ColumnDefinitions>
+                                <CheckBox
+                                    x:Name="SelectAllAccountsCheckBox"
+                                    Grid.Column="0"
+                                    MinWidth="0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Checked="OnSelectAllAccountsCheckBoxChecked"
+                                    IsChecked="{x:Bind ViewModel.FilteredAccountsSelectionState, Mode=OneWay}"
+                                    IsEnabled="{x:Bind ViewModel.HasFilteredAccounts, Mode=OneWay}"
+                                    IsThreeState="True"
+                                    Unchecked="OnSelectAllAccountsCheckBoxUnchecked" />
+                                <TextBlock
+                                    x:Uid="AccountsPage_AccountHeaderTextBlock"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    FontWeight="SemiBold" />
+                                <TextBlock
+                                    x:Uid="AccountsPage_PlanHeaderTextBlock"
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontWeight="SemiBold" />
+                                <TextBlock
+                                    x:Uid="AccountsPage_UsageHeaderTextBlock"
+                                    Grid.Column="3"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    FontWeight="SemiBold" />
+                                <TextBlock
+                                    x:Uid="AccountsPage_StatusHeaderTextBlock"
+                                    Grid.Column="4"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontWeight="SemiBold" />
+                                <TextBlock
+                                    x:Uid="AccountsPage_ActionsHeaderTextBlock"
+                                    Grid.Column="5"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    FontWeight="SemiBold" />
+                            </Grid>
+                        </Border>
+                    </ListView.Header>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="viewModels:CodexAccountViewModel">
+                            <Border Style="{StaticResource AccountsListItemBorderStyle}">
+                                <Grid ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="4*" />
+                                        <ColumnDefinition Width="0.8*" />
+                                        <ColumnDefinition Width="172" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <CheckBox
+                                        Grid.Column="0"
+                                        MinWidth="0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        IsChecked="{x:Bind IsSelected, Mode=TwoWay}" />
+
+                                    <StackPanel
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Spacing="3">
+                                        <TextBlock
+                                            FontSize="16"
+                                            FontWeight="SemiBold"
+                                            Text="{x:Bind DisplayName, Mode=OneWay}"
+                                            TextTrimming="CharacterEllipsis" />
+                                        <TextBlock
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Text="{x:Bind EmailAddress, Mode=OneWay}"
+                                            TextTrimming="CharacterEllipsis" />
+                                        <TextBlock
+                                            FontFamily="Consolas"
+                                            FontSize="12"
+                                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                            Text="{x:Bind AccessTokenPreview, Mode=OneWay}"
+                                            TextTrimming="CharacterEllipsis" />
+                                    </StackPanel>
+
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Text="{x:Bind PlanText, Mode=OneWay}" />
+
+                                    <Grid
+                                        Grid.Column="3"
+                                        VerticalAlignment="Center"
+                                        ColumnSpacing="8"
+                                        RowSpacing="6">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Border
+                                            MinWidth="76"
+                                            Padding="8,3"
+                                            VerticalAlignment="Center"
+                                            Background="{x:Bind IsPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource PrimaryUsageLimitBadgeBackgroundBrushConverter}}"
+                                            CornerRadius="{ThemeResource ControlCornerRadius}">
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                Foreground="{x:Bind IsPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageLimitBadgeForegroundBrushConverter}}"
+                                                Text="{x:Bind PrimaryUsageWindowLabelText, Mode=OneWay}" />
+                                        </Border>
+                                        <StackPanel
+                                            Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            Spacing="3">
+                                            <Grid ColumnSpacing="8">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock
+                                                    FontWeight="SemiBold"
+                                                    Text="{x:Bind PrimaryUsageRemainingText, Mode=OneWay}"
+                                                    TextTrimming="CharacterEllipsis" />
+                                                <TextBlock
+                                                    Grid.Column="1"
+                                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                    Text="{x:Bind PrimaryUsageResetText, Mode=OneWay}"
+                                                    TextTrimming="CharacterEllipsis" />
+                                            </Grid>
+                                            <ProgressBar
+                                                Foreground="{x:Bind IsPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
+                                                Maximum="100"
+                                                Value="{x:Bind PrimaryUsageRemainingPercentage, Mode=OneWay}" />
+                                        </StackPanel>
+                                        <Border
+                                            Grid.Row="1"
+                                            MinWidth="76"
+                                            Padding="8,3"
+                                            VerticalAlignment="Center"
+                                            Background="{x:Bind IsSecondaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource SecondaryUsageLimitBadgeBackgroundBrushConverter}}"
+                                            CornerRadius="{ThemeResource ControlCornerRadius}">
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                Foreground="{x:Bind IsSecondaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageLimitBadgeForegroundBrushConverter}}"
+                                                Text="{x:Bind SecondaryUsageWindowLabelText, Mode=OneWay}" />
+                                        </Border>
+                                        <StackPanel
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            Spacing="3">
+                                            <Grid ColumnSpacing="8">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock
+                                                    FontWeight="SemiBold"
+                                                    Text="{x:Bind SecondaryUsageRemainingText, Mode=OneWay}"
+                                                    TextTrimming="CharacterEllipsis" />
+                                                <TextBlock
+                                                    Grid.Column="1"
+                                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                    Text="{x:Bind SecondaryUsageResetText, Mode=OneWay}"
+                                                    TextTrimming="CharacterEllipsis" />
+                                            </Grid>
+                                            <ProgressBar
+                                                Foreground="{x:Bind IsSecondaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
+                                                Maximum="100"
+                                                Value="{x:Bind SecondaryUsageRemainingPercentage, Mode=OneWay}" />
+                                        </StackPanel>
+                                        <TextBlock
+                                            Grid.Row="2"
+                                            Grid.ColumnSpan="2"
+                                            FontSize="12"
+                                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                            LineHeight="12"
+                                            Text="{x:Bind LastUsageRefreshText, Mode=OneWay}"
+                                            TextTrimming="CharacterEllipsis" />
+                                    </Grid>
+
+                                    <Border
+                                        Grid.Column="4"
+                                        Padding="10,5"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Background="{ThemeResource ControlFillColorSecondaryBrush}"
+                                        CornerRadius="12">
+                                        <TextBlock
+                                            FontSize="12"
+                                            FontWeight="SemiBold"
+                                            Text="{x:Bind StatusText, Mode=OneWay}" />
+                                    </Border>
+
+                                    <StackPanel
+                                        Grid.Column="5"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal"
+                                        Spacing="4">
+                                        <Button
+                                            Click="OnSwitchAccountButtonClicked"
+                                            CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}"
+                                            Style="{StaticResource AccountActionButtonStyle}">
+                                            <ToolTipService.ToolTip>
+                                                <ToolTip x:Uid="AccountsPage_SwitchAccountToolTip" />
+                                            </ToolTipService.ToolTip>
+                                            <FontIcon FontSize="14" Glyph="&#xE8AB;" />
+                                        </Button>
+                                        <Button
+                                            Click="OnRenameAccountButtonClicked"
+                                            CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}"
+                                            Style="{StaticResource AccountActionButtonStyle}">
+                                            <ToolTipService.ToolTip>
+                                                <ToolTip x:Uid="AccountsPage_RenameAccountToolTip" />
+                                            </ToolTipService.ToolTip>
+                                            <FontIcon FontSize="14" Glyph="&#xE70F;" />
+                                        </Button>
+                                        <Button
+                                            Click="OnRefreshAccountButtonClicked"
+                                            CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}"
+                                            Style="{StaticResource AccountActionButtonStyle}">
+                                            <ToolTipService.ToolTip>
+                                                <ToolTip x:Uid="AccountsPage_RefreshAccountToolTip" />
+                                            </ToolTipService.ToolTip>
+                                            <FontIcon FontSize="14" Glyph="&#xE72C;" />
+                                        </Button>
+                                        <Button
+                                            Click="OnDeleteAccountButtonClicked"
+                                            CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}"
+                                            Style="{StaticResource AccountActionButtonStyle}">
+                                            <ToolTipService.ToolTip>
+                                                <ToolTip x:Uid="AccountsPage_DeleteAccountToolTip" />
+                                            </ToolTipService.ToolTip>
+                                            <FontIcon FontSize="14" Glyph="&#xE74D;" />
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <StackPanel
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Spacing="8"
+                    Visibility="{x:Bind ViewModel.HasNoAccounts, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <FontIcon
+                        HorizontalAlignment="Center"
+                        FontSize="36"
+                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                        Glyph="&#xE748;" />
+                    <TextBlock
+                        x:Uid="AccountsPage_NoAccountsTitleTextBlock"
+                        HorizontalAlignment="Center"
+                        FontSize="18"
+                        FontWeight="SemiBold" />
+                    <TextBlock
+                        x:Uid="AccountsPage_NoAccountsDescriptionTextBlock"
+                        HorizontalAlignment="Center"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+
+                <StackPanel
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Spacing="8"
+                    Visibility="{x:Bind ViewModel.HasNoFilteredAccounts, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <FontIcon
+                        HorizontalAlignment="Center"
+                        FontSize="36"
+                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                        Glyph="&#xE721;" />
+                    <TextBlock
+                        x:Uid="AccountsPage_NoFilteredAccountsTitleTextBlock"
+                        HorizontalAlignment="Center"
+                        FontSize="18"
+                        FontWeight="SemiBold" />
+                    <TextBlock
+                        x:Uid="AccountsPage_NoFilteredAccountsDescriptionTextBlock"
+                        HorizontalAlignment="Center"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="CliAccountSwitcher.WinUI.Pages.DashboardPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:CliAccountSwitcher.WinUI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dev="using:DevWinUI"
+    xmlns:local="using:CliAccountSwitcher.WinUI.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="using:CliAccountSwitcher.WinUI.ViewModels"
+    DataContext="{x:Bind ViewModel}"
+    Unloaded="OnDashboardPageUnloaded"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <Style x:Key="DashboardCardBorderStyle" TargetType="Border">
+            <Setter Property="Padding" Value="18" />
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+        <Style x:Key="DashboardIconBadgeBorderStyle" TargetType="Border">
+            <Setter Property="Width" Value="42" />
+            <Setter Property="Height" Value="42" />
+            <Setter Property="Background" Value="{ThemeResource AccentFillColorDefaultBrush}" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+        <Style x:Key="DashboardMetricLabelTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+    </Page.Resources>
+
+    <Grid Padding="24">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+            <StackPanel Spacing="12">
+                <Grid ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Spacing="4">
+                        <TextBlock
+                            x:Uid="DashboardPage_TitleTextBlock"
+                            FontSize="28"
+                            FontWeight="SemiBold"
+                            MaxLines="1"
+                            TextTrimming="WordEllipsis" />
+                        <TextBlock
+                            x:Uid="DashboardPage_DescriptionTextBlock"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            MaxLines="1"
+                            TextTrimming="WordEllipsis" />
+                    </StackPanel>
+
+                    <StackPanel
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="8">
+                        <Button
+                            x:Name="AddAccountButton"
+                            Click="OnAddAccountButtonClicked"
+                            Style="{StaticResource AccentButtonStyle}">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <FontIcon FontSize="14" Glyph="&#xE710;" />
+                                <TextBlock x:Uid="AccountsPage_AddAccountTextBlock" />
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="RefreshAllAccountsButton" Click="OnRefreshAllAccountsButtonClicked">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <FontIcon FontSize="14" Glyph="&#xE72C;" />
+                                <TextBlock x:Uid="AccountsPage_RefreshAllAccountsTextBlock" />
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="DeleteExpiredAccountsButton" Click="OnDeleteExpiredAccountsButtonClicked">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <FontIcon FontSize="14" Glyph="&#xE711;" />
+                                <TextBlock x:Uid="AccountsPage_DeleteExpiredAccountsTextBlock" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <Grid RowSpacing="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Style="{StaticResource DashboardCardBorderStyle}">
+                            <StackPanel VerticalAlignment="Center" Spacing="10">
+                                <Grid ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Style="{StaticResource DashboardIconBadgeBorderStyle}">
+                                        <FontIcon
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"
+                                            Glyph="&#xE748;" />
+                                    </Border>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock
+                                            x:Uid="DashboardPage_TotalAccountLabelTextBlock"
+                                            VerticalAlignment="Center"
+                                            MaxLines="1"
+                                            Style="{StaticResource DashboardMetricLabelTextBlockStyle}"
+                                            TextTrimming="WordEllipsis" />
+                                        <TextBlock
+                                            x:Uid="DashboardPage_TotalAccountDescriptionTextBlock"
+                                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                            MaxLines="1"
+                                            TextTrimming="WordEllipsis"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <TextBlock
+                                    FontSize="24"
+                                    FontWeight="SemiBold"
+                                    Text="{x:Bind ViewModel.AccountCountText, Mode=OneWay}"
+                                    TextTrimming="WordEllipsis" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="1" Style="{StaticResource DashboardCardBorderStyle}">
+                            <StackPanel VerticalAlignment="Center" Spacing="10">
+                                <TextBlock
+                                    x:Uid="DashboardPage_PrimaryLowUsageAccountLabelTextBlock"
+                                    MaxLines="1"
+                                    Style="{StaticResource DashboardMetricLabelTextBlockStyle}"
+                                    TextTrimming="WordEllipsis" />
+                                <TextBlock
+                                    FontSize="24"
+                                    FontWeight="SemiBold"
+                                    MaxLines="1"
+                                    Text="{x:Bind ViewModel.PrimaryLowUsageAccountCountText, Mode=OneWay}"
+                                    TextTrimming="WordEllipsis" />
+                                <TextBlock
+                                    x:Uid="DashboardPage_LowUsageMetricDescriptionTextBlock"
+                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                    MaxLines="1"
+                                    TextTrimming="WordEllipsis"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="2" Style="{StaticResource DashboardCardBorderStyle}">
+                            <StackPanel VerticalAlignment="Center" Spacing="10">
+                                <TextBlock
+                                    x:Uid="DashboardPage_SecondaryLowUsageAccountLabelTextBlock"
+                                    MaxLines="1"
+                                    Style="{StaticResource DashboardMetricLabelTextBlockStyle}"
+                                    TextTrimming="WordEllipsis" />
+                                <TextBlock
+                                    FontSize="24"
+                                    FontWeight="SemiBold"
+                                    MaxLines="1"
+                                    Text="{x:Bind ViewModel.SecondaryLowUsageAccountCountText, Mode=OneWay}"
+                                    TextTrimming="WordEllipsis" />
+                                <TextBlock
+                                    x:Uid="DashboardPage_SecondaryLowUsageMetricDescriptionTextBlock"
+                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                    MaxLines="1"
+                                    TextTrimming="WordEllipsis"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Grid Grid.Row="1" ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Style="{StaticResource DashboardCardBorderStyle}">
+                            <StackPanel VerticalAlignment="Center" Spacing="10">
+                                <TextBlock
+                                    x:Uid="DashboardPage_PrimaryAverageUsageLabelTextBlock"
+                                    MaxLines="1"
+                                    Style="{StaticResource DashboardMetricLabelTextBlockStyle}"
+                                    TextTrimming="WordEllipsis" />
+                                <TextBlock
+                                    FontSize="24"
+                                    FontWeight="SemiBold"
+                                    MaxLines="1"
+                                    Text="{x:Bind ViewModel.PrimaryAverageUsageRemainingText, Mode=OneWay}"
+                                    TextTrimming="WordEllipsis" />
+                                <ProgressBar Maximum="100" Value="{x:Bind ViewModel.PrimaryAverageUsageRemainingPercentage, Mode=OneWay}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource DashboardCardBorderStyle}">
+                            <StackPanel Spacing="10">
+                                <TextBlock
+                                    x:Uid="DashboardPage_SecondaryAverageUsageLabelTextBlock"
+                                    MaxLines="1"
+                                    Style="{StaticResource DashboardMetricLabelTextBlockStyle}"
+                                    TextTrimming="WordEllipsis" />
+                                <TextBlock
+                                    FontSize="24"
+                                    FontWeight="SemiBold"
+                                    MaxLines="1"
+                                    Text="{x:Bind ViewModel.SecondaryAverageUsageRemainingText, Mode=OneWay}"
+                                    TextTrimming="WordEllipsis" />
+                                <ProgressBar Maximum="100" Value="{x:Bind ViewModel.SecondaryAverageUsageRemainingPercentage, Mode=OneWay}" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <Grid ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <controls:ActiveAccountQuotaControl
+                        Grid.Column="0"
+                        ShouldUseMainWindowNavigation="False"
+                        ViewModel="{x:Bind ViewModel}" />
+
+                    <Border Grid.Column="1" Style="{StaticResource DashboardCardBorderStyle}">
+                        <Grid RowSpacing="14">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Spacing="4">
+                                <TextBlock
+                                    x:Uid="DashboardPage_LowUsageAccountsSectionTitleTextBlock"
+                                    FontSize="20"
+                                    FontWeight="SemiBold"
+                                    MaxLines="1"
+                                    TextTrimming="WordEllipsis" />
+                                <TextBlock
+                                    x:Uid="DashboardPage_LowUsageAccountsSectionDescriptionTextBlock"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    MaxLines="1"
+                                    TextTrimming="WordEllipsis"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+
+                            <ListView
+                                Grid.Row="1"
+                                IsItemClickEnabled="False"
+                                ItemsSource="{x:Bind ViewModel.LowUsageAccounts}"
+                                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                SelectionMode="None"
+                                Visibility="{x:Bind ViewModel.HasLowUsageAccounts, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:DataType="viewModels:DashboardLowUsageAccountViewModel">
+                                        <Grid
+                                            MinHeight="92"
+                                            Padding="8"
+                                            ColumnSpacing="12">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="2*" />
+                                                <ColumnDefinition Width="3*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0" Spacing="3">
+                                                <TextBlock
+                                                    FontSize="16"
+                                                    FontWeight="SemiBold"
+                                                    Text="{x:Bind DisplayName}"
+                                                    TextTrimming="WordEllipsis" />
+                                                <TextBlock
+                                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                    Text="{x:Bind EmailAddress}"
+                                                    TextTrimming="WordEllipsis" />
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                                    Text="{x:Bind LastUsageRefreshText}"
+                                                    TextTrimming="WordEllipsis" />
+                                            </StackPanel>
+
+                                            <StackPanel
+                                                Grid.Column="1"
+                                                VerticalAlignment="Center"
+                                                Spacing="8">
+                                                <StackPanel Spacing="4" Visibility="{x:Bind IsPrimaryUsageWarningVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                    <TextBlock
+                                                        FontWeight="SemiBold"
+                                                        Text="{x:Bind PrimaryUsageWarningText}"
+                                                        TextTrimming="WordEllipsis" />
+                                                    <ProgressBar
+                                                        Foreground="{ThemeResource UsageWarningProgressBarForegroundBrush}"
+                                                        Maximum="100"
+                                                        Value="{x:Bind PrimaryUsageRemainingPercentage}" />
+                                                </StackPanel>
+                                                <StackPanel Spacing="4" Visibility="{x:Bind IsSecondaryUsageWarningVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                    <TextBlock
+                                                        FontWeight="SemiBold"
+                                                        Text="{x:Bind SecondaryUsageWarningText}"
+                                                        TextTrimming="WordEllipsis" />
+                                                    <ProgressBar
+                                                        Foreground="{ThemeResource UsageWarningProgressBarForegroundBrush}"
+                                                        Maximum="100"
+                                                        Value="{x:Bind SecondaryUsageRemainingPercentage}" />
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <Border
+                                                Grid.Column="2"
+                                                Padding="10,5"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                Background="{ThemeResource ControlFillColorSecondaryBrush}"
+                                                CornerRadius="8">
+                                                <TextBlock
+                                                    FontSize="12"
+                                                    FontWeight="SemiBold"
+                                                    Text="{x:Bind StatusText}" />
+                                            </Border>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+
+                            <StackPanel
+                                Grid.Row="1"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Spacing="8"
+                                Visibility="{x:Bind ViewModel.HasNoLowUsageAccounts, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <FontIcon
+                                    HorizontalAlignment="Center"
+                                    FontSize="38"
+                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                    Glyph="&#xE9D2;" />
+                                <TextBlock
+                                    x:Uid="DashboardPage_NoLowUsageAccountsTitleTextBlock"
+                                    HorizontalAlignment="Center"
+                                    FontSize="18"
+                                    FontWeight="SemiBold"
+                                    TextTrimming="WordEllipsis" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

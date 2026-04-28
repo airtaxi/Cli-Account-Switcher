@@ -18,11 +18,11 @@ description: Add or update language support in a WinUI 3 app that uses .resw loc
 
 For this repository, language support normally spans these files:
 
-- `CodexAccountSwitch.WinUI/Services/LocalizationService.cs`
-- `CodexAccountSwitch.WinUI/Services/ApplicationSettingsService.cs`
-- `CodexAccountSwitch.WinUI/Pages/SettingsPage.xaml`
-- `CodexAccountSwitch.WinUI/Pages/SettingsPage.xaml.cs`
-- `CodexAccountSwitch.WinUI/Strings/<language-tag>/Resources.resw`
+- `CliAccountSwitcher.WinUI/Services/LocalizationService.cs`
+- `CliAccountSwitcher.WinUI/Services/ApplicationSettingsService.cs`
+- `CliAccountSwitcher.WinUI/Pages/SettingsPage.xaml`
+- `CliAccountSwitcher.WinUI/Pages/SettingsPage.xaml.cs`
+- `CliAccountSwitcher.WinUI/Strings/<language-tag>/Resources.resw`
 
 If the project structure differs, search for these concepts instead:
 

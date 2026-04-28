@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="CliAccountSwitcher.WinUI.Pages.AddAccountDialog.ManualPasteAddAccountPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:CliAccountSwitcher.WinUI.Pages.AddAccountDialog"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="using:CliAccountSwitcher.WinUI.ViewModels"
+    mc:Ignorable="d">
+
+    <Grid Padding="24" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Spacing="6">
+            <TextBlock
+                x:Uid="ManualPasteAddAccountPage_TitleTextBlock"
+                FontSize="22"
+                FontWeight="SemiBold" />
+            <TextBlock
+                x:Uid="ManualPasteAddAccountPage_DescriptionTextBlock"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                TextWrapping="Wrap" />
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="1"
+            Orientation="Horizontal"
+            Spacing="8">
+            <Button x:Name="AddManualAuthenticationTextBoxButton" Click="OnAddManualAuthenticationTextBoxButtonClicked">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <FontIcon FontSize="14" Glyph="&#xE710;" />
+                    <TextBlock x:Uid="ManualPasteAddAccountPage_AddInputTextBlock" />
+                </StackPanel>
+            </Button>
+            <Button
+                x:Name="LoadManualAuthenticationDocumentsButton"
+                Click="OnLoadManualAuthenticationDocumentsButtonClicked"
+                Style="{StaticResource AccentButtonStyle}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <FontIcon FontSize="14" Glyph="&#xE8B5;" />
+                    <TextBlock x:Uid="ManualPasteAddAccountPage_LoadInputsTextBlock" />
+                </StackPanel>
+            </Button>
+            <ProgressRing
+                x:Name="ManualValidationProgressRing"
+                Width="24"
+                Height="24"
+                IsActive="False"
+                Visibility="Collapsed" />
+        </StackPanel>
+
+        <ListView
+            x:Name="ManualAuthenticationInputsListView"
+            Grid.Row="2"
+            ItemsSource="{x:Bind ManualAuthenticationInputs}"
+            SelectionMode="None">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="viewModels:ManualAuthenticationInputViewModel">
+                    <Grid Padding="0,8" RowSpacing="8">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox
+                                x:Uid="ManualPasteAddAccountPage_ManualAuthenticationTextBox"
+                                Grid.Column="0"
+                                Height="128"
+                                AcceptsReturn="True"
+                                FontFamily="Consolas"
+                                Text="{x:Bind AuthenticationDocumentText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                TextWrapping="NoWrap" />
+                            <Button
+                                Grid.Column="1"
+                                Width="34"
+                                Height="34"
+                                Padding="0"
+                                VerticalAlignment="Top"
+                                Click="OnRemoveManualAuthenticationTextBoxButtonClicked"
+                                CommandParameter="{x:Bind}">
+                                <ToolTipService.ToolTip>
+                                    <ToolTip x:Uid="ManualPasteAddAccountPage_RemoveInputToolTip" />
+                                </ToolTipService.ToolTip>
+                                <FontIcon FontSize="14" Glyph="&#xE711;" />
+                            </Button>
+                        </Grid>
+                        <InfoBar
+                            x:Uid="ManualPasteAddAccountPage_InputErrorInfoBar"
+                            Grid.Row="1"
+                            IsOpen="{x:Bind HasError, Mode=OneWay}"
+                            Severity="Error" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <InfoBar
+            x:Name="ManualErrorInfoBar"
+            x:Uid="ManualPasteAddAccountPage_ErrorInfoBar"
+            Grid.Row="3"
+            IsOpen="False"
+            Severity="Error" />
+    </Grid>
+</Page>

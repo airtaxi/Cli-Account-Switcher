@@ -1,12 +1,12 @@
-# Codex Account Switch WinUI
+# CLI Account Switcher
 
 🌐 [한국어](README.ko.md)
 
 [![Download from Microsoft Store](https://get.microsoft.com/images/en-US%20dark.svg)](https://apps.microsoft.com/detail/9N25QV7VTL54)
 
-![Codex Account Switch WinUI screenshot](.github/Assets/EN.jpg)
+![CLI Account Switcher screenshot](.github/Assets/EN.jpg)
 
-Codex Account Switch WinUI is a Windows desktop utility for managing multiple Codex authentication accounts and quickly switching the account currently used by Codex.
+CLI Account Switcher is a Windows desktop utility for managing CLI authentication accounts for AI services. It currently supports Codex accounts, with Claude Code and GitHub Copilot support planned.
 
 The app stores saved account records in its own local application data folder and switches the active Codex account by writing the selected authentication document to `%USERPROFILE%\.codex\auth.json`.
 
@@ -15,6 +15,7 @@ The app stores saved account records in its own local application data folder an
 - Add Codex accounts with OAuth sign-in, the current `auth.json`, a JSON file, or pasted authentication JSON.
 - Switch the active Codex account from the Accounts screen.
 - View Codex plan information and remaining usage for the 5-hour and weekly windows.
+- Claude Code and GitHub Copilot account switching support is planned.
 - Click the tray icon to open a quick active account usage popup without opening the full window.
 - Refresh account usage and detect expired accounts.
 - Back up and restore saved accounts.
@@ -48,13 +49,13 @@ The repository contains three projects:
 
 | Project | Description |
 | --- | --- |
-| `CodexAccountSwitch.WinUI` | Packaged WinUI 3 desktop app. |
-| `CodexAccountSwitch.Api` | Codex OAuth, authentication document, usage, models, and API client helpers. |
-| `CodexAccountSwitch.Api.Test` | Console experiment project for Codex API behavior. |
+| `CliAccountSwitcher.WinUI` | Packaged WinUI 3 desktop app. |
+| `CliAccountSwitcher.Api` | Codex OAuth, authentication document, usage, models, and API client helpers. |
+| `CliAccountSwitcher.Api.Test` | Console experiment project for Codex API behavior. |
 
 The WinUI app targets `net10.0-windows10.0.26100.0`, enables NativeAOT publishing, uses MSIX tooling, and supports `x86`, `x64`, and `ARM64` package bundles.
 
-Publish profiles live in `CodexAccountSwitch.WinUI/Properties/PublishProfiles`.
+Publish profiles live in `CliAccountSwitcher.WinUI/Properties/PublishProfiles`.
 
 ## Localization
 

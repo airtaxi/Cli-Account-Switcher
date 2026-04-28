@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="CliAccountSwitcher.WinUI.Pages.AddAccountDialog.CurrentAccountAddAccountPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:CliAccountSwitcher.WinUI.Pages.AddAccountDialog"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="24" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Spacing="6">
+            <TextBlock
+                x:Uid="CurrentAccountAddAccountPage_TitleTextBlock"
+                FontSize="22"
+                FontWeight="SemiBold" />
+            <TextBlock
+                x:Uid="CurrentAccountAddAccountPage_DescriptionTextBlock"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                TextWrapping="Wrap" />
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="1"
+            Orientation="Horizontal"
+            Spacing="8">
+            <Button
+                x:Name="ImportCurrentAccountButton"
+                Click="OnImportCurrentAccountButtonClicked"
+                Style="{StaticResource AccentButtonStyle}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <FontIcon FontSize="14" Glyph="&#xE8B5;" />
+                    <TextBlock x:Uid="CurrentAccountAddAccountPage_ImportButtonTextBlock" />
+                </StackPanel>
+            </Button>
+            <ProgressRing
+                x:Name="CurrentAccountValidationProgressRing"
+                Width="24"
+                Height="24"
+                IsActive="False"
+                Visibility="Collapsed" />
+        </StackPanel>
+
+        <Border
+            Grid.Row="2"
+            Padding="16"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
+            <StackPanel Spacing="6">
+                <TextBlock x:Uid="CurrentAccountAddAccountPage_FilePathHeaderTextBlock" FontWeight="SemiBold" />
+                <TextBlock
+                    FontFamily="Consolas"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Text="{x:Bind CurrentAuthenticationFilePath}"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+
+        <InfoBar
+            x:Name="CurrentAccountErrorInfoBar"
+            x:Uid="CurrentAccountAddAccountPage_ErrorInfoBar"
+            Grid.Row="3"
+            IsOpen="False"
+            Severity="Error" />
+    </Grid>
+</Page>

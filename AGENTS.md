@@ -1,4 +1,4 @@
-# CodexAccountSwitch.WinUI Agent Guide
+# CliAccountSwitcher.WinUI Agent Guide
 
 ## What Makes This WinUI Project Different
 
@@ -6,15 +6,15 @@ This is not a plain WinUI template application. It is a packaged, NativeAOT-orie
 
 Key differences from a typical WinUI project:
 
-- `Program.cs` owns startup because `CodexAccountSwitch.WinUI.csproj` defines `DISABLE_XAML_GENERATED_MAIN`.
-- Startup is single-instance. `Program.Main` registers `CodexAccountSwitchWinUI_SingleInstance`; secondary activations are redirected to the current instance.
+- `Program.cs` owns startup because `CliAccountSwitcher.WinUI.csproj` defines `DISABLE_XAML_GENERATED_MAIN`.
+- Startup is single-instance. `Program.Main` registers `CliAccountSwitcherWinUI_SingleInstance`; secondary activations are redirected to the current instance.
 - `App.xaml.cs` is the service composition root. It creates and stores static service instances, starts background services, handles startup-task launches, handles notification activations, and creates `MainWindow`.
 - The app is tray-aware. `Views/MainWindow.xaml` uses `H.NotifyIcon.WinUI`; closing the main window hides it instead of exiting unless the close comes from system shutdown or the tray Exit command.
 - The main window derives from `WinUIEx.WindowEx`, uses a custom WinUI `TitleBar`, and hosts page navigation inside `AppFrame`.
 - Main navigation is split between `Views/MainWindow.xaml.cs` and `Pages/MainPage.xaml.cs`. `MainWindow` owns the top selector and broadcasts `MainPageNavigationSection` changes through `WeakReferenceMessenger`; `MainPage` swaps the section page in `SectionContentFrame`.
 - The app uses DevWinUI controls and visuals, including `SelectorBarSegmented`, `BlurEffectControl`, and `LoadingIndicator`.
 - The project targets `net10.0-windows10.0.26100.0`, uses `LangVersion` `preview`, has `PublishAot` enabled, and packages through MSIX tooling.
-- The WinUI project references `..\CodexAccountSwitch.Api\CodexAccountSwitch.Api.csproj` for Codex API, OAuth, authentication document, and usage client behavior.
+- The WinUI project references `..\CliAccountSwitcher.Api\CliAccountSwitcher.Api.csproj` for Codex API, OAuth, authentication document, and usage client behavior.
 
 ## Runtime Flow
 
@@ -48,7 +48,7 @@ Notification activation can request navigation to the Accounts section. If the w
 
 ## NuGet And License Metadata
 
-When updating, adding, or removing any NuGet package in `CodexAccountSwitch.WinUI.csproj`, also update `Pages/AboutPage.xaml.cs`.
+When updating, adding, or removing any NuGet package in `CliAccountSwitcher.WinUI.csproj`, also update `Pages/AboutPage.xaml.cs`.
 
 Specifically, keep `s_thirdPartyLicensePackages` and `CreateThirdPartyLicensePackages()` synchronized with every package reference version, license, author, and project URL shown in the About page's third-party licenses dialog. This is required; do not leave package versions in the project file and About page out of sync.
 

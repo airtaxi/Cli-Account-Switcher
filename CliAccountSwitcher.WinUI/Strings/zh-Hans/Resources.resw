@@ -1,0 +1,1025 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppDisplayName" xml:space="preserve">
+    <value>CLI Account Switcher</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>CLI Account Switcher 是面向 AI 服务的 CLI 账号切换器。目前仅支持 Codex，并计划支持 Claude Code 和 GitHub Copilot。</value>
+  </data>
+  <data name="MainWindow_AppTitleBar.Title" xml:space="preserve">
+    <value>CLI Account Switcher</value>
+  </data>
+  <data name="MainWindow_TrayAuthorMenuFlyoutItem.Text" xml:space="preserve">
+    <value>作者：Howon Lee (airtaxi)</value>
+  </data>
+  <data name="MainWindow_OpenDashboardPageMenuFlyoutItem.Text" xml:space="preserve">
+    <value>打开仪表板</value>
+  </data>
+  <data name="MainWindow_OpenAccountsPageMenuFlyoutItem.Text" xml:space="preserve">
+    <value>打开账号页面</value>
+  </data>
+  <data name="MainWindow_CloseProgramMenuFlyoutItem.Text" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="MainPage_DashboardSelectorBarItem.Text" xml:space="preserve">
+    <value>仪表板</value>
+  </data>
+  <data name="MainPage_AccountsSelectorBarItem.Text" xml:space="preserve">
+    <value>账号</value>
+  </data>
+  <data name="MainPage_AboutSelectorBarItem.Text" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="MainPage_SettingsSelectorBarItem.Text" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="DialogHelper_DefaultInputTitle" xml:space="preserve">
+    <value>输入</value>
+  </data>
+  <data name="DialogHelper_ConfirmButtonText" xml:space="preserve">
+    <value>确定</value>
+  </data>
+  <data name="DialogHelper_CancelButtonText" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="AddAccountDialog.Title" xml:space="preserve">
+    <value>添加账号</value>
+  </data>
+  <data name="AddAccountDialog.CloseButtonText" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="AddAccountDialog_OAuthSelectorBarItem.Text" xml:space="preserve">
+    <value>OAuth</value>
+  </data>
+  <data name="AddAccountDialog_ManualPasteSelectorBarItem.Text" xml:space="preserve">
+    <value>手动粘贴</value>
+  </data>
+  <data name="AddAccountDialog_CurrentAccountSelectorBarItem.Text" xml:space="preserve">
+    <value>已登录账号</value>
+  </data>
+  <data name="AddAccountDialog_FileSelectorBarItem.Text" xml:space="preserve">
+    <value>加载文件</value>
+  </data>
+  <data name="CodexAccountViewModel_UnknownPlan" xml:space="preserve">
+    <value>未知</value>
+  </data>
+  <data name="CodexAccountViewModel_TokenExpiredStatus" xml:space="preserve">
+    <value>令牌已过期</value>
+  </data>
+  <data name="CodexAccountViewModel_ActiveStatus" xml:space="preserve">
+    <value>活跃</value>
+  </data>
+  <data name="CodexAccountViewModel_WaitingStatus" xml:space="preserve">
+    <value>等待中</value>
+  </data>
+  <data name="CodexAccountViewModel_NotRefreshed" xml:space="preserve">
+    <value>尚未刷新</value>
+  </data>
+  <data name="CodexAccountViewModel_LastUsageRefreshFormat" xml:space="preserve">
+    <value>上次刷新：{0}</value>
+  </data>
+  <data name="CodexAccountViewModel_NoAccessToken" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="CodexAccountViewModel_UnknownUsage" xml:space="preserve">
+    <value>无法获取用量</value>
+  </data>
+  <data name="CodexAccountViewModel_UnknownResetTime" xml:space="preserve">
+    <value>无法获取重置时间</value>
+  </data>
+  <data name="CodexAccountViewModel_PrimaryUsageWindowLabel" xml:space="preserve">
+    <value>5 小时限制</value>
+  </data>
+  <data name="CodexAccountViewModel_SecondaryUsageWindowLabel" xml:space="preserve">
+    <value>7 天限制</value>
+  </data>
+  <data name="CodexAccountViewModel_ResetAfterFormat" xml:space="preserve">
+    <value>将在 {0:hh\:mm\:ss} 后重置</value>
+  </data>
+  <data name="CodexAccountViewModel_ResetAfterWithSingleDayFormat" xml:space="preserve">
+    <value>将在 1 天 {0:hh\:mm\:ss} 后重置</value>
+  </data>
+  <data name="CodexAccountViewModel_ResetAfterWithMultipleDaysFormat" xml:space="preserve">
+    <value>将在 {0} 天 {1:hh\:mm\:ss} 后重置</value>
+  </data>
+  <data name="CodexAccountViewModel_UsageRemainingOnlyFormat" xml:space="preserve">
+    <value>剩余 {0}%</value>
+  </data>
+  <data name="CodexAccountViewModel_UsageRemainingFormat" xml:space="preserve">
+    <value>剩余 {0}% · {1}</value>
+  </data>
+  <data name="AccountsPageViewModel_NoSelectedAccounts" xml:space="preserve">
+    <value>未选择</value>
+  </data>
+  <data name="AccountsPageViewModel_SelectedAccountCountFormat" xml:space="preserve">
+    <value>已选择 {0} 项</value>
+  </data>
+  <data name="AccountsPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>账号管理</value>
+  </data>
+  <data name="AccountsPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>保存 Codex auth.json 账号，并管理用量和活跃状态。</value>
+  </data>
+  <data name="AccountsPage_RefreshAllAccountsTextBlock.Text" xml:space="preserve">
+    <value>刷新</value>
+  </data>
+  <data name="AccountsPage_AddAccountTextBlock.Text" xml:space="preserve">
+    <value>添加账号</value>
+  </data>
+  <data name="AccountsPage_AccountSearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>搜索账号名称、邮箱或方案</value>
+  </data>
+  <data name="AccountsPage_AllPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="AccountsPage_FreePlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Free</value>
+  </data>
+  <data name="AccountsPage_PlusPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Plus</value>
+  </data>
+  <data name="AccountsPage_TeamPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="AccountsPage_ProLitePlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Pro Lite</value>
+  </data>
+  <data name="AccountsPage_ProPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Pro</value>
+  </data>
+  <data name="AccountsPage_RefreshSelectedAccountsTextBlock.Text" xml:space="preserve">
+    <value>刷新所选</value>
+  </data>
+  <data name="AccountsPage_DeleteSelectedAccountsTextBlock.Text" xml:space="preserve">
+    <value>删除所选</value>
+  </data>
+  <data name="AccountsPage_ExportBackupTextBlock.Text" xml:space="preserve">
+    <value>导出备份</value>
+  </data>
+  <data name="AccountsPage_ImportBackupTextBlock.Text" xml:space="preserve">
+    <value>导入备份</value>
+  </data>
+  <data name="AccountsPage_DeleteExpiredAccountsTextBlock.Text" xml:space="preserve">
+    <value>清理过期账号</value>
+  </data>
+  <data name="AccountsPage_AccountHeaderTextBlock.Text" xml:space="preserve">
+    <value>账号</value>
+  </data>
+  <data name="AccountsPage_PlanHeaderTextBlock.Text" xml:space="preserve">
+    <value>方案</value>
+  </data>
+  <data name="AccountsPage_UsageHeaderTextBlock.Text" xml:space="preserve">
+    <value>用量</value>
+  </data>
+  <data name="AccountsPage_StatusHeaderTextBlock.Text" xml:space="preserve">
+    <value>状态</value>
+  </data>
+  <data name="AccountsPage_ActionsHeaderTextBlock.Text" xml:space="preserve">
+    <value>操作</value>
+  </data>
+  <data name="AccountsPage_SwitchAccountToolTip.Content" xml:space="preserve">
+    <value>切换</value>
+  </data>
+  <data name="AccountsPage_RenameAccountToolTip.Content" xml:space="preserve">
+    <value>重命名</value>
+  </data>
+  <data name="AccountsPage_RefreshAccountToolTip.Content" xml:space="preserve">
+    <value>刷新</value>
+  </data>
+  <data name="AccountsPage_DeleteAccountToolTip.Content" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="AccountsPage_NoAccountsTitleTextBlock.Text" xml:space="preserve">
+    <value>尚未注册账号。</value>
+  </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock.Text" xml:space="preserve">
+    <value>使用“添加账号”导入 auth.json。</value>
+  </data>
+  <data name="AccountsPage_NoFilteredAccountsTitleTextBlock.Text" xml:space="preserve">
+    <value>没有符合筛选条件的账号。</value>
+  </data>
+  <data name="AccountsPage_NoFilteredAccountsDescriptionTextBlock.Text" xml:space="preserve">
+    <value>请调整搜索文本或方案筛选。</value>
+  </data>
+  <data name="AccountsPage_RefreshAllAccountsLoadingMessage" xml:space="preserve">
+    <value>正在刷新所有账号的用量。</value>
+  </data>
+  <data name="AccountsPage_RefreshSelectedAccountsLoadingMessage" xml:space="preserve">
+    <value>正在刷新所选账号的用量。</value>
+  </data>
+  <data name="AccountsPage_DeleteSelectedAccountsDialogTitle" xml:space="preserve">
+    <value>删除所选账号</value>
+  </data>
+  <data name="AccountsPage_DeleteSelectedAccountsDialogMessage" xml:space="preserve">
+    <value>要删除 {0} 个账号吗？</value>
+  </data>
+  <data name="AccountsPage_DeleteButtonText" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="AccountsPage_ExportBackupDialogTitle" xml:space="preserve">
+    <value>导出备份</value>
+  </data>
+  <data name="AccountsPage_ExportBackupDialogMessage" xml:space="preserve">
+    <value>账号备份已保存。</value>
+  </data>
+  <data name="AccountsPage_ImportBackupLoadingMessage" xml:space="preserve">
+    <value>正在验证备份文件中的账号。</value>
+  </data>
+  <data name="AccountsPage_ImportBackupDialogTitle" xml:space="preserve">
+    <value>导入备份</value>
+  </data>
+  <data name="AccountsPage_DeleteExpiredAccountsDialogTitle" xml:space="preserve">
+    <value>清理过期账号</value>
+  </data>
+  <data name="AccountsPage_DeleteExpiredAccountsDialogMessage" xml:space="preserve">
+    <value>要从账号列表中删除令牌已过期的账号吗？</value>
+  </data>
+  <data name="AccountsPage_DeleteExpiredAccountsNoAccountsMessage" xml:space="preserve">
+    <value>没有可删除的过期账号。</value>
+  </data>
+  <data name="AccountsPage_DeleteExpiredAccountsDeletedMessageFormat" xml:space="preserve">
+    <value>已删除 {0} 个账号。</value>
+  </data>
+  <data name="AccountsPage_RenameAccountDialogTitle" xml:space="preserve">
+    <value>重命名账号</value>
+  </data>
+  <data name="AccountsPage_RenameAccountPlaceholderText" xml:space="preserve">
+    <value>留空将重置为邮箱</value>
+  </data>
+  <data name="AccountsPage_RefreshAccountLoadingMessage" xml:space="preserve">
+    <value>正在刷新账号用量。</value>
+  </data>
+  <data name="AccountsPage_DeleteAccountDialogTitle" xml:space="preserve">
+    <value>删除账号</value>
+  </data>
+  <data name="AccountsPage_DeleteAccountDialogMessage" xml:space="preserve">
+    <value>要删除此账号吗？</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationDialogTitle" xml:space="preserve">
+    <value>重启 Codex</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationDialogMessage" xml:space="preserve">
+    <value>账号已切换。若要立即使用切换后的账号，请重启 Codex。现在重启吗？</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationButtonText" xml:space="preserve">
+    <value>重启</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationLoadingMessage" xml:space="preserve">
+    <value>正在重启 Codex。</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationFailedDialogTitle" xml:space="preserve">
+    <value>重启失败</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationFailedDialogMessage" xml:space="preserve">
+    <value>无法自动重启 Codex。请手动关闭 Codex 后重新打开。</value>
+  </data>
+  <data name="AccountsPage_ZipBackupFileTypeChoice" xml:space="preserve">
+    <value>ZIP 备份</value>
+  </data>
+  <data name="AccountsPage_ImportBackupSuccessCountFormat" xml:space="preserve">
+    <value>{0} 个成功</value>
+  </data>
+  <data name="AccountsPage_ImportBackupFailureCountFormat" xml:space="preserve">
+    <value>{0} 个失败</value>
+  </data>
+  <data name="AccountsPage_ImportBackupDuplicateCountFormat" xml:space="preserve">
+    <value>{0} 个重复</value>
+  </data>
+  <data name="AccountsPage_ImportBackupEmptyResultMessage" xml:space="preserve">
+    <value>没有可导入的账号。</value>
+  </data>
+  <data name="OAuthAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>OAuth</value>
+  </data>
+  <data name="OAuthAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>在浏览器中完成 Codex 身份验证后，账号会在用量验证后添加。</value>
+  </data>
+  <data name="OAuthAddAccountPage_OpenBrowserTextBlock.Text" xml:space="preserve">
+    <value>在浏览器中开始身份验证</value>
+  </data>
+  <data name="OAuthAddAccountPage_WaitingTextBlock.Text" xml:space="preserve">
+    <value>正在等待身份验证回调。</value>
+  </data>
+  <data name="OAuthAddAccountPage_ManualAddressDescriptionTextBlock.Text" xml:space="preserve">
+    <value>无法自动打开浏览器。请复制下面的地址，粘贴到浏览器中并继续身份验证。</value>
+  </data>
+  <data name="OAuthAddAccountPage_CopyAddressToolTip.Content" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="OAuthAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>OAuth 身份验证或账号验证期间发生错误。</value>
+  </data>
+  <data name="OAuthAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>添加账号失败</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>导入已登录账号</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>读取当前已登录 Codex 的 .codex/auth.json，并通过用量请求验证账号。</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ImportButtonTextBlock.Text" xml:space="preserve">
+    <value>导入已登录账号</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_FilePathHeaderTextBlock.Text" xml:space="preserve">
+    <value>要读取的文件</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>导入已登录账号时发生错误。</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>添加账号失败</value>
+  </data>
+  <data name="FileAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>加载文件</value>
+  </data>
+  <data name="FileAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>选择此电脑上保存的 auth.json 文件，并通过用量请求验证账号。</value>
+  </data>
+  <data name="FileAddAccountPage_ImportButtonTextBlock.Text" xml:space="preserve">
+    <value>选择 auth.json 文件</value>
+  </data>
+  <data name="FileAddAccountPage_SupportedFormatHeaderTextBlock.Text" xml:space="preserve">
+    <value>支持的格式</value>
+  </data>
+  <data name="FileAddAccountPage_SupportedFormatDescriptionTextBlock.Text" xml:space="preserve">
+    <value>请选择一个 .json 文件。它必须使用 Codex auth.json 格式。</value>
+  </data>
+  <data name="FileAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>导入 auth.json 文件时发生错误。</value>
+  </data>
+  <data name="FileAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>添加账号失败</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>手动粘贴</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>粘贴一个或多个 auth.json 文档并一起导入。</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_AddInputTextBlock.Text" xml:space="preserve">
+    <value>添加输入</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_LoadInputsTextBlock.Text" xml:space="preserve">
+    <value>导入粘贴的账号</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ManualAuthenticationTextBox.PlaceholderText" xml:space="preserve">
+    <value>粘贴 auth.json 内容</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_RemoveInputToolTip.Content" xml:space="preserve">
+    <value>删除输入</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_InputErrorInfoBar.Message" xml:space="preserve">
+    <value>无法导入此 auth.json。</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_InputErrorInfoBar.Title" xml:space="preserve">
+    <value>验证失败</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>部分 auth.json 文档无法导入。</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>添加账号失败</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_NoInputMessage" xml:space="preserve">
+    <value>未粘贴 auth.json 内容。</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_PartialFailureMessage" xml:space="preserve">
+    <value>部分 auth.json 文档无法导入。</value>
+  </data>
+  <data name="DashboardPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>仪表板</value>
+  </data>
+  <data name="DashboardPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>一目了然地查看账号配额和当前活跃账号。</value>
+  </data>
+  <data name="DashboardPage_TotalAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>账号总数</value>
+  </data>
+  <data name="DashboardPage_TotalAccountDescriptionTextBlock.Text" xml:space="preserve">
+    <value>基于已保存的 Codex 账号。</value>
+  </data>
+  <data name="DashboardPage_PrimaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>5 小时平均配额</value>
+  </data>
+  <data name="DashboardPage_PrimaryLowUsageAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>5 小时低配额账号</value>
+  </data>
+  <data name="DashboardPage_SecondaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>7 天平均配额</value>
+  </data>
+  <data name="DashboardPage_SecondaryLowUsageAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>7 天低配额账号</value>
+  </data>
+  <data name="DashboardPage_LowUsageMetricDescriptionTextBlock.Text" xml:space="preserve">
+    <value>低于已配置的警告阈值</value>
+  </data>
+  <data name="DashboardPage_SecondaryLowUsageMetricDescriptionTextBlock.Text" xml:space="preserve">
+    <value>低于已配置的警告阈值</value>
+  </data>
+  <data name="DashboardPage_ActiveAccountSectionTitleTextBlock.Text" xml:space="preserve">
+    <value>活跃账号配额</value>
+  </data>
+  <data name="DashboardPage_ActiveAccountSectionDescriptionTextBlock.Text" xml:space="preserve">
+    <value>当前活跃账号的剩余配额。</value>
+  </data>
+  <data name="DashboardPage_ManageAccountsTextBlock.Text" xml:space="preserve">
+    <value>前往账号管理</value>
+  </data>
+  <data name="DashboardPage_RefreshActiveAccountTextBlock.Text" xml:space="preserve">
+    <value>刷新活跃账号</value>
+  </data>
+  <data name="DashboardPage_CurrentActiveAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>当前活跃账号</value>
+  </data>
+  <data name="DashboardPage_ActivePrimaryUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>5 小时剩余</value>
+  </data>
+  <data name="DashboardPage_ActiveSecondaryUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>7 天剩余</value>
+  </data>
+  <data name="DashboardPage_NoActiveAccountTitleTextBlock.Text" xml:space="preserve">
+    <value>没有活跃账号。</value>
+  </data>
+  <data name="DashboardPage_NoActiveAccountDescriptionTextBlock.Text" xml:space="preserve">
+    <value>在账号管理中切换账号后，此处会显示剩余配额。</value>
+  </data>
+  <data name="DashboardPage_LowUsageAccountsSectionTitleTextBlock.Text" xml:space="preserve">
+    <value>低配额账号</value>
+  </data>
+  <data name="DashboardPage_LowUsageAccountsSectionDescriptionTextBlock.Text" xml:space="preserve">
+    <value>仅显示 5 小时或 7 天剩余配额低于警告阈值的账号。</value>
+  </data>
+  <data name="DashboardPage_NoLowUsageAccountsTitleTextBlock.Text" xml:space="preserve">
+    <value>没有低配额账号。</value>
+  </data>
+  <data name="DashboardPageViewModel_AccountCountFormat" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="DashboardPageViewModel_LowUsageAccountCountFormat" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="DashboardPageViewModel_NoLowUsageAccounts" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="DashboardLowUsageAccountViewModel_LowUsageFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="AboutPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>CLI Account Switcher</value>
+  </data>
+  <data name="AboutPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>CLI Account Switcher 是面向 AI 服务的 CLI 账号切换器。目前仅支持 Codex，并计划支持 Claude Code 和 GitHub Copilot。</value>
+  </data>
+  <data name="AboutPage_VersionHeaderTextBlock.Text" xml:space="preserve">
+    <value>版本</value>
+  </data>
+  <data name="AboutPage_CopyrightHeaderTextBlock.Text" xml:space="preserve">
+    <value>版权</value>
+  </data>
+  <data name="AboutPage_ProjectSettingsGroup.Header" xml:space="preserve">
+    <value>项目</value>
+  </data>
+  <data name="AboutPage_ProjectSettingsGroup.Description" xml:space="preserve">
+    <value>GitHub 仓库、作者以及启发此应用的原始项目。</value>
+  </data>
+  <data name="AboutPage_GitHubRepositorySettingsCard.Header" xml:space="preserve">
+    <value>GitHub 仓库</value>
+  </data>
+  <data name="AboutPage_GitHubRepositorySettingsCard.Description" xml:space="preserve">
+    <value>查看源代码和问题。</value>
+  </data>
+  <data name="AboutPage_GitHubRepositoryButtonTextBlock.Text" xml:space="preserve">
+    <value>打开仓库</value>
+  </data>
+  <data name="AboutPage_CreatorSettingsCard.Header" xml:space="preserve">
+    <value>Howon Lee (airtaxi)</value>
+  </data>
+  <data name="AboutPage_CreatorSettingsCard.Description" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="AboutPage_CreatorGitHubButtonTextBlock.Text" xml:space="preserve">
+    <value>打开 GitHub 个人资料</value>
+  </data>
+  <data name="AboutPage_InspirationSettingsCard.Header" xml:space="preserve">
+    <value>特别鸣谢</value>
+  </data>
+  <data name="AboutPage_InspirationSettingsCard.Description" xml:space="preserve">
+    <value>灵感来自 isxlan0/Codex_AccountSwitch。感谢分享原始想法。</value>
+  </data>
+  <data name="AboutPage_InspirationRepositoryButtonTextBlock.Text" xml:space="preserve">
+    <value>打开原始仓库</value>
+  </data>
+  <data name="AboutPage_LicenseSettingsGroup.Header" xml:space="preserve">
+    <value>许可证</value>
+  </data>
+  <data name="AboutPage_LicenseSettingsGroup.Description" xml:space="preserve">
+    <value>查看应用许可证和 NuGet 包许可证信息。</value>
+  </data>
+  <data name="AboutPage_AppLicenseSettingsCard.Header" xml:space="preserve">
+    <value>应用许可证</value>
+  </data>
+  <data name="AboutPage_AppLicenseSettingsCard.Description" xml:space="preserve">
+    <value>此应用基于 MIT License 分发。</value>
+  </data>
+  <data name="AboutPage_AppLicenseContentTextBlock.Text" xml:space="preserve">
+    <value>MIT License</value>
+  </data>
+  <data name="AboutPage_ThirdPartyLicensesSettingsCard.Header" xml:space="preserve">
+    <value>第三方许可证</value>
+  </data>
+  <data name="AboutPage_ThirdPartyLicensesSettingsCard.Description" xml:space="preserve">
+    <value>查看应用直接引用的 NuGet 包。</value>
+  </data>
+  <data name="AboutPage_ThirdPartyLicensesButtonTextBlock.Text" xml:space="preserve">
+    <value>查看 NuGet 包</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog.Title" xml:space="preserve">
+    <value>第三方许可证</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog.CloseButtonText" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>此应用直接引用的 NuGet 包及其许可证信息。</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_NuGetPackageHeaderTextBlock.Text" xml:space="preserve">
+    <value>NuGet 包</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_NuGetPackageDescriptionTextBlock.Text" xml:space="preserve">
+    <value>查看包标识符、版本、许可证和作者信息。</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_VersionHeaderTextBlock.Text" xml:space="preserve">
+    <value>版本</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_LicenseHeaderTextBlock.Text" xml:space="preserve">
+    <value>许可证</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_ProjectButtonTextBlock.Text" xml:space="preserve">
+    <value>项目</value>
+  </data>
+  <data name="ThirdPartyLicensePackage_WindowsSoftwareDevelopmentKitLicense" xml:space="preserve">
+    <value>Windows SDK 许可证</value>
+  </data>
+  <data name="SettingsPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="SettingsPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>调整应用显示、更新、启动行为和自动账号管理。</value>
+  </data>
+  <data name="SettingsPage_GeneralSettingsGroup.Header" xml:space="preserve">
+    <value>常规设置</value>
+  </data>
+  <data name="SettingsPage_GeneralSettingsGroup.Description" xml:space="preserve">
+    <value>配置语言、主题、更新检查和系统启动行为。</value>
+  </data>
+  <data name="SettingsPage_LanguageSettingsCard.Header" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="SettingsPage_LanguageSettingsCard.Description" xml:space="preserve">
+    <value>选择应用显示语言。建议更改后重启。</value>
+  </data>
+  <data name="SettingsPage_SystemDefaultLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>系统默认</value>
+  </data>
+  <data name="SettingsPage_KoreanLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>韩语</value>
+  </data>
+  <data name="SettingsPage_EnglishLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>英语</value>
+  </data>
+  <data name="SettingsPage_JapaneseLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>日语</value>
+  </data>
+  <data name="SettingsPage_SimplifiedChineseLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>简体中文</value>
+  </data>
+  <data name="SettingsPage_TraditionalChineseLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>繁体中文</value>
+  </data>
+  <data name="SettingsPage_ThemeSettingsCard.Header" xml:space="preserve">
+    <value>主题</value>
+  </data>
+  <data name="SettingsPage_ThemeSettingsCard.Description" xml:space="preserve">
+    <value>立即更改应用和对话框的颜色主题。</value>
+  </data>
+  <data name="SettingsPage_SystemDefaultThemeComboBoxItem.Content" xml:space="preserve">
+    <value>系统默认</value>
+  </data>
+  <data name="SettingsPage_LightThemeComboBoxItem.Content" xml:space="preserve">
+    <value>浅色</value>
+  </data>
+  <data name="SettingsPage_DarkThemeComboBoxItem.Content" xml:space="preserve">
+    <value>深色</value>
+  </data>
+  <data name="SettingsPage_UpdateCheckSettingsCard.Header" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="SettingsPage_UpdateCheckSettingsCard.Description" xml:space="preserve">
+    <value>查看当前应用版本和 Microsoft Store 更新。</value>
+  </data>
+  <data name="SettingsPage_ApplicationVersionFormat" xml:space="preserve">
+    <value>当前版本：{0}</value>
+  </data>
+  <data name="SettingsPage_CheckForUpdatesButtonTextBlock.Text" xml:space="preserve">
+    <value>检查</value>
+  </data>
+  <data name="SettingsPage_CheckForUpdatesLoadingMessage" xml:space="preserve">
+    <value>正在检查 Microsoft Store 更新。</value>
+  </data>
+  <data name="SettingsPage_AutomaticUpdateCheckSettingsCard.Header" xml:space="preserve">
+    <value>自动检查更新</value>
+  </data>
+  <data name="SettingsPage_AutomaticUpdateCheckSettingsCard.Description" xml:space="preserve">
+    <value>每 8 小时检查 Store 更新，发现更新时显示通知。</value>
+  </data>
+  <data name="SettingsPage_StartupLaunchSettingsCard.Header" xml:space="preserve">
+    <value>系统启动时运行</value>
+  </data>
+  <data name="SettingsPage_StartupLaunchSettingsCard.Description" xml:space="preserve">
+    <value>Windows 登录后自动运行 CLI Account Switcher。</value>
+  </data>
+  <data name="SettingsPage_ApplicationSettingsTransferSettingsExpander.Header" xml:space="preserve">
+    <value>导入/导出设置</value>
+  </data>
+  <data name="SettingsPage_ApplicationSettingsTransferSettingsExpander.Description" xml:space="preserve">
+    <value>将不包含账号列表的应用设置保存为 .casc 文件，或从该文件加载。</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsSettingsCard.Header" xml:space="preserve">
+    <value>导出设置</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsSettingsCard.Description" xml:space="preserve">
+    <value>将当前应用设置保存到 .casc 文件。</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsButtonTextBlock.Text" xml:space="preserve">
+    <value>导出</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsSettingsCard.Header" xml:space="preserve">
+    <value>导入设置</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsSettingsCard.Description" xml:space="preserve">
+    <value>从 .casc 文件加载应用设置并应用到当前设置。</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsButtonTextBlock.Text" xml:space="preserve">
+    <value>导入</value>
+  </data>
+  <data name="SettingsPage_ApplicationSettingsFileTypeChoice" xml:space="preserve">
+    <value>CLI Account Switcher 设置文件</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsDialogTitle" xml:space="preserve">
+    <value>导出设置</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsDialogMessage" xml:space="preserve">
+    <value>应用设置已导出。</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsFailedDialogTitle" xml:space="preserve">
+    <value>设置导出失败</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsFailedDialogMessage" xml:space="preserve">
+    <value>无法导出应用设置。请检查文件访问权限。</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsLoadingMessage" xml:space="preserve">
+    <value>正在导入应用设置。</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsDialogTitle" xml:space="preserve">
+    <value>导入设置</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsDialogMessage" xml:space="preserve">
+    <value>应用设置已导入并应用。</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsLanguageChangedDialogMessage" xml:space="preserve">
+    <value>应用设置已导入并应用。由于语言已更改，设置页面将重新加载。建议重启应用，以可靠应用到每个屏幕。</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsFailedDialogTitle" xml:space="preserve">
+    <value>设置导入失败</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsFailedDialogMessage" xml:space="preserve">
+    <value>无法从所选 .casc 文件导入应用设置。请检查文件格式和访问权限。</value>
+  </data>
+  <data name="SettingsPage_IntegratedLogExportSettingsCard.Header" xml:space="preserve">
+    <value>下载集成日志</value>
+  </data>
+  <data name="SettingsPage_IntegratedLogExportSettingsCard.Description" xml:space="preserve">
+    <value>将应用运行期间记录的日志保存到文件中。（最多 1,000 条）</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogButtonTextBlock.Text" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="SettingsPage_IntegratedLogFileTypeChoice" xml:space="preserve">
+    <value>文本文件</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogEmptyDialogTitle" xml:space="preserve">
+    <value>没有日志</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogEmptyDialogMessage" xml:space="preserve">
+    <value>当前应用会话中没有记录的日志。</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogDialogTitle" xml:space="preserve">
+    <value>日志导出完成</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogDialogMessage" xml:space="preserve">
+    <value>日志已保存。</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogFailedDialogTitle" xml:space="preserve">
+    <value>日志导出失败</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogFailedDialogMessage" xml:space="preserve">
+    <value>无法保存日志。请检查文件访问权限。</value>
+  </data>
+  <data name="SettingsPage_AccountSettingsGroup.Header" xml:space="preserve">
+    <value>账号设置</value>
+  </data>
+  <data name="SettingsPage_AccountSettingsGroup.Description" xml:space="preserve">
+    <value>配置账号健康检查、自动刷新、低配额阈值和已保存的通知标志。</value>
+  </data>
+  <data name="SettingsPage_ExpiredAccountAutomaticDeletionSettingsCard.Header" xml:space="preserve">
+    <value>自动删除无效账号</value>
+  </data>
+  <data name="SettingsPage_ExpiredAccountAutomaticDeletionSettingsCard.Description" xml:space="preserve">
+    <value>刷新期间身份验证被拒绝时，自动从列表中删除账号。</value>
+  </data>
+  <data name="SettingsPage_ExpiredAccountNotificationSettingsCard.Header" xml:space="preserve">
+    <value>发现无效账号时通知</value>
+  </data>
+  <data name="SettingsPage_ExpiredAccountNotificationSettingsCard.Description" xml:space="preserve">
+    <value>检测到过期或无法使用的账号时显示 Windows 通知。</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
+    <value>活跃账号自动刷新</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
+    <value>按所选分钟间隔刷新活跃账号的用量。</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
+    <value>刷新间隔</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
+    <value>设置活跃账号用量每隔多少分钟刷新一次。</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountNextUsageRefreshSettingsCard.Header" xml:space="preserve">
+    <value>下次刷新</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountNextUsageRefreshSettingsCard.Description" xml:space="preserve">
+    <value>活跃账号用量再次刷新前的剩余时间。</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
+    <value>非活跃账号自动刷新</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
+    <value>按所选分钟间隔刷新非活跃账号的用量。</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
+    <value>刷新间隔</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
+    <value>设置非活跃账号用量每隔多少分钟刷新一次。</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountNextUsageRefreshSettingsCard.Header" xml:space="preserve">
+    <value>下次刷新</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountNextUsageRefreshSettingsCard.Description" xml:space="preserve">
+    <value>非活跃账号用量再次刷新前的剩余时间。</value>
+  </data>
+  <data name="SettingsPage_RefreshRemainingDisabledText" xml:space="preserve">
+    <value>自动刷新已关闭</value>
+  </data>
+  <data name="SettingsPage_RefreshRemainingFormat" xml:space="preserve">
+    <value>下次刷新还有 {0:00}:{1:00}:{2:00}</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Header" xml:space="preserve">
+    <value>5 小时低配额阈值</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
+    <value>当 5 小时限制的剩余用量等于或低于此百分比时标记为低配额。</value>
+  </data>
+  <data name="SettingsPage_SecondaryUsageWarningThresholdSettingsCard.Header" xml:space="preserve">
+    <value>7 天低配额阈值</value>
+  </data>
+  <data name="SettingsPage_SecondaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
+    <value>当 7 天限制的剩余用量等于或低于此百分比时标记为低配额。</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Header" xml:space="preserve">
+    <value>5 小时低配额通知</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
+    <value>保存是否启用 5 小时低配额通知。</value>
+  </data>
+  <data name="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard.Header" xml:space="preserve">
+    <value>7 天低配额通知</value>
+  </data>
+  <data name="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
+    <value>保存是否启用 7 天低配额通知。</value>
+  </data>
+  <data name="SettingsPage_LanguageRestartDialogTitle" xml:space="preserve">
+    <value>建议重启</value>
+  </data>
+  <data name="SettingsPage_LanguageRestartDialogMessage" xml:space="preserve">
+    <value>语言设置已保存。建议重启应用，以可靠应用到每个屏幕。</value>
+  </data>
+  <data name="SettingsPage_UpdateAvailableDialogTitle" xml:space="preserve">
+    <value>有可用更新</value>
+  </data>
+  <data name="SettingsPage_UpdateAvailableDialogMessageFormat" xml:space="preserve">
+    <value>{1}
+Microsoft Store 中有 {0} 个可用更新。</value>
+  </data>
+  <data name="SettingsPage_OpenStoreButtonText" xml:space="preserve">
+    <value>打开 Store</value>
+  </data>
+  <data name="SettingsPage_NoUpdateDialogTitle" xml:space="preserve">
+    <value>已是最新</value>
+  </data>
+  <data name="SettingsPage_NoUpdateDialogMessage" xml:space="preserve">
+    <value>已安装的应用已经是最新版本。</value>
+  </data>
+  <data name="SettingsPage_UpdateCheckFailedDialogTitle" xml:space="preserve">
+    <value>更新检查失败</value>
+  </data>
+  <data name="SettingsPage_UpdateCheckFailedDialogMessage" xml:space="preserve">
+    <value>无法检查 Microsoft Store 更新信息。请确认包安装状态和网络连接。</value>
+  </data>
+  <data name="SettingsPage_StartupRegistrationFailedDialogTitle" xml:space="preserve">
+    <value>启动设置失败</value>
+  </data>
+  <data name="SettingsPage_StartupRegistrationFailedDialogMessage" xml:space="preserve">
+    <value>无法应用 Windows 启动任务设置。请检查包清单注册或 Windows 启动应用权限。</value>
+  </data>
+  <data name="Notification_ExpiredAccountDetectedTitle" xml:space="preserve">
+    <value>发现无效账号</value>
+  </data>
+  <data name="Notification_ExpiredAccountDetectedMessageFormat" xml:space="preserve">
+    <value>{0} 无法使用。已根据你的设置更新账号状态。</value>
+  </data>
+  <data name="Notification_UsageLowQuotaDetectedTitle" xml:space="preserve">
+    <value>检测到低配额</value>
+  </data>
+  <data name="Notification_UsageLowQuotaDetectedMessageFormat" xml:space="preserve">
+    <value>{0} 的 {1} 剩余配额为 {2}%。</value>
+  </data>
+  <data name="Notification_UsageLowQuotaDetectedWithSwitchSuggestionMessageFormat" xml:space="preserve">
+    <value>{0} 的 {1} 剩余配额为 {2}%。另一个账号的配额高于警告阈值。选择此通知可从账号管理切换账号。</value>
+  </data>
+  <data name="Notification_PrimaryUsageLowQuotaWindowName" xml:space="preserve">
+    <value>5 小时</value>
+  </data>
+  <data name="Notification_SecondaryUsageLowQuotaWindowName" xml:space="preserve">
+    <value>7 天</value>
+  </data>
+  <data name="Notification_StoreUpdateAvailableTitle" xml:space="preserve">
+    <value>CLI Account Switcher 更新</value>
+  </data>
+  <data name="Notification_StoreUpdateAvailableMessageFormat" xml:space="preserve">
+    <value>Microsoft Store 中有 {0} 个可用更新。</value>
+  </data>
+  <data name="Notification_OpenStoreButtonText" xml:space="preserve">
+    <value>打开 Store</value>
+  </data>
+  <data name="SettingsPage_UpdateSettingsCard.Header" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="SettingsPage_UpdateSettingsCard.Description" xml:space="preserve">
+    <value>查看当前应用版本和 Microsoft Store 更新。</value>
+  </data>
+  <data name="SettingsPage_AutomaticUpdateSettingsCard.Header" xml:space="preserve">
+    <value>自动检查更新</value>
+  </data>
+  <data name="SettingsPage_AutomaticUpdateSettingsCard.Description" xml:space="preserve">
+    <value>每 8 小时检查 Store 更新，发现更新时显示通知。</value>
+  </data>
+  <data name="SettingsPage_RestartRecommendedDialogTitle" xml:space="preserve">
+    <value>建议重启</value>
+  </data>
+  <data name="SettingsPage_RestartRecommendedDialogMessage" xml:space="preserve">
+    <value>语言设置已保存。建议重启应用，以可靠应用到每个屏幕。</value>
+  </data>
+  <data name="SettingsPage_NoUpdateDialogMessageFormat" xml:space="preserve">
+    <value>{0}
+已安装的应用已经是最新版本。</value>
+  </data>
+  <data name="SettingsPage_AutomaticRefreshDisabledText" xml:space="preserve">
+    <value>自动刷新已关闭</value>
+  </data>
+  <data name="SettingsPage_NextUsageRefreshFormat" xml:space="preserve">
+    <value>下次刷新还有 {0}</value>
+  </data>
+  <data name="SettingsPage_RemainingTimeWithDaysFormat" xml:space="preserve">
+    <value>{0} 天 {1}</value>
+  </data>
+</root>

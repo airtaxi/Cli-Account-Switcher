@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "CliAccountSwitcher.WinUI (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "CliAccountSwitcher.WinUI (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

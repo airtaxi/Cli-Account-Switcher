@@ -1,0 +1,1025 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppDisplayName" xml:space="preserve">
+    <value>CLI Account Switcher</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>CLI Account Switcher は AI サービス向けの CLI アカウント切替アプリです。現在は Codex のみをサポートし、Claude Code と GitHub Copilot のサポートを予定しています。</value>
+  </data>
+  <data name="MainWindow_AppTitleBar.Title" xml:space="preserve">
+    <value>CLI Account Switcher</value>
+  </data>
+  <data name="MainWindow_TrayAuthorMenuFlyoutItem.Text" xml:space="preserve">
+    <value>作者: Howon Lee (airtaxi)</value>
+  </data>
+  <data name="MainWindow_OpenDashboardPageMenuFlyoutItem.Text" xml:space="preserve">
+    <value>ダッシュボードを開く</value>
+  </data>
+  <data name="MainWindow_OpenAccountsPageMenuFlyoutItem.Text" xml:space="preserve">
+    <value>アカウントページを開く</value>
+  </data>
+  <data name="MainWindow_CloseProgramMenuFlyoutItem.Text" xml:space="preserve">
+    <value>終了</value>
+  </data>
+  <data name="MainPage_DashboardSelectorBarItem.Text" xml:space="preserve">
+    <value>ダッシュボード</value>
+  </data>
+  <data name="MainPage_AccountsSelectorBarItem.Text" xml:space="preserve">
+    <value>アカウント</value>
+  </data>
+  <data name="MainPage_AboutSelectorBarItem.Text" xml:space="preserve">
+    <value>情報</value>
+  </data>
+  <data name="MainPage_SettingsSelectorBarItem.Text" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="DialogHelper_DefaultInputTitle" xml:space="preserve">
+    <value>入力</value>
+  </data>
+  <data name="DialogHelper_ConfirmButtonText" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="DialogHelper_CancelButtonText" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="AddAccountDialog.Title" xml:space="preserve">
+    <value>アカウントを追加</value>
+  </data>
+  <data name="AddAccountDialog.CloseButtonText" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="AddAccountDialog_OAuthSelectorBarItem.Text" xml:space="preserve">
+    <value>OAuth</value>
+  </data>
+  <data name="AddAccountDialog_ManualPasteSelectorBarItem.Text" xml:space="preserve">
+    <value>手動貼り付け</value>
+  </data>
+  <data name="AddAccountDialog_CurrentAccountSelectorBarItem.Text" xml:space="preserve">
+    <value>サインイン済みアカウント</value>
+  </data>
+  <data name="AddAccountDialog_FileSelectorBarItem.Text" xml:space="preserve">
+    <value>ファイルを読み込む</value>
+  </data>
+  <data name="CodexAccountViewModel_UnknownPlan" xml:space="preserve">
+    <value>不明</value>
+  </data>
+  <data name="CodexAccountViewModel_TokenExpiredStatus" xml:space="preserve">
+    <value>トークン期限切れ</value>
+  </data>
+  <data name="CodexAccountViewModel_ActiveStatus" xml:space="preserve">
+    <value>アクティブ</value>
+  </data>
+  <data name="CodexAccountViewModel_WaitingStatus" xml:space="preserve">
+    <value>待機中</value>
+  </data>
+  <data name="CodexAccountViewModel_NotRefreshed" xml:space="preserve">
+    <value>まだ更新されていません</value>
+  </data>
+  <data name="CodexAccountViewModel_LastUsageRefreshFormat" xml:space="preserve">
+    <value>最終更新: {0}</value>
+  </data>
+  <data name="CodexAccountViewModel_NoAccessToken" xml:space="preserve">
+    <value>なし</value>
+  </data>
+  <data name="CodexAccountViewModel_UnknownUsage" xml:space="preserve">
+    <value>使用量を取得できません</value>
+  </data>
+  <data name="CodexAccountViewModel_UnknownResetTime" xml:space="preserve">
+    <value>リセット時刻を取得できません</value>
+  </data>
+  <data name="CodexAccountViewModel_PrimaryUsageWindowLabel" xml:space="preserve">
+    <value>5時間制限</value>
+  </data>
+  <data name="CodexAccountViewModel_SecondaryUsageWindowLabel" xml:space="preserve">
+    <value>7日間制限</value>
+  </data>
+  <data name="CodexAccountViewModel_ResetAfterFormat" xml:space="preserve">
+    <value>{0:hh\:mm\:ss} 後にリセット</value>
+  </data>
+  <data name="CodexAccountViewModel_ResetAfterWithSingleDayFormat" xml:space="preserve">
+    <value>1日 {0:hh\:mm\:ss} 後にリセット</value>
+  </data>
+  <data name="CodexAccountViewModel_ResetAfterWithMultipleDaysFormat" xml:space="preserve">
+    <value>{0}日 {1:hh\:mm\:ss} 後にリセット</value>
+  </data>
+  <data name="CodexAccountViewModel_UsageRemainingOnlyFormat" xml:space="preserve">
+    <value>残り {0}%</value>
+  </data>
+  <data name="CodexAccountViewModel_UsageRemainingFormat" xml:space="preserve">
+    <value>残り {0}% · {1}</value>
+  </data>
+  <data name="AccountsPageViewModel_NoSelectedAccounts" xml:space="preserve">
+    <value>選択なし</value>
+  </data>
+  <data name="AccountsPageViewModel_SelectedAccountCountFormat" xml:space="preserve">
+    <value>{0} 件選択中</value>
+  </data>
+  <data name="AccountsPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>アカウント管理</value>
+  </data>
+  <data name="AccountsPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Codex auth.json アカウントを保存し、使用量とアクティブ状態を管理します。</value>
+  </data>
+  <data name="AccountsPage_RefreshAllAccountsTextBlock.Text" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="AccountsPage_AddAccountTextBlock.Text" xml:space="preserve">
+    <value>アカウントを追加</value>
+  </data>
+  <data name="AccountsPage_AccountSearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>アカウント名、メール、プランを検索</value>
+  </data>
+  <data name="AccountsPage_AllPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>すべて</value>
+  </data>
+  <data name="AccountsPage_FreePlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Free</value>
+  </data>
+  <data name="AccountsPage_PlusPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Plus</value>
+  </data>
+  <data name="AccountsPage_TeamPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="AccountsPage_ProLitePlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Pro Lite</value>
+  </data>
+  <data name="AccountsPage_ProPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Pro</value>
+  </data>
+  <data name="AccountsPage_RefreshSelectedAccountsTextBlock.Text" xml:space="preserve">
+    <value>選択項目を更新</value>
+  </data>
+  <data name="AccountsPage_DeleteSelectedAccountsTextBlock.Text" xml:space="preserve">
+    <value>選択項目を削除</value>
+  </data>
+  <data name="AccountsPage_ExportBackupTextBlock.Text" xml:space="preserve">
+    <value>バックアップをエクスポート</value>
+  </data>
+  <data name="AccountsPage_ImportBackupTextBlock.Text" xml:space="preserve">
+    <value>バックアップをインポート</value>
+  </data>
+  <data name="AccountsPage_DeleteExpiredAccountsTextBlock.Text" xml:space="preserve">
+    <value>期限切れアカウントを整理</value>
+  </data>
+  <data name="AccountsPage_AccountHeaderTextBlock.Text" xml:space="preserve">
+    <value>アカウント</value>
+  </data>
+  <data name="AccountsPage_PlanHeaderTextBlock.Text" xml:space="preserve">
+    <value>プラン</value>
+  </data>
+  <data name="AccountsPage_UsageHeaderTextBlock.Text" xml:space="preserve">
+    <value>使用量</value>
+  </data>
+  <data name="AccountsPage_StatusHeaderTextBlock.Text" xml:space="preserve">
+    <value>状態</value>
+  </data>
+  <data name="AccountsPage_ActionsHeaderTextBlock.Text" xml:space="preserve">
+    <value>操作</value>
+  </data>
+  <data name="AccountsPage_SwitchAccountToolTip.Content" xml:space="preserve">
+    <value>切り替え</value>
+  </data>
+  <data name="AccountsPage_RenameAccountToolTip.Content" xml:space="preserve">
+    <value>名前変更</value>
+  </data>
+  <data name="AccountsPage_RefreshAccountToolTip.Content" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="AccountsPage_DeleteAccountToolTip.Content" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="AccountsPage_NoAccountsTitleTextBlock.Text" xml:space="preserve">
+    <value>登録済みアカウントがありません。</value>
+  </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock.Text" xml:space="preserve">
+    <value>アカウントを追加して auth.json をインポートしてください。</value>
+  </data>
+  <data name="AccountsPage_NoFilteredAccountsTitleTextBlock.Text" xml:space="preserve">
+    <value>条件に一致するアカウントがありません。</value>
+  </data>
+  <data name="AccountsPage_NoFilteredAccountsDescriptionTextBlock.Text" xml:space="preserve">
+    <value>検索テキストまたはプランフィルターを調整してください。</value>
+  </data>
+  <data name="AccountsPage_RefreshAllAccountsLoadingMessage" xml:space="preserve">
+    <value>すべてのアカウントの使用量を更新しています。</value>
+  </data>
+  <data name="AccountsPage_RefreshSelectedAccountsLoadingMessage" xml:space="preserve">
+    <value>選択したアカウントの使用量を更新しています。</value>
+  </data>
+  <data name="AccountsPage_DeleteSelectedAccountsDialogTitle" xml:space="preserve">
+    <value>選択したアカウントを削除</value>
+  </data>
+  <data name="AccountsPage_DeleteSelectedAccountsDialogMessage" xml:space="preserve">
+    <value>{0} 件のアカウントを削除しますか?</value>
+  </data>
+  <data name="AccountsPage_DeleteButtonText" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="AccountsPage_ExportBackupDialogTitle" xml:space="preserve">
+    <value>バックアップをエクスポート</value>
+  </data>
+  <data name="AccountsPage_ExportBackupDialogMessage" xml:space="preserve">
+    <value>アカウントのバックアップを保存しました。</value>
+  </data>
+  <data name="AccountsPage_ImportBackupLoadingMessage" xml:space="preserve">
+    <value>バックアップファイルのアカウントを検証しています。</value>
+  </data>
+  <data name="AccountsPage_ImportBackupDialogTitle" xml:space="preserve">
+    <value>バックアップをインポート</value>
+  </data>
+  <data name="AccountsPage_DeleteExpiredAccountsDialogTitle" xml:space="preserve">
+    <value>期限切れアカウントを整理</value>
+  </data>
+  <data name="AccountsPage_DeleteExpiredAccountsDialogMessage" xml:space="preserve">
+    <value>トークン期限切れのアカウントを一覧から削除しますか?</value>
+  </data>
+  <data name="AccountsPage_DeleteExpiredAccountsNoAccountsMessage" xml:space="preserve">
+    <value>削除する期限切れアカウントはありません。</value>
+  </data>
+  <data name="AccountsPage_DeleteExpiredAccountsDeletedMessageFormat" xml:space="preserve">
+    <value>{0} 件のアカウントを削除しました。</value>
+  </data>
+  <data name="AccountsPage_RenameAccountDialogTitle" xml:space="preserve">
+    <value>アカウント名を変更</value>
+  </data>
+  <data name="AccountsPage_RenameAccountPlaceholderText" xml:space="preserve">
+    <value>空欄にするとメールに戻します</value>
+  </data>
+  <data name="AccountsPage_RefreshAccountLoadingMessage" xml:space="preserve">
+    <value>アカウントの使用量を更新しています。</value>
+  </data>
+  <data name="AccountsPage_DeleteAccountDialogTitle" xml:space="preserve">
+    <value>アカウントを削除</value>
+  </data>
+  <data name="AccountsPage_DeleteAccountDialogMessage" xml:space="preserve">
+    <value>このアカウントを削除しますか?</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationDialogTitle" xml:space="preserve">
+    <value>Codex を再起動</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationDialogMessage" xml:space="preserve">
+    <value>アカウントを切り替えました。変更後のアカウントをすぐに使用するには Codex を再起動してください。今すぐ再起動しますか?</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationButtonText" xml:space="preserve">
+    <value>再起動</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationLoadingMessage" xml:space="preserve">
+    <value>Codex を再起動しています。</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationFailedDialogTitle" xml:space="preserve">
+    <value>再起動に失敗しました</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationFailedDialogMessage" xml:space="preserve">
+    <value>Codex を自動的に再起動できませんでした。Codex を手動で閉じて、もう一度開いてください。</value>
+  </data>
+  <data name="AccountsPage_ZipBackupFileTypeChoice" xml:space="preserve">
+    <value>ZIP バックアップ</value>
+  </data>
+  <data name="AccountsPage_ImportBackupSuccessCountFormat" xml:space="preserve">
+    <value>{0} 件成功</value>
+  </data>
+  <data name="AccountsPage_ImportBackupFailureCountFormat" xml:space="preserve">
+    <value>{0} 件失敗</value>
+  </data>
+  <data name="AccountsPage_ImportBackupDuplicateCountFormat" xml:space="preserve">
+    <value>{0} 件重複</value>
+  </data>
+  <data name="AccountsPage_ImportBackupEmptyResultMessage" xml:space="preserve">
+    <value>インポートするアカウントがありません。</value>
+  </data>
+  <data name="OAuthAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>OAuth</value>
+  </data>
+  <data name="OAuthAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>ブラウザーで Codex 認証を完了すると、使用量の検証後にアカウントが追加されます。</value>
+  </data>
+  <data name="OAuthAddAccountPage_OpenBrowserTextBlock.Text" xml:space="preserve">
+    <value>ブラウザーで認証を開始</value>
+  </data>
+  <data name="OAuthAddAccountPage_WaitingTextBlock.Text" xml:space="preserve">
+    <value>認証コールバックを待機しています。</value>
+  </data>
+  <data name="OAuthAddAccountPage_ManualAddressDescriptionTextBlock.Text" xml:space="preserve">
+    <value>ブラウザーを自動で開けませんでした。下のアドレスをコピーしてブラウザーに貼り付け、認証を続行してください。</value>
+  </data>
+  <data name="OAuthAddAccountPage_CopyAddressToolTip.Content" xml:space="preserve">
+    <value>コピー</value>
+  </data>
+  <data name="OAuthAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>OAuth 認証またはアカウント検証中にエラーが発生しました。</value>
+  </data>
+  <data name="OAuthAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>アカウントの追加に失敗しました</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>サインイン済みアカウントをインポート</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>現在サインインしている Codex の .codex/auth.json を読み取り、使用量リクエストでアカウントを検証します。</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ImportButtonTextBlock.Text" xml:space="preserve">
+    <value>サインイン済みアカウントをインポート</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_FilePathHeaderTextBlock.Text" xml:space="preserve">
+    <value>読み込むファイル</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>サインイン済みアカウントのインポート中にエラーが発生しました。</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>アカウントの追加に失敗しました</value>
+  </data>
+  <data name="FileAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>ファイルを読み込む</value>
+  </data>
+  <data name="FileAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>この PC に保存された auth.json ファイルを選択し、使用量リクエストでアカウントを検証します。</value>
+  </data>
+  <data name="FileAddAccountPage_ImportButtonTextBlock.Text" xml:space="preserve">
+    <value>auth.json ファイルを選択</value>
+  </data>
+  <data name="FileAddAccountPage_SupportedFormatHeaderTextBlock.Text" xml:space="preserve">
+    <value>対応形式</value>
+  </data>
+  <data name="FileAddAccountPage_SupportedFormatDescriptionTextBlock.Text" xml:space="preserve">
+    <value>.json ファイルを 1 つ選択してください。Codex auth.json 形式である必要があります。</value>
+  </data>
+  <data name="FileAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>auth.json ファイルのインポート中にエラーが発生しました。</value>
+  </data>
+  <data name="FileAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>アカウントの追加に失敗しました</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>手動貼り付け</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>1 つ以上の auth.json ドキュメントを貼り付けて、まとめてインポートします。</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_AddInputTextBlock.Text" xml:space="preserve">
+    <value>入力を追加</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_LoadInputsTextBlock.Text" xml:space="preserve">
+    <value>貼り付けたアカウントをインポート</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ManualAuthenticationTextBox.PlaceholderText" xml:space="preserve">
+    <value>auth.json の内容を貼り付け</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_RemoveInputToolTip.Content" xml:space="preserve">
+    <value>入力を削除</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_InputErrorInfoBar.Message" xml:space="preserve">
+    <value>この auth.json はインポートできませんでした。</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_InputErrorInfoBar.Title" xml:space="preserve">
+    <value>検証に失敗しました</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>一部の auth.json ドキュメントをインポートできませんでした。</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>アカウントの追加に失敗しました</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_NoInputMessage" xml:space="preserve">
+    <value>auth.json の内容が貼り付けられていません。</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_PartialFailureMessage" xml:space="preserve">
+    <value>一部の auth.json ドキュメントをインポートできませんでした。</value>
+  </data>
+  <data name="DashboardPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>ダッシュボード</value>
+  </data>
+  <data name="DashboardPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>アカウントのクォータと現在のアクティブアカウントをひと目で確認できます。</value>
+  </data>
+  <data name="DashboardPage_TotalAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>合計アカウント</value>
+  </data>
+  <data name="DashboardPage_TotalAccountDescriptionTextBlock.Text" xml:space="preserve">
+    <value>保存済み Codex アカウントに基づきます。</value>
+  </data>
+  <data name="DashboardPage_PrimaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>5時間平均クォータ</value>
+  </data>
+  <data name="DashboardPage_PrimaryLowUsageAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>5時間の低クォータアカウント</value>
+  </data>
+  <data name="DashboardPage_SecondaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>7日間平均クォータ</value>
+  </data>
+  <data name="DashboardPage_SecondaryLowUsageAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>7日間の低クォータアカウント</value>
+  </data>
+  <data name="DashboardPage_LowUsageMetricDescriptionTextBlock.Text" xml:space="preserve">
+    <value>設定された警告しきい値未満</value>
+  </data>
+  <data name="DashboardPage_SecondaryLowUsageMetricDescriptionTextBlock.Text" xml:space="preserve">
+    <value>設定された警告しきい値未満</value>
+  </data>
+  <data name="DashboardPage_ActiveAccountSectionTitleTextBlock.Text" xml:space="preserve">
+    <value>アクティブアカウントのクォータ</value>
+  </data>
+  <data name="DashboardPage_ActiveAccountSectionDescriptionTextBlock.Text" xml:space="preserve">
+    <value>現在のアクティブアカウントの残りクォータです。</value>
+  </data>
+  <data name="DashboardPage_ManageAccountsTextBlock.Text" xml:space="preserve">
+    <value>アカウント管理へ移動</value>
+  </data>
+  <data name="DashboardPage_RefreshActiveAccountTextBlock.Text" xml:space="preserve">
+    <value>アクティブアカウントを更新</value>
+  </data>
+  <data name="DashboardPage_CurrentActiveAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>現在のアクティブアカウント</value>
+  </data>
+  <data name="DashboardPage_ActivePrimaryUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>5時間残り</value>
+  </data>
+  <data name="DashboardPage_ActiveSecondaryUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>7日間残り</value>
+  </data>
+  <data name="DashboardPage_NoActiveAccountTitleTextBlock.Text" xml:space="preserve">
+    <value>アクティブアカウントがありません。</value>
+  </data>
+  <data name="DashboardPage_NoActiveAccountDescriptionTextBlock.Text" xml:space="preserve">
+    <value>アカウント管理で使用するアカウントに切り替えると、ここに残りクォータが表示されます。</value>
+  </data>
+  <data name="DashboardPage_LowUsageAccountsSectionTitleTextBlock.Text" xml:space="preserve">
+    <value>低クォータアカウント</value>
+  </data>
+  <data name="DashboardPage_LowUsageAccountsSectionDescriptionTextBlock.Text" xml:space="preserve">
+    <value>5時間または7日間の残りクォータが警告しきい値未満のアカウントのみ表示されます。</value>
+  </data>
+  <data name="DashboardPage_NoLowUsageAccountsTitleTextBlock.Text" xml:space="preserve">
+    <value>低クォータアカウントはありません。</value>
+  </data>
+  <data name="DashboardPageViewModel_AccountCountFormat" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="DashboardPageViewModel_LowUsageAccountCountFormat" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="DashboardPageViewModel_NoLowUsageAccounts" xml:space="preserve">
+    <value>なし</value>
+  </data>
+  <data name="DashboardLowUsageAccountViewModel_LowUsageFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="AboutPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>CLI Account Switcher</value>
+  </data>
+  <data name="AboutPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>CLI Account Switcher は AI サービス向けの CLI アカウント切替アプリです。現在は Codex のみをサポートし、Claude Code と GitHub Copilot のサポートを予定しています。</value>
+  </data>
+  <data name="AboutPage_VersionHeaderTextBlock.Text" xml:space="preserve">
+    <value>バージョン</value>
+  </data>
+  <data name="AboutPage_CopyrightHeaderTextBlock.Text" xml:space="preserve">
+    <value>著作権</value>
+  </data>
+  <data name="AboutPage_ProjectSettingsGroup.Header" xml:space="preserve">
+    <value>プロジェクト</value>
+  </data>
+  <data name="AboutPage_ProjectSettingsGroup.Description" xml:space="preserve">
+    <value>GitHub リポジトリ、作者、このアプリの着想元となった元プロジェクトです。</value>
+  </data>
+  <data name="AboutPage_GitHubRepositorySettingsCard.Header" xml:space="preserve">
+    <value>GitHub リポジトリ</value>
+  </data>
+  <data name="AboutPage_GitHubRepositorySettingsCard.Description" xml:space="preserve">
+    <value>ソースコードとイシューを表示します。</value>
+  </data>
+  <data name="AboutPage_GitHubRepositoryButtonTextBlock.Text" xml:space="preserve">
+    <value>リポジトリを開く</value>
+  </data>
+  <data name="AboutPage_CreatorSettingsCard.Header" xml:space="preserve">
+    <value>Howon Lee (airtaxi)</value>
+  </data>
+  <data name="AboutPage_CreatorSettingsCard.Description" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="AboutPage_CreatorGitHubButtonTextBlock.Text" xml:space="preserve">
+    <value>GitHub プロフィールを開く</value>
+  </data>
+  <data name="AboutPage_InspirationSettingsCard.Header" xml:space="preserve">
+    <value>謝辞</value>
+  </data>
+  <data name="AboutPage_InspirationSettingsCard.Description" xml:space="preserve">
+    <value>isxlan0/Codex_AccountSwitch から着想を得ました。元のアイデアを共有していただきありがとうございます。</value>
+  </data>
+  <data name="AboutPage_InspirationRepositoryButtonTextBlock.Text" xml:space="preserve">
+    <value>元のリポジトリを開く</value>
+  </data>
+  <data name="AboutPage_LicenseSettingsGroup.Header" xml:space="preserve">
+    <value>ライセンス</value>
+  </data>
+  <data name="AboutPage_LicenseSettingsGroup.Description" xml:space="preserve">
+    <value>アプリのライセンスと NuGet パッケージのライセンス情報を確認します。</value>
+  </data>
+  <data name="AboutPage_AppLicenseSettingsCard.Header" xml:space="preserve">
+    <value>アプリのライセンス</value>
+  </data>
+  <data name="AboutPage_AppLicenseSettingsCard.Description" xml:space="preserve">
+    <value>このアプリは MIT License の下で配布されています。</value>
+  </data>
+  <data name="AboutPage_AppLicenseContentTextBlock.Text" xml:space="preserve">
+    <value>MIT License</value>
+  </data>
+  <data name="AboutPage_ThirdPartyLicensesSettingsCard.Header" xml:space="preserve">
+    <value>サードパーティライセンス</value>
+  </data>
+  <data name="AboutPage_ThirdPartyLicensesSettingsCard.Description" xml:space="preserve">
+    <value>アプリが直接参照している NuGet パッケージを表示します。</value>
+  </data>
+  <data name="AboutPage_ThirdPartyLicensesButtonTextBlock.Text" xml:space="preserve">
+    <value>NuGet パッケージを表示</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog.Title" xml:space="preserve">
+    <value>サードパーティライセンス</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog.CloseButtonText" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>このアプリが直接参照している NuGet パッケージとそのライセンス情報です。</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_NuGetPackageHeaderTextBlock.Text" xml:space="preserve">
+    <value>NuGet パッケージ</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_NuGetPackageDescriptionTextBlock.Text" xml:space="preserve">
+    <value>パッケージ ID、バージョン、ライセンス、作者情報を確認します。</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_VersionHeaderTextBlock.Text" xml:space="preserve">
+    <value>バージョン</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_LicenseHeaderTextBlock.Text" xml:space="preserve">
+    <value>ライセンス</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_ProjectButtonTextBlock.Text" xml:space="preserve">
+    <value>プロジェクト</value>
+  </data>
+  <data name="ThirdPartyLicensePackage_WindowsSoftwareDevelopmentKitLicense" xml:space="preserve">
+    <value>Windows SDK ライセンス</value>
+  </data>
+  <data name="SettingsPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="SettingsPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>アプリの表示、更新、スタートアップ動作、自動アカウント管理を調整します。</value>
+  </data>
+  <data name="SettingsPage_GeneralSettingsGroup.Header" xml:space="preserve">
+    <value>一般設定</value>
+  </data>
+  <data name="SettingsPage_GeneralSettingsGroup.Description" xml:space="preserve">
+    <value>言語、テーマ、更新チェック、システム起動時の動作を設定します。</value>
+  </data>
+  <data name="SettingsPage_LanguageSettingsCard.Header" xml:space="preserve">
+    <value>言語</value>
+  </data>
+  <data name="SettingsPage_LanguageSettingsCard.Description" xml:space="preserve">
+    <value>アプリの表示言語を選択します。変更後は再起動をおすすめします。</value>
+  </data>
+  <data name="SettingsPage_SystemDefaultLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>システム既定</value>
+  </data>
+  <data name="SettingsPage_KoreanLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>韓国語</value>
+  </data>
+  <data name="SettingsPage_EnglishLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>英語</value>
+  </data>
+  <data name="SettingsPage_JapaneseLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="SettingsPage_SimplifiedChineseLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>簡体字中国語</value>
+  </data>
+  <data name="SettingsPage_TraditionalChineseLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>繁体字中国語</value>
+  </data>
+  <data name="SettingsPage_ThemeSettingsCard.Header" xml:space="preserve">
+    <value>テーマ</value>
+  </data>
+  <data name="SettingsPage_ThemeSettingsCard.Description" xml:space="preserve">
+    <value>アプリとダイアログの配色テーマをすぐに変更します。</value>
+  </data>
+  <data name="SettingsPage_SystemDefaultThemeComboBoxItem.Content" xml:space="preserve">
+    <value>システム既定</value>
+  </data>
+  <data name="SettingsPage_LightThemeComboBoxItem.Content" xml:space="preserve">
+    <value>ライト</value>
+  </data>
+  <data name="SettingsPage_DarkThemeComboBoxItem.Content" xml:space="preserve">
+    <value>ダーク</value>
+  </data>
+  <data name="SettingsPage_UpdateCheckSettingsCard.Header" xml:space="preserve">
+    <value>更新を確認</value>
+  </data>
+  <data name="SettingsPage_UpdateCheckSettingsCard.Description" xml:space="preserve">
+    <value>現在のアプリバージョンと Microsoft Store の更新を確認します。</value>
+  </data>
+  <data name="SettingsPage_ApplicationVersionFormat" xml:space="preserve">
+    <value>現在のバージョン: {0}</value>
+  </data>
+  <data name="SettingsPage_CheckForUpdatesButtonTextBlock.Text" xml:space="preserve">
+    <value>確認</value>
+  </data>
+  <data name="SettingsPage_CheckForUpdatesLoadingMessage" xml:space="preserve">
+    <value>Microsoft Store の更新を確認しています。</value>
+  </data>
+  <data name="SettingsPage_AutomaticUpdateCheckSettingsCard.Header" xml:space="preserve">
+    <value>自動更新チェック</value>
+  </data>
+  <data name="SettingsPage_AutomaticUpdateCheckSettingsCard.Description" xml:space="preserve">
+    <value>8時間ごとに Store の更新を確認し、見つかった場合は通知を表示します。</value>
+  </data>
+  <data name="SettingsPage_StartupLaunchSettingsCard.Header" xml:space="preserve">
+    <value>システム起動時に起動</value>
+  </data>
+  <data name="SettingsPage_StartupLaunchSettingsCard.Description" xml:space="preserve">
+    <value>Windows サインイン後に CLI Account Switcher を自動的に実行します。</value>
+  </data>
+  <data name="SettingsPage_ApplicationSettingsTransferSettingsExpander.Header" xml:space="preserve">
+    <value>設定のインポート/エクスポート</value>
+  </data>
+  <data name="SettingsPage_ApplicationSettingsTransferSettingsExpander.Description" xml:space="preserve">
+    <value>アカウント一覧を含めずに、アプリ設定を .casc ファイルとして保存または読み込みます。</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsSettingsCard.Header" xml:space="preserve">
+    <value>設定をエクスポート</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsSettingsCard.Description" xml:space="preserve">
+    <value>現在のアプリ設定を .casc ファイルに保存します。</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsButtonTextBlock.Text" xml:space="preserve">
+    <value>エクスポート</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsSettingsCard.Header" xml:space="preserve">
+    <value>設定をインポート</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsSettingsCard.Description" xml:space="preserve">
+    <value>.casc ファイルからアプリ設定を読み込み、現在の設定に適用します。</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsButtonTextBlock.Text" xml:space="preserve">
+    <value>インポート</value>
+  </data>
+  <data name="SettingsPage_ApplicationSettingsFileTypeChoice" xml:space="preserve">
+    <value>CLI Account Switcher 設定ファイル</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsDialogTitle" xml:space="preserve">
+    <value>設定をエクスポート</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsDialogMessage" xml:space="preserve">
+    <value>アプリ設定をエクスポートしました。</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsFailedDialogTitle" xml:space="preserve">
+    <value>設定のエクスポートに失敗しました</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsFailedDialogMessage" xml:space="preserve">
+    <value>アプリ設定をエクスポートできませんでした。ファイルへのアクセス権限を確認してください。</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsLoadingMessage" xml:space="preserve">
+    <value>アプリ設定をインポートしています。</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsDialogTitle" xml:space="preserve">
+    <value>設定をインポート</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsDialogMessage" xml:space="preserve">
+    <value>アプリ設定をインポートして適用しました。</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsLanguageChangedDialogMessage" xml:space="preserve">
+    <value>アプリ設定をインポートして適用しました。言語が変更されたため、設定ページを再読み込みします。すべての画面に確実に反映するには、アプリを再起動することをおすすめします。</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsFailedDialogTitle" xml:space="preserve">
+    <value>設定のインポートに失敗しました</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsFailedDialogMessage" xml:space="preserve">
+    <value>選択した .casc ファイルからアプリ設定をインポートできませんでした。ファイル形式とアクセス権限を確認してください。</value>
+  </data>
+  <data name="SettingsPage_IntegratedLogExportSettingsCard.Header" xml:space="preserve">
+    <value>統合ログをダウンロード</value>
+  </data>
+  <data name="SettingsPage_IntegratedLogExportSettingsCard.Description" xml:space="preserve">
+    <value>アプリ実行中に記録したログをファイルに保存します。（最大 1,000 件）</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogButtonTextBlock.Text" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="SettingsPage_IntegratedLogFileTypeChoice" xml:space="preserve">
+    <value>テキスト ファイル</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogEmptyDialogTitle" xml:space="preserve">
+    <value>ログはありません</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogEmptyDialogMessage" xml:space="preserve">
+    <value>現在のアプリ セッションには記録されたログがありません。</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogDialogTitle" xml:space="preserve">
+    <value>ログ保存が完了しました</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogDialogMessage" xml:space="preserve">
+    <value>ログを保存しました。</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogFailedDialogTitle" xml:space="preserve">
+    <value>ログのエクスポートに失敗しました</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogFailedDialogMessage" xml:space="preserve">
+    <value>ログを保存できませんでした。ファイルのアクセス権限を確認してください。</value>
+  </data>
+  <data name="SettingsPage_AccountSettingsGroup.Header" xml:space="preserve">
+    <value>アカウント設定</value>
+  </data>
+  <data name="SettingsPage_AccountSettingsGroup.Description" xml:space="preserve">
+    <value>アカウントの正常性チェック、自動更新、低クォータしきい値、保存済み通知フラグを設定します。</value>
+  </data>
+  <data name="SettingsPage_ExpiredAccountAutomaticDeletionSettingsCard.Header" xml:space="preserve">
+    <value>無効なアカウントを自動削除</value>
+  </data>
+  <data name="SettingsPage_ExpiredAccountAutomaticDeletionSettingsCard.Description" xml:space="preserve">
+    <value>更新中に認証が拒否されたアカウントを一覧から自動的に削除します。</value>
+  </data>
+  <data name="SettingsPage_ExpiredAccountNotificationSettingsCard.Header" xml:space="preserve">
+    <value>無効なアカウント検出時に通知</value>
+  </data>
+  <data name="SettingsPage_ExpiredAccountNotificationSettingsCard.Description" xml:space="preserve">
+    <value>期限切れまたは使用できないアカウントが検出されたときに Windows 通知を表示します。</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
+    <value>アクティブアカウントの自動更新</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
+    <value>選択した分間隔でアクティブアカウントの使用量を更新します。</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
+    <value>更新間隔</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
+    <value>アクティブアカウントの使用量を何分ごとに更新するか設定します。</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountNextUsageRefreshSettingsCard.Header" xml:space="preserve">
+    <value>次回更新</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountNextUsageRefreshSettingsCard.Description" xml:space="preserve">
+    <value>アクティブアカウントの使用量が次に更新されるまでの残り時間です。</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
+    <value>非アクティブアカウントの自動更新</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
+    <value>選択した分間隔で非アクティブアカウントの使用量を更新します。</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
+    <value>更新間隔</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
+    <value>非アクティブアカウントの使用量を何分ごとに更新するか設定します。</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountNextUsageRefreshSettingsCard.Header" xml:space="preserve">
+    <value>次回更新</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountNextUsageRefreshSettingsCard.Description" xml:space="preserve">
+    <value>非アクティブアカウントの使用量が次に更新されるまでの残り時間です。</value>
+  </data>
+  <data name="SettingsPage_RefreshRemainingDisabledText" xml:space="preserve">
+    <value>自動更新はオフです</value>
+  </data>
+  <data name="SettingsPage_RefreshRemainingFormat" xml:space="preserve">
+    <value>次回更新まで {0:00}:{1:00}:{2:00}</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Header" xml:space="preserve">
+    <value>5時間の低クォータしきい値</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
+    <value>5時間制限の残り使用量がこの割合以下になったら低クォータとしてマークします。</value>
+  </data>
+  <data name="SettingsPage_SecondaryUsageWarningThresholdSettingsCard.Header" xml:space="preserve">
+    <value>7日間の低クォータしきい値</value>
+  </data>
+  <data name="SettingsPage_SecondaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
+    <value>7日間制限の残り使用量がこの割合以下になったら低クォータとしてマークします。</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Header" xml:space="preserve">
+    <value>5時間の低クォータ通知</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
+    <value>5時間の低クォータ通知を有効にするかどうかを保存します。</value>
+  </data>
+  <data name="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard.Header" xml:space="preserve">
+    <value>7日間の低クォータ通知</value>
+  </data>
+  <data name="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
+    <value>7日間の低クォータ通知を有効にするかどうかを保存します。</value>
+  </data>
+  <data name="SettingsPage_LanguageRestartDialogTitle" xml:space="preserve">
+    <value>再起動をおすすめします</value>
+  </data>
+  <data name="SettingsPage_LanguageRestartDialogMessage" xml:space="preserve">
+    <value>言語設定を保存しました。すべての画面に確実に反映するには、アプリを再起動することをおすすめします。</value>
+  </data>
+  <data name="SettingsPage_UpdateAvailableDialogTitle" xml:space="preserve">
+    <value>更新があります</value>
+  </data>
+  <data name="SettingsPage_UpdateAvailableDialogMessageFormat" xml:space="preserve">
+    <value>{1}
+Microsoft Store に {0} 件の更新があります。</value>
+  </data>
+  <data name="SettingsPage_OpenStoreButtonText" xml:space="preserve">
+    <value>Store を開く</value>
+  </data>
+  <data name="SettingsPage_NoUpdateDialogTitle" xml:space="preserve">
+    <value>最新の状態です</value>
+  </data>
+  <data name="SettingsPage_NoUpdateDialogMessage" xml:space="preserve">
+    <value>インストール済みのアプリはすでに最新です。</value>
+  </data>
+  <data name="SettingsPage_UpdateCheckFailedDialogTitle" xml:space="preserve">
+    <value>更新確認に失敗しました</value>
+  </data>
+  <data name="SettingsPage_UpdateCheckFailedDialogMessage" xml:space="preserve">
+    <value>Microsoft Store の更新情報を確認できませんでした。パッケージのインストール状態とネットワーク接続を確認してください。</value>
+  </data>
+  <data name="SettingsPage_StartupRegistrationFailedDialogTitle" xml:space="preserve">
+    <value>スタートアップ設定に失敗しました</value>
+  </data>
+  <data name="SettingsPage_StartupRegistrationFailedDialogMessage" xml:space="preserve">
+    <value>Windows スタートアップタスク設定を適用できませんでした。パッケージマニフェスト登録または Windows のスタートアップアプリ権限を確認してください。</value>
+  </data>
+  <data name="Notification_ExpiredAccountDetectedTitle" xml:space="preserve">
+    <value>無効なアカウントが見つかりました</value>
+  </data>
+  <data name="Notification_ExpiredAccountDetectedMessageFormat" xml:space="preserve">
+    <value>{0} は使用できません。設定に基づいてアカウント状態を更新しました。</value>
+  </data>
+  <data name="Notification_UsageLowQuotaDetectedTitle" xml:space="preserve">
+    <value>低クォータを検出しました</value>
+  </data>
+  <data name="Notification_UsageLowQuotaDetectedMessageFormat" xml:space="preserve">
+    <value>{0} の {1} 残りクォータは {2}% です。</value>
+  </data>
+  <data name="Notification_UsageLowQuotaDetectedWithSwitchSuggestionMessageFormat" xml:space="preserve">
+    <value>{0} の {1} 残りクォータは {2}% です。警告しきい値を超えるクォータを持つ別のアカウントがあります。この通知を選択してアカウント管理から切り替えてください。</value>
+  </data>
+  <data name="Notification_PrimaryUsageLowQuotaWindowName" xml:space="preserve">
+    <value>5時間</value>
+  </data>
+  <data name="Notification_SecondaryUsageLowQuotaWindowName" xml:space="preserve">
+    <value>7日間</value>
+  </data>
+  <data name="Notification_StoreUpdateAvailableTitle" xml:space="preserve">
+    <value>CLI Account Switcher の更新</value>
+  </data>
+  <data name="Notification_StoreUpdateAvailableMessageFormat" xml:space="preserve">
+    <value>Microsoft Store に {0} 件の更新があります。</value>
+  </data>
+  <data name="Notification_OpenStoreButtonText" xml:space="preserve">
+    <value>Store を開く</value>
+  </data>
+  <data name="SettingsPage_UpdateSettingsCard.Header" xml:space="preserve">
+    <value>更新を確認</value>
+  </data>
+  <data name="SettingsPage_UpdateSettingsCard.Description" xml:space="preserve">
+    <value>現在のアプリバージョンと Microsoft Store の更新を確認します。</value>
+  </data>
+  <data name="SettingsPage_AutomaticUpdateSettingsCard.Header" xml:space="preserve">
+    <value>自動更新チェック</value>
+  </data>
+  <data name="SettingsPage_AutomaticUpdateSettingsCard.Description" xml:space="preserve">
+    <value>8時間ごとに Store の更新を確認し、見つかった場合は通知を表示します。</value>
+  </data>
+  <data name="SettingsPage_RestartRecommendedDialogTitle" xml:space="preserve">
+    <value>再起動をおすすめします</value>
+  </data>
+  <data name="SettingsPage_RestartRecommendedDialogMessage" xml:space="preserve">
+    <value>言語設定を保存しました。すべての画面に確実に反映するには、アプリを再起動することをおすすめします。</value>
+  </data>
+  <data name="SettingsPage_NoUpdateDialogMessageFormat" xml:space="preserve">
+    <value>{0}
+インストール済みのアプリはすでに最新です。</value>
+  </data>
+  <data name="SettingsPage_AutomaticRefreshDisabledText" xml:space="preserve">
+    <value>自動更新はオフです</value>
+  </data>
+  <data name="SettingsPage_NextUsageRefreshFormat" xml:space="preserve">
+    <value>次回更新まで {0}</value>
+  </data>
+  <data name="SettingsPage_RemainingTimeWithDaysFormat" xml:space="preserve">
+    <value>{0} 日 {1}</value>
+  </data>
+</root>
