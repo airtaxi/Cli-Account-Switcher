@@ -113,8 +113,9 @@ public sealed class CodexAccountService : IDisposable
     {
         var codexAccount = await CreateValidatedAccountAsync(codexAuthenticationDocument, customAlias, cancellationToken);
         UpsertAccount(codexAccount);
+        var changedAccounts = SynchronizeActiveStatuses();
         await SaveAccountsAsync(cancellationToken);
-        SendAccountChangedMessage(codexAccount);
+        SendAccountChangedMessages([codexAccount, .. changedAccounts]);
         return codexAccount;
     }
 
@@ -207,6 +208,7 @@ public sealed class CodexAccountService : IDisposable
     {
         var codexAccountBackupImportResult = new CodexAccountBackupImportResult();
         var importedAccountIdentifiers = new HashSet<string>(StringComparer.Ordinal);
+        var importedAccounts = new List<CodexAccount>();
 
         using var zipArchive = ZipFile.OpenRead(backupFilePath);
         foreach (var zipArchiveEntry in zipArchive.Entries.Where(zipArchiveEntry => string.Equals(Path.GetExtension(zipArchiveEntry.FullName), ".json", StringComparison.OrdinalIgnoreCase)))
@@ -238,14 +240,20 @@ public sealed class CodexAccountService : IDisposable
                     var validatedAccount = await CreateValidatedAccountAsync(candidateAccount.CodexAuthenticationDocument, candidateAccount.CustomAlias, cancellationToken);
                     UpsertAccount(validatedAccount);
                     importedAccountIdentifiers.Add(validatedAccount.AccountIdentifier);
+                    importedAccounts.Add(validatedAccount);
                     codexAccountBackupImportResult.SuccessCount++;
-                    SendAccountChangedMessage(validatedAccount);
                 }
                 catch { codexAccountBackupImportResult.FailureCount++; }
             }
         }
 
-        if (codexAccountBackupImportResult.SuccessCount > 0) await SaveAccountsAsync(cancellationToken);
+        if (codexAccountBackupImportResult.SuccessCount > 0)
+        {
+            var changedAccounts = SynchronizeActiveStatuses();
+            await SaveAccountsAsync(cancellationToken);
+            SendAccountChangedMessages([.. importedAccounts, .. changedAccounts]);
+        }
+
         return codexAccountBackupImportResult;
     }
 
@@ -322,24 +330,10 @@ public sealed class CodexAccountService : IDisposable
 
     private async Task RefreshActiveStatusesAsync(CancellationToken cancellationToken)
     {
-        var activeAccountIdentifier = TryReadActiveAccountIdentifier();
-        var changedAccounts = new List<CodexAccount>();
-
-        lock (_accountsLock)
-        {
-            foreach (var codexAccount in _accounts)
-            {
-                var isActive = !string.IsNullOrWhiteSpace(activeAccountIdentifier) && string.Equals(codexAccount.AccountIdentifier, activeAccountIdentifier, StringComparison.Ordinal);
-                if (codexAccount.IsActive == isActive) continue;
-
-                codexAccount.IsActive = isActive;
-                changedAccounts.Add(codexAccount);
-            }
-        }
-
+        var changedAccounts = SynchronizeActiveStatuses();
         if (changedAccounts.Count == 0) return;
         await SaveAccountsAsync(cancellationToken);
-        foreach (var codexAccount in changedAccounts) SendAccountChangedMessage(codexAccount);
+        SendAccountChangedMessages(changedAccounts);
     }
 
     private async Task<IReadOnlyList<CodexAccount>> ReadBackupEntryAccountsAsync(ZipArchiveEntry zipArchiveEntry, CancellationToken cancellationToken)
@@ -633,6 +627,27 @@ public sealed class CodexAccountService : IDisposable
         }
     }
 
+    private List<CodexAccount> SynchronizeActiveStatuses() => SynchronizeActiveStatuses(TryReadActiveAccountIdentifier());
+
+    private List<CodexAccount> SynchronizeActiveStatuses(string activeAccountIdentifier)
+    {
+        var changedAccounts = new List<CodexAccount>();
+
+        lock (_accountsLock)
+        {
+            foreach (var codexAccount in _accounts)
+            {
+                var isActive = !string.IsNullOrWhiteSpace(activeAccountIdentifier) && string.Equals(codexAccount.AccountIdentifier, activeAccountIdentifier, StringComparison.Ordinal);
+                if (codexAccount.IsActive == isActive) continue;
+
+                codexAccount.IsActive = isActive;
+                changedAccounts.Add(codexAccount);
+            }
+        }
+
+        return changedAccounts;
+    }
+
     private CodexAccount FindAccount(string accountIdentifier)
     {
         lock (_accountsLock) return _accounts.FirstOrDefault(account => string.Equals(account.AccountIdentifier, accountIdentifier, StringComparison.Ordinal));
@@ -669,6 +684,16 @@ public sealed class CodexAccountService : IDisposable
     private static bool IsUsageUnderWarningThreshold(CodexUsageWindow codexUsageWindow, int usageWarningThresholdPercentage) => codexUsageWindow.RemainingPercentage >= 0 && codexUsageWindow.RemainingPercentage <= NormalizeUsageWarningThresholdPercentage(usageWarningThresholdPercentage);
 
     private static int NormalizeUsageWarningThresholdPercentage(int usageWarningThresholdPercentage) => Math.Clamp(usageWarningThresholdPercentage, 0, 100);
+
+    private static void SendAccountChangedMessages(IEnumerable<CodexAccount> codexAccounts)
+    {
+        var sentAccountIdentifiers = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var codexAccount in codexAccounts)
+        {
+            if (!sentAccountIdentifiers.Add(codexAccount.AccountIdentifier)) continue;
+            SendAccountChangedMessage(codexAccount);
+        }
+    }
 
     private static void SendAccountChangedMessage(CodexAccount codexAccount) => WeakReferenceMessenger.Default.Send(new ValueChangedMessage<CodexAccount>(codexAccount));
 
