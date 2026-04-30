@@ -121,7 +121,7 @@
     <value>CLI Account Switcher</value>
   </data>
   <data name="AppDescription" xml:space="preserve">
-    <value>CLI Account Switcher は AI サービス向けの CLI アカウント切替アプリです。現在は Codex のみをサポートし、Claude Code と GitHub Copilot のサポートを予定しています。</value>
+    <value>CLI Account Switcher は AI サービス向けの CLI アカウント切替アプリです。Codex と Claude Code をサポートしています。</value>
   </data>
   <data name="MainWindow_AppTitleBar.Title" xml:space="preserve">
     <value>CLI Account Switcher</value>
@@ -235,7 +235,7 @@
     <value>アカウント管理</value>
   </data>
   <data name="AccountsPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>Codex auth.json アカウントを保存し、使用量とアクティブ状態を管理します。</value>
+    <value>対応する CLI アカウントを保存し、使用量とアクティブ状態を管理します。</value>
   </data>
   <data name="AccountsPage_RefreshAllAccountsTextBlock.Text" xml:space="preserve">
     <value>更新</value>
@@ -392,6 +392,9 @@
   </data>
   <data name="AccountsPage_ZipBackupFileTypeChoice" xml:space="preserve">
     <value>ZIP バックアップ</value>
+  </data>
+  <data name="AccountsPage_ClaudeCodeBackupFileTypeChoice" xml:space="preserve">
+    <value>Claude Code バックアップ</value>
   </data>
   <data name="AccountsPage_ImportBackupSuccessCountFormat" xml:space="preserve">
     <value>{0} 件成功</value>
@@ -586,7 +589,7 @@
     <value>CLI Account Switcher</value>
   </data>
   <data name="AboutPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>CLI Account Switcher は AI サービス向けの CLI アカウント切替アプリです。現在は Codex のみをサポートし、Claude Code と GitHub Copilot のサポートを予定しています。</value>
+    <value>CLI Account Switcher は AI サービス向けの CLI アカウント切替アプリです。Codex と Claude Code をサポートしています。</value>
   </data>
   <data name="AboutPage_VersionHeaderTextBlock.Text" xml:space="preserve">
     <value>バージョン</value>
@@ -1021,5 +1024,89 @@ Microsoft Store に {0} 件の更新があります。</value>
   </data>
   <data name="SettingsPage_RemainingTimeWithDaysFormat" xml:space="preserve">
     <value>{0} 日 {1}</value>
+  </data>
+  <data name="ProviderToggle_AutomationName" xml:space="preserve">
+    <value>CLI provider</value>
+  </data>
+  <data name="AccountsPage_OrganizationHeaderText" xml:space="preserve">
+    <value>組織</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionDialogTitle" xml:space="preserve">
+    <value>Claude Code セッションの更新</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionDialogMessage" xml:space="preserve">
+    <value>アカウントの切り替えが完了しました。新しいアカウント状態を反映するには、Claude Code を再起動するか VS Code の Claude セッションを開き直してください。</value>
+  </data>
+  <data name="CodexAccountViewModel_LastUpdatedFormat" xml:space="preserve">
+    <value>最終更新: {0}</value>
+  </data>
+  <data name="OAuthAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>Claude Code ログイン</value>
+  </data>
+  <data name="OAuthAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>Claude Code ログインを実行し、現在の Claude Code credential と global config を管理対象アカウントとして保存します。</value>
+  </data>
+  <data name="OAuthAddAccountPage_ClaudeCodeRunLoginButtonText" xml:space="preserve">
+    <value>Claude Code ログインを実行</value>
+  </data>
+  <data name="OAuthAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
+    <value>Claude Code ログインまたは現在のアカウント保存に失敗しました。Claude Code がインストール済みでログイン済みか確認してください。</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>Claude Code credential を貼り付け</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>.credentials.json と global config JSON を貼り付けます。claudeAiOauth トークンと oauthAccount のアカウント/組織値が必要です。</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeLoadInputsButtonText" xml:space="preserve">
+    <value>credential を保存</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeValidationErrorMessage" xml:space="preserve">
+    <value>Claude Code credential または global config が無効です。accessToken、refreshToken、expiresAt、emailAddress、accountUuid、organizationUuid、organizationName を確認してください。</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeCredentialsJsonTextBox.Header" xml:space="preserve">
+    <value>Credentials JSON</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeCredentialsJsonTextBox.PlaceholderText" xml:space="preserve">
+    <value>.credentials.json を貼り付け</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeGlobalConfigJsonTextBox.Header" xml:space="preserve">
+    <value>Global config JSON</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeGlobalConfigJsonTextBox.PlaceholderText" xml:space="preserve">
+    <value>.claude.json または .config.json を貼り付け</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>現在の Claude Code アカウントを保存</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>現在の Claude Code credential と global config ファイルを読み取り、管理対象アカウントとして保存します。</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeImportButtonText" xml:space="preserve">
+    <value>現在の Claude Code アカウントを保存</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeFilePathHeader" xml:space="preserve">
+    <value>Claude Code ファイル</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
+    <value>現在の Claude Code credential を保存できませんでした。先に Claude Code にログインしてください。</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>Claude Code ファイルをインポート</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>最初に .credentials.json を選択し、次に Claude Code の global config JSON ファイルを選択してください。</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeImportButtonText" xml:space="preserve">
+    <value>ファイルを選択</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeSupportedFormatHeader" xml:space="preserve">
+    <value>対応ファイル</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeSupportedFormatDescription" xml:space="preserve">
+    <value>oauthAccount 情報を含む Claude Code の .credentials.json と .claude.json または .config.json ファイルを使用します。</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
+    <value>Claude Code ファイルをインポートできませんでした。選択した credential と global config JSON ファイルを確認してください。</value>
   </data>
 </root>

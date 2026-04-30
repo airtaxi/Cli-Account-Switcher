@@ -18,10 +18,12 @@
 
         <StackPanel Grid.Row="0" Spacing="6">
             <TextBlock
+                x:Name="FileTitleTextBlock"
                 x:Uid="FileAddAccountPage_TitleTextBlock"
                 FontSize="22"
                 FontWeight="SemiBold" />
             <TextBlock
+                x:Name="FileDescriptionTextBlock"
                 x:Uid="FileAddAccountPage_DescriptionTextBlock"
                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                 TextWrapping="Wrap" />
@@ -37,7 +39,9 @@
                 Style="{StaticResource AccentButtonStyle}">
                 <StackPanel Orientation="Horizontal" Spacing="6">
                     <FontIcon FontSize="14" Glyph="&#xE8E5;" />
-                    <TextBlock x:Uid="FileAddAccountPage_ImportButtonTextBlock" />
+                    <TextBlock
+                        x:Name="FileImportButtonTextBlock"
+                        x:Uid="FileAddAccountPage_ImportButtonTextBlock" />
                 </StackPanel>
             </Button>
             <ProgressRing
@@ -56,8 +60,12 @@
             BorderThickness="1"
             CornerRadius="8">
             <StackPanel Spacing="6">
-                <TextBlock x:Uid="FileAddAccountPage_SupportedFormatHeaderTextBlock" FontWeight="SemiBold" />
                 <TextBlock
+                    x:Name="FileSupportedFormatHeaderTextBlock"
+                    x:Uid="FileAddAccountPage_SupportedFormatHeaderTextBlock"
+                    FontWeight="SemiBold" />
+                <TextBlock
+                    x:Name="FileSupportedFormatDescriptionTextBlock"
                     x:Uid="FileAddAccountPage_SupportedFormatDescriptionTextBlock"
                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                     TextWrapping="Wrap" />

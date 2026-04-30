@@ -6,16 +6,16 @@
 
 ![CLI Account Switcher 스크린샷](.github/Assets/KO.jpg)
 
-CLI Account Switcher는 AI 서비스용 CLI 인증 계정을 관리하기 위한 Windows 데스크톱 유틸리티입니다. 현재 Codex 계정을 지원하며, Claude Code 및 GitHub Copilot 지원은 예정되어 있습니다.
+CLI Account Switcher는 AI 서비스용 CLI 인증 계정을 관리하기 위한 Windows 데스크톱 유틸리티입니다. Codex와 Claude Code 계정을 지원합니다.
 
-앱은 저장된 계정 목록을 자체 로컬 앱 데이터 폴더에 보관하고, 선택한 인증 문서를 `%USERPROFILE%\.codex\auth.json`에 기록해 활성 Codex 계정을 전환합니다.
+앱은 저장된 계정 목록을 자체 로컬 앱 데이터 폴더에 보관하고, 선택한 인증 문서를 해당 CLI의 로컬 인증 파일에 기록해 활성 Codex 또는 Claude Code 계정을 전환합니다.
 
 ## 주요 기능
 
-- OAuth 로그인, 현재 `auth.json`, JSON 파일, 직접 붙여넣은 인증 JSON으로 Codex 계정을 추가합니다.
-- 계정 화면에서 활성 Codex 계정을 전환합니다.
-- Codex 플랜과 5시간/주간 잔여 사용량 정보를 확인합니다.
-- Claude Code 및 GitHub Copilot 계정 전환 지원은 예정되어 있습니다.
+- 지원되는 로그인 및 가져오기 방식으로 Codex와 Claude Code 계정을 추가합니다.
+- 계정 화면에서 활성 Codex 또는 Claude Code 계정을 전환합니다.
+- 지원되는 계정의 플랜과 잔여 사용량 정보를 확인합니다.
+- 하나의 Windows 앱에서 Codex와 Claude Code 계정을 함께 관리합니다.
 - 전체 창을 열지 않고 트레이 아이콘을 눌러 활성 계정의 남은 사용량을 빠르게 확인합니다.
 - 계정 사용량을 새로 고치고 만료된 계정을 감지합니다.
 - 저장된 계정을 백업하고 복원합니다.
@@ -30,13 +30,13 @@ CLI Account Switcher는 AI 서비스용 CLI 인증 계정을 관리하기 위한
 
 ## 기본 사용 흐름
 
-1. 계정 화면에서 하나 이상의 Codex 계정을 추가합니다.
+1. 계정 화면에서 하나 이상의 Codex 또는 Claude Code 계정을 추가합니다.
 2. 앱이 계정을 검증한 뒤 플랜과 사용량 정보를 확인합니다.
-3. 사용할 계정을 선택해 활성 Codex 계정으로 전환합니다.
-4. 실행 중인 Codex 프로세스가 새 `auth.json`을 읽도록 안내가 표시되면 Codex를 다시 시작합니다.
+3. 사용할 계정을 선택해 해당 CLI의 활성 계정으로 전환합니다.
+4. 실행 중인 세션이 새 인증 파일을 읽도록 안내가 표시되면 Codex 또는 Claude Code를 다시 시작합니다.
 5. 다른 Windows 설치 환경으로 계정이나 설정을 옮길 때 백업/내보내기 기능을 사용합니다.
 
-계정 전환은 `%USERPROFILE%\.codex\auth.json`을 덮어씁니다. 해당 파일을 직접 관리하거나 다른 도구와 함께 사용 중이라면 먼저 백업해 두세요.
+계정 전환은 선택한 CLI의 로컬 인증 파일을 덮어씁니다. 해당 파일을 직접 관리하거나 다른 도구와 함께 사용 중이라면 먼저 백업해 두세요.
 
 ## 요구 사항
 
@@ -50,8 +50,8 @@ CLI Account Switcher는 AI 서비스용 CLI 인증 계정을 관리하기 위한
 | 프로젝트 | 설명 |
 | --- | --- |
 | `CliAccountSwitcher.WinUI` | 패키징된 WinUI 3 데스크톱 앱입니다. |
-| `CliAccountSwitcher.Api` | Codex OAuth, 인증 문서, 사용량, 모델, API 클라이언트 도우미를 담당합니다. |
-| `CliAccountSwitcher.Api.Test` | Codex API 동작을 실험하기 위한 콘솔 프로젝트입니다. |
+| `CliAccountSwitcher.Api` | Codex와 Claude Code 인증, 사용량, 모델, API 클라이언트 도우미를 담당합니다. |
+| `CliAccountSwitcher.Api.Test` | Codex와 Claude Code API 동작을 실험하기 위한 콘솔 프로젝트입니다. |
 
 WinUI 앱은 `net10.0-windows10.0.26100.0`을 대상으로 하며, NativeAOT 게시와 MSIX 도구를 사용하고 `x86`, `x64`, `ARM64` 패키지 번들을 지원합니다.
 

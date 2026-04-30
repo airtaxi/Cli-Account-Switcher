@@ -90,6 +90,25 @@
                     </SelectorBarItem>
                 </dev:SelectorBarSegmented>
             </TitleBar.Content>
+            <TitleBar.RightHeader>
+                <StackPanel
+                    Padding="8,0"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Spacing="8">
+                    <TextBlock
+                        x:Name="ProviderTextBlock"
+                        VerticalAlignment="Center"
+                        FontWeight="SemiBold"
+                        TextTrimming="CharacterEllipsis" />
+                    <ToggleSwitch
+                        x:Name="ProviderToggleSwitch"
+                        MinWidth="0"
+                        OffContent=""
+                        OnContent=""
+                        Toggled="OnProviderToggleSwitchToggled" />
+                </StackPanel>
+            </TitleBar.RightHeader>
         </TitleBar>
 
         <Frame

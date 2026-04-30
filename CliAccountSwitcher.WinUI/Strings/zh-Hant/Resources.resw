@@ -121,7 +121,7 @@
     <value>CLI Account Switcher</value>
   </data>
   <data name="AppDescription" xml:space="preserve">
-    <value>CLI Account Switcher 是面向 AI 服務的 CLI 帳號切換器。目前僅支援 Codex，並計劃支援 Claude Code 和 GitHub Copilot。</value>
+    <value>CLI Account Switcher 是面向 AI 服務的 CLI 帳號切換器。支援 Codex 和 Claude Code。</value>
   </data>
   <data name="MainWindow_AppTitleBar.Title" xml:space="preserve">
     <value>CLI Account Switcher</value>
@@ -235,7 +235,7 @@
     <value>帳號管理</value>
   </data>
   <data name="AccountsPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>儲存 Codex auth.json 帳號，並管理用量和使用中狀態。</value>
+    <value>儲存支援的 CLI 帳號，並管理用量和使用中狀態。</value>
   </data>
   <data name="AccountsPage_RefreshAllAccountsTextBlock.Text" xml:space="preserve">
     <value>重新整理</value>
@@ -392,6 +392,9 @@
   </data>
   <data name="AccountsPage_ZipBackupFileTypeChoice" xml:space="preserve">
     <value>ZIP 備份</value>
+  </data>
+  <data name="AccountsPage_ClaudeCodeBackupFileTypeChoice" xml:space="preserve">
+    <value>Claude Code 備份</value>
   </data>
   <data name="AccountsPage_ImportBackupSuccessCountFormat" xml:space="preserve">
     <value>{0} 個成功</value>
@@ -586,7 +589,7 @@
     <value>CLI Account Switcher</value>
   </data>
   <data name="AboutPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>CLI Account Switcher 是面向 AI 服務的 CLI 帳號切換器。目前僅支援 Codex，並計劃支援 Claude Code 和 GitHub Copilot。</value>
+    <value>CLI Account Switcher 是面向 AI 服務的 CLI 帳號切換器。支援 Codex 和 Claude Code。</value>
   </data>
   <data name="AboutPage_VersionHeaderTextBlock.Text" xml:space="preserve">
     <value>版本</value>
@@ -1021,5 +1024,89 @@ Microsoft Store 中有 {0} 個可用更新。</value>
   </data>
   <data name="SettingsPage_RemainingTimeWithDaysFormat" xml:space="preserve">
     <value>{0} 天 {1}</value>
+  </data>
+  <data name="ProviderToggle_AutomationName" xml:space="preserve">
+    <value>CLI provider</value>
+  </data>
+  <data name="AccountsPage_OrganizationHeaderText" xml:space="preserve">
+    <value>組織</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionDialogTitle" xml:space="preserve">
+    <value>重新整理 Claude Code 工作階段</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionDialogMessage" xml:space="preserve">
+    <value>帳戶切換已完成。請重新啟動 Claude Code，或重新開啟 VS Code Claude 工作階段以套用新的帳戶狀態。</value>
+  </data>
+  <data name="CodexAccountViewModel_LastUpdatedFormat" xml:space="preserve">
+    <value>最後更新：{0}</value>
+  </data>
+  <data name="OAuthAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>Claude Code 登入</value>
+  </data>
+  <data name="OAuthAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>執行 Claude Code 登入，然後將目前的 Claude Code credential 與 global config 儲存為受管理帳戶。</value>
+  </data>
+  <data name="OAuthAddAccountPage_ClaudeCodeRunLoginButtonText" xml:space="preserve">
+    <value>執行 Claude Code 登入</value>
+  </data>
+  <data name="OAuthAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
+    <value>Claude Code 登入或目前帳戶儲存失敗。請確認 Claude Code 已安裝並已登入。</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>貼上 Claude Code credential</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>貼上 .credentials.json 與 global config JSON。需要 claudeAiOauth 權杖及 oauthAccount 帳戶/組織欄位。</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeLoadInputsButtonText" xml:space="preserve">
+    <value>儲存 credential</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeValidationErrorMessage" xml:space="preserve">
+    <value>Claude Code credential 或 global config 無效。請檢查 accessToken、refreshToken、expiresAt、emailAddress、accountUuid、organizationUuid 和 organizationName。</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeCredentialsJsonTextBox.Header" xml:space="preserve">
+    <value>Credentials JSON</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeCredentialsJsonTextBox.PlaceholderText" xml:space="preserve">
+    <value>貼上 .credentials.json</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeGlobalConfigJsonTextBox.Header" xml:space="preserve">
+    <value>Global config JSON</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeGlobalConfigJsonTextBox.PlaceholderText" xml:space="preserve">
+    <value>貼上 .claude.json 或 .config.json</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>儲存目前 Claude Code 帳戶</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>讀取目前 Claude Code credential 和 global config 檔案，並儲存為受管理帳戶。</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeImportButtonText" xml:space="preserve">
+    <value>儲存目前 Claude Code 帳戶</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeFilePathHeader" xml:space="preserve">
+    <value>Claude Code 檔案</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
+    <value>無法儲存目前 Claude Code credential。請先登入 Claude Code。</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>匯入 Claude Code 檔案</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>先選擇 .credentials.json，然後選擇 Claude Code global config JSON 檔案。</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeImportButtonText" xml:space="preserve">
+    <value>選擇檔案</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeSupportedFormatHeader" xml:space="preserve">
+    <value>支援的檔案</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeSupportedFormatDescription" xml:space="preserve">
+    <value>使用包含 oauthAccount 資訊的 Claude Code .credentials.json 和 .claude.json 或 .config.json 檔案。</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
+    <value>無法匯入 Claude Code 檔案。請檢查選取的 credential 和 global config JSON 檔案。</value>
   </data>
 </root>

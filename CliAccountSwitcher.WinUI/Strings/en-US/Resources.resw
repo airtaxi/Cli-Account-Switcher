@@ -121,7 +121,7 @@
     <value>CLI Account Switcher</value>
   </data>
   <data name="AppDescription" xml:space="preserve">
-    <value>CLI account switcher for AI services. Currently supports Codex, with Claude Code and GitHub Copilot support planned.</value>
+    <value>CLI account switcher for AI services. Supports Codex and Claude Code.</value>
   </data>
   <data name="MainWindow_AppTitleBar.Title" xml:space="preserve">
     <value>CLI Account Switcher</value>
@@ -235,7 +235,7 @@
     <value>Account Management</value>
   </data>
   <data name="AccountsPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>Store Codex auth.json accounts and manage usage and active status.</value>
+    <value>Store supported CLI accounts and manage usage and active status.</value>
   </data>
   <data name="AccountsPage_RefreshAllAccountsTextBlock.Text" xml:space="preserve">
     <value>Refresh</value>
@@ -392,6 +392,9 @@
   </data>
   <data name="AccountsPage_ZipBackupFileTypeChoice" xml:space="preserve">
     <value>ZIP Backup</value>
+  </data>
+  <data name="AccountsPage_ClaudeCodeBackupFileTypeChoice" xml:space="preserve">
+    <value>Claude Code Backup</value>
   </data>
   <data name="AccountsPage_ImportBackupSuccessCountFormat" xml:space="preserve">
     <value>{0} succeeded</value>
@@ -586,7 +589,7 @@
     <value>CLI Account Switcher</value>
   </data>
   <data name="AboutPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>CLI account switcher for AI services. Currently supports Codex, with Claude Code and GitHub Copilot support planned.</value>
+    <value>CLI account switcher for AI services. Supports Codex and Claude Code.</value>
   </data>
   <data name="AboutPage_VersionHeaderTextBlock.Text" xml:space="preserve">
     <value>Version</value>
@@ -1021,5 +1024,89 @@ The installed app is already up to date.</value>
   </data>
   <data name="SettingsPage_RemainingTimeWithDaysFormat" xml:space="preserve">
     <value>{0} day(s) {1}</value>
+  </data>
+  <data name="ProviderToggle_AutomationName" xml:space="preserve">
+    <value>CLI provider</value>
+  </data>
+  <data name="AccountsPage_OrganizationHeaderText" xml:space="preserve">
+    <value>Organization</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionDialogTitle" xml:space="preserve">
+    <value>Refresh Claude Code session</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionDialogMessage" xml:space="preserve">
+    <value>Account switching is complete. Restart Claude Code or reopen the VS Code Claude session to use the new account state.</value>
+  </data>
+  <data name="CodexAccountViewModel_LastUpdatedFormat" xml:space="preserve">
+    <value>Last updated: {0}</value>
+  </data>
+  <data name="OAuthAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>Claude Code login</value>
+  </data>
+  <data name="OAuthAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>Run Claude Code login, then save the current Claude Code credential and global config as a managed account.</value>
+  </data>
+  <data name="OAuthAddAccountPage_ClaudeCodeRunLoginButtonText" xml:space="preserve">
+    <value>Run Claude Code login</value>
+  </data>
+  <data name="OAuthAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
+    <value>Claude Code login or current account save failed. Make sure Claude Code is installed and logged in.</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>Paste Claude Code credentials</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>Paste .credentials.json and global config JSON. Required fields include claudeAiOauth tokens and oauthAccount identity/organization values.</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeLoadInputsButtonText" xml:space="preserve">
+    <value>Save credentials</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeValidationErrorMessage" xml:space="preserve">
+    <value>Claude Code credentials or global config are invalid. Check accessToken, refreshToken, expiresAt, emailAddress, accountUuid, organizationUuid, and organizationName.</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeCredentialsJsonTextBox.Header" xml:space="preserve">
+    <value>Credentials JSON</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeCredentialsJsonTextBox.PlaceholderText" xml:space="preserve">
+    <value>Paste .credentials.json</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeGlobalConfigJsonTextBox.Header" xml:space="preserve">
+    <value>Global config JSON</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeGlobalConfigJsonTextBox.PlaceholderText" xml:space="preserve">
+    <value>Paste .claude.json or .config.json</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>Save current Claude Code account</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>Read the current Claude Code credential and global config files, then save them as a managed account.</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeImportButtonText" xml:space="preserve">
+    <value>Save current Claude Code account</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeFilePathHeader" xml:space="preserve">
+    <value>Claude Code files</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
+    <value>Current Claude Code credentials could not be saved. Sign in with Claude Code first.</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>Import Claude Code files</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>Select .credentials.json first, then select the Claude Code global config JSON file.</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeImportButtonText" xml:space="preserve">
+    <value>Select files</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeSupportedFormatHeader" xml:space="preserve">
+    <value>Supported files</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeSupportedFormatDescription" xml:space="preserve">
+    <value>Use Claude Code .credentials.json and .claude.json or .config.json files that contain oauthAccount information.</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
+    <value>Claude Code files could not be imported. Check the selected credentials and global config JSON files.</value>
   </data>
 </root>

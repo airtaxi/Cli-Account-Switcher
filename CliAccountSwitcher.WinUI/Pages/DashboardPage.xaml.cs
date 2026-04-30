@@ -1,3 +1,4 @@
+using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Helpers;
 using CliAccountSwitcher.WinUI.ViewModels;
 using CliAccountSwitcher.WinUI.Views;
@@ -18,7 +19,11 @@ public sealed partial class DashboardPage : Page
         InitializeComponent();
     }
 
-    private async void OnRefreshAllAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments) => await RunWithLoadingAsync(GetLocalizedString("AccountsPage_RefreshAllAccountsLoadingMessage"), async () => await App.CodexAccountService.RefreshAllAccountsAsync());
+    private async void OnRefreshAllAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
+    {
+        var providerAccountActions = App.GetProviderAccountActions(App.ApplicationSettings.SelectedProviderKind);
+        await RunWithLoadingAsync(GetLocalizedString("AccountsPage_RefreshAllAccountsLoadingMessage"), async () => await providerAccountActions.RefreshAccountsPageAllAsync());
+    }
 
     private async void OnAddAccountButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
@@ -27,7 +32,7 @@ public sealed partial class DashboardPage : Page
             XamlRoot = XamlRoot
         };
         await addAccountDialog.ShowAsync();
-        ViewModel.ReloadDashboard();
+        await ViewModel.ReloadDashboardAsync();
     }
 
     private async void OnDeleteExpiredAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
@@ -35,20 +40,21 @@ public sealed partial class DashboardPage : Page
         var contentDialogResult = await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogMessage"), GetLocalizedString("AccountsPage_DeleteButtonText"), GetLocalizedString("DialogHelper_CancelButtonText"));
         if (contentDialogResult != ContentDialogResult.Primary) return;
 
-        var deletedAccountCount = await App.CodexAccountService.DeleteExpiredAccountsAsync();
-        ViewModel.ReloadDashboard();
+        var providerAccountActions = App.GetProviderAccountActions(App.ApplicationSettings.SelectedProviderKind);
+        var deletedAccountCount = await providerAccountActions.DeleteExpiredAccountsAsync();
+        await ViewModel.ReloadDashboardAsync();
         await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), deletedAccountCount == 0 ? GetLocalizedString("AccountsPage_DeleteExpiredAccountsNoAccountsMessage") : GetFormattedString("AccountsPage_DeleteExpiredAccountsDeletedMessageFormat", deletedAccountCount));
     }
 
     private void OnDashboardPageUnloaded(object sender, RoutedEventArgs routedEventArguments) => ViewModel.Dispose();
 
-    private async Task RunWithLoadingAsync(string loadingMessage, Func<Task> action)
+    private async Task RunWithLoadingAsync(string loadingMessage, Func<Task> action, bool shouldReloadDashboard = true)
     {
         MainWindow.ShowLoading(loadingMessage);
         try
         {
             await action();
-            ViewModel.ReloadDashboard();
+            if (shouldReloadDashboard) await ViewModel.ReloadDashboardAsync();
         }
         finally
         {

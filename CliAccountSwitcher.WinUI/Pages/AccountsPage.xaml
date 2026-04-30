@@ -116,7 +116,8 @@
                 x:Name="PlanFilterSelectorBar"
                 Grid.Column="1"
                 SelectedItem="{x:Bind AllPlanFilterSelectorBarItem}"
-                SelectionChanged="OnPlanFilterSelectorBarSelectionChanged">
+                SelectionChanged="OnPlanFilterSelectorBarSelectionChanged"
+                Visibility="{x:Bind ViewModel.IsPlanFilterVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
                 <SelectorBarItem
                     x:Name="AllPlanFilterSelectorBarItem"
                     x:Uid="AccountsPage_AllPlanFilterSelectorBarItem"
@@ -221,11 +222,12 @@
                                     VerticalAlignment="Center"
                                     FontWeight="SemiBold" />
                                 <TextBlock
-                                    x:Uid="AccountsPage_PlanHeaderTextBlock"
+                                    x:Name="PlanHeaderTextBlock"
                                     Grid.Column="2"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    FontWeight="SemiBold" />
+                                    FontWeight="SemiBold"
+                                    Text="{x:Bind ViewModel.PlanHeaderText, Mode=OneWay}" />
                                 <TextBlock
                                     x:Uid="AccountsPage_UsageHeaderTextBlock"
                                     Grid.Column="3"
@@ -425,6 +427,7 @@
                                         <Button
                                             Click="OnRenameAccountButtonClicked"
                                             CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}"
+                                            IsEnabled="{x:Bind CanRename, Mode=OneWay}"
                                             Style="{StaticResource AccountActionButtonStyle}">
                                             <ToolTipService.ToolTip>
                                                 <ToolTip x:Uid="AccountsPage_RenameAccountToolTip" />

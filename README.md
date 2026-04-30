@@ -6,16 +6,16 @@
 
 ![CLI Account Switcher screenshot](.github/Assets/EN.jpg)
 
-CLI Account Switcher is a Windows desktop utility for managing CLI authentication accounts for AI services. It currently supports Codex accounts, with Claude Code and GitHub Copilot support planned.
+CLI Account Switcher is a Windows desktop utility for managing CLI authentication accounts for AI services. It supports Codex and Claude Code accounts.
 
-The app stores saved account records in its own local application data folder and switches the active Codex account by writing the selected authentication document to `%USERPROFILE%\.codex\auth.json`.
+The app stores saved account records in its own local application data folder and switches the active Codex or Claude Code account by writing the selected authentication document to the relevant local authentication file.
 
 ## Features
 
-- Add Codex accounts with OAuth sign-in, the current `auth.json`, a JSON file, or pasted authentication JSON.
-- Switch the active Codex account from the Accounts screen.
-- View Codex plan information and remaining usage for the 5-hour and weekly windows.
-- Claude Code and GitHub Copilot account switching support is planned.
+- Add Codex and Claude Code accounts with the supported sign-in and import flows.
+- Switch the active Codex or Claude Code account from the Accounts screen.
+- View plan information and remaining usage for supported accounts.
+- Manage Codex and Claude Code accounts in one Windows app.
 - Click the tray icon to open a quick active account usage popup without opening the full window.
 - Refresh account usage and detect expired accounts.
 - Back up and restore saved accounts.
@@ -30,13 +30,13 @@ The app stores saved account records in its own local application data folder an
 
 ## Basic Workflow
 
-1. Add one or more Codex accounts from the Accounts screen.
+1. Add one or more Codex or Claude Code accounts from the Accounts screen.
 2. Review plan and usage information after the app validates each account.
-3. Select an account and switch it to make it the active Codex account.
-4. Restart Codex when prompted so running Codex processes pick up the newly written `auth.json`.
+3. Select an account and switch it to make it the active account for the matching CLI.
+4. Restart Codex or Claude Code when prompted so running sessions pick up the newly written authentication file.
 5. Use backup/export features when moving accounts or settings to another Windows installation.
 
-Switching an account overwrites `%USERPROFILE%\.codex\auth.json`. If you already manage that file manually or with another tool, make a backup first.
+Switching an account overwrites the local authentication file used by the selected CLI. If you already manage those files manually or with another tool, make a backup first.
 
 ## Requirements
 
@@ -50,8 +50,8 @@ The repository contains three projects:
 | Project | Description |
 | --- | --- |
 | `CliAccountSwitcher.WinUI` | Packaged WinUI 3 desktop app. |
-| `CliAccountSwitcher.Api` | Codex OAuth, authentication document, usage, models, and API client helpers. |
-| `CliAccountSwitcher.Api.Test` | Console experiment project for Codex API behavior. |
+| `CliAccountSwitcher.Api` | Codex and Claude Code authentication, usage, models, and API client helpers. |
+| `CliAccountSwitcher.Api.Test` | Console experiment project for Codex and Claude Code API behavior. |
 
 The WinUI app targets `net10.0-windows10.0.26100.0`, enables NativeAOT publishing, uses MSIX tooling, and supports `x86`, `x64`, and `ARM64` package bundles.
 

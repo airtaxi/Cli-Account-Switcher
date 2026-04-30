@@ -15,6 +15,8 @@ namespace CliAccountSwitcher.WinUI.Helpers;
 [JsonSerializable(typeof(CodexUsageSnapshot))]
 [JsonSerializable(typeof(CodexUsageWindow))]
 [JsonSerializable(typeof(ApplicationSettings))]
+[JsonSerializable(typeof(ClaudeCodeBackupDocument))]
+[JsonSerializable(typeof(ClaudeCodeBackupAccountDocument))]
 public sealed partial class CodexAccountJsonSerializerContext : JsonSerializerContext
 {
 }

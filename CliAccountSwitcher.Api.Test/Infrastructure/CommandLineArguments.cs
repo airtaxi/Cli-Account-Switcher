@@ -54,4 +54,6 @@ public sealed class CommandLineArguments
     public string? GetOptionValue(string optionName) => _optionValues.TryGetValue(optionName, out var optionValue) ? optionValue : null;
 
     public string? GetPositionalValue(int index) => index >= 0 && index < _positionalValues.Count ? _positionalValues[index] : null;
+
+    public IReadOnlyList<string> GetPositionalValues() => _positionalValues;
 }

@@ -1,5 +1,7 @@
+using CliAccountSwitcher.Api.Providers.Abstractions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI.Xaml;
+using System.Text.Json.Serialization;
 
 namespace CliAccountSwitcher.WinUI.Models;
 
@@ -23,6 +25,10 @@ public sealed partial class ApplicationSettings : ObservableObject
 
     [ObservableProperty]
     public partial string LanguageOverride { get; set; } = "";
+
+    [ObservableProperty]
+    [JsonConverter(typeof(JsonStringEnumConverter<CliProviderKind>))]
+    public partial CliProviderKind SelectedProviderKind { get; set; } = CliProviderKind.Codex;
 
     [ObservableProperty]
     public partial bool IsAutomaticUpdateCheckEnabled { get; set; } = true;

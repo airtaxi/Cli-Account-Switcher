@@ -1,3 +1,4 @@
+using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -23,9 +24,11 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         _codexAccountService = codexAccountService;
         _applicationSettings = applicationSettings;
         _dispatcherQueue = dispatcherQueue;
+        SelectedProviderKind = _applicationSettings.SelectedProviderKind;
         _applicationSettings.PropertyChanged += OnApplicationSettingsPropertyChanged;
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<CodexAccount>>(this, OnCodexAccountChangedMessageReceived);
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<CodexAccountStoreDocument>>(this, OnCodexAccountStoreDocumentChangedMessageReceived);
+        WeakReferenceMessenger.Default.Register<ValueChangedMessage<CliProviderKind>>(this, OnProviderKindChangedMessageReceived);
         ReloadAccounts();
     }
 
@@ -38,6 +41,13 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     [ObservableProperty]
     public partial string SelectedPlanFilter { get; set; } = "All";
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsPlanFilterVisible))]
+    [NotifyPropertyChangedFor(nameof(IsCodexProviderSelected))]
+    [NotifyPropertyChangedFor(nameof(IsClaudeCodeProviderSelected))]
+    [NotifyPropertyChangedFor(nameof(PlanHeaderText))]
+    public partial CliProviderKind SelectedProviderKind { get; set; } = CliProviderKind.Codex;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasAccounts))]
@@ -70,9 +80,47 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     public string SelectedAccountCountText => SelectedAccountIdentifiers.Count == 0 ? GetLocalizedString("AccountsPageViewModel_NoSelectedAccounts") : GetFormattedString("AccountsPageViewModel_SelectedAccountCountFormat", SelectedAccountIdentifiers.Count);
 
+    public bool IsPlanFilterVisible => SelectedProviderKind == CliProviderKind.Codex;
+
+    public bool IsCodexProviderSelected => SelectedProviderKind == CliProviderKind.Codex;
+
+    public bool IsClaudeCodeProviderSelected => SelectedProviderKind == CliProviderKind.ClaudeCode;
+
+    public string PlanHeaderText => SelectedProviderKind == CliProviderKind.Codex ? GetLocalizedString("AccountsPage_PlanHeaderTextBlock/Text") : GetLocalizedString("AccountsPage_OrganizationHeaderText");
+
     public void ReloadAccounts()
     {
-        SynchronizeAccounts(_codexAccountService.GetAccounts());
+        SelectedProviderKind = _applicationSettings.SelectedProviderKind;
+        if (SelectedProviderKind == CliProviderKind.Codex)
+        {
+            SynchronizeAccounts(_codexAccountService.GetAccounts());
+            ApplyFilter();
+            RefreshAccountStateProperties();
+            return;
+        }
+
+        _ = ReloadAccountsAsync();
+    }
+
+    public async Task ReloadAccountsAsync()
+    {
+        SelectedProviderKind = _applicationSettings.SelectedProviderKind;
+        if (SelectedProviderKind == CliProviderKind.Codex)
+        {
+            ReloadAccounts();
+            return;
+        }
+
+        try
+        {
+            var storedProviderAccounts = await App.CliProviderAccountService.GetClaudeCodeAccountsAsync();
+            SynchronizeAccounts(storedProviderAccounts);
+        }
+        catch
+        {
+            SynchronizeAccounts(Array.Empty<StoredProviderAccount>());
+        }
+
         ApplyFilter();
         RefreshAccountStateProperties();
     }
@@ -117,6 +165,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         foreach (var accountViewModel in Accounts) accountViewModel.PropertyChanged -= OnAccountViewModelPropertyChanged;
         WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CodexAccount>>(this);
         WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CodexAccountStoreDocument>>(this);
+        WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CliProviderKind>>(this);
     }
 
     private void OnApplicationSettingsPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArguments)
@@ -128,14 +177,22 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     private void OnCodexAccountChangedMessageReceived(object recipient, ValueChangedMessage<CodexAccount> valueChangedMessage)
     {
+        if (SelectedProviderKind != CliProviderKind.Codex) return;
         if (_dispatcherQueue.HasThreadAccess) ApplyAccountChange(valueChangedMessage.Value);
         else _dispatcherQueue.TryEnqueue(() => ApplyAccountChange(valueChangedMessage.Value));
     }
 
     private void OnCodexAccountStoreDocumentChangedMessageReceived(object recipient, ValueChangedMessage<CodexAccountStoreDocument> valueChangedMessage)
     {
+        if (SelectedProviderKind != CliProviderKind.Codex) return;
         if (_dispatcherQueue.HasThreadAccess) ApplyAccountStoreDocumentChange(valueChangedMessage.Value);
         else _dispatcherQueue.TryEnqueue(() => ApplyAccountStoreDocumentChange(valueChangedMessage.Value));
+    }
+
+    private void OnProviderKindChangedMessageReceived(object recipient, ValueChangedMessage<CliProviderKind> valueChangedMessage)
+    {
+        if (_dispatcherQueue.HasThreadAccess) ApplyProviderKindChange(valueChangedMessage.Value);
+        else _dispatcherQueue.TryEnqueue(() => ApplyProviderKindChange(valueChangedMessage.Value));
     }
 
     private void OnAccountViewModelPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArguments)
@@ -187,6 +244,33 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         RefreshSelectedAccountIdentifiersFromAccountViewModels();
     }
 
+    private void SynchronizeAccounts(IReadOnlyList<StoredProviderAccount> storedProviderAccounts)
+    {
+        var storedAccountIdentifiers = storedProviderAccounts.Select(storedProviderAccount => storedProviderAccount.StoredAccountIdentifier).ToHashSet(StringComparer.Ordinal);
+        for (var accountIndex = Accounts.Count - 1; accountIndex >= 0; accountIndex--)
+        {
+            var accountViewModel = Accounts[accountIndex];
+            if (accountViewModel.ProviderKind == CliProviderKind.ClaudeCode && storedAccountIdentifiers.Contains(accountViewModel.AccountIdentifier)) continue;
+            accountViewModel.PropertyChanged -= OnAccountViewModelPropertyChanged;
+            _selectedAccountIdentifiers.Remove(accountViewModel.AccountIdentifier);
+            Accounts.RemoveAt(accountIndex);
+        }
+
+        foreach (var storedProviderAccount in storedProviderAccounts)
+        {
+            var existingAccountViewModel = Accounts.FirstOrDefault(accountViewModel => string.Equals(accountViewModel.AccountIdentifier, storedProviderAccount.StoredAccountIdentifier, StringComparison.Ordinal));
+            if (existingAccountViewModel is null) Accounts.Add(CreateAccountViewModel(storedProviderAccount));
+            else
+            {
+                existingAccountViewModel.Update(storedProviderAccount);
+                ApplyClaudeCodeUsageSnapshotCache(existingAccountViewModel);
+            }
+        }
+
+        SortAccounts();
+        RefreshSelectedAccountIdentifiersFromAccountViewModels();
+    }
+
     private CodexAccountViewModel CreateAccountViewModel(CodexAccount codexAccount)
     {
         var accountViewModel = new CodexAccountViewModel(codexAccount, _applicationSettings)
@@ -195,6 +279,29 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         };
         accountViewModel.PropertyChanged += OnAccountViewModelPropertyChanged;
         return accountViewModel;
+    }
+
+    private CodexAccountViewModel CreateAccountViewModel(StoredProviderAccount storedProviderAccount)
+    {
+        var accountViewModel = new CodexAccountViewModel(storedProviderAccount, _applicationSettings)
+        {
+            IsSelected = _selectedAccountIdentifiers.Contains(storedProviderAccount.StoredAccountIdentifier)
+        };
+        ApplyClaudeCodeUsageSnapshotCache(accountViewModel);
+        accountViewModel.PropertyChanged += OnAccountViewModelPropertyChanged;
+        return accountViewModel;
+    }
+
+    private static void ApplyClaudeCodeUsageSnapshotCache(CodexAccountViewModel accountViewModel)
+    {
+        if (App.CliProviderAccountService.TryGetClaudeCodeUsageSnapshot(accountViewModel.AccountIdentifier, out var providerUsageSnapshot))
+        {
+            var usageRefreshTime = App.CliProviderAccountService.TryGetClaudeCodeUsageRefreshTime(accountViewModel.AccountIdentifier, out var cachedUsageRefreshTime) ? cachedUsageRefreshTime : DateTimeOffset.UtcNow;
+            accountViewModel.UpdateProviderUsageSnapshot(providerUsageSnapshot, usageRefreshTime);
+            return;
+        }
+
+        accountViewModel.ClearProviderUsageSnapshot();
     }
 
     private void SortAccounts()
@@ -211,7 +318,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     private void ApplyFilter()
     {
         var normalizedSearchText = (SearchText ?? "").Trim();
-        var normalizedSelectedPlanFilter = string.IsNullOrWhiteSpace(SelectedPlanFilter) ? "All" : SelectedPlanFilter.Trim();
+        var normalizedSelectedPlanFilter = SelectedProviderKind == CliProviderKind.Codex && !string.IsNullOrWhiteSpace(SelectedPlanFilter) ? SelectedPlanFilter.Trim() : "All";
         var filteredAccountViewModels = Accounts.Where(accountViewModel => IsAccountVisible(accountViewModel, normalizedSearchText, normalizedSelectedPlanFilter)).ToList();
         var filteredAccountViewModelSet = filteredAccountViewModels.ToHashSet();
 
@@ -270,6 +377,14 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     {
         AccountCount = Accounts.Count;
         FilteredAccountCount = FilteredAccounts.Count;
+    }
+
+    private void ApplyProviderKindChange(CliProviderKind providerKind)
+    {
+        SelectedProviderKind = providerKind;
+        SelectedPlanFilter = "All";
+        SetSelectedAccountIdentifiers([]);
+        _ = ReloadAccountsAsync();
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();

@@ -121,7 +121,7 @@
     <value>CLI Account Switcher</value>
   </data>
   <data name="AppDescription" xml:space="preserve">
-    <value>CLI Account Switcher 是面向 AI 服务的 CLI 账号切换器。目前仅支持 Codex，并计划支持 Claude Code 和 GitHub Copilot。</value>
+    <value>CLI Account Switcher 是面向 AI 服务的 CLI 账号切换器。支持 Codex 和 Claude Code。</value>
   </data>
   <data name="MainWindow_AppTitleBar.Title" xml:space="preserve">
     <value>CLI Account Switcher</value>
@@ -235,7 +235,7 @@
     <value>账号管理</value>
   </data>
   <data name="AccountsPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>保存 Codex auth.json 账号，并管理用量和活跃状态。</value>
+    <value>保存受支持的 CLI 账号，并管理用量和活跃状态。</value>
   </data>
   <data name="AccountsPage_RefreshAllAccountsTextBlock.Text" xml:space="preserve">
     <value>刷新</value>
@@ -392,6 +392,9 @@
   </data>
   <data name="AccountsPage_ZipBackupFileTypeChoice" xml:space="preserve">
     <value>ZIP 备份</value>
+  </data>
+  <data name="AccountsPage_ClaudeCodeBackupFileTypeChoice" xml:space="preserve">
+    <value>Claude Code 备份</value>
   </data>
   <data name="AccountsPage_ImportBackupSuccessCountFormat" xml:space="preserve">
     <value>{0} 个成功</value>
@@ -586,7 +589,7 @@
     <value>CLI Account Switcher</value>
   </data>
   <data name="AboutPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>CLI Account Switcher 是面向 AI 服务的 CLI 账号切换器。目前仅支持 Codex，并计划支持 Claude Code 和 GitHub Copilot。</value>
+    <value>CLI Account Switcher 是面向 AI 服务的 CLI 账号切换器。支持 Codex 和 Claude Code。</value>
   </data>
   <data name="AboutPage_VersionHeaderTextBlock.Text" xml:space="preserve">
     <value>版本</value>
@@ -1021,5 +1024,89 @@ Microsoft Store 中有 {0} 个可用更新。</value>
   </data>
   <data name="SettingsPage_RemainingTimeWithDaysFormat" xml:space="preserve">
     <value>{0} 天 {1}</value>
+  </data>
+  <data name="ProviderToggle_AutomationName" xml:space="preserve">
+    <value>CLI provider</value>
+  </data>
+  <data name="AccountsPage_OrganizationHeaderText" xml:space="preserve">
+    <value>组织</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionDialogTitle" xml:space="preserve">
+    <value>刷新 Claude Code 会话</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionDialogMessage" xml:space="preserve">
+    <value>账号切换已完成。请重启 Claude Code，或重新打开 VS Code Claude 会话以应用新的账号状态。</value>
+  </data>
+  <data name="CodexAccountViewModel_LastUpdatedFormat" xml:space="preserve">
+    <value>最后更新：{0}</value>
+  </data>
+  <data name="OAuthAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>Claude Code 登录</value>
+  </data>
+  <data name="OAuthAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>运行 Claude Code 登录，然后将当前 Claude Code credential 和 global config 保存为托管账号。</value>
+  </data>
+  <data name="OAuthAddAccountPage_ClaudeCodeRunLoginButtonText" xml:space="preserve">
+    <value>运行 Claude Code 登录</value>
+  </data>
+  <data name="OAuthAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
+    <value>Claude Code 登录或当前账号保存失败。请确认 Claude Code 已安装并已登录。</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>粘贴 Claude Code credential</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>粘贴 .credentials.json 和 global config JSON。需要 claudeAiOauth 令牌以及 oauthAccount 账号/组织字段。</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeLoadInputsButtonText" xml:space="preserve">
+    <value>保存 credential</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeValidationErrorMessage" xml:space="preserve">
+    <value>Claude Code credential 或 global config 无效。请检查 accessToken、refreshToken、expiresAt、emailAddress、accountUuid、organizationUuid 和 organizationName。</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeCredentialsJsonTextBox.Header" xml:space="preserve">
+    <value>Credentials JSON</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeCredentialsJsonTextBox.PlaceholderText" xml:space="preserve">
+    <value>粘贴 .credentials.json</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeGlobalConfigJsonTextBox.Header" xml:space="preserve">
+    <value>Global config JSON</value>
+  </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeGlobalConfigJsonTextBox.PlaceholderText" xml:space="preserve">
+    <value>粘贴 .claude.json 或 .config.json</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>保存当前 Claude Code 账号</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>读取当前 Claude Code credential 和 global config 文件，并保存为托管账号。</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeImportButtonText" xml:space="preserve">
+    <value>保存当前 Claude Code 账号</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeFilePathHeader" xml:space="preserve">
+    <value>Claude Code 文件</value>
+  </data>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
+    <value>无法保存当前 Claude Code credential。请先登录 Claude Code。</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>导入 Claude Code 文件</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>先选择 .credentials.json，然后选择 Claude Code global config JSON 文件。</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeImportButtonText" xml:space="preserve">
+    <value>选择文件</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeSupportedFormatHeader" xml:space="preserve">
+    <value>支持的文件</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeSupportedFormatDescription" xml:space="preserve">
+    <value>使用包含 oauthAccount 信息的 Claude Code .credentials.json 和 .claude.json 或 .config.json 文件。</value>
+  </data>
+  <data name="FileAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
+    <value>无法导入 Claude Code 文件。请检查所选 credential 和 global config JSON 文件。</value>
   </data>
 </root>

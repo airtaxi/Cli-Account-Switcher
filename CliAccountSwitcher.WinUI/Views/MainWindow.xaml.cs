@@ -1,3 +1,4 @@
+using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Helpers;
 using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.Pages;
@@ -6,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using System.Runtime.InteropServices;
@@ -35,6 +37,7 @@ public sealed partial class MainWindow : WindowEx
     private readonly WindowSubclassProcedure _windowSubclassProcedure;
     private PopupWindow _activeAccountQuotaPopupWindow;
     private bool _isApplyingNavigationSelection;
+    private bool _isApplyingProviderSelection;
     private bool _isSystemShutdownInProgress;
 
     public static MainWindow Instance { get; private set; }
@@ -59,6 +62,8 @@ public sealed partial class MainWindow : WindowEx
         SetWindowSubclass(this.GetWindowHandle(), _windowSubclassProcedure, MainWindowSubclassIdentifier, 0);
 
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<MainPageNavigationSection>>(this, OnMainPageNavigationSectionChangedMessageReceived);
+        WeakReferenceMessenger.Default.Register<ValueChangedMessage<CliProviderKind>>(this, OnProviderKindChangedMessageReceived);
+        ApplyProviderSelection(App.ApplicationSettings.SelectedProviderKind);
 
         App.ApplicationThemeService.ApplyThemeToWindow(this);
         App.ApplicationThemeService.ThemeChanged += OnApplicationThemeServiceThemeChanged;
@@ -124,6 +129,7 @@ public sealed partial class MainWindow : WindowEx
         OpenDashboardPageMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_OpenDashboardPageMenuFlyoutItem/Text");
         OpenAccountsPageMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_OpenAccountsPageMenuFlyoutItem/Text");
         CloseProgramMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_CloseProgramMenuFlyoutItem/Text");
+        AutomationProperties.SetName(ProviderToggleSwitch, App.LocalizationService.GetLocalizedString("ProviderToggle_AutomationName"));
     }
 
     private void OnAppFrameNavigated(object sender, NavigationEventArgs navigationEventArguments)
@@ -146,7 +152,25 @@ public sealed partial class MainWindow : WindowEx
 
     private void OnMainPageNavigationSectionChangedMessageReceived(object messageRecipient, ValueChangedMessage<MainPageNavigationSection> valueChangedMessage) => SelectMainPageNavigationSection(valueChangedMessage.Value);
 
+    private void OnProviderKindChangedMessageReceived(object messageRecipient, ValueChangedMessage<CliProviderKind> valueChangedMessage)
+    {
+        if (DispatcherQueue.HasThreadAccess) ApplyProviderSelection(valueChangedMessage.Value);
+        else DispatcherQueue.TryEnqueue(() => ApplyProviderSelection(valueChangedMessage.Value));
+    }
+
     private void OnApplicationThemeServiceThemeChanged(ElementTheme theme) => App.ApplicationThemeService.ApplyThemeToWindow(this);
+
+    private async void OnProviderToggleSwitchToggled(object sender, RoutedEventArgs routedEventArguments)
+    {
+        if (_isApplyingProviderSelection) return;
+
+        var selectedProviderKind = ProviderToggleSwitch.IsOn ? CliProviderKind.ClaudeCode : CliProviderKind.Codex;
+        if (App.ApplicationSettings.SelectedProviderKind == selectedProviderKind) return;
+
+        App.ApplicationSettings.SelectedProviderKind = selectedProviderKind;
+        await App.ApplicationSettingsService.SaveSettingsAsync();
+        WeakReferenceMessenger.Default.Send(new ValueChangedMessage<CliProviderKind>(selectedProviderKind));
+    }
 
     [RelayCommand]
     private void OpenDashboardPage() => NavigateToMainPageSection(MainPageNavigationSection.Dashboard);
@@ -247,6 +271,27 @@ public sealed partial class MainWindow : WindowEx
         }
     }
 
+    private void ApplyProviderSelection(CliProviderKind selectedProviderKind)
+    {
+        _isApplyingProviderSelection = true;
+        try
+        {
+            ProviderToggleSwitch.IsOn = selectedProviderKind == CliProviderKind.ClaudeCode;
+            ProviderTextBlock.Text = GetProviderDisplayName(selectedProviderKind);
+        }
+        finally
+        {
+            _isApplyingProviderSelection = false;
+        }
+    }
+
+    private static string GetProviderDisplayName(CliProviderKind selectedProviderKind)
+        => selectedProviderKind switch
+        {
+            CliProviderKind.ClaudeCode => "Claude Code",
+            _ => "Codex"
+        };
+
     private SelectorBarItem GetSelectorBarItem(MainPageNavigationSection mainPageNavigationSection) => mainPageNavigationSection switch
     {
         MainPageNavigationSection.Dashboard => DashboardSelectorBarItem,
@@ -268,10 +313,12 @@ public sealed partial class MainWindow : WindowEx
     private void OnMainWindowClosed(object sender, WindowEventArgs windowEventArguments)
     {
         WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<MainPageNavigationSection>>(this);
+        WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CliProviderKind>>(this);
         App.ApplicationThemeService.ThemeChanged -= OnApplicationThemeServiceThemeChanged;
         App.LocalizationService.LanguageChanged -= RefreshLocalizedText;
         _activeAccountQuotaPopupWindow?.Close();
         App.StoreUpdateService.Dispose();
         App.CodexAccountService.Dispose();
+        App.CliProviderAccountService.Dispose();
     }
 }

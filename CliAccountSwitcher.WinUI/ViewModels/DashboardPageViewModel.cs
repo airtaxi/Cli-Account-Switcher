@@ -1,3 +1,4 @@
+using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -25,6 +26,7 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
         _applicationSettings.PropertyChanged += OnApplicationSettingsPropertyChanged;
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<CodexAccount>>(this, OnCodexAccountChangedMessageReceived);
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<CodexAccountStoreDocument>>(this, OnCodexAccountStoreDocumentChangedMessageReceived);
+        WeakReferenceMessenger.Default.Register<ValueChangedMessage<CliProviderKind>>(this, OnProviderKindChangedMessageReceived);
         ReloadDashboard();
     }
 
@@ -95,6 +97,30 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
 
     public void ReloadDashboard()
     {
+        if (_applicationSettings.SelectedProviderKind == CliProviderKind.Codex)
+        {
+            ReloadCodexDashboard();
+            return;
+        }
+
+        _ = ReloadDashboardAsync();
+    }
+
+    public async Task ReloadDashboardAsync()
+    {
+        if (_applicationSettings.SelectedProviderKind == CliProviderKind.Codex)
+        {
+            ReloadCodexDashboard();
+            return;
+        }
+
+        await ReloadClaudeCodeDashboardAsync();
+    }
+
+    public async Task RefreshActiveProviderAccountAsync() => await ReloadDashboardAsync();
+
+    private void ReloadCodexDashboard()
+    {
         var codexAccounts = _codexAccountService.GetAccounts();
         var accountViewModels = codexAccounts.Select(codexAccount => new CodexAccountViewModel(codexAccount, _applicationSettings)).ToList();
 
@@ -112,6 +138,7 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
         _applicationSettings.PropertyChanged -= OnApplicationSettingsPropertyChanged;
         WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CodexAccount>>(this);
         WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CodexAccountStoreDocument>>(this);
+        WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CliProviderKind>>(this);
     }
 
     private void OnApplicationSettingsPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArguments)
@@ -123,14 +150,59 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
 
     private void OnCodexAccountChangedMessageReceived(object recipient, ValueChangedMessage<CodexAccount> valueChangedMessage)
     {
+        if (_applicationSettings.SelectedProviderKind != CliProviderKind.Codex) return;
         if (_dispatcherQueue.HasThreadAccess) ReloadDashboard();
         else _dispatcherQueue.TryEnqueue(ReloadDashboard);
     }
 
     private void OnCodexAccountStoreDocumentChangedMessageReceived(object recipient, ValueChangedMessage<CodexAccountStoreDocument> valueChangedMessage)
     {
+        if (_applicationSettings.SelectedProviderKind != CliProviderKind.Codex) return;
         if (_dispatcherQueue.HasThreadAccess) ReloadDashboard();
         else _dispatcherQueue.TryEnqueue(ReloadDashboard);
+    }
+
+    private void OnProviderKindChangedMessageReceived(object recipient, ValueChangedMessage<CliProviderKind> valueChangedMessage) => QueueReloadDashboard();
+
+    private async Task ReloadClaudeCodeDashboardAsync()
+    {
+        try
+        {
+            var storedProviderAccounts = await App.CliProviderAccountService.GetClaudeCodeAccountsAsync();
+            var accountViewModels = storedProviderAccounts.Select(storedProviderAccount => new CodexAccountViewModel(storedProviderAccount, _applicationSettings)).ToList();
+            foreach (var accountViewModel in accountViewModels) ApplyClaudeCodeUsageSnapshotCache(accountViewModel);
+
+            var activeAccountViewModel = accountViewModels.FirstOrDefault(accountViewModel => accountViewModel.IsActive);
+
+            AccountCountText = GetFormattedString("DashboardPageViewModel_AccountCountFormat", accountViewModels.Count);
+            SetAverageUsageProperties(accountViewModels);
+            SetLowUsageSummaryProperties(accountViewModels);
+            SetActiveAccountProperties(activeAccountViewModel);
+            SetLowUsageAccounts(accountViewModels);
+        }
+        catch
+        {
+            AccountCountText = GetFormattedString("DashboardPageViewModel_AccountCountFormat", 0);
+            SetUnknownAverageUsageProperties();
+            SetLowUsageSummaryProperties([]);
+            SetActiveAccountProperties(null);
+            SetLowUsageAccounts([]);
+        }
+    }
+
+    private void QueueReloadDashboard()
+    {
+        if (_dispatcherQueue.HasThreadAccess) _ = ReloadDashboardAsync();
+        else _dispatcherQueue.TryEnqueue(() => _ = ReloadDashboardAsync());
+    }
+
+    private static void ApplyClaudeCodeUsageSnapshotCache(CodexAccountViewModel accountViewModel)
+    {
+        if (App.CliProviderAccountService.TryGetClaudeCodeUsageSnapshot(accountViewModel.AccountIdentifier, out var providerUsageSnapshot))
+        {
+            var usageRefreshTime = App.CliProviderAccountService.TryGetClaudeCodeUsageRefreshTime(accountViewModel.AccountIdentifier, out var cachedUsageRefreshTime) ? cachedUsageRefreshTime : DateTimeOffset.UtcNow;
+            accountViewModel.UpdateProviderUsageSnapshot(providerUsageSnapshot, usageRefreshTime);
+        }
     }
 
     private void SetAverageUsageProperties(IReadOnlyList<CodexAccount> codexAccounts)
@@ -142,6 +214,25 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
         PrimaryAverageUsageRemainingPercentage = ClampUsageRemainingPercentage(primaryAverageUsageRemainingPercentage);
         SecondaryAverageUsageRemainingText = FormatUsageRemainingPercentage(secondaryAverageUsageRemainingPercentage);
         SecondaryAverageUsageRemainingPercentage = ClampUsageRemainingPercentage(secondaryAverageUsageRemainingPercentage);
+    }
+
+    private void SetAverageUsageProperties(IReadOnlyList<CodexAccountViewModel> accountViewModels)
+    {
+        var primaryAverageUsageRemainingPercentage = CalculateAverageUsageRemainingPercentage(accountViewModels, accountViewModel => accountViewModel.ProviderUsageSnapshot.FiveHour.RemainingPercentage);
+        var secondaryAverageUsageRemainingPercentage = CalculateAverageUsageRemainingPercentage(accountViewModels, accountViewModel => accountViewModel.ProviderUsageSnapshot.SevenDay.RemainingPercentage);
+
+        PrimaryAverageUsageRemainingText = FormatUsageRemainingPercentage(primaryAverageUsageRemainingPercentage);
+        PrimaryAverageUsageRemainingPercentage = ClampUsageRemainingPercentage(primaryAverageUsageRemainingPercentage);
+        SecondaryAverageUsageRemainingText = FormatUsageRemainingPercentage(secondaryAverageUsageRemainingPercentage);
+        SecondaryAverageUsageRemainingPercentage = ClampUsageRemainingPercentage(secondaryAverageUsageRemainingPercentage);
+    }
+
+    private void SetUnknownAverageUsageProperties()
+    {
+        PrimaryAverageUsageRemainingText = GetLocalizedString("CodexAccountViewModel_UnknownUsage");
+        PrimaryAverageUsageRemainingPercentage = 0;
+        SecondaryAverageUsageRemainingText = GetLocalizedString("CodexAccountViewModel_UnknownUsage");
+        SecondaryAverageUsageRemainingPercentage = 0;
     }
 
     private void SetLowUsageSummaryProperties(IReadOnlyList<CodexAccountViewModel> accountViewModels)
@@ -198,6 +289,13 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
     private static int CalculateAverageUsageRemainingPercentage(IEnumerable<CodexAccount> codexAccounts, Func<CodexAccount, int> remainingPercentageSelector)
     {
         var knownRemainingPercentages = codexAccounts.Select(remainingPercentageSelector).Where(remainingPercentage => remainingPercentage >= 0).ToList();
+        if (knownRemainingPercentages.Count == 0) return -1;
+        return (int)Math.Round(knownRemainingPercentages.Average(), MidpointRounding.AwayFromZero);
+    }
+
+    private static int CalculateAverageUsageRemainingPercentage(IEnumerable<CodexAccountViewModel> accountViewModels, Func<CodexAccountViewModel, int> remainingPercentageSelector)
+    {
+        var knownRemainingPercentages = accountViewModels.Select(remainingPercentageSelector).Where(remainingPercentage => remainingPercentage >= 0).ToList();
         if (knownRemainingPercentages.Count == 0) return -1;
         return (int)Math.Round(knownRemainingPercentages.Average(), MidpointRounding.AwayFromZero);
     }

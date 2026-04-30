@@ -1,3 +1,4 @@
+using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.Services;
 using CliAccountSwitcher.WinUI.Views;
@@ -16,6 +17,7 @@ public partial class App : Application
     private static MainWindow s_mainWindow;
     private static bool s_shouldShowMainWindowAfterLaunch;
     private static AppActivationArguments s_pendingApplicationActivationArguments;
+    private static IReadOnlyDictionary<CliProviderKind, IProviderAccountActions> s_providerAccountActionsByKind;
     private MainPageNavigationSection? _pendingNotificationNavigationSection;
 
     // Services
@@ -34,6 +36,8 @@ public partial class App : Application
     public static StoreUpdateService StoreUpdateService { get; private set; }
 
     public static CodexAccountService CodexAccountService { get; private set; }
+
+    public static CliProviderAccountService CliProviderAccountService { get; private set; }
 
     public static CodexApplicationRestartService CodexApplicationRestartService { get; private set; }
 
@@ -57,6 +61,12 @@ public partial class App : Application
         StartupRegistrationService = new StartupRegistrationService();
         StoreUpdateService = new StoreUpdateService(ApplicationSettings, ApplicationNotificationService);
         CodexAccountService = new CodexAccountService(ApplicationSettingsService, ApplicationNotificationService);
+        CliProviderAccountService = new CliProviderAccountService();
+        s_providerAccountActionsByKind = new Dictionary<CliProviderKind, IProviderAccountActions>
+        {
+            [CliProviderKind.Codex] = new CodexProviderAccountActions(CodexAccountService),
+            [CliProviderKind.ClaudeCode] = new ClaudeCodeProviderAccountActions(CliProviderAccountService)
+        };
         CodexApplicationRestartService = new CodexApplicationRestartService();
         RegisterAppNotificationManager();
         StoreUpdateService.Start();
@@ -103,6 +113,12 @@ public partial class App : Application
         }
 
         s_currentApplication.ProcessRedirectedActivationArguments(applicationActivationArguments);
+    }
+
+    public static IProviderAccountActions GetProviderAccountActions(CliProviderKind providerKind)
+    {
+        if (s_providerAccountActionsByKind is not null && s_providerAccountActionsByKind.TryGetValue(providerKind, out var providerAccountActions)) return providerAccountActions;
+        throw new ArgumentOutOfRangeException(nameof(providerKind), providerKind, "Unknown provider kind.");
     }
 
     private void RegisterAppNotificationManager()

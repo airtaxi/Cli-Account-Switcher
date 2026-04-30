@@ -18,10 +18,12 @@
 
         <StackPanel Grid.Row="0" Spacing="6">
             <TextBlock
+                x:Name="CurrentAccountTitleTextBlock"
                 x:Uid="CurrentAccountAddAccountPage_TitleTextBlock"
                 FontSize="22"
                 FontWeight="SemiBold" />
             <TextBlock
+                x:Name="CurrentAccountDescriptionTextBlock"
                 x:Uid="CurrentAccountAddAccountPage_DescriptionTextBlock"
                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                 TextWrapping="Wrap" />
@@ -37,7 +39,9 @@
                 Style="{StaticResource AccentButtonStyle}">
                 <StackPanel Orientation="Horizontal" Spacing="6">
                     <FontIcon FontSize="14" Glyph="&#xE8B5;" />
-                    <TextBlock x:Uid="CurrentAccountAddAccountPage_ImportButtonTextBlock" />
+                    <TextBlock
+                        x:Name="CurrentAccountImportButtonTextBlock"
+                        x:Uid="CurrentAccountAddAccountPage_ImportButtonTextBlock" />
                 </StackPanel>
             </Button>
             <ProgressRing
@@ -56,7 +60,10 @@
             BorderThickness="1"
             CornerRadius="8">
             <StackPanel Spacing="6">
-                <TextBlock x:Uid="CurrentAccountAddAccountPage_FilePathHeaderTextBlock" FontWeight="SemiBold" />
+                <TextBlock
+                    x:Name="CurrentAccountFilePathHeaderTextBlock"
+                    x:Uid="CurrentAccountAddAccountPage_FilePathHeaderTextBlock"
+                    FontWeight="SemiBold" />
                 <TextBlock
                     FontFamily="Consolas"
                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"

@@ -1,3 +1,4 @@
+using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Helpers;
 using CliAccountSwitcher.WinUI.Models;
 using Microsoft.UI.Xaml;
@@ -64,6 +65,7 @@ public sealed class ApplicationSettingsService
         applicationSettings.SchemaVersion = ApplicationSettings.CurrentSchemaVersion;
         applicationSettings.Theme = applicationSettings.Theme is ElementTheme.Default or ElementTheme.Light or ElementTheme.Dark ? applicationSettings.Theme : ElementTheme.Default;
         applicationSettings.LanguageOverride = NormalizeLanguageOverride(applicationSettings.LanguageOverride);
+        applicationSettings.SelectedProviderKind = NormalizeSelectedProviderKind(applicationSettings.SelectedProviderKind);
         applicationSettings.ActiveAccountUsageRefreshIntervalSeconds = NormalizeRefreshIntervalSeconds(applicationSettings.ActiveAccountUsageRefreshIntervalSeconds, ApplicationSettings.DefaultActiveAccountUsageRefreshIntervalSeconds);
         applicationSettings.InactiveAccountUsageRefreshIntervalSeconds = NormalizeRefreshIntervalSeconds(applicationSettings.InactiveAccountUsageRefreshIntervalSeconds, ApplicationSettings.DefaultInactiveAccountUsageRefreshIntervalSeconds);
         applicationSettings.PrimaryUsageWarningThresholdPercentage = NormalizePercentage(applicationSettings.PrimaryUsageWarningThresholdPercentage);
@@ -75,6 +77,7 @@ public sealed class ApplicationSettingsService
         destinationApplicationSettings.SchemaVersion = sourceApplicationSettings.SchemaVersion;
         destinationApplicationSettings.Theme = sourceApplicationSettings.Theme;
         destinationApplicationSettings.LanguageOverride = sourceApplicationSettings.LanguageOverride;
+        destinationApplicationSettings.SelectedProviderKind = sourceApplicationSettings.SelectedProviderKind;
         destinationApplicationSettings.IsAutomaticUpdateCheckEnabled = sourceApplicationSettings.IsAutomaticUpdateCheckEnabled;
         destinationApplicationSettings.IsStartupLaunchEnabled = sourceApplicationSettings.IsStartupLaunchEnabled;
         destinationApplicationSettings.IsExpiredAccountAutomaticDeletionEnabled = sourceApplicationSettings.IsExpiredAccountAutomaticDeletionEnabled;
@@ -90,6 +93,8 @@ public sealed class ApplicationSettingsService
     }
 
     private static string NormalizeLanguageOverride(string languageOverride) => languageOverride is "ko-KR" or "en-US" or "ja-JP" or "zh-Hans" or "zh-Hant" ? languageOverride : "";
+
+    private static CliProviderKind NormalizeSelectedProviderKind(CliProviderKind selectedProviderKind) => selectedProviderKind is CliProviderKind.Codex or CliProviderKind.ClaudeCode ? selectedProviderKind : CliProviderKind.Codex;
 
     private static int NormalizeRefreshIntervalSeconds(int refreshIntervalSeconds, int defaultRefreshIntervalSeconds) => refreshIntervalSeconds <= 0 ? defaultRefreshIntervalSeconds : Math.Clamp(refreshIntervalSeconds, 60, 86400);
 

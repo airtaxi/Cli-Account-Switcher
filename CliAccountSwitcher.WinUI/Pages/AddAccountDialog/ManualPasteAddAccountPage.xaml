@@ -19,10 +19,12 @@
 
         <StackPanel Grid.Row="0" Spacing="6">
             <TextBlock
+                x:Name="ManualTitleTextBlock"
                 x:Uid="ManualPasteAddAccountPage_TitleTextBlock"
                 FontSize="22"
                 FontWeight="SemiBold" />
             <TextBlock
+                x:Name="ManualDescriptionTextBlock"
                 x:Uid="ManualPasteAddAccountPage_DescriptionTextBlock"
                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                 TextWrapping="Wrap" />
@@ -44,7 +46,9 @@
                 Style="{StaticResource AccentButtonStyle}">
                 <StackPanel Orientation="Horizontal" Spacing="6">
                     <FontIcon FontSize="14" Glyph="&#xE8B5;" />
-                    <TextBlock x:Uid="ManualPasteAddAccountPage_LoadInputsTextBlock" />
+                    <TextBlock
+                        x:Name="ManualLoadInputsTextBlock"
+                        x:Uid="ManualPasteAddAccountPage_LoadInputsTextBlock" />
                 </StackPanel>
             </Button>
             <ProgressRing
@@ -103,6 +107,32 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <Grid
+            x:Name="ClaudeCodeManualInputGrid"
+            Grid.Row="2"
+            RowSpacing="12"
+            Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBox
+                x:Name="ClaudeCodeCredentialsJsonTextBox"
+                x:Uid="ManualPasteAddAccountPage_ClaudeCodeCredentialsJsonTextBox"
+                Grid.Row="0"
+                AcceptsReturn="True"
+                FontFamily="Consolas"
+                TextWrapping="NoWrap" />
+            <TextBox
+                x:Name="ClaudeCodeGlobalConfigJsonTextBox"
+                x:Uid="ManualPasteAddAccountPage_ClaudeCodeGlobalConfigJsonTextBox"
+                Grid.Row="1"
+                AcceptsReturn="True"
+                FontFamily="Consolas"
+                TextWrapping="NoWrap" />
+        </Grid>
 
         <InfoBar
             x:Name="ManualErrorInfoBar"
