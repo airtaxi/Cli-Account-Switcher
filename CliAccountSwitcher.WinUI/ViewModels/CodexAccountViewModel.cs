@@ -258,12 +258,14 @@ public sealed partial class CodexAccountViewModel : ObservableObject
         if (elapsedDuration <= TimeSpan.Zero) return false;
 
         var usageWindowAverageUnitCount = usageWindowDuration.TotalSeconds / averageUnitDuration.TotalSeconds;
+        if (usageWindowAverageUnitCount <= 0) return false;
+
         var elapsedAverageUnitCount = elapsedDuration.TotalSeconds / averageUnitDuration.TotalSeconds;
-        if (usageWindowAverageUnitCount <= 0 || elapsedAverageUnitCount <= 0) return false;
+        elapsedAverageUnitCount = Math.Min(Math.Max(elapsedAverageUnitCount, 1.0), usageWindowAverageUnitCount);
 
         var averageUsageLimitPercentage = 100.0 / usageWindowAverageUnitCount;
         var currentAverageUsagePercentage = usedPercentage / elapsedAverageUnitCount;
-        return currentAverageUsagePercentage >= averageUsageLimitPercentage;
+        return currentAverageUsagePercentage > averageUsageLimitPercentage;
     }
 
     private static int NormalizeUsageWarningThresholdPercentage(int usageWarningThresholdPercentage) => Math.Clamp(usageWarningThresholdPercentage, 0, 100);
