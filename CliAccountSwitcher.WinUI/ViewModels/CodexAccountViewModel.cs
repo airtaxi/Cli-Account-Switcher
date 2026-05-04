@@ -9,6 +9,11 @@ namespace CliAccountSwitcher.WinUI.ViewModels;
 
 public sealed partial class CodexAccountViewModel : ObservableObject
 {
+    private static readonly TimeSpan s_primaryUsageWindowDuration = TimeSpan.FromHours(5);
+    private static readonly TimeSpan s_primaryUsageAverageUnitDuration = TimeSpan.FromHours(1);
+    private static readonly TimeSpan s_secondaryUsageWindowDuration = TimeSpan.FromDays(7);
+    private static readonly TimeSpan s_secondaryUsageAverageUnitDuration = TimeSpan.FromDays(1);
+
     private readonly ApplicationSettings _applicationSettings;
     private DateTimeOffset? _providerUsageRefreshTime;
 
@@ -84,6 +89,10 @@ public sealed partial class CodexAccountViewModel : ObservableObject
 
     public bool IsSecondaryUsageUnderWarningThreshold => ProviderKind == CliProviderKind.Codex ? IsUsageUnderWarningThreshold(CodexAccount.LastCodexUsageSnapshot.SecondaryWindow, _applicationSettings.SecondaryUsageWarningThresholdPercentage) : IsUsageUnderWarningThreshold(ProviderUsageSnapshot.SevenDay, _applicationSettings.SecondaryUsageWarningThresholdPercentage);
 
+    public bool IsPrimaryUsageOverAverageRateLimit => ProviderKind == CliProviderKind.Codex ? IsUsageOverAverageRateLimit(CodexAccount.LastCodexUsageSnapshot.PrimaryWindow, s_primaryUsageWindowDuration, s_primaryUsageAverageUnitDuration) : IsUsageOverAverageRateLimit(ProviderUsageSnapshot.FiveHour, s_primaryUsageWindowDuration, s_primaryUsageAverageUnitDuration);
+
+    public bool IsSecondaryUsageOverAverageRateLimit => ProviderKind == CliProviderKind.Codex ? IsUsageOverAverageRateLimit(CodexAccount.LastCodexUsageSnapshot.SecondaryWindow, s_secondaryUsageWindowDuration, s_secondaryUsageAverageUnitDuration) : IsUsageOverAverageRateLimit(ProviderUsageSnapshot.SevenDay, s_secondaryUsageWindowDuration, s_secondaryUsageAverageUnitDuration);
+
     public string LastUsageRefreshText => ProviderKind == CliProviderKind.Codex
         ? GetFormattedString("CodexAccountViewModel_LastUsageRefreshFormat", CodexAccount.LastUsageRefreshTime is null ? GetLocalizedString("CodexAccountViewModel_NotRefreshed") : CodexAccount.LastUsageRefreshTime.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.CurrentCulture))
         : GetFormattedString("CodexAccountViewModel_LastUpdatedFormat", (_providerUsageRefreshTime ?? StoredProviderAccount.LastUpdated).ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.CurrentCulture));
@@ -154,6 +163,8 @@ public sealed partial class CodexAccountViewModel : ObservableObject
         OnPropertyChanged(nameof(SecondaryUsageRemainingPercentage));
         OnPropertyChanged(nameof(IsPrimaryUsageUnderWarningThreshold));
         OnPropertyChanged(nameof(IsSecondaryUsageUnderWarningThreshold));
+        OnPropertyChanged(nameof(IsPrimaryUsageOverAverageRateLimit));
+        OnPropertyChanged(nameof(IsSecondaryUsageOverAverageRateLimit));
         OnPropertyChanged(nameof(LastUsageRefreshText));
         OnPropertyChanged(nameof(SearchText));
         OnPropertyChanged(nameof(CanRename));
@@ -212,6 +223,8 @@ public sealed partial class CodexAccountViewModel : ObservableObject
 
     private static bool IsUsageUnderWarningThreshold(CodexUsageWindow codexUsageWindow, int usageWarningThresholdPercentage) => codexUsageWindow.RemainingPercentage >= 0 && codexUsageWindow.RemainingPercentage <= NormalizeUsageWarningThresholdPercentage(usageWarningThresholdPercentage);
 
+    private static bool IsUsageOverAverageRateLimit(CodexUsageWindow codexUsageWindow, TimeSpan usageWindowDuration, TimeSpan averageUnitDuration) => IsUsageOverAverageRateLimit(codexUsageWindow.UsedPercentage, codexUsageWindow.ResetAfterSeconds, usageWindowDuration, averageUnitDuration);
+
     private static string FormatUsageWindow(ProviderUsageWindow providerUsageWindow)
     {
         if (providerUsageWindow.RemainingPercentage < 0) return GetLocalizedString("CodexAccountViewModel_UnknownUsage");
@@ -236,6 +249,28 @@ public sealed partial class CodexAccountViewModel : ObservableObject
     private static int ClampUsageRemainingPercentage(ProviderUsageWindow providerUsageWindow) => providerUsageWindow.RemainingPercentage < 0 ? 0 : Math.Clamp(providerUsageWindow.RemainingPercentage, 0, 100);
 
     private static bool IsUsageUnderWarningThreshold(ProviderUsageWindow providerUsageWindow, int usageWarningThresholdPercentage) => providerUsageWindow.RemainingPercentage >= 0 && providerUsageWindow.RemainingPercentage <= NormalizeUsageWarningThresholdPercentage(usageWarningThresholdPercentage);
+
+    private static bool IsUsageOverAverageRateLimit(ProviderUsageWindow providerUsageWindow, TimeSpan usageWindowDuration, TimeSpan averageUnitDuration) => IsUsageOverAverageRateLimit(providerUsageWindow.UsedPercentage, providerUsageWindow.ResetAfterSeconds, usageWindowDuration, averageUnitDuration);
+
+    private static bool IsUsageOverAverageRateLimit(int usedPercentage, long resetAfterSeconds, TimeSpan usageWindowDuration, TimeSpan averageUnitDuration)
+    {
+        if (usedPercentage < 0 || usedPercentage > 100 || resetAfterSeconds < 0) return false;
+        if (usageWindowDuration <= TimeSpan.Zero || averageUnitDuration <= TimeSpan.Zero) return false;
+
+        var resetAfterDuration = TimeSpan.FromSeconds(resetAfterSeconds);
+        if (resetAfterDuration >= usageWindowDuration) return false;
+
+        var elapsedDuration = usageWindowDuration - resetAfterDuration;
+        if (elapsedDuration <= TimeSpan.Zero) return false;
+
+        var usageWindowAverageUnitCount = usageWindowDuration.TotalSeconds / averageUnitDuration.TotalSeconds;
+        var elapsedAverageUnitCount = elapsedDuration.TotalSeconds / averageUnitDuration.TotalSeconds;
+        if (usageWindowAverageUnitCount <= 0 || elapsedAverageUnitCount <= 0) return false;
+
+        var averageUsageLimitPercentage = 100.0 / usageWindowAverageUnitCount;
+        var currentAverageUsagePercentage = usedPercentage / elapsedAverageUnitCount;
+        return currentAverageUsagePercentage >= averageUsageLimitPercentage;
+    }
 
     private static int NormalizeUsageWarningThresholdPercentage(int usageWarningThresholdPercentage) => Math.Clamp(usageWarningThresholdPercentage, 0, 100);
 

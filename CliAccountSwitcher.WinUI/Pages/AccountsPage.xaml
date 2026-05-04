@@ -342,10 +342,24 @@
                                                     Text="{x:Bind PrimaryUsageResetText, Mode=OneWay}"
                                                     TextTrimming="CharacterEllipsis" />
                                             </Grid>
-                                            <ProgressBar
-                                                Foreground="{x:Bind IsPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
-                                                Maximum="100"
-                                                Value="{x:Bind PrimaryUsageRemainingPercentage, Mode=OneWay}" />
+                                            <Grid>
+                                                <ProgressBar
+                                                    Foreground="{x:Bind IsPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
+                                                    Maximum="100"
+                                                    Value="{x:Bind PrimaryUsageRemainingPercentage, Mode=OneWay}" />
+                                                <ProgressBar
+                                                    Foreground="{ThemeResource UsageAverageRateWarningProgressBarForegroundBrush}"
+                                                    Maximum="100"
+                                                    Value="{x:Bind PrimaryUsageRemainingPercentage, Mode=OneWay}"
+                                                    Visibility="{x:Bind IsPrimaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                            </Grid>
+                                            <TextBlock
+                                                x:Uid="PrimaryUsageAverageRateWarningTextBlock"
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                Foreground="{ThemeResource UsageAverageRateWarningTextBrush}"
+                                                TextTrimming="CharacterEllipsis"
+                                                Visibility="{x:Bind IsPrimaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                                         </StackPanel>
                                         <Border
                                             Grid.Row="1"
@@ -381,10 +395,24 @@
                                                     Text="{x:Bind SecondaryUsageResetText, Mode=OneWay}"
                                                     TextTrimming="CharacterEllipsis" />
                                             </Grid>
-                                            <ProgressBar
-                                                Foreground="{x:Bind IsSecondaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
-                                                Maximum="100"
-                                                Value="{x:Bind SecondaryUsageRemainingPercentage, Mode=OneWay}" />
+                                            <Grid>
+                                                <ProgressBar
+                                                    Foreground="{x:Bind IsSecondaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
+                                                    Maximum="100"
+                                                    Value="{x:Bind SecondaryUsageRemainingPercentage, Mode=OneWay}" />
+                                                <ProgressBar
+                                                    Foreground="{ThemeResource UsageAverageRateWarningProgressBarForegroundBrush}"
+                                                    Maximum="100"
+                                                    Value="{x:Bind SecondaryUsageRemainingPercentage, Mode=OneWay}"
+                                                    Visibility="{x:Bind IsSecondaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                            </Grid>
+                                            <TextBlock
+                                                x:Uid="SecondaryUsageAverageRateWarningTextBlock"
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                Foreground="{ThemeResource UsageAverageRateWarningTextBrush}"
+                                                TextTrimming="CharacterEllipsis"
+                                                Visibility="{x:Bind IsSecondaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                                         </StackPanel>
                                         <TextBlock
                                             Grid.Row="2"

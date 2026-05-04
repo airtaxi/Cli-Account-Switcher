@@ -90,6 +90,12 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
     public partial bool IsActiveAccountSecondaryUsageUnderWarningThreshold { get; set; }
 
     [ObservableProperty]
+    public partial bool IsActiveAccountPrimaryUsageOverAverageRateLimit { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsActiveAccountSecondaryUsageOverAverageRateLimit { get; set; }
+
+    [ObservableProperty]
     public partial bool HasLowUsageAccounts { get; set; }
 
     [ObservableProperty]
@@ -117,7 +123,13 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
         await ReloadClaudeCodeDashboardAsync();
     }
 
-    public async Task RefreshActiveProviderAccountAsync() => await ReloadDashboardAsync();
+    public async Task RefreshActiveProviderAccountAsync()
+    {
+        if (_applicationSettings.SelectedProviderKind == CliProviderKind.Codex) await _codexAccountService.RefreshActiveAccountAsync();
+        else await App.CliProviderAccountService.RefreshActiveClaudeCodeAccountAsync();
+
+        await ReloadDashboardAsync();
+    }
 
     private void ReloadCodexDashboard()
     {
@@ -259,6 +271,8 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
         ActiveAccountLastUsageRefreshText = activeAccountViewModel?.LastUsageRefreshText ?? "";
         IsActiveAccountPrimaryUsageUnderWarningThreshold = activeAccountViewModel?.IsPrimaryUsageUnderWarningThreshold == true;
         IsActiveAccountSecondaryUsageUnderWarningThreshold = activeAccountViewModel?.IsSecondaryUsageUnderWarningThreshold == true;
+        IsActiveAccountPrimaryUsageOverAverageRateLimit = activeAccountViewModel?.IsPrimaryUsageOverAverageRateLimit == true;
+        IsActiveAccountSecondaryUsageOverAverageRateLimit = activeAccountViewModel?.IsSecondaryUsageOverAverageRateLimit == true;
     }
 
     private void SetLowUsageAccounts(IReadOnlyList<CodexAccountViewModel> accountViewModels)

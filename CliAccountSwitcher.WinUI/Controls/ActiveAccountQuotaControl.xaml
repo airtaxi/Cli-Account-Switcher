@@ -120,10 +120,24 @@
                                 Text="{x:Bind ActiveAccountPrimaryUsageRemainingText, Mode=OneWay}"
                                 TextTrimming="WordEllipsis" />
                         </Grid>
-                        <ProgressBar
-                            Foreground="{x:Bind IsActiveAccountPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
-                            Maximum="100"
-                            Value="{x:Bind ActiveAccountPrimaryUsageRemainingPercentage, Mode=OneWay}" />
+                        <Grid>
+                            <ProgressBar
+                                Foreground="{x:Bind IsActiveAccountPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
+                                Maximum="100"
+                                Value="{x:Bind ActiveAccountPrimaryUsageRemainingPercentage, Mode=OneWay}" />
+                            <ProgressBar
+                                Foreground="{ThemeResource UsageAverageRateWarningProgressBarForegroundBrush}"
+                                Maximum="100"
+                                Value="{x:Bind ActiveAccountPrimaryUsageRemainingPercentage, Mode=OneWay}"
+                                Visibility="{x:Bind IsActiveAccountPrimaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        </Grid>
+                        <TextBlock
+                            x:Uid="PrimaryUsageAverageRateWarningTextBlock"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Foreground="{ThemeResource UsageAverageRateWarningTextBrush}"
+                            TextTrimming="WordEllipsis"
+                            Visibility="{x:Bind IsActiveAccountPrimaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Spacing="8">
@@ -145,10 +159,24 @@
                                 Text="{x:Bind ActiveAccountSecondaryUsageRemainingText, Mode=OneWay}"
                                 TextTrimming="WordEllipsis" />
                         </Grid>
-                        <ProgressBar
-                            Foreground="{x:Bind IsActiveAccountSecondaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
-                            Maximum="100"
-                            Value="{x:Bind ActiveAccountSecondaryUsageRemainingPercentage, Mode=OneWay}" />
+                        <Grid>
+                            <ProgressBar
+                                Foreground="{x:Bind IsActiveAccountSecondaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
+                                Maximum="100"
+                                Value="{x:Bind ActiveAccountSecondaryUsageRemainingPercentage, Mode=OneWay}" />
+                            <ProgressBar
+                                Foreground="{ThemeResource UsageAverageRateWarningProgressBarForegroundBrush}"
+                                Maximum="100"
+                                Value="{x:Bind ActiveAccountSecondaryUsageRemainingPercentage, Mode=OneWay}"
+                                Visibility="{x:Bind IsActiveAccountSecondaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        </Grid>
+                        <TextBlock
+                            x:Uid="SecondaryUsageAverageRateWarningTextBlock"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Foreground="{ThemeResource UsageAverageRateWarningTextBrush}"
+                            TextTrimming="WordEllipsis"
+                            Visibility="{x:Bind IsActiveAccountSecondaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                     </StackPanel>
                 </Grid>
             </StackPanel>

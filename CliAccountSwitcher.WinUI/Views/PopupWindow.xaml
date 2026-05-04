@@ -10,11 +10,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:winuiex="using:WinUIEx"
     Width="480"
-    Height="308"
     Activated="OnPopupWindowActivated"
     Closed="OnPopupWindowClosed"
     IsMaximizable="False"
     IsResizable="False"
+    MinHeight="0"
     mc:Ignorable="d">
 
     <Window.SystemBackdrop>

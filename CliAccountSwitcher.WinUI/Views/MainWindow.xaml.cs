@@ -23,7 +23,6 @@ public sealed partial class MainWindow : WindowEx
     private const uint WindowsMessageQueryEndSession = 0x0011;
     private const uint WindowsMessageEndSession = 0x0016;
     private const nuint MainWindowSubclassIdentifier = 1;
-    private const int ActiveAccountQuotaPopupHorizontalOffset = 220;
 
     private delegate nint WindowSubclassProcedure(nint windowHandle, uint message, nint messageWordParameter, nint messageLongParameter, nuint subclassIdentifier, nuint referenceData);
 
@@ -186,34 +185,7 @@ public sealed partial class MainWindow : WindowEx
         var activeAccountQuotaPopupWindow = new PopupWindow();
         _activeAccountQuotaPopupWindow = activeAccountQuotaPopupWindow;
         activeAccountQuotaPopupWindow.Closed += OnActiveAccountQuotaPopupWindowClosed;
-
-        var rasterizationScale = (double)activeAccountQuotaPopupWindow.GetDpiForWindow() / 96;
-        var taskbarRectangle = TaskbarHelper.GetTaskbarRectangle();
-        var taskbarPosition = TaskbarHelper.GetTaskbarPosition();
-
-        var positionX = taskbarRectangle.Right - ((activeAccountQuotaPopupWindow.Width + ActiveAccountQuotaPopupHorizontalOffset) * rasterizationScale);
-        var positionY = taskbarRectangle.Top - (activeAccountQuotaPopupWindow.Height * rasterizationScale);
-
-        switch (taskbarPosition)
-        {
-            case TaskbarPosition.Top:
-                positionX = taskbarRectangle.Right - ((activeAccountQuotaPopupWindow.Width + ActiveAccountQuotaPopupHorizontalOffset) * rasterizationScale);
-                positionY = taskbarRectangle.Bottom;
-                break;
-
-            case TaskbarPosition.Left:
-                positionX = taskbarRectangle.Right;
-                positionY = taskbarRectangle.Bottom - (activeAccountQuotaPopupWindow.Height * rasterizationScale);
-                break;
-
-            case TaskbarPosition.Right:
-                positionX = taskbarRectangle.Left - (activeAccountQuotaPopupWindow.Width * rasterizationScale);
-                positionY = taskbarRectangle.Bottom - (activeAccountQuotaPopupWindow.Height * rasterizationScale);
-                break;
-        }
-
-        activeAccountQuotaPopupWindow.Move((int)positionX, (int)positionY);
-        activeAccountQuotaPopupWindow.Activate();
+        activeAccountQuotaPopupWindow.ShowAboveTaskbarIcon();
     }
 
     private void OnCloseProgramMenuFlyoutItemClicked(object sender, RoutedEventArgs routedEventArguments) => Environment.Exit(0);

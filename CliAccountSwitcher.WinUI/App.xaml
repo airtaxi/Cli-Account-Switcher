@@ -22,6 +22,8 @@
                     <SolidColorBrush x:Key="UsageWarningLimitBadgeBackgroundBrush" Color="#FDE7E9" />
                     <SolidColorBrush x:Key="UsageWarningLimitBadgeForegroundBrush" Color="#A4262C" />
                     <SolidColorBrush x:Key="UsageWarningProgressBarForegroundBrush" Color="#C42B1C" />
+                    <SolidColorBrush x:Key="UsageAverageRateWarningProgressBarForegroundBrush" Color="#8B0000" />
+                    <SolidColorBrush x:Key="UsageAverageRateWarningTextBrush" Color="#8B0000" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <Color x:Key="ThemeColor">#000000</Color>
@@ -30,6 +32,8 @@
                     <SolidColorBrush x:Key="UsageWarningLimitBadgeBackgroundBrush" Color="#5A1F20" />
                     <SolidColorBrush x:Key="UsageWarningLimitBadgeForegroundBrush" Color="#FFDAD6" />
                     <SolidColorBrush x:Key="UsageWarningProgressBarForegroundBrush" Color="#FF9A9A" />
+                    <SolidColorBrush x:Key="UsageAverageRateWarningProgressBarForegroundBrush" Color="#FF6A6A" />
+                    <SolidColorBrush x:Key="UsageAverageRateWarningTextBrush" Color="#FF6A6A" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
 

@@ -558,6 +558,12 @@
   <data name="DashboardPage_ActiveSecondaryUsageLabelTextBlock.Text" xml:space="preserve">
     <value>7 天剩余</value>
   </data>
+  <data name="PrimaryUsageAverageRateWarningTextBlock.Text" xml:space="preserve">
+    <value>超过平均速度</value>
+  </data>
+  <data name="SecondaryUsageAverageRateWarningTextBlock.Text" xml:space="preserve">
+    <value>超过平均速度</value>
+  </data>
   <data name="DashboardPage_NoActiveAccountTitleTextBlock.Text" xml:space="preserve">
     <value>没有活跃账号。</value>
   </data>

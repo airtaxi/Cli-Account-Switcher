@@ -558,6 +558,12 @@
   <data name="DashboardPage_ActiveSecondaryUsageLabelTextBlock.Text" xml:space="preserve">
     <value>7日間残り</value>
   </data>
+  <data name="PrimaryUsageAverageRateWarningTextBlock.Text" xml:space="preserve">
+    <value>平均超過ペース</value>
+  </data>
+  <data name="SecondaryUsageAverageRateWarningTextBlock.Text" xml:space="preserve">
+    <value>平均超過ペース</value>
+  </data>
   <data name="DashboardPage_NoActiveAccountTitleTextBlock.Text" xml:space="preserve">
     <value>アクティブアカウントがありません。</value>
   </data>

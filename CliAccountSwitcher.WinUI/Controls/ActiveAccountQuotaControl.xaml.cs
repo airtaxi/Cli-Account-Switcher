@@ -79,6 +79,10 @@ public sealed partial class ActiveAccountQuotaControl : UserControl
 
     public bool IsActiveAccountSecondaryUsageUnderWarningThreshold => ViewModel?.IsActiveAccountSecondaryUsageUnderWarningThreshold == true;
 
+    public bool IsActiveAccountPrimaryUsageOverAverageRateLimit => ViewModel?.IsActiveAccountPrimaryUsageOverAverageRateLimit == true;
+
+    public bool IsActiveAccountSecondaryUsageOverAverageRateLimit => ViewModel?.IsActiveAccountSecondaryUsageOverAverageRateLimit == true;
+
     private static void OnViewModelPropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArguments)
     {
         var activeAccountQuotaControl = (ActiveAccountQuotaControl)dependencyObject;
