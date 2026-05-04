@@ -8,56 +8,25 @@ using CliAccountSwitcher.Api.Models.Usage;
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Helpers;
 using CliAccountSwitcher.WinUI.Models;
-using CommunityToolkit.Mvvm.Messaging;
-using CommunityToolkit.Mvvm.Messaging.Messages;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace CliAccountSwitcher.WinUI.Services;
 
-public sealed class CodexAccountService : IDisposable
+public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
 {
-    private readonly object _accountsLock = new();
-    private readonly List<CodexAccount> _accounts = [];
     private readonly SemaphoreSlim _saveSemaphore = new(1, 1);
-    private readonly SemaphoreSlim _refreshSemaphore = new(1, 1);
-    private readonly CancellationTokenSource _backgroundCancellationTokenSource = new();
-    private readonly ApplicationSettingsService _applicationSettingsService;
-    private readonly ApplicationNotificationService _applicationNotificationService;
     private readonly HttpClient _httpClient;
     private readonly CodexAuthenticationDocumentSerializer _codexAuthenticationDocumentSerializer = new();
     private readonly CodexOAuthClient _codexOAuthClient;
     private readonly CodexUsageClient _codexUsageClient;
-    private readonly object _refreshScheduleLock = new();
     private FileSystemWatcher _authenticationFileSystemWatcher;
-    private DateTimeOffset? _nextActiveUsageRefreshTime;
-    private DateTimeOffset? _nextInactiveUsageRefreshTime;
-    private bool _isUsageRefreshScheduleInitialized;
     private bool _disposed;
 
-    public TimeSpan ActiveStatusRefreshInterval { get; set; } = TimeSpan.FromMinutes(1);
-
-    public TimeSpan ActiveUsageRefreshInterval { get; private set; } = TimeSpan.FromSeconds(ApplicationSettings.DefaultActiveAccountUsageRefreshIntervalSeconds);
-
-    public TimeSpan InactiveUsageRefreshInterval { get; private set; } = TimeSpan.FromSeconds(ApplicationSettings.DefaultInactiveAccountUsageRefreshIntervalSeconds);
-
-    public bool IsActiveUsageRefreshEnabled { get; private set; } = true;
-
-    public bool IsInactiveUsageRefreshEnabled { get; private set; } = true;
-
     public CodexAccountService(ApplicationSettingsService applicationSettingsService, ApplicationNotificationService applicationNotificationService)
+        : base(applicationSettingsService, applicationNotificationService)
     {
-        _applicationSettingsService = applicationSettingsService;
-        _applicationNotificationService = applicationNotificationService;
-
         var codexApiClientOptions = new CodexApiClientOptions
         {
             CodexHomeDirectoryPath = Constants.CodexHomeDirectory
@@ -68,42 +37,18 @@ public sealed class CodexAccountService : IDisposable
         _httpClient = CodexHttpClientFactory.CreateDefault();
         _codexOAuthClient = new CodexOAuthClient(_httpClient, codexApiClientOptions, codexRequestMessageFactory);
         _codexUsageClient = new CodexUsageClient(_httpClient, codexRequestMessageFactory);
-
-        ApplyApplicationSettings();
-        LoadAccounts();
     }
 
-    public IReadOnlyList<CodexAccount> GetAccounts()
-    {
-        lock (_accountsLock) return [.. _accounts];
-    }
+    public override CliProviderKind ProviderKind => CliProviderKind.Codex;
 
-    public IReadOnlyList<ProviderAccount> GetProviderAccounts()
-    {
-        lock (_accountsLock) return _accounts.Select(CreateProviderAccount).ToArray();
-    }
+    public override string BackupFileNamePrefix => "codex-accounts";
 
-    public TimeSpan? GetActiveUsageRefreshRemainingTime()
-    {
-        lock (_refreshScheduleLock) return GetUsageRefreshRemainingTime(_nextActiveUsageRefreshTime, IsActiveUsageRefreshEnabled);
-    }
+    public override bool IsRenameSupported => true;
 
-    public TimeSpan? GetInactiveUsageRefreshRemainingTime()
+    public override async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
-        lock (_refreshScheduleLock) return GetUsageRefreshRemainingTime(_nextInactiveUsageRefreshTime, IsInactiveUsageRefreshEnabled);
-    }
-
-    public void Start()
-    {
-        ThrowIfDisposed();
-        _applicationSettingsService.SettingsChanged += OnApplicationSettingsServiceSettingsChanged;
+        await base.InitializeAsync(cancellationToken);
         StartAuthenticationFileSystemWatcher();
-        _ = RunActiveStatusRefreshLoopAsync();
-        _ = RunActiveUsageRefreshLoopAsync();
-        _ = RunInactiveUsageRefreshLoopAsync();
-        _ = RefreshActiveStatusesSilentlyAsync();
-        if (IsActiveUsageRefreshEnabled) _ = RefreshAccountsUsageSilentlyAsync(account => account.IsActive);
-        if (IsInactiveUsageRefreshEnabled) _ = RefreshAccountsUsageSilentlyAsync(account => !account.IsActive);
     }
 
     public CodexOAuthSession CreateOAuthSession() => _codexOAuthClient.CreateSession();
@@ -118,10 +63,10 @@ public sealed class CodexAccountService : IDisposable
     public async Task<CodexAccount> AddValidatedAuthenticationDocumentAsync(CodexAuthenticationDocument codexAuthenticationDocument, string customAlias = "", CancellationToken cancellationToken = default)
     {
         var codexAccount = await CreateValidatedAccountAsync(codexAuthenticationDocument, customAlias, cancellationToken);
-        UpsertAccount(codexAccount);
-        var changedAccounts = SynchronizeActiveStatuses();
-        await SaveAccountsAsync(cancellationToken);
-        SendAccountChangedMessages([codexAccount, .. changedAccounts]);
+        UpsertAccountState(codexAccount);
+        await SynchronizeActiveStatusesAsync(cancellationToken);
+        await SaveAccountStatesAsync(cancellationToken);
+        NotifyAccountsChanged();
         return codexAccount;
     }
 
@@ -137,69 +82,15 @@ public sealed class CodexAccountService : IDisposable
         return await AddValidatedAuthenticationDocumentTextAsync(authenticationDocumentText, "", cancellationToken);
     }
 
-    public async Task RefreshAllAccountsAsync(CancellationToken cancellationToken = default)
+    public override async Task RenameAccountAsync(string accountIdentifier, string customAlias, CancellationToken cancellationToken = default)
     {
-        await RefreshActiveStatusesAsync(cancellationToken);
-        await RefreshAccountsUsageAsync(_ => true, cancellationToken);
-    }
-
-    public async Task RefreshAccountsAsync(IEnumerable<string> accountIdentifiers, CancellationToken cancellationToken = default)
-    {
-        var accountIdentifierSet = accountIdentifiers.Where(accountIdentifier => !string.IsNullOrWhiteSpace(accountIdentifier)).ToHashSet(StringComparer.Ordinal);
-        if (accountIdentifierSet.Count == 0) return;
-
-        await RefreshActiveStatusesAsync(cancellationToken);
-        await RefreshAccountsUsageAsync(account => accountIdentifierSet.Contains(account.AccountIdentifier), cancellationToken);
-    }
-
-    public async Task RefreshActiveAccountAsync(CancellationToken cancellationToken = default)
-    {
-        await RefreshActiveStatusesAsync(cancellationToken);
-
-        var activeAccountIdentifier = GetAccounts().FirstOrDefault(account => account.IsActive)?.AccountIdentifier;
-        if (string.IsNullOrWhiteSpace(activeAccountIdentifier)) return;
-
-        await RefreshAccountsUsageAsync(account => string.Equals(account.AccountIdentifier, activeAccountIdentifier, StringComparison.Ordinal), cancellationToken);
-        ResetActiveUsageRefreshSchedule();
-    }
-
-    public async Task SwitchActiveAccountAsync(string accountIdentifier, CancellationToken cancellationToken = default)
-    {
-        var codexAccount = FindAccount(accountIdentifier) ?? throw new InvalidOperationException("The account does not exist.");
-        var authenticationDocumentText = _codexAuthenticationDocumentSerializer.Serialize(codexAccount.CodexAuthenticationDocument);
-        Directory.CreateDirectory(Constants.CodexHomeDirectory);
-        await File.WriteAllTextAsync(Constants.CurrentAuthenticationFilePath, authenticationDocumentText, cancellationToken);
-        await RefreshActiveStatusesAsync(cancellationToken);
-    }
-
-    public async Task RenameAccountAsync(string accountIdentifier, string customAlias, CancellationToken cancellationToken = default)
-    {
-        var codexAccount = FindAccount(accountIdentifier) ?? throw new InvalidOperationException("The account does not exist.");
+        var codexAccount = FindAccountState(accountIdentifier) ?? throw new InvalidOperationException("The account does not exist.");
         codexAccount.CustomAlias = customAlias.Trim();
-        await SaveAccountsAsync(cancellationToken);
-        SendAccountChangedMessage(codexAccount);
+        await SaveAccountStatesAsync(cancellationToken);
+        NotifyAccountsChanged();
     }
 
-    public async Task DeleteAccountsAsync(IEnumerable<string> accountIdentifiers, CancellationToken cancellationToken = default)
-    {
-        var accountIdentifierSet = accountIdentifiers.Where(accountIdentifier => !string.IsNullOrWhiteSpace(accountIdentifier)).ToHashSet(StringComparer.Ordinal);
-        if (accountIdentifierSet.Count == 0) return;
-
-        lock (_accountsLock) _accounts.RemoveAll(account => accountIdentifierSet.Contains(account.AccountIdentifier));
-        await SaveAccountsAsync(cancellationToken);
-        SendAccountsChangedMessage();
-    }
-
-    public async Task<int> DeleteExpiredAccountsAsync(CancellationToken cancellationToken = default)
-    {
-        int deletedCount;
-        lock (_accountsLock) deletedCount = _accounts.RemoveAll(account => account.IsTokenExpired);
-        if (deletedCount > 0) await SaveAccountsAsync(cancellationToken);
-        if (deletedCount > 0) SendAccountsChangedMessage();
-        return deletedCount;
-    }
-
-    public async Task ExportBackupAsync(string backupFilePath, CancellationToken cancellationToken = default)
+    public override async Task ExportBackupAsync(string backupFilePath, CancellationToken cancellationToken = default)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(backupFilePath) ?? Constants.BackupsDirectory);
         if (File.Exists(backupFilePath)) File.Delete(backupFilePath);
@@ -210,11 +101,10 @@ public sealed class CodexAccountService : IDisposable
         await JsonSerializer.SerializeAsync(zipArchiveEntryStream, codexAccountStoreDocument, CodexAccountJsonSerializerContext.Default.CodexAccountStoreDocument, cancellationToken);
     }
 
-    public async Task<CodexAccountBackupImportResult> ImportBackupAsync(string backupFilePath, CancellationToken cancellationToken = default)
+    public override async Task<ProviderAccountBackupImportResult> ImportBackupAsync(string backupFilePath, CancellationToken cancellationToken = default)
     {
-        var codexAccountBackupImportResult = new CodexAccountBackupImportResult();
+        var providerAccountBackupImportResult = new ProviderAccountBackupImportResult();
         var importedAccountIdentifiers = new HashSet<string>(StringComparer.Ordinal);
-        var importedAccounts = new List<CodexAccount>();
 
         using var zipArchive = ZipFile.OpenRead(backupFilePath);
         foreach (var zipArchiveEntry in zipArchive.Entries.Where(zipArchiveEntry => string.Equals(Path.GetExtension(zipArchiveEntry.FullName), ".json", StringComparison.OrdinalIgnoreCase)))
@@ -222,7 +112,7 @@ public sealed class CodexAccountService : IDisposable
             var candidateAccounts = await ReadBackupEntryAccountsAsync(zipArchiveEntry, cancellationToken);
             if (candidateAccounts.Count == 0)
             {
-                codexAccountBackupImportResult.FailureCount++;
+                providerAccountBackupImportResult.FailureCount++;
                 continue;
             }
 
@@ -231,67 +121,48 @@ public sealed class CodexAccountService : IDisposable
                 var accountIdentifier = TryGetAccountIdentifier(candidateAccount.CodexAuthenticationDocument);
                 if (string.IsNullOrWhiteSpace(accountIdentifier))
                 {
-                    codexAccountBackupImportResult.FailureCount++;
+                    providerAccountBackupImportResult.FailureCount++;
                     continue;
                 }
 
-                if (ContainsAccount(accountIdentifier) || importedAccountIdentifiers.Contains(accountIdentifier))
+                if (ContainsAccountState(accountIdentifier) || importedAccountIdentifiers.Contains(accountIdentifier))
                 {
-                    codexAccountBackupImportResult.DuplicateCount++;
+                    providerAccountBackupImportResult.DuplicateCount++;
                     continue;
                 }
 
                 try
                 {
                     var validatedAccount = await CreateValidatedAccountAsync(candidateAccount.CodexAuthenticationDocument, candidateAccount.CustomAlias, cancellationToken);
-                    UpsertAccount(validatedAccount);
+                    UpsertAccountState(validatedAccount);
                     importedAccountIdentifiers.Add(validatedAccount.AccountIdentifier);
-                    importedAccounts.Add(validatedAccount);
-                    codexAccountBackupImportResult.SuccessCount++;
+                    providerAccountBackupImportResult.SuccessCount++;
                 }
-                catch { codexAccountBackupImportResult.FailureCount++; }
+                catch { providerAccountBackupImportResult.FailureCount++; }
             }
         }
 
-        if (codexAccountBackupImportResult.SuccessCount > 0)
+        if (providerAccountBackupImportResult.SuccessCount > 0)
         {
-            var changedAccounts = SynchronizeActiveStatuses();
-            await SaveAccountsAsync(cancellationToken);
-            SendAccountChangedMessages([.. importedAccounts, .. changedAccounts]);
+            await SynchronizeActiveStatusesAsync(cancellationToken);
+            await SaveAccountStatesAsync(cancellationToken);
+            NotifyAccountsChanged();
         }
 
-        return codexAccountBackupImportResult;
+        return providerAccountBackupImportResult;
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
         if (_disposed) return;
         _disposed = true;
-        _backgroundCancellationTokenSource.Cancel();
-        _applicationSettingsService.SettingsChanged -= OnApplicationSettingsServiceSettingsChanged;
         _authenticationFileSystemWatcher?.Dispose();
-        _backgroundCancellationTokenSource.Dispose();
         _saveSemaphore.Dispose();
-        _refreshSemaphore.Dispose();
         _httpClient.Dispose();
+        base.Dispose();
     }
 
-    private async Task<CodexAccount> CreateValidatedAccountAsync(CodexAuthenticationDocument codexAuthenticationDocument, string customAlias, CancellationToken cancellationToken)
-    {
-        var codexUsageSnapshot = await _codexUsageClient.GetUsageAsync(codexAuthenticationDocument, cancellationToken);
-        var codexAccount = new CodexAccount
-        {
-            CodexAuthenticationDocument = codexAuthenticationDocument,
-            CustomAlias = customAlias.Trim(),
-            LastCodexUsageSnapshot = codexUsageSnapshot,
-            LastUsageRefreshTime = DateTimeOffset.UtcNow
-        };
-        codexAccount.MarkAsValid();
-        UpdateEmailAddress(codexAccount, codexUsageSnapshot);
-        return codexAccount;
-    }
-
-    private static ProviderAccount CreateProviderAccount(CodexAccount codexAccount)
+    protected override ProviderAccount CreateProviderAccount(CodexAccount codexAccount)
         => new()
         {
             ProviderKind = CliProviderKind.Codex,
@@ -308,75 +179,83 @@ public sealed class CodexAccountService : IDisposable
             LastUsageRefreshTime = codexAccount.LastUsageRefreshTime
         };
 
-    private static ProviderUsageSnapshot CreateProviderUsageSnapshot(CodexUsageSnapshot codexUsageSnapshot)
-        => new()
-        {
-            ProviderKind = CliProviderKind.Codex,
-            PlanType = codexUsageSnapshot.PlanType,
-            EmailAddress = codexUsageSnapshot.EmailAddress,
-            RawResponseText = codexUsageSnapshot.RawResponseText,
-            FiveHour = CreateProviderUsageWindow(codexUsageSnapshot.PrimaryWindow),
-            SevenDay = CreateProviderUsageWindow(codexUsageSnapshot.SecondaryWindow)
-        };
+    protected override string GetAccountIdentifier(CodexAccount codexAccount) => codexAccount.AccountIdentifier;
 
-    private static ProviderUsageWindow CreateProviderUsageWindow(CodexUsageWindow codexUsageWindow)
-        => new()
-        {
-            UsedPercentage = codexUsageWindow.UsedPercentage,
-            RemainingPercentage = codexUsageWindow.RemainingPercentage,
-            ResetAfterSeconds = codexUsageWindow.ResetAfterSeconds,
-            ResetAt = CreateDateTimeOffset(codexUsageWindow.ResetAtUnixSeconds)
-        };
+    protected override string GetDisplayName(CodexAccount codexAccount) => codexAccount.DisplayName;
 
-    private async Task RefreshAccountsUsageAsync(Func<CodexAccount, bool> accountPredicate, CancellationToken cancellationToken)
+    protected override bool GetIsActive(CodexAccount codexAccount) => codexAccount.IsActive;
+
+    protected override void SetIsActive(CodexAccount codexAccount, bool isActive) => codexAccount.IsActive = isActive;
+
+    protected override bool GetIsTokenExpired(CodexAccount codexAccount) => codexAccount.IsTokenExpired;
+
+    protected override void MarkAccountAsExpired(CodexAccount codexAccount) => codexAccount.MarkAsExpired();
+
+    protected override ProviderUsageSnapshot GetProviderUsageSnapshot(CodexAccount codexAccount) => CreateProviderUsageSnapshot(codexAccount.LastCodexUsageSnapshot);
+
+    protected override Task<IReadOnlyList<CodexAccount>> LoadAccountStatesCoreAsync(CancellationToken cancellationToken) => Task.FromResult(LoadAccounts());
+
+    protected override async Task SaveAccountStatesAsync(CancellationToken cancellationToken)
     {
-        await _refreshSemaphore.WaitAsync(cancellationToken);
+        await _saveSemaphore.WaitAsync(cancellationToken);
         try
         {
-            var targetAccounts = GetAccounts().Where(accountPredicate).ToList();
-            foreach (var codexAccount in targetAccounts)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await RefreshAccountUsageAsync(codexAccount.AccountIdentifier, cancellationToken);
-            }
+            Directory.CreateDirectory(Constants.UserDataDirectory);
+            var codexAccountStoreDocument = CreateStoreDocumentSnapshot();
+            await using var fileStream = File.Create(Constants.AccountsFilePath);
+            await JsonSerializer.SerializeAsync(fileStream, codexAccountStoreDocument, CodexAccountJsonSerializerContext.Default.CodexAccountStoreDocument, cancellationToken);
         }
         finally
         {
-            _refreshSemaphore.Release();
+            _saveSemaphore.Release();
         }
     }
 
-    private async Task RefreshAccountUsageAsync(string accountIdentifier, CancellationToken cancellationToken)
+    protected override async Task<string> ReadActiveAccountIdentifierAsync(CancellationToken cancellationToken)
     {
-        var codexAccount = FindAccount(accountIdentifier);
-        if (codexAccount is null) return;
-
         try
         {
-            var codexUsageSnapshot = await _codexUsageClient.GetUsageAsync(codexAccount.CodexAuthenticationDocument, cancellationToken);
-            var wasPrimaryUsageUnderWarningThreshold = IsUsageUnderWarningThreshold(codexAccount.LastCodexUsageSnapshot.PrimaryWindow, _applicationSettingsService.Settings.PrimaryUsageWarningThresholdPercentage);
-            var wasSecondaryUsageUnderWarningThreshold = IsUsageUnderWarningThreshold(codexAccount.LastCodexUsageSnapshot.SecondaryWindow, _applicationSettingsService.Settings.SecondaryUsageWarningThresholdPercentage);
-
-            codexAccount.LastCodexUsageSnapshot = codexUsageSnapshot;
-            codexAccount.LastUsageRefreshTime = DateTimeOffset.UtcNow;
-            codexAccount.MarkAsValid();
-            UpdateEmailAddress(codexAccount, codexUsageSnapshot);
-            ShowLowQuotaNotifications(codexAccount, wasPrimaryUsageUnderWarningThreshold, wasSecondaryUsageUnderWarningThreshold);
-            await SaveAccountsAsync(cancellationToken);
-            SendAccountChangedMessage(codexAccount);
+            if (!File.Exists(Constants.CurrentAuthenticationFilePath)) return "";
+            var authenticationDocumentText = await File.ReadAllTextAsync(Constants.CurrentAuthenticationFilePath, cancellationToken);
+            var codexAuthenticationDocument = CodexAuthenticationDocumentSerializer.Parse(authenticationDocumentText);
+            return codexAuthenticationDocument.GetEffectiveAccountIdentifier();
         }
-        catch (CodexApiException codexApiException) when (codexApiException.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden)
-        {
-            await HandleExpiredAccountAsync(codexAccount, cancellationToken);
-        }
+        catch { return ""; }
     }
 
-    private async Task RefreshActiveStatusesAsync(CancellationToken cancellationToken)
+    protected override async Task<ProviderActivationFollowUp> ActivateAccountCoreAsync(CodexAccount codexAccount, CancellationToken cancellationToken)
     {
-        var changedAccounts = SynchronizeActiveStatuses();
-        if (changedAccounts.Count == 0) return;
-        await SaveAccountsAsync(cancellationToken);
-        SendAccountChangedMessages(changedAccounts);
+        var authenticationDocumentText = _codexAuthenticationDocumentSerializer.Serialize(codexAccount.CodexAuthenticationDocument);
+        Directory.CreateDirectory(Constants.CodexHomeDirectory);
+        await File.WriteAllTextAsync(Constants.CurrentAuthenticationFilePath, authenticationDocumentText, cancellationToken);
+        return ProviderActivationFollowUp.RestartCodex;
+    }
+
+    protected override async Task<ProviderUsageSnapshot> RefreshAccountUsageCoreAsync(CodexAccount codexAccount, CancellationToken cancellationToken)
+    {
+        var codexUsageSnapshot = await _codexUsageClient.GetUsageAsync(codexAccount.CodexAuthenticationDocument, cancellationToken);
+        codexAccount.LastCodexUsageSnapshot = codexUsageSnapshot;
+        codexAccount.LastUsageRefreshTime = DateTimeOffset.UtcNow;
+        codexAccount.MarkAsValid();
+        UpdateEmailAddress(codexAccount, codexUsageSnapshot);
+        return CreateProviderUsageSnapshot(codexUsageSnapshot);
+    }
+
+    protected override bool IsAccountExpiredException(Exception exception) => exception is CodexApiException { StatusCode: HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden };
+
+    private async Task<CodexAccount> CreateValidatedAccountAsync(CodexAuthenticationDocument codexAuthenticationDocument, string customAlias, CancellationToken cancellationToken)
+    {
+        var codexUsageSnapshot = await _codexUsageClient.GetUsageAsync(codexAuthenticationDocument, cancellationToken);
+        var codexAccount = new CodexAccount
+        {
+            CodexAuthenticationDocument = codexAuthenticationDocument,
+            CustomAlias = customAlias.Trim(),
+            LastCodexUsageSnapshot = codexUsageSnapshot,
+            LastUsageRefreshTime = DateTimeOffset.UtcNow
+        };
+        codexAccount.MarkAsValid();
+        UpdateEmailAddress(codexAccount, codexUsageSnapshot);
+        return codexAccount;
     }
 
     private async Task<IReadOnlyList<CodexAccount>> ReadBackupEntryAccountsAsync(ZipArchiveEntry zipArchiveEntry, CancellationToken cancellationToken)
@@ -413,184 +292,24 @@ public sealed class CodexAccountService : IDisposable
         catch { return []; }
     }
 
-    private async Task RunActiveStatusRefreshLoopAsync()
-    {
-        using var periodicTimer = new PeriodicTimer(ActiveStatusRefreshInterval);
-        try
-        {
-            while (await periodicTimer.WaitForNextTickAsync(_backgroundCancellationTokenSource.Token)) await RefreshActiveStatusesSilentlyAsync();
-        }
-        catch (OperationCanceledException) { }
-    }
-
-    private async Task RunActiveUsageRefreshLoopAsync()
+    private IReadOnlyList<CodexAccount> LoadAccounts()
     {
         try
         {
-            while (!_backgroundCancellationTokenSource.IsCancellationRequested)
-            {
-                if (!IsActiveUsageRefreshEnabled)
-                {
-                    SetNextActiveUsageRefreshTime(null);
-                    await Task.Delay(TimeSpan.FromSeconds(1), _backgroundCancellationTokenSource.Token);
-                    continue;
-                }
+            if (!File.Exists(Constants.AccountsFilePath)) return [];
 
-                if (!await WaitForNextRefreshAsync(true, ActiveUsageRefreshInterval)) continue;
-                await RefreshAccountsUsageSilentlyAsync(account => account.IsActive);
-                SetNextActiveUsageRefreshTime(DateTimeOffset.UtcNow.Add(ActiveUsageRefreshInterval));
-            }
+            using var fileStream = File.OpenRead(Constants.AccountsFilePath);
+            var codexAccountStoreDocument = JsonSerializer.Deserialize(fileStream, CodexAccountJsonSerializerContext.Default.CodexAccountStoreDocument);
+            return codexAccountStoreDocument?.Accounts?.Where(account => !string.IsNullOrWhiteSpace(TryGetAccountIdentifier(account.CodexAuthenticationDocument))).ToArray() ?? [];
         }
-        catch (OperationCanceledException) { }
+        catch { return []; }
     }
 
-    private async Task RunInactiveUsageRefreshLoopAsync()
-    {
-        try
+    private CodexAccountStoreDocument CreateStoreDocumentSnapshot()
+        => new()
         {
-            while (!_backgroundCancellationTokenSource.IsCancellationRequested)
-            {
-                if (!IsInactiveUsageRefreshEnabled)
-                {
-                    SetNextInactiveUsageRefreshTime(null);
-                    await Task.Delay(TimeSpan.FromSeconds(1), _backgroundCancellationTokenSource.Token);
-                    continue;
-                }
-
-                if (!await WaitForNextRefreshAsync(false, InactiveUsageRefreshInterval)) continue;
-                await RefreshAccountsUsageSilentlyAsync(account => !account.IsActive);
-                SetNextInactiveUsageRefreshTime(DateTimeOffset.UtcNow.Add(InactiveUsageRefreshInterval));
-            }
-        }
-        catch (OperationCanceledException) { }
-    }
-
-    private async Task<bool> WaitForNextRefreshAsync(bool isActiveAccountRefresh, TimeSpan refreshInterval)
-    {
-        var nextRefreshTime = GetNextUsageRefreshTime(isActiveAccountRefresh);
-        if (nextRefreshTime is null)
-        {
-            SetNextUsageRefreshTime(isActiveAccountRefresh, DateTimeOffset.UtcNow.Add(refreshInterval));
-            return false;
-        }
-
-        var remainingTime = nextRefreshTime.Value - DateTimeOffset.UtcNow;
-        if (remainingTime <= TimeSpan.Zero) return true;
-
-        await Task.Delay(GetRefreshSchedulePollingDelay(remainingTime), _backgroundCancellationTokenSource.Token);
-        return false;
-    }
-
-    private async Task HandleExpiredAccountAsync(CodexAccount codexAccount, CancellationToken cancellationToken)
-    {
-        var wasTokenExpired = codexAccount.IsTokenExpired;
-        if (!wasTokenExpired && _applicationSettingsService.Settings.IsExpiredAccountNotificationEnabled) _applicationNotificationService.ShowExpiredAccountDetectedNotification(codexAccount.DisplayName);
-
-        if (_applicationSettingsService.Settings.IsExpiredAccountAutomaticDeletionEnabled)
-        {
-            lock (_accountsLock) _accounts.RemoveAll(account => string.Equals(account.AccountIdentifier, codexAccount.AccountIdentifier, StringComparison.Ordinal));
-            await SaveAccountsAsync(cancellationToken);
-            SendAccountsChangedMessage();
-            return;
-        }
-
-        codexAccount.MarkAsExpired();
-        await SaveAccountsAsync(cancellationToken);
-        SendAccountChangedMessage(codexAccount);
-    }
-
-    private void ShowLowQuotaNotifications(CodexAccount codexAccount, bool wasPrimaryUsageUnderWarningThreshold, bool wasSecondaryUsageUnderWarningThreshold)
-    {
-        var applicationSettings = _applicationSettingsService.Settings;
-        var isPrimaryUsageUnderWarningThreshold = IsUsageUnderWarningThreshold(codexAccount.LastCodexUsageSnapshot.PrimaryWindow, applicationSettings.PrimaryUsageWarningThresholdPercentage);
-        var isSecondaryUsageUnderWarningThreshold = IsUsageUnderWarningThreshold(codexAccount.LastCodexUsageSnapshot.SecondaryWindow, applicationSettings.SecondaryUsageWarningThresholdPercentage);
-        var hasPrimaryUsageAlternativeAccountOverWarningThreshold = HasAlternativeAccountOverWarningThreshold(codexAccount, alternativeCodexAccount => alternativeCodexAccount.LastCodexUsageSnapshot.PrimaryWindow, applicationSettings.PrimaryUsageWarningThresholdPercentage);
-        var hasSecondaryUsageAlternativeAccountOverWarningThreshold = HasAlternativeAccountOverWarningThreshold(codexAccount, alternativeCodexAccount => alternativeCodexAccount.LastCodexUsageSnapshot.SecondaryWindow, applicationSettings.SecondaryUsageWarningThresholdPercentage);
-
-        if (!wasPrimaryUsageUnderWarningThreshold && isPrimaryUsageUnderWarningThreshold && applicationSettings.IsPrimaryUsageLowQuotaNotificationEnabled) _applicationNotificationService.ShowPrimaryUsageLowQuotaNotification(codexAccount.DisplayName, codexAccount.LastCodexUsageSnapshot.PrimaryWindow.RemainingPercentage, hasPrimaryUsageAlternativeAccountOverWarningThreshold);
-        if (!wasSecondaryUsageUnderWarningThreshold && isSecondaryUsageUnderWarningThreshold && applicationSettings.IsSecondaryUsageLowQuotaNotificationEnabled) _applicationNotificationService.ShowSecondaryUsageLowQuotaNotification(codexAccount.DisplayName, codexAccount.LastCodexUsageSnapshot.SecondaryWindow.RemainingPercentage, hasSecondaryUsageAlternativeAccountOverWarningThreshold);
-    }
-
-    private bool HasAlternativeAccountOverWarningThreshold(CodexAccount sourceCodexAccount, Func<CodexAccount, CodexUsageWindow> codexUsageWindowSelector, int usageWarningThresholdPercentage)
-    {
-        var codexAccounts = GetAccounts();
-        if (codexAccounts.Count < 2) return false;
-
-        var normalizedUsageWarningThresholdPercentage = NormalizeUsageWarningThresholdPercentage(usageWarningThresholdPercentage);
-        return codexAccounts.Any(codexAccount => !string.Equals(codexAccount.AccountIdentifier, sourceCodexAccount.AccountIdentifier, StringComparison.Ordinal) && codexUsageWindowSelector(codexAccount).RemainingPercentage > normalizedUsageWarningThresholdPercentage);
-    }
-
-    private void ApplyApplicationSettings()
-    {
-        var applicationSettings = _applicationSettingsService.Settings;
-        var activeUsageRefreshInterval = TimeSpan.FromSeconds(applicationSettings.ActiveAccountUsageRefreshIntervalSeconds);
-        var inactiveUsageRefreshInterval = TimeSpan.FromSeconds(applicationSettings.InactiveAccountUsageRefreshIntervalSeconds);
-        var isActiveUsageRefreshEnabled = applicationSettings.IsActiveAccountUsageAutomaticRefreshEnabled;
-        var isInactiveUsageRefreshEnabled = applicationSettings.IsInactiveAccountUsageAutomaticRefreshEnabled;
-        var shouldResetUsageRefreshSchedules = !_isUsageRefreshScheduleInitialized || ActiveUsageRefreshInterval != activeUsageRefreshInterval || InactiveUsageRefreshInterval != inactiveUsageRefreshInterval || IsActiveUsageRefreshEnabled != isActiveUsageRefreshEnabled || IsInactiveUsageRefreshEnabled != isInactiveUsageRefreshEnabled;
-
-        ActiveUsageRefreshInterval = activeUsageRefreshInterval;
-        InactiveUsageRefreshInterval = inactiveUsageRefreshInterval;
-        IsActiveUsageRefreshEnabled = isActiveUsageRefreshEnabled;
-        IsInactiveUsageRefreshEnabled = isInactiveUsageRefreshEnabled;
-        if (!shouldResetUsageRefreshSchedules) return;
-
-        ResetUsageRefreshSchedules();
-        _isUsageRefreshScheduleInitialized = true;
-    }
-
-    private void ResetUsageRefreshSchedules()
-    {
-        var currentTime = DateTimeOffset.UtcNow;
-        SetNextActiveUsageRefreshTime(IsActiveUsageRefreshEnabled ? currentTime.Add(ActiveUsageRefreshInterval) : null);
-        SetNextInactiveUsageRefreshTime(IsInactiveUsageRefreshEnabled ? currentTime.Add(InactiveUsageRefreshInterval) : null);
-    }
-
-    private void ResetActiveUsageRefreshSchedule() => SetNextActiveUsageRefreshTime(IsActiveUsageRefreshEnabled ? DateTimeOffset.UtcNow.Add(ActiveUsageRefreshInterval) : null);
-
-    private DateTimeOffset? GetNextUsageRefreshTime(bool isActiveAccountRefresh)
-    {
-        lock (_refreshScheduleLock) return isActiveAccountRefresh ? _nextActiveUsageRefreshTime : _nextInactiveUsageRefreshTime;
-    }
-
-    private void SetNextUsageRefreshTime(bool isActiveAccountRefresh, DateTimeOffset? nextRefreshTime)
-    {
-        if (isActiveAccountRefresh) SetNextActiveUsageRefreshTime(nextRefreshTime);
-        else SetNextInactiveUsageRefreshTime(nextRefreshTime);
-    }
-
-    private void SetNextActiveUsageRefreshTime(DateTimeOffset? nextRefreshTime)
-    {
-        lock (_refreshScheduleLock) _nextActiveUsageRefreshTime = nextRefreshTime;
-    }
-
-    private void SetNextInactiveUsageRefreshTime(DateTimeOffset? nextRefreshTime)
-    {
-        lock (_refreshScheduleLock) _nextInactiveUsageRefreshTime = nextRefreshTime;
-    }
-
-    private TimeSpan? GetUsageRefreshRemainingTime(DateTimeOffset? nextRefreshTime, bool isUsageRefreshEnabled)
-    {
-        if (!isUsageRefreshEnabled || nextRefreshTime is null) return null;
-        var remainingTime = nextRefreshTime.Value - DateTimeOffset.UtcNow;
-        return remainingTime <= TimeSpan.Zero ? TimeSpan.Zero : remainingTime;
-    }
-
-    private static TimeSpan GetRefreshSchedulePollingDelay(TimeSpan remainingTime) => remainingTime < TimeSpan.FromSeconds(1) ? remainingTime : TimeSpan.FromSeconds(1);
-
-    private void OnApplicationSettingsServiceSettingsChanged(object sender, EventArgs eventArguments) => ApplyApplicationSettings();
-
-    private async Task RefreshActiveStatusesSilentlyAsync()
-    {
-        try { await RefreshActiveStatusesAsync(_backgroundCancellationTokenSource.Token); }
-        catch { }
-    }
-
-    private async Task RefreshAccountsUsageSilentlyAsync(Func<CodexAccount, bool> accountPredicate)
-    {
-        try { await RefreshAccountsUsageAsync(accountPredicate, _backgroundCancellationTokenSource.Token); }
-        catch { }
-    }
+            Accounts = [.. GetAccountStatesSnapshot()]
+        };
 
     private void StartAuthenticationFileSystemWatcher()
     {
@@ -610,108 +329,35 @@ public sealed class CodexAccountService : IDisposable
         catch { }
     }
 
-    private void OnAuthenticationFileSystemWatcherChanged(object sender, FileSystemEventArgs fileSystemEventArguments) => _ = RefreshActiveStatusesSilentlyAsync();
+    private void OnAuthenticationFileSystemWatcherChanged(object sender, FileSystemEventArgs fileSystemEventArguments) => _ = SynchronizeActiveStatusesSilentlyAsync();
 
-    private void OnAuthenticationFileSystemWatcherRenamed(object sender, RenamedEventArgs renamedEventArguments) => _ = RefreshActiveStatusesSilentlyAsync();
+    private void OnAuthenticationFileSystemWatcherRenamed(object sender, RenamedEventArgs renamedEventArguments) => _ = SynchronizeActiveStatusesSilentlyAsync();
 
-    private void LoadAccounts()
+    private async Task SynchronizeActiveStatusesSilentlyAsync()
     {
-        try
-        {
-            if (!File.Exists(Constants.AccountsFilePath)) return;
-
-            using var fileStream = File.OpenRead(Constants.AccountsFilePath);
-            var codexAccountStoreDocument = JsonSerializer.Deserialize(fileStream, CodexAccountJsonSerializerContext.Default.CodexAccountStoreDocument);
-            if (codexAccountStoreDocument?.Accounts is null) return;
-
-            lock (_accountsLock)
-            {
-                _accounts.Clear();
-                _accounts.AddRange(codexAccountStoreDocument.Accounts.Where(account => !string.IsNullOrWhiteSpace(TryGetAccountIdentifier(account.CodexAuthenticationDocument))));
-            }
-        }
+        try { await SynchronizeActiveStatusesAsync(); }
         catch { }
     }
 
-    private async Task SaveAccountsAsync(CancellationToken cancellationToken)
-    {
-        await _saveSemaphore.WaitAsync(cancellationToken);
-        try
+    private static ProviderUsageSnapshot CreateProviderUsageSnapshot(CodexUsageSnapshot codexUsageSnapshot)
+        => new()
         {
-            Directory.CreateDirectory(Constants.UserDataDirectory);
-            var codexAccountStoreDocument = CreateStoreDocumentSnapshot();
-            await using var fileStream = File.Create(Constants.AccountsFilePath);
-            await JsonSerializer.SerializeAsync(fileStream, codexAccountStoreDocument, CodexAccountJsonSerializerContext.Default.CodexAccountStoreDocument, cancellationToken);
-        }
-        finally
+            ProviderKind = CliProviderKind.Codex,
+            PlanType = codexUsageSnapshot.PlanType,
+            EmailAddress = codexUsageSnapshot.EmailAddress,
+            RawResponseText = codexUsageSnapshot.RawResponseText,
+            FiveHour = CreateProviderUsageWindow(codexUsageSnapshot.PrimaryWindow),
+            SevenDay = CreateProviderUsageWindow(codexUsageSnapshot.SecondaryWindow)
+        };
+
+    private static ProviderUsageWindow CreateProviderUsageWindow(CodexUsageWindow codexUsageWindow)
+        => new()
         {
-            _saveSemaphore.Release();
-        }
-    }
-
-    private CodexAccountStoreDocument CreateStoreDocumentSnapshot()
-    {
-        lock (_accountsLock)
-        {
-            return new CodexAccountStoreDocument
-            {
-                Accounts = [.. _accounts]
-            };
-        }
-    }
-
-    private void UpsertAccount(CodexAccount codexAccount)
-    {
-        lock (_accountsLock)
-        {
-            var existingAccountIndex = _accounts.FindIndex(account => string.Equals(account.AccountIdentifier, codexAccount.AccountIdentifier, StringComparison.Ordinal));
-            if (existingAccountIndex >= 0) _accounts[existingAccountIndex] = codexAccount;
-            else _accounts.Add(codexAccount);
-        }
-    }
-
-    private List<CodexAccount> SynchronizeActiveStatuses() => SynchronizeActiveStatuses(TryReadActiveAccountIdentifier());
-
-    private List<CodexAccount> SynchronizeActiveStatuses(string activeAccountIdentifier)
-    {
-        var changedAccounts = new List<CodexAccount>();
-
-        lock (_accountsLock)
-        {
-            foreach (var codexAccount in _accounts)
-            {
-                var isActive = !string.IsNullOrWhiteSpace(activeAccountIdentifier) && string.Equals(codexAccount.AccountIdentifier, activeAccountIdentifier, StringComparison.Ordinal);
-                if (codexAccount.IsActive == isActive) continue;
-
-                codexAccount.IsActive = isActive;
-                changedAccounts.Add(codexAccount);
-            }
-        }
-
-        return changedAccounts;
-    }
-
-    private CodexAccount FindAccount(string accountIdentifier)
-    {
-        lock (_accountsLock) return _accounts.FirstOrDefault(account => string.Equals(account.AccountIdentifier, accountIdentifier, StringComparison.Ordinal));
-    }
-
-    private bool ContainsAccount(string accountIdentifier)
-    {
-        lock (_accountsLock) return _accounts.Any(account => string.Equals(account.AccountIdentifier, accountIdentifier, StringComparison.Ordinal));
-    }
-
-    private string TryReadActiveAccountIdentifier()
-    {
-        try
-        {
-            if (!File.Exists(Constants.CurrentAuthenticationFilePath)) return "";
-            var authenticationDocumentText = File.ReadAllText(Constants.CurrentAuthenticationFilePath);
-            var codexAuthenticationDocument = CodexAuthenticationDocumentSerializer.Parse(authenticationDocumentText);
-            return codexAuthenticationDocument.GetEffectiveAccountIdentifier();
-        }
-        catch { return ""; }
-    }
+            UsedPercentage = codexUsageWindow.UsedPercentage,
+            RemainingPercentage = codexUsageWindow.RemainingPercentage,
+            ResetAfterSeconds = codexUsageWindow.ResetAfterSeconds,
+            ResetAt = CreateDateTimeOffset(codexUsageWindow.ResetAtUnixSeconds)
+        };
 
     private static string TryGetAccountIdentifier(CodexAuthenticationDocument codexAuthenticationDocument)
     {
@@ -735,28 +381,5 @@ public sealed class CodexAccountService : IDisposable
     {
         if (string.IsNullOrWhiteSpace(accessToken)) return "";
         return accessToken.Length <= 18 ? accessToken : $"{accessToken[..8]}...{accessToken[^6..]}";
-    }
-
-    private static bool IsUsageUnderWarningThreshold(CodexUsageWindow codexUsageWindow, int usageWarningThresholdPercentage) => codexUsageWindow.RemainingPercentage >= 0 && codexUsageWindow.RemainingPercentage <= NormalizeUsageWarningThresholdPercentage(usageWarningThresholdPercentage);
-
-    private static int NormalizeUsageWarningThresholdPercentage(int usageWarningThresholdPercentage) => Math.Clamp(usageWarningThresholdPercentage, 0, 100);
-
-    private static void SendAccountChangedMessages(IEnumerable<CodexAccount> codexAccounts)
-    {
-        var sentAccountIdentifiers = new HashSet<string>(StringComparer.Ordinal);
-        foreach (var codexAccount in codexAccounts)
-        {
-            if (!sentAccountIdentifiers.Add(codexAccount.AccountIdentifier)) continue;
-            SendAccountChangedMessage(codexAccount);
-        }
-    }
-
-    private static void SendAccountChangedMessage(CodexAccount codexAccount) => WeakReferenceMessenger.Default.Send(new ValueChangedMessage<CodexAccount>(codexAccount));
-
-    private void SendAccountsChangedMessage() => WeakReferenceMessenger.Default.Send(new ValueChangedMessage<CodexAccountStoreDocument>(CreateStoreDocumentSnapshot()));
-
-    private void ThrowIfDisposed()
-    {
-        if (_disposed) throw new ObjectDisposedException(nameof(CodexAccountService));
     }
 }

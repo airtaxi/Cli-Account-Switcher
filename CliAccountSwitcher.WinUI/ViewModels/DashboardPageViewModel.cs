@@ -1,6 +1,6 @@
 using CliAccountSwitcher.Api.Providers.Abstractions;
+using CliAccountSwitcher.WinUI.Managers;
 using CliAccountSwitcher.WinUI.Models;
-using CliAccountSwitcher.WinUI.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
@@ -13,19 +13,18 @@ namespace CliAccountSwitcher.WinUI.ViewModels;
 
 public sealed partial class DashboardPageViewModel : ObservableObject, IDisposable
 {
-    private readonly CodexAccountService _codexAccountService;
+    private readonly AccountServiceManager _accountServiceManager;
     private readonly ApplicationSettings _applicationSettings;
     private readonly DispatcherQueue _dispatcherQueue;
     private bool _disposed;
 
-    public DashboardPageViewModel(CodexAccountService codexAccountService, ApplicationSettings applicationSettings, DispatcherQueue dispatcherQueue)
+    public DashboardPageViewModel(AccountServiceManager accountServiceManager, ApplicationSettings applicationSettings, DispatcherQueue dispatcherQueue)
     {
-        _codexAccountService = codexAccountService;
+        _accountServiceManager = accountServiceManager;
         _applicationSettings = applicationSettings;
         _dispatcherQueue = dispatcherQueue;
         _applicationSettings.PropertyChanged += OnApplicationSettingsPropertyChanged;
-        WeakReferenceMessenger.Default.Register<ValueChangedMessage<CodexAccount>>(this, OnCodexAccountChangedMessageReceived);
-        WeakReferenceMessenger.Default.Register<ValueChangedMessage<CodexAccountStoreDocument>>(this, OnCodexAccountStoreDocumentChangedMessageReceived);
+        WeakReferenceMessenger.Default.Register<ValueChangedMessage<ProviderAccountsChangedMessage>>(this, OnProviderAccountsChangedMessageReceived);
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<CliProviderKind>>(this, OnProviderKindChangedMessageReceived);
         ReloadDashboard();
     }
@@ -103,37 +102,7 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
 
     public void ReloadDashboard()
     {
-        if (_applicationSettings.SelectedProviderKind == CliProviderKind.Codex)
-        {
-            ReloadCodexDashboard();
-            return;
-        }
-
-        _ = ReloadDashboardAsync();
-    }
-
-    public async Task ReloadDashboardAsync()
-    {
-        if (_applicationSettings.SelectedProviderKind == CliProviderKind.Codex)
-        {
-            ReloadCodexDashboard();
-            return;
-        }
-
-        await ReloadClaudeCodeDashboardAsync();
-    }
-
-    public async Task RefreshActiveProviderAccountAsync()
-    {
-        if (_applicationSettings.SelectedProviderKind == CliProviderKind.Codex) await _codexAccountService.RefreshActiveAccountAsync();
-        else await App.CliProviderAccountService.RefreshActiveClaudeCodeAccountAsync();
-
-        await ReloadDashboardAsync();
-    }
-
-    private void ReloadCodexDashboard()
-    {
-        var providerAccounts = _codexAccountService.GetProviderAccounts();
+        var providerAccounts = _accountServiceManager.GetAccounts(_applicationSettings.SelectedProviderKind);
         var accountViewModels = providerAccounts.Select(providerAccount => new ProviderAccountViewModel(providerAccount, _applicationSettings)).ToList();
 
         AccountCountText = GetFormattedString("DashboardPageViewModel_AccountCountFormat", accountViewModels.Count);
@@ -143,13 +112,24 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
         SetLowUsageAccounts(accountViewModels);
     }
 
+    public Task ReloadDashboardAsync()
+    {
+        ReloadDashboard();
+        return Task.CompletedTask;
+    }
+
+    public async Task RefreshActiveProviderAccountAsync()
+    {
+        await _accountServiceManager.RefreshActiveAccountAsync(_applicationSettings.SelectedProviderKind);
+        ReloadDashboard();
+    }
+
     public void Dispose()
     {
         if (_disposed) return;
         _disposed = true;
         _applicationSettings.PropertyChanged -= OnApplicationSettingsPropertyChanged;
-        WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CodexAccount>>(this);
-        WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CodexAccountStoreDocument>>(this);
+        WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<ProviderAccountsChangedMessage>>(this);
         WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CliProviderKind>>(this);
     }
 
@@ -160,50 +140,19 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
         else _dispatcherQueue.TryEnqueue(ReloadDashboard);
     }
 
-    private void OnCodexAccountChangedMessageReceived(object recipient, ValueChangedMessage<CodexAccount> valueChangedMessage)
+    private void OnProviderAccountsChangedMessageReceived(object recipient, ValueChangedMessage<ProviderAccountsChangedMessage> valueChangedMessage)
     {
-        if (_applicationSettings.SelectedProviderKind != CliProviderKind.Codex) return;
-        if (_dispatcherQueue.HasThreadAccess) ReloadDashboard();
-        else _dispatcherQueue.TryEnqueue(ReloadDashboard);
-    }
-
-    private void OnCodexAccountStoreDocumentChangedMessageReceived(object recipient, ValueChangedMessage<CodexAccountStoreDocument> valueChangedMessage)
-    {
-        if (_applicationSettings.SelectedProviderKind != CliProviderKind.Codex) return;
+        if (_applicationSettings.SelectedProviderKind != valueChangedMessage.Value.ProviderKind) return;
         if (_dispatcherQueue.HasThreadAccess) ReloadDashboard();
         else _dispatcherQueue.TryEnqueue(ReloadDashboard);
     }
 
     private void OnProviderKindChangedMessageReceived(object recipient, ValueChangedMessage<CliProviderKind> valueChangedMessage) => QueueReloadDashboard();
 
-    private async Task ReloadClaudeCodeDashboardAsync()
-    {
-        try
-        {
-            var providerAccounts = await App.CliProviderAccountService.GetClaudeCodeProviderAccountsAsync();
-            var accountViewModels = providerAccounts.Select(providerAccount => new ProviderAccountViewModel(providerAccount, _applicationSettings)).ToList();
-            var activeAccountViewModel = accountViewModels.FirstOrDefault(accountViewModel => accountViewModel.IsActive);
-
-            AccountCountText = GetFormattedString("DashboardPageViewModel_AccountCountFormat", accountViewModels.Count);
-            SetAverageUsageProperties(accountViewModels);
-            SetLowUsageSummaryProperties(accountViewModels);
-            SetActiveAccountProperties(activeAccountViewModel);
-            SetLowUsageAccounts(accountViewModels);
-        }
-        catch
-        {
-            AccountCountText = GetFormattedString("DashboardPageViewModel_AccountCountFormat", 0);
-            SetUnknownAverageUsageProperties();
-            SetLowUsageSummaryProperties([]);
-            SetActiveAccountProperties(null);
-            SetLowUsageAccounts([]);
-        }
-    }
-
     private void QueueReloadDashboard()
     {
-        if (_dispatcherQueue.HasThreadAccess) _ = ReloadDashboardAsync();
-        else _dispatcherQueue.TryEnqueue(() => _ = ReloadDashboardAsync());
+        if (_dispatcherQueue.HasThreadAccess) ReloadDashboard();
+        else _dispatcherQueue.TryEnqueue(ReloadDashboard);
     }
 
     private void SetAverageUsageProperties(IReadOnlyList<ProviderAccountViewModel> accountViewModels)

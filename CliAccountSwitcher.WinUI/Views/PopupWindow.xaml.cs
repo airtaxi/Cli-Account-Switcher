@@ -32,7 +32,7 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
 
     public PopupWindow()
     {
-        ViewModel = new DashboardPageViewModel(App.CodexAccountService, App.ApplicationSettings, DispatcherQueue);
+        ViewModel = new DashboardPageViewModel(App.AccountServiceManager, App.ApplicationSettings, DispatcherQueue);
 
         InitializeComponent();
 

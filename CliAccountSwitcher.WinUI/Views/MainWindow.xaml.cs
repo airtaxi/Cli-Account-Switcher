@@ -290,7 +290,8 @@ public sealed partial class MainWindow : WindowEx
         App.LocalizationService.LanguageChanged -= RefreshLocalizedText;
         _activeAccountQuotaPopupWindow?.Close();
         App.StoreUpdateService.Dispose();
+        App.AccountServiceManager.Dispose();
         App.CodexAccountService.Dispose();
-        App.CliProviderAccountService.Dispose();
+        App.ClaudeAccountService.Dispose();
     }
 }

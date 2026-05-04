@@ -1,6 +1,6 @@
 using CliAccountSwitcher.Api.Providers.Abstractions;
+using CliAccountSwitcher.WinUI.Managers;
 using CliAccountSwitcher.WinUI.Models;
-using CliAccountSwitcher.WinUI.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
@@ -12,22 +12,21 @@ namespace CliAccountSwitcher.WinUI.ViewModels;
 
 public sealed partial class AccountsPageViewModel : ObservableObject, IDisposable
 {
-    private readonly CodexAccountService _codexAccountService;
+    private readonly AccountServiceManager _accountServiceManager;
     private readonly ApplicationSettings _applicationSettings;
     private readonly DispatcherQueue _dispatcherQueue;
     private readonly HashSet<string> _selectedAccountIdentifiers = new(StringComparer.Ordinal);
     private bool _isSynchronizingAccountSelection;
     private bool _disposed;
 
-    public AccountsPageViewModel(CodexAccountService codexAccountService, ApplicationSettings applicationSettings, DispatcherQueue dispatcherQueue)
+    public AccountsPageViewModel(AccountServiceManager accountServiceManager, ApplicationSettings applicationSettings, DispatcherQueue dispatcherQueue)
     {
-        _codexAccountService = codexAccountService;
+        _accountServiceManager = accountServiceManager;
         _applicationSettings = applicationSettings;
         _dispatcherQueue = dispatcherQueue;
         SelectedProviderKind = _applicationSettings.SelectedProviderKind;
         _applicationSettings.PropertyChanged += OnApplicationSettingsPropertyChanged;
-        WeakReferenceMessenger.Default.Register<ValueChangedMessage<CodexAccount>>(this, OnCodexAccountChangedMessageReceived);
-        WeakReferenceMessenger.Default.Register<ValueChangedMessage<CodexAccountStoreDocument>>(this, OnCodexAccountStoreDocumentChangedMessageReceived);
+        WeakReferenceMessenger.Default.Register<ValueChangedMessage<ProviderAccountsChangedMessage>>(this, OnProviderAccountsChangedMessageReceived);
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<CliProviderKind>>(this, OnProviderKindChangedMessageReceived);
         ReloadAccounts();
     }
@@ -88,38 +87,15 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     public void ReloadAccounts()
     {
         SelectedProviderKind = _applicationSettings.SelectedProviderKind;
-        if (SelectedProviderKind == CliProviderKind.Codex)
-        {
-            SynchronizeAccounts(_codexAccountService.GetProviderAccounts());
-            ApplyFilter();
-            RefreshAccountStateProperties();
-            return;
-        }
-
-        _ = ReloadAccountsAsync();
-    }
-
-    public async Task ReloadAccountsAsync()
-    {
-        SelectedProviderKind = _applicationSettings.SelectedProviderKind;
-        if (SelectedProviderKind == CliProviderKind.Codex)
-        {
-            ReloadAccounts();
-            return;
-        }
-
-        try
-        {
-            var providerAccounts = await App.CliProviderAccountService.GetClaudeCodeProviderAccountsAsync();
-            SynchronizeAccounts(providerAccounts);
-        }
-        catch
-        {
-            SynchronizeAccounts(Array.Empty<ProviderAccount>());
-        }
-
+        SynchronizeAccounts(_accountServiceManager.GetAccounts(SelectedProviderKind));
         ApplyFilter();
         RefreshAccountStateProperties();
+    }
+
+    public Task ReloadAccountsAsync()
+    {
+        ReloadAccounts();
+        return Task.CompletedTask;
     }
 
     public void SetSelectedAccountIdentifiers(IEnumerable<string> accountIdentifiers)
@@ -160,8 +136,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         _disposed = true;
         _applicationSettings.PropertyChanged -= OnApplicationSettingsPropertyChanged;
         foreach (var accountViewModel in Accounts) accountViewModel.PropertyChanged -= OnAccountViewModelPropertyChanged;
-        WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CodexAccount>>(this);
-        WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CodexAccountStoreDocument>>(this);
+        WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<ProviderAccountsChangedMessage>>(this);
         WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CliProviderKind>>(this);
     }
 
@@ -172,16 +147,9 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         else _dispatcherQueue.TryEnqueue(RefreshUsageWarningThresholdProperties);
     }
 
-    private void OnCodexAccountChangedMessageReceived(object recipient, ValueChangedMessage<CodexAccount> valueChangedMessage)
+    private void OnProviderAccountsChangedMessageReceived(object recipient, ValueChangedMessage<ProviderAccountsChangedMessage> valueChangedMessage)
     {
-        if (SelectedProviderKind != CliProviderKind.Codex) return;
-        if (_dispatcherQueue.HasThreadAccess) ReloadAccounts();
-        else _dispatcherQueue.TryEnqueue(ReloadAccounts);
-    }
-
-    private void OnCodexAccountStoreDocumentChangedMessageReceived(object recipient, ValueChangedMessage<CodexAccountStoreDocument> valueChangedMessage)
-    {
-        if (SelectedProviderKind != CliProviderKind.Codex) return;
+        if (SelectedProviderKind != valueChangedMessage.Value.ProviderKind) return;
         if (_dispatcherQueue.HasThreadAccess) ReloadAccounts();
         else _dispatcherQueue.TryEnqueue(ReloadAccounts);
     }
@@ -312,7 +280,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         SelectedProviderKind = providerKind;
         SelectedPlanFilter = "All";
         SetSelectedAccountIdentifiers([]);
-        _ = ReloadAccountsAsync();
+        ReloadAccounts();
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();

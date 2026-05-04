@@ -15,19 +15,18 @@ public sealed partial class DashboardPage : Page
 
     public DashboardPage()
     {
-        ViewModel = new DashboardPageViewModel(App.CodexAccountService, App.ApplicationSettings, DispatcherQueue);
+        ViewModel = new DashboardPageViewModel(App.AccountServiceManager, App.ApplicationSettings, DispatcherQueue);
         InitializeComponent();
     }
 
     private async void OnRefreshAllAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
-        var providerAccountActions = App.GetProviderAccountActions(App.ApplicationSettings.SelectedProviderKind);
-        await RunWithLoadingAsync(GetLocalizedString("AccountsPage_RefreshAllAccountsLoadingMessage"), async () => await providerAccountActions.RefreshAccountsPageAllAsync());
+        await RunWithLoadingAsync(GetLocalizedString("AccountsPage_RefreshAllAccountsLoadingMessage"), async () => await App.AccountServiceManager.RefreshAllAccountsAsync(App.ApplicationSettings.SelectedProviderKind));
     }
 
     private async void OnAddAccountButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
-        var addAccountDialog = new CliAccountSwitcher.WinUI.Dialogs.AddAccountDialog(App.CodexAccountService)
+        var addAccountDialog = new CliAccountSwitcher.WinUI.Dialogs.AddAccountDialog
         {
             XamlRoot = XamlRoot
         };
@@ -40,8 +39,7 @@ public sealed partial class DashboardPage : Page
         var contentDialogResult = await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogMessage"), GetLocalizedString("AccountsPage_DeleteButtonText"), GetLocalizedString("DialogHelper_CancelButtonText"));
         if (contentDialogResult != ContentDialogResult.Primary) return;
 
-        var providerAccountActions = App.GetProviderAccountActions(App.ApplicationSettings.SelectedProviderKind);
-        var deletedAccountCount = await providerAccountActions.DeleteExpiredAccountsAsync();
+        var deletedAccountCount = await App.AccountServiceManager.DeleteExpiredAccountsAsync(App.ApplicationSettings.SelectedProviderKind);
         await ViewModel.ReloadDashboardAsync();
         await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), deletedAccountCount == 0 ? GetLocalizedString("AccountsPage_DeleteExpiredAccountsNoAccountsMessage") : GetFormattedString("AccountsPage_DeleteExpiredAccountsDeletedMessageFormat", deletedAccountCount));
     }

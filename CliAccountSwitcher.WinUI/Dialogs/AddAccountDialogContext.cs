@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace CliAccountSwitcher.WinUI.Dialogs;
 
-public sealed class AddAccountDialogContext(CodexAccountService codexAccountService, ContentDialog contentDialog)
+public sealed class AddAccountDialogContext(CodexAccountService codexAccountService, ClaudeAccountService claudeAccountService, ContentDialog contentDialog)
 {
     private CodexOAuthSession _codexOAuthSession;
 
     public CodexAccountService CodexAccountService { get; } = codexAccountService;
+
+    public ClaudeAccountService ClaudeAccountService { get; } = claudeAccountService;
 
     public ContentDialog ContentDialog { get; } = contentDialog;
 
@@ -20,11 +22,11 @@ public sealed class AddAccountDialogContext(CodexAccountService codexAccountServ
 
     public void CompleteSuccessfully() => ContentDialog.Hide();
 
-    public async Task RunClaudeCodeLoginAsync() => await App.CliProviderAccountService.RunClaudeCodeLoginAsync();
+    public async Task RunClaudeCodeLoginAsync() => await ClaudeAccountService.RunClaudeCodeLoginAsync();
 
-    public async Task SaveCurrentClaudeCodeAccountAsync() => await App.CliProviderAccountService.SaveCurrentClaudeCodeAccountAsync();
+    public async Task SaveCurrentClaudeCodeAccountAsync() => await ClaudeAccountService.SaveCurrentClaudeCodeAccountAsync();
 
-    public async Task SaveClaudeCodeAccountAsync(string credentialsJson, string globalConfigJson) => await App.CliProviderAccountService.SaveClaudeCodeAccountAsync(credentialsJson, globalConfigJson);
+    public async Task SaveClaudeCodeAccountAsync(string credentialsJson, string globalConfigJson) => await ClaudeAccountService.SaveClaudeCodeAccountAsync(credentialsJson, globalConfigJson);
 
     public async Task SetOAuthSessionAsync(CodexOAuthSession codexOAuthSession)
     {

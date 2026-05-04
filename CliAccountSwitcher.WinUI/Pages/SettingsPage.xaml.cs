@@ -346,8 +346,8 @@ public sealed partial class SettingsPage : Page
 
     private void RefreshUsageRefreshCountdownTexts()
     {
-        ActiveAccountNextUsageRefreshTextBlock.Text = FormatNextUsageRefreshText(App.CodexAccountService.GetActiveUsageRefreshRemainingTime());
-        InactiveAccountNextUsageRefreshTextBlock.Text = FormatNextUsageRefreshText(App.CodexAccountService.GetInactiveUsageRefreshRemainingTime());
+        ActiveAccountNextUsageRefreshTextBlock.Text = FormatNextUsageRefreshText(App.AccountServiceManager.GetActiveUsageRefreshRemainingTime());
+        InactiveAccountNextUsageRefreshTextBlock.Text = FormatNextUsageRefreshText(App.AccountServiceManager.GetInactiveUsageRefreshRemainingTime());
     }
 
     private static string FormatNextUsageRefreshText(TimeSpan? remainingTime) => remainingTime is null ? GetLocalizedString("SettingsPage_RefreshRemainingDisabledText") : FormatRemainingTime(remainingTime.Value);

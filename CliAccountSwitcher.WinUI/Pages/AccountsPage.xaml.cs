@@ -1,7 +1,6 @@
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Helpers;
 using CliAccountSwitcher.WinUI.Models;
-using CliAccountSwitcher.WinUI.Services;
 using CliAccountSwitcher.WinUI.ViewModels;
 using CliAccountSwitcher.WinUI.Views;
 using Microsoft.UI.Xaml;
@@ -22,18 +21,18 @@ public sealed partial class AccountsPage : Page
 
     public AccountsPage()
     {
-        ViewModel = new AccountsPageViewModel(App.CodexAccountService, App.ApplicationSettings, DispatcherQueue);
+        ViewModel = new AccountsPageViewModel(App.AccountServiceManager, App.ApplicationSettings, DispatcherQueue);
         InitializeComponent();
         ViewModel.PropertyChanged += OnViewModelPropertyChanged;
     }
 
-    private IProviderAccountActions CurrentProviderAccountActions => App.GetProviderAccountActions(ViewModel.SelectedProviderKind);
+    private CliProviderKind SelectedProviderKind => ViewModel.SelectedProviderKind;
 
-    private async void OnRefreshAllAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments) => await RunWithLoadingAsync(GetLocalizedString("AccountsPage_RefreshAllAccountsLoadingMessage"), async () => await CurrentProviderAccountActions.RefreshAccountsPageAllAsync());
+    private async void OnRefreshAllAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments) => await RunWithLoadingAsync(GetLocalizedString("AccountsPage_RefreshAllAccountsLoadingMessage"), async () => await App.AccountServiceManager.RefreshAllAccountsAsync(SelectedProviderKind));
 
     private async void OnAddAccountButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
-        var addAccountDialog = new CliAccountSwitcher.WinUI.Dialogs.AddAccountDialog(App.CodexAccountService)
+        var addAccountDialog = new CliAccountSwitcher.WinUI.Dialogs.AddAccountDialog
         {
             XamlRoot = XamlRoot
         };
@@ -46,7 +45,7 @@ public sealed partial class AccountsPage : Page
         var selectedAccountIdentifiers = ViewModel.SelectedAccountIdentifiers;
         if (selectedAccountIdentifiers.Count == 0) return;
 
-        await RunWithLoadingAsync(GetLocalizedString("AccountsPage_RefreshSelectedAccountsLoadingMessage"), async () => await CurrentProviderAccountActions.RefreshAccountsPageSelectionAsync(selectedAccountIdentifiers));
+        await RunWithLoadingAsync(GetLocalizedString("AccountsPage_RefreshSelectedAccountsLoadingMessage"), async () => await App.AccountServiceManager.RefreshAccountsAsync(SelectedProviderKind, selectedAccountIdentifiers));
     }
 
     private async void OnDeleteSelectedAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
@@ -57,25 +56,25 @@ public sealed partial class AccountsPage : Page
         var contentDialogResult = await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteSelectedAccountsDialogTitle"), GetFormattedString("AccountsPage_DeleteSelectedAccountsDialogMessage", selectedAccountIdentifiers.Count), GetLocalizedString("AccountsPage_DeleteButtonText"), GetLocalizedString("DialogHelper_CancelButtonText"));
         if (contentDialogResult != ContentDialogResult.Primary) return;
 
-        await CurrentProviderAccountActions.DeleteAccountsAsync(selectedAccountIdentifiers);
+        await App.AccountServiceManager.DeleteAccountsAsync(SelectedProviderKind, selectedAccountIdentifiers);
         await ViewModel.ReloadAccountsAsync();
     }
 
     private async void OnExportBackupButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
-        var providerAccountActions = CurrentProviderAccountActions;
-        var fileSavePicker = CreateBackupFileSavePicker(providerAccountActions);
+        var selectedProviderKind = SelectedProviderKind;
+        var fileSavePicker = CreateBackupFileSavePicker(selectedProviderKind, App.AccountServiceManager.GetBackupFileNamePrefix(selectedProviderKind));
         var storageFile = await fileSavePicker.PickSaveFileAsync();
         if (storageFile is null) return;
 
-        await providerAccountActions.ExportBackupAsync(storageFile.Path);
+        await App.AccountServiceManager.ExportBackupAsync(selectedProviderKind, storageFile.Path);
         await this.ShowDialogAsync(GetLocalizedString("AccountsPage_ExportBackupDialogTitle"), GetLocalizedString("AccountsPage_ExportBackupDialogMessage"));
     }
 
     private async void OnImportBackupButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
-        var providerAccountActions = CurrentProviderAccountActions;
-        var fileOpenPicker = CreateBackupFileOpenPicker(providerAccountActions.ProviderKind);
+        var selectedProviderKind = SelectedProviderKind;
+        var fileOpenPicker = CreateBackupFileOpenPicker(selectedProviderKind);
         var storageFile = await fileOpenPicker.PickSingleFileAsync();
         if (storageFile is null) return;
 
@@ -83,7 +82,7 @@ public sealed partial class AccountsPage : Page
         var providerAccountBackupImportResult = default(ProviderAccountBackupImportResult);
         try
         {
-            providerAccountBackupImportResult = await providerAccountActions.ImportBackupAsync(storageFile.Path);
+            providerAccountBackupImportResult = await App.AccountServiceManager.ImportBackupAsync(selectedProviderKind, storageFile.Path);
             await ViewModel.ReloadAccountsAsync();
         }
         catch { providerAccountBackupImportResult = new ProviderAccountBackupImportResult { FailureCount = 1 }; }
@@ -100,7 +99,7 @@ public sealed partial class AccountsPage : Page
         var contentDialogResult = await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogMessage"), GetLocalizedString("AccountsPage_DeleteButtonText"), GetLocalizedString("DialogHelper_CancelButtonText"));
         if (contentDialogResult != ContentDialogResult.Primary) return;
 
-        var deletedCount = await CurrentProviderAccountActions.DeleteExpiredAccountsAsync();
+        var deletedCount = await App.AccountServiceManager.DeleteExpiredAccountsAsync(SelectedProviderKind);
         await ViewModel.ReloadAccountsAsync();
         await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), deletedCount == 0 ? GetLocalizedString("AccountsPage_DeleteExpiredAccountsNoAccountsMessage") : GetFormattedString("AccountsPage_DeleteExpiredAccountsDeletedMessageFormat", deletedCount));
     }
@@ -110,7 +109,7 @@ public sealed partial class AccountsPage : Page
         var accountIdentifier = ReadCommandParameter(sender);
         if (string.IsNullOrWhiteSpace(accountIdentifier)) return;
 
-        var providerActivationFollowUp = await CurrentProviderAccountActions.ActivateAccountAsync(accountIdentifier);
+        var providerActivationFollowUp = await App.AccountServiceManager.ActivateAccountAsync(SelectedProviderKind, accountIdentifier);
         await ViewModel.ReloadAccountsAsync();
         await HandleProviderActivationFollowUpAsync(providerActivationFollowUp);
     }
@@ -119,14 +118,14 @@ public sealed partial class AccountsPage : Page
     {
         var accountIdentifier = ReadCommandParameter(sender);
         if (string.IsNullOrWhiteSpace(accountIdentifier)) return;
-        if (ViewModel.SelectedProviderKind != CliProviderKind.Codex) return;
+        if (!App.AccountServiceManager.GetIsRenameSupported(SelectedProviderKind)) return;
 
         var currentAccountViewModel = ViewModel.Accounts.FirstOrDefault(accountViewModel => string.Equals(accountViewModel.AccountIdentifier, accountIdentifier, StringComparison.Ordinal));
         if (currentAccountViewModel is null) return;
 
         var customAlias = await this.ShowInputDialogAsync(GetLocalizedString("AccountsPage_RenameAccountDialogTitle"), GetLocalizedString("AccountsPage_RenameAccountPlaceholderText"), true, defaultText: currentAccountViewModel.CustomAlias);
         if (customAlias is null) return;
-        await App.CodexAccountService.RenameAccountAsync(accountIdentifier, customAlias);
+        await App.AccountServiceManager.RenameAccountAsync(SelectedProviderKind, accountIdentifier, customAlias);
         ViewModel.ReloadAccounts();
     }
 
@@ -135,7 +134,7 @@ public sealed partial class AccountsPage : Page
         var accountIdentifier = ReadCommandParameter(sender);
         if (string.IsNullOrWhiteSpace(accountIdentifier)) return;
 
-        await RunWithLoadingAsync(GetLocalizedString("AccountsPage_RefreshAccountLoadingMessage"), async () => await CurrentProviderAccountActions.RefreshAccountAsync(accountIdentifier));
+        await RunWithLoadingAsync(GetLocalizedString("AccountsPage_RefreshAccountLoadingMessage"), async () => await App.AccountServiceManager.RefreshAccountAsync(SelectedProviderKind, accountIdentifier));
     }
 
     private async void OnDeleteAccountButtonClicked(object sender, RoutedEventArgs routedEventArguments)
@@ -146,7 +145,7 @@ public sealed partial class AccountsPage : Page
         var contentDialogResult = await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteAccountDialogTitle"), GetLocalizedString("AccountsPage_DeleteAccountDialogMessage"), GetLocalizedString("AccountsPage_DeleteButtonText"), GetLocalizedString("DialogHelper_CancelButtonText"));
         if (contentDialogResult != ContentDialogResult.Primary) return;
 
-        await CurrentProviderAccountActions.DeleteAccountsAsync([accountIdentifier]);
+        await App.AccountServiceManager.DeleteAccountsAsync(SelectedProviderKind, [accountIdentifier]);
         await ViewModel.ReloadAccountsAsync();
     }
 
@@ -233,17 +232,17 @@ public sealed partial class AccountsPage : Page
         return fileOpenPicker;
     }
 
-    private static FileSavePicker CreateBackupFileSavePicker(IProviderAccountActions providerAccountActions)
+    private static FileSavePicker CreateBackupFileSavePicker(CliProviderKind providerKind, string backupFileNamePrefix)
     {
-        var backupFileExtension = GetBackupFileExtension(providerAccountActions.ProviderKind);
+        var backupFileExtension = GetBackupFileExtension(providerKind);
         var fileSavePicker = new FileSavePicker
         {
             SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
-            SuggestedFileName = $"{providerAccountActions.BackupFileNamePrefix}-{DateTimeOffset.Now.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture)}",
+            SuggestedFileName = $"{backupFileNamePrefix}-{DateTimeOffset.Now.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture)}",
             DefaultFileExtension = backupFileExtension
         };
         InitializeWithWindow.Initialize(fileSavePicker, WindowNative.GetWindowHandle(MainWindow.Instance));
-        fileSavePicker.FileTypeChoices.Add(GetLocalizedString(GetBackupFileTypeChoiceResourceName(providerAccountActions.ProviderKind)), [backupFileExtension]);
+        fileSavePicker.FileTypeChoices.Add(GetLocalizedString(GetBackupFileTypeChoiceResourceName(providerKind)), [backupFileExtension]);
         return fileSavePicker;
     }
 

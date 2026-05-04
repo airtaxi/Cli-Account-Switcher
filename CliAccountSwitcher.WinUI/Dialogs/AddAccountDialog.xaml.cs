@@ -1,6 +1,5 @@
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Pages.AddAccountDialog;
-using CliAccountSwitcher.WinUI.Services;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.UI.Xaml;
@@ -12,12 +11,12 @@ public sealed partial class AddAccountDialog : ContentDialog
 {
     private readonly AddAccountDialogContext _addAccountDialogContext;
 
-    public AddAccountDialog(CodexAccountService codexAccountService)
+    public AddAccountDialog()
     {
         InitializeComponent();
         App.ApplicationThemeService.ApplyThemeToElement(this);
         App.ApplicationThemeService.ThemeChanged += OnApplicationThemeServiceThemeChanged;
-        _addAccountDialogContext = new AddAccountDialogContext(codexAccountService, this);
+        _addAccountDialogContext = new AddAccountDialogContext(App.CodexAccountService, App.ClaudeAccountService, this);
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<CliProviderKind>>(this, OnProviderKindChangedMessageReceived);
         NavigateToSelectedPage();
     }
