@@ -25,13 +25,17 @@ public sealed class CliProviderAccountService : IDisposable
 
     public async Task<IReadOnlyList<StoredProviderAccount>> GetClaudeCodeAccountsAsync(CancellationToken cancellationToken = default) => await _claudeCodeProviderAdapter.ListStoredAccountsAsync(_providerSnapshotStore, cancellationToken);
 
-    public async Task<StoredProviderAccount> SaveCurrentClaudeCodeAccountAsync(CancellationToken cancellationToken = default) => await _claudeCodeProviderAdapter.SaveCurrentAccountAsync(_providerSnapshotStore, cancellationToken);
+    public async Task<StoredProviderAccount> SaveCurrentClaudeCodeAccountAsync(CancellationToken cancellationToken = default)
+        => await SaveAndRefreshClaudeCodeAccountAsync(_claudeCodeProviderAdapter.SaveCurrentAccountAsync(_providerSnapshotStore, cancellationToken), cancellationToken);
 
-    public async Task<StoredProviderAccount> SaveCurrentClaudeCodeAccountWithoutActivationAsync(CancellationToken cancellationToken = default) => await _claudeCodeProviderAdapter.SaveCurrentAccountWithoutActivationAsync(_providerSnapshotStore, cancellationToken);
+    public async Task<StoredProviderAccount> SaveCurrentClaudeCodeAccountWithoutActivationAsync(CancellationToken cancellationToken = default)
+        => await SaveAndRefreshClaudeCodeAccountAsync(_claudeCodeProviderAdapter.SaveCurrentAccountWithoutActivationAsync(_providerSnapshotStore, cancellationToken), cancellationToken);
 
-    public async Task<StoredProviderAccount> SaveClaudeCodeAccountAsync(string credentialsJson, string globalConfigJson, CancellationToken cancellationToken = default) => await _claudeCodeProviderAdapter.SaveAccountAsync(_providerSnapshotStore, credentialsJson, globalConfigJson, cancellationToken);
+    public async Task<StoredProviderAccount> SaveClaudeCodeAccountAsync(string credentialsJson, string globalConfigJson, CancellationToken cancellationToken = default)
+        => await SaveAndRefreshClaudeCodeAccountAsync(_claudeCodeProviderAdapter.SaveAccountAsync(_providerSnapshotStore, credentialsJson, globalConfigJson, cancellationToken), cancellationToken);
 
-    public async Task<StoredProviderAccount> SaveClaudeCodeAccountWithoutActivationAsync(string credentialsJson, string globalConfigJson, CancellationToken cancellationToken = default) => await _claudeCodeProviderAdapter.SaveAccountWithoutActivationAsync(_providerSnapshotStore, credentialsJson, globalConfigJson, cancellationToken);
+    public async Task<StoredProviderAccount> SaveClaudeCodeAccountWithoutActivationAsync(string credentialsJson, string globalConfigJson, CancellationToken cancellationToken = default)
+        => await SaveAndRefreshClaudeCodeAccountAsync(_claudeCodeProviderAdapter.SaveAccountWithoutActivationAsync(_providerSnapshotStore, credentialsJson, globalConfigJson, cancellationToken), cancellationToken);
 
     public async Task<StoredProviderAccount> ActivateClaudeCodeAccountAsync(string storedAccountIdentifier, CancellationToken cancellationToken = default) => await _claudeCodeProviderAdapter.ActivateStoredAccountAsync(_providerSnapshotStore, storedAccountIdentifier, cancellationToken);
 
@@ -211,6 +215,13 @@ public sealed class CliProviderAccountService : IDisposable
         _claudeCodeProviderAdapter.Dispose();
     }
 
+    private async Task<StoredProviderAccount> SaveAndRefreshClaudeCodeAccountAsync(Task<StoredProviderAccount> saveAccountTask, CancellationToken cancellationToken)
+    {
+        var storedProviderAccount = await saveAccountTask;
+        await RefreshClaudeCodeAccountAsync(storedProviderAccount, cancellationToken);
+        return storedProviderAccount;
+    }
+
     private async Task RefreshClaudeCodeAccountAsync(StoredProviderAccount storedProviderAccount, CancellationToken cancellationToken)
     {
         try
@@ -224,6 +235,10 @@ public sealed class CliProviderAccountService : IDisposable
         {
             ClearClaudeCodeUsageSnapshot(storedProviderAccount.StoredAccountIdentifier);
             await UpdateClaudeCodeStoredAccountMetadataAsync(storedProviderAccount, true, DateTimeOffset.UtcNow, cancellationToken);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
         }
         catch { }
     }
