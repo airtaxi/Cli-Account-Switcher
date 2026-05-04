@@ -304,7 +304,8 @@ public sealed class CodexProviderAdapter : IProviderAdapter, IDisposable
             PlanType = identityProfile.PlanType,
             IsActive = isActive,
             IsTokenExpired = false,
-            LastUpdated = DateTimeOffset.UtcNow
+            LastUpdated = DateTimeOffset.UtcNow,
+            LastProviderUsageSnapshot = new ProviderUsageSnapshot { ProviderKind = CliProviderKind.Codex }
         };
     }
 
@@ -322,7 +323,9 @@ public sealed class CodexProviderAdapter : IProviderAdapter, IDisposable
             PlanType = storedProviderAccount.PlanType,
             IsActive = isActive,
             IsTokenExpired = storedProviderAccount.IsTokenExpired,
-            LastUpdated = storedProviderAccount.LastUpdated
+            LastUpdated = storedProviderAccount.LastUpdated,
+            LastProviderUsageSnapshot = storedProviderAccount.LastProviderUsageSnapshot,
+            LastUsageRefreshTime = storedProviderAccount.LastUsageRefreshTime
         };
 
     private static bool IsSameCodexAccount(StoredProviderAccount storedProviderAccount, CodexAuthenticationDocument codexAuthenticationDocument)

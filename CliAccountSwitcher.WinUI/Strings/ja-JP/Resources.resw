@@ -177,52 +177,52 @@
   <data name="AddAccountDialog_FileSelectorBarItem.Text" xml:space="preserve">
     <value>ファイルを読み込む</value>
   </data>
-  <data name="CodexAccountViewModel_UnknownPlan" xml:space="preserve">
+  <data name="ProviderAccountViewModel_UnknownPlan" xml:space="preserve">
     <value>不明</value>
   </data>
-  <data name="CodexAccountViewModel_TokenExpiredStatus" xml:space="preserve">
+  <data name="ProviderAccountViewModel_TokenExpiredStatus" xml:space="preserve">
     <value>トークン期限切れ</value>
   </data>
-  <data name="CodexAccountViewModel_ActiveStatus" xml:space="preserve">
+  <data name="ProviderAccountViewModel_ActiveStatus" xml:space="preserve">
     <value>アクティブ</value>
   </data>
-  <data name="CodexAccountViewModel_WaitingStatus" xml:space="preserve">
+  <data name="ProviderAccountViewModel_WaitingStatus" xml:space="preserve">
     <value>待機中</value>
   </data>
-  <data name="CodexAccountViewModel_NotRefreshed" xml:space="preserve">
+  <data name="ProviderAccountViewModel_NotRefreshed" xml:space="preserve">
     <value>まだ更新されていません</value>
   </data>
-  <data name="CodexAccountViewModel_LastUsageRefreshFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_LastUsageRefreshFormat" xml:space="preserve">
     <value>最終更新: {0}</value>
   </data>
-  <data name="CodexAccountViewModel_NoAccessToken" xml:space="preserve">
+  <data name="ProviderAccountViewModel_NoAccessToken" xml:space="preserve">
     <value>なし</value>
   </data>
-  <data name="CodexAccountViewModel_UnknownUsage" xml:space="preserve">
+  <data name="ProviderAccountViewModel_UnknownUsage" xml:space="preserve">
     <value>使用量を取得できません</value>
   </data>
-  <data name="CodexAccountViewModel_UnknownResetTime" xml:space="preserve">
+  <data name="ProviderAccountViewModel_UnknownResetTime" xml:space="preserve">
     <value>リセット時刻を取得できません</value>
   </data>
-  <data name="CodexAccountViewModel_PrimaryUsageWindowLabel" xml:space="preserve">
+  <data name="ProviderAccountViewModel_PrimaryUsageWindowLabel" xml:space="preserve">
     <value>5時間制限</value>
   </data>
-  <data name="CodexAccountViewModel_SecondaryUsageWindowLabel" xml:space="preserve">
+  <data name="ProviderAccountViewModel_SecondaryUsageWindowLabel" xml:space="preserve">
     <value>7日間制限</value>
   </data>
-  <data name="CodexAccountViewModel_ResetAfterFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_ResetAfterFormat" xml:space="preserve">
     <value>{0:hh\:mm\:ss} 後にリセット</value>
   </data>
-  <data name="CodexAccountViewModel_ResetAfterWithSingleDayFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_ResetAfterWithSingleDayFormat" xml:space="preserve">
     <value>1日 {0:hh\:mm\:ss} 後にリセット</value>
   </data>
-  <data name="CodexAccountViewModel_ResetAfterWithMultipleDaysFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_ResetAfterWithMultipleDaysFormat" xml:space="preserve">
     <value>{0}日 {1:hh\:mm\:ss} 後にリセット</value>
   </data>
-  <data name="CodexAccountViewModel_UsageRemainingOnlyFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_UsageRemainingOnlyFormat" xml:space="preserve">
     <value>残り {0}%</value>
   </data>
-  <data name="CodexAccountViewModel_UsageRemainingFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_UsageRemainingFormat" xml:space="preserve">
     <value>残り {0}% · {1}</value>
   </data>
   <data name="AccountsPageViewModel_NoSelectedAccounts" xml:space="preserve">
@@ -1057,9 +1057,6 @@ Microsoft Store に {0} 件の更新があります。</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogMessage" xml:space="preserve">
     <value>アカウントの切り替えが完了しました。新しいアカウント状態を反映するには、Claude Code を再起動するか VS Code の Claude セッションを開き直してください。</value>
-  </data>
-  <data name="CodexAccountViewModel_LastUpdatedFormat" xml:space="preserve">
-    <value>最終更新: {0}</value>
   </data>
   <data name="OAuthAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
     <value>Claude Code ログイン</value>

@@ -267,7 +267,7 @@
                         </Border>
                     </ListView.Header>
                     <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="viewModels:CodexAccountViewModel">
+                        <DataTemplate x:DataType="viewModels:ProviderAccountViewModel">
                             <Border Style="{StaticResource AccountsListItemBorderStyle}">
                                 <Grid ColumnSpacing="12">
                                     <Grid.ColumnDefinitions>

@@ -196,7 +196,9 @@ public sealed class FileSystemProviderSnapshotStore : IProviderSnapshotStore
             PlanType = storedProviderAccount.PlanType,
             IsActive = isActive,
             IsTokenExpired = storedProviderAccount.IsTokenExpired,
-            LastUpdated = storedProviderAccount.LastUpdated
+            LastUpdated = storedProviderAccount.LastUpdated,
+            LastProviderUsageSnapshot = storedProviderAccount.LastProviderUsageSnapshot,
+            LastUsageRefreshTime = storedProviderAccount.LastUsageRefreshTime
         };
 
     private static async Task WriteTextAtomicallyAsync(string filePath, string fileText, CancellationToken cancellationToken)

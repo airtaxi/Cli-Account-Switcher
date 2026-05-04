@@ -10,11 +10,8 @@ namespace CliAccountSwitcher.WinUI.Services;
 
 public sealed class CliProviderAccountService : IDisposable
 {
-    private readonly object _claudeCodeUsageCacheLock = new();
     private readonly FileSystemProviderSnapshotStore _providerSnapshotStore;
     private readonly ClaudeCodeProviderAdapter _claudeCodeProviderAdapter;
-    private readonly Dictionary<string, ProviderUsageSnapshot> _claudeCodeUsageSnapshots = new(StringComparer.Ordinal);
-    private readonly Dictionary<string, DateTimeOffset> _claudeCodeUsageRefreshTimes = new(StringComparer.Ordinal);
     private readonly SemaphoreSlim _claudeCodeRefreshSemaphore = new(1, 1);
 
     public CliProviderAccountService()
@@ -24,6 +21,12 @@ public sealed class CliProviderAccountService : IDisposable
     }
 
     public async Task<IReadOnlyList<StoredProviderAccount>> GetClaudeCodeAccountsAsync(CancellationToken cancellationToken = default) => await _claudeCodeProviderAdapter.ListStoredAccountsAsync(_providerSnapshotStore, cancellationToken);
+
+    public async Task<IReadOnlyList<ProviderAccount>> GetClaudeCodeProviderAccountsAsync(CancellationToken cancellationToken = default)
+    {
+        var storedProviderAccounts = await GetClaudeCodeAccountsAsync(cancellationToken);
+        return storedProviderAccounts.Select(CreateProviderAccount).ToArray();
+    }
 
     public async Task<StoredProviderAccount> SaveCurrentClaudeCodeAccountAsync(CancellationToken cancellationToken = default)
         => await SaveAndRefreshClaudeCodeAccountAsync(_claudeCodeProviderAdapter.SaveCurrentAccountAsync(_providerSnapshotStore, cancellationToken), cancellationToken);
@@ -41,11 +44,7 @@ public sealed class CliProviderAccountService : IDisposable
 
     public async Task DeleteClaudeCodeAccountsAsync(IEnumerable<string> storedAccountIdentifiers, CancellationToken cancellationToken = default)
     {
-        foreach (var storedAccountIdentifier in storedAccountIdentifiers.Where(storedAccountIdentifier => !string.IsNullOrWhiteSpace(storedAccountIdentifier)).Distinct(StringComparer.Ordinal))
-        {
-            await _claudeCodeProviderAdapter.DeleteStoredAccountAsync(_providerSnapshotStore, storedAccountIdentifier, cancellationToken);
-            ClearClaudeCodeUsageSnapshot(storedAccountIdentifier);
-        }
+        foreach (var storedAccountIdentifier in storedAccountIdentifiers.Where(storedAccountIdentifier => !string.IsNullOrWhiteSpace(storedAccountIdentifier)).Distinct(StringComparer.Ordinal)) await _claudeCodeProviderAdapter.DeleteStoredAccountAsync(_providerSnapshotStore, storedAccountIdentifier, cancellationToken);
     }
 
     public async Task RunClaudeCodeLoginAsync(CancellationToken cancellationToken = default) => await _claudeCodeProviderAdapter.RunLoginAsync(cancellationToken);
@@ -56,14 +55,12 @@ public sealed class CliProviderAccountService : IDisposable
         {
             var providerUsageSnapshot = await _claudeCodeProviderAdapter.GetUsageAsync(storedAccountIdentifier, cancellationToken);
             var usageRefreshTime = DateTimeOffset.UtcNow;
-            SetClaudeCodeUsageSnapshot(storedAccountIdentifier, providerUsageSnapshot, usageRefreshTime);
-            await UpdateClaudeCodeStoredAccountMetadataAsync(storedAccountIdentifier, false, usageRefreshTime, cancellationToken);
+            await UpdateClaudeCodeStoredAccountMetadataAsync(storedAccountIdentifier, false, usageRefreshTime, providerUsageSnapshot, cancellationToken);
             return providerUsageSnapshot;
         }
         catch (ProviderActionRequiredException)
         {
-            ClearClaudeCodeUsageSnapshot(storedAccountIdentifier);
-            await UpdateClaudeCodeStoredAccountMetadataAsync(storedAccountIdentifier, true, DateTimeOffset.UtcNow, cancellationToken);
+            await UpdateClaudeCodeStoredAccountMetadataAsync(storedAccountIdentifier, true, DateTimeOffset.UtcNow, null, cancellationToken);
             throw;
         }
     }
@@ -190,25 +187,6 @@ public sealed class CliProviderAccountService : IDisposable
         return importResult;
     }
 
-    public bool TryGetClaudeCodeUsageSnapshot(string storedAccountIdentifier, out ProviderUsageSnapshot providerUsageSnapshot)
-    {
-        lock (_claudeCodeUsageCacheLock) return _claudeCodeUsageSnapshots.TryGetValue(storedAccountIdentifier, out providerUsageSnapshot);
-    }
-
-    public bool TryGetClaudeCodeUsageRefreshTime(string storedAccountIdentifier, out DateTimeOffset usageRefreshTime)
-    {
-        lock (_claudeCodeUsageCacheLock) return _claudeCodeUsageRefreshTimes.TryGetValue(storedAccountIdentifier, out usageRefreshTime);
-    }
-
-    public void ClearClaudeCodeUsageSnapshot(string storedAccountIdentifier)
-    {
-        lock (_claudeCodeUsageCacheLock)
-        {
-            _claudeCodeUsageSnapshots.Remove(storedAccountIdentifier);
-            _claudeCodeUsageRefreshTimes.Remove(storedAccountIdentifier);
-        }
-    }
-
     public void Dispose()
     {
         _claudeCodeRefreshSemaphore.Dispose();
@@ -228,13 +206,11 @@ public sealed class CliProviderAccountService : IDisposable
         {
             var providerUsageSnapshot = await _claudeCodeProviderAdapter.GetUsageAsync(storedProviderAccount.StoredAccountIdentifier, cancellationToken);
             var usageRefreshTime = DateTimeOffset.UtcNow;
-            SetClaudeCodeUsageSnapshot(storedProviderAccount.StoredAccountIdentifier, providerUsageSnapshot, usageRefreshTime);
-            await UpdateClaudeCodeStoredAccountMetadataAsync(storedProviderAccount, false, usageRefreshTime, cancellationToken);
+            await UpdateClaudeCodeStoredAccountMetadataAsync(storedProviderAccount, false, usageRefreshTime, providerUsageSnapshot, cancellationToken);
         }
         catch (ProviderActionRequiredException)
         {
-            ClearClaudeCodeUsageSnapshot(storedProviderAccount.StoredAccountIdentifier);
-            await UpdateClaudeCodeStoredAccountMetadataAsync(storedProviderAccount, true, DateTimeOffset.UtcNow, cancellationToken);
+            await UpdateClaudeCodeStoredAccountMetadataAsync(storedProviderAccount, true, DateTimeOffset.UtcNow, null, cancellationToken);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
@@ -243,24 +219,15 @@ public sealed class CliProviderAccountService : IDisposable
         catch { }
     }
 
-    private void SetClaudeCodeUsageSnapshot(string storedAccountIdentifier, ProviderUsageSnapshot providerUsageSnapshot, DateTimeOffset usageRefreshTime)
-    {
-        lock (_claudeCodeUsageCacheLock)
-        {
-            _claudeCodeUsageSnapshots[storedAccountIdentifier] = providerUsageSnapshot;
-            _claudeCodeUsageRefreshTimes[storedAccountIdentifier] = usageRefreshTime;
-        }
-    }
-
-    private async Task UpdateClaudeCodeStoredAccountMetadataAsync(string storedAccountIdentifier, bool isTokenExpired, DateTimeOffset lastUpdated, CancellationToken cancellationToken)
+    private async Task UpdateClaudeCodeStoredAccountMetadataAsync(string storedAccountIdentifier, bool isTokenExpired, DateTimeOffset lastUpdated, ProviderUsageSnapshot providerUsageSnapshot, CancellationToken cancellationToken)
     {
         var storedProviderAccount = (await GetClaudeCodeAccountsAsync(cancellationToken)).FirstOrDefault(storedProviderAccount => string.Equals(storedProviderAccount.StoredAccountIdentifier, storedAccountIdentifier, StringComparison.Ordinal));
         if (storedProviderAccount is null) return;
 
-        await UpdateClaudeCodeStoredAccountMetadataAsync(storedProviderAccount, isTokenExpired, lastUpdated, cancellationToken);
+        await UpdateClaudeCodeStoredAccountMetadataAsync(storedProviderAccount, isTokenExpired, lastUpdated, providerUsageSnapshot, cancellationToken);
     }
 
-    private async Task UpdateClaudeCodeStoredAccountMetadataAsync(StoredProviderAccount storedProviderAccount, bool isTokenExpired, DateTimeOffset lastUpdated, CancellationToken cancellationToken)
+    private async Task UpdateClaudeCodeStoredAccountMetadataAsync(StoredProviderAccount storedProviderAccount, bool isTokenExpired, DateTimeOffset lastUpdated, ProviderUsageSnapshot providerUsageSnapshot, CancellationToken cancellationToken)
     {
         var payloadJson = await _providerSnapshotStore.GetPayloadJsonAsync(CliProviderKind.ClaudeCode, storedProviderAccount.StoredAccountIdentifier, cancellationToken);
         if (string.IsNullOrWhiteSpace(payloadJson)) return;
@@ -268,6 +235,8 @@ public sealed class CliProviderAccountService : IDisposable
         var updatedStoredProviderAccount = CloneStoredProviderAccount(storedProviderAccount);
         updatedStoredProviderAccount.IsTokenExpired = isTokenExpired;
         updatedStoredProviderAccount.LastUpdated = lastUpdated;
+        updatedStoredProviderAccount.LastProviderUsageSnapshot = providerUsageSnapshot ?? new ProviderUsageSnapshot { ProviderKind = storedProviderAccount.ProviderKind };
+        updatedStoredProviderAccount.LastUsageRefreshTime = providerUsageSnapshot is null ? null : lastUpdated;
         await _providerSnapshotStore.SaveAsync(updatedStoredProviderAccount, payloadJson, cancellationToken);
     }
 
@@ -318,6 +287,48 @@ public sealed class CliProviderAccountService : IDisposable
             PlanType = storedProviderAccount.PlanType,
             IsActive = storedProviderAccount.IsActive,
             IsTokenExpired = storedProviderAccount.IsTokenExpired,
-            LastUpdated = storedProviderAccount.LastUpdated
+            LastUpdated = storedProviderAccount.LastUpdated,
+            LastProviderUsageSnapshot = storedProviderAccount.LastProviderUsageSnapshot,
+            LastUsageRefreshTime = storedProviderAccount.LastUsageRefreshTime
         };
+
+    private static ProviderAccount CreateProviderAccount(StoredProviderAccount storedProviderAccount)
+        => new()
+        {
+            ProviderKind = storedProviderAccount.ProviderKind,
+            AccountIdentifier = storedProviderAccount.StoredAccountIdentifier,
+            ProviderAccountIdentifier = storedProviderAccount.AccountIdentifier,
+            AccountDetailText = string.IsNullOrWhiteSpace(storedProviderAccount.AccountIdentifier) ? storedProviderAccount.StoredAccountIdentifier : storedProviderAccount.AccountIdentifier,
+            DisplayName = string.IsNullOrWhiteSpace(storedProviderAccount.DisplayName) ? storedProviderAccount.EmailAddress : storedProviderAccount.DisplayName,
+            EmailAddress = storedProviderAccount.EmailAddress,
+            PlanType = storedProviderAccount.PlanType,
+            IsActive = storedProviderAccount.IsActive,
+            IsTokenExpired = storedProviderAccount.IsTokenExpired,
+            LastProviderUsageSnapshot = CreateProviderUsageSnapshot(storedProviderAccount.ProviderKind, storedProviderAccount.LastProviderUsageSnapshot),
+            LastUsageRefreshTime = storedProviderAccount.LastUsageRefreshTime
+        };
+
+    private static ProviderUsageSnapshot CreateProviderUsageSnapshot(CliProviderKind providerKind, ProviderUsageSnapshot providerUsageSnapshot)
+        => providerUsageSnapshot is null
+            ? new ProviderUsageSnapshot { ProviderKind = providerKind }
+            : new ProviderUsageSnapshot
+            {
+                ProviderKind = providerKind,
+                PlanType = providerUsageSnapshot.PlanType,
+                EmailAddress = providerUsageSnapshot.EmailAddress,
+                RawResponseText = providerUsageSnapshot.RawResponseText,
+                FiveHour = CreateProviderUsageWindow(providerUsageSnapshot.FiveHour),
+                SevenDay = CreateProviderUsageWindow(providerUsageSnapshot.SevenDay)
+            };
+
+    private static ProviderUsageWindow CreateProviderUsageWindow(ProviderUsageWindow providerUsageWindow)
+        => providerUsageWindow is null
+            ? new ProviderUsageWindow()
+            : new ProviderUsageWindow
+            {
+                UsedPercentage = providerUsageWindow.UsedPercentage,
+                RemainingPercentage = providerUsageWindow.RemainingPercentage,
+                ResetAfterSeconds = providerUsageWindow.ResetAfterSeconds,
+                ResetAt = providerUsageWindow.ResetAt
+            };
 }

@@ -177,52 +177,52 @@
   <data name="AddAccountDialog_FileSelectorBarItem.Text" xml:space="preserve">
     <value>Load File</value>
   </data>
-  <data name="CodexAccountViewModel_UnknownPlan" xml:space="preserve">
+  <data name="ProviderAccountViewModel_UnknownPlan" xml:space="preserve">
     <value>Unknown</value>
   </data>
-  <data name="CodexAccountViewModel_TokenExpiredStatus" xml:space="preserve">
+  <data name="ProviderAccountViewModel_TokenExpiredStatus" xml:space="preserve">
     <value>Token Expired</value>
   </data>
-  <data name="CodexAccountViewModel_ActiveStatus" xml:space="preserve">
+  <data name="ProviderAccountViewModel_ActiveStatus" xml:space="preserve">
     <value>Active</value>
   </data>
-  <data name="CodexAccountViewModel_WaitingStatus" xml:space="preserve">
+  <data name="ProviderAccountViewModel_WaitingStatus" xml:space="preserve">
     <value>Waiting</value>
   </data>
-  <data name="CodexAccountViewModel_NotRefreshed" xml:space="preserve">
+  <data name="ProviderAccountViewModel_NotRefreshed" xml:space="preserve">
     <value>Not refreshed yet</value>
   </data>
-  <data name="CodexAccountViewModel_LastUsageRefreshFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_LastUsageRefreshFormat" xml:space="preserve">
     <value>Last refreshed: {0}</value>
   </data>
-  <data name="CodexAccountViewModel_NoAccessToken" xml:space="preserve">
+  <data name="ProviderAccountViewModel_NoAccessToken" xml:space="preserve">
     <value>None</value>
   </data>
-  <data name="CodexAccountViewModel_UnknownUsage" xml:space="preserve">
+  <data name="ProviderAccountViewModel_UnknownUsage" xml:space="preserve">
     <value>Usage unavailable</value>
   </data>
-  <data name="CodexAccountViewModel_UnknownResetTime" xml:space="preserve">
+  <data name="ProviderAccountViewModel_UnknownResetTime" xml:space="preserve">
     <value>Reset time unavailable</value>
   </data>
-  <data name="CodexAccountViewModel_PrimaryUsageWindowLabel" xml:space="preserve">
+  <data name="ProviderAccountViewModel_PrimaryUsageWindowLabel" xml:space="preserve">
     <value>5-hour limit</value>
   </data>
-  <data name="CodexAccountViewModel_SecondaryUsageWindowLabel" xml:space="preserve">
+  <data name="ProviderAccountViewModel_SecondaryUsageWindowLabel" xml:space="preserve">
     <value>7-day limit</value>
   </data>
-  <data name="CodexAccountViewModel_ResetAfterFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_ResetAfterFormat" xml:space="preserve">
     <value>resets in {0:hh\:mm\:ss}</value>
   </data>
-  <data name="CodexAccountViewModel_ResetAfterWithSingleDayFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_ResetAfterWithSingleDayFormat" xml:space="preserve">
     <value>resets in 1 day {0:hh\:mm\:ss}</value>
   </data>
-  <data name="CodexAccountViewModel_ResetAfterWithMultipleDaysFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_ResetAfterWithMultipleDaysFormat" xml:space="preserve">
     <value>resets in {0} days {1:hh\:mm\:ss}</value>
   </data>
-  <data name="CodexAccountViewModel_UsageRemainingOnlyFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_UsageRemainingOnlyFormat" xml:space="preserve">
     <value>{0}% remaining</value>
   </data>
-  <data name="CodexAccountViewModel_UsageRemainingFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_UsageRemainingFormat" xml:space="preserve">
     <value>{0}% remaining · {1}</value>
   </data>
   <data name="AccountsPageViewModel_NoSelectedAccounts" xml:space="preserve">
@@ -1057,9 +1057,6 @@ The installed app is already up to date.</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogMessage" xml:space="preserve">
     <value>Account switching is complete. Restart Claude Code or reopen the VS Code Claude session to use the new account state.</value>
-  </data>
-  <data name="CodexAccountViewModel_LastUpdatedFormat" xml:space="preserve">
-    <value>Last updated: {0}</value>
   </data>
   <data name="OAuthAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
     <value>Claude Code login</value>

@@ -32,9 +32,9 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         ReloadAccounts();
     }
 
-    public ObservableCollection<CodexAccountViewModel> Accounts { get; } = [];
+    public ObservableCollection<ProviderAccountViewModel> Accounts { get; } = [];
 
-    public ObservableCollection<CodexAccountViewModel> FilteredAccounts { get; } = [];
+    public ObservableCollection<ProviderAccountViewModel> FilteredAccounts { get; } = [];
 
     [ObservableProperty]
     public partial string SearchText { get; set; } = "";
@@ -90,7 +90,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         SelectedProviderKind = _applicationSettings.SelectedProviderKind;
         if (SelectedProviderKind == CliProviderKind.Codex)
         {
-            SynchronizeAccounts(_codexAccountService.GetAccounts());
+            SynchronizeAccounts(_codexAccountService.GetProviderAccounts());
             ApplyFilter();
             RefreshAccountStateProperties();
             return;
@@ -110,12 +110,12 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
         try
         {
-            var storedProviderAccounts = await App.CliProviderAccountService.GetClaudeCodeAccountsAsync();
-            SynchronizeAccounts(storedProviderAccounts);
+            var providerAccounts = await App.CliProviderAccountService.GetClaudeCodeProviderAccountsAsync();
+            SynchronizeAccounts(providerAccounts);
         }
         catch
         {
-            SynchronizeAccounts(Array.Empty<StoredProviderAccount>());
+            SynchronizeAccounts(Array.Empty<ProviderAccount>());
         }
 
         ApplyFilter();
@@ -175,15 +175,15 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     private void OnCodexAccountChangedMessageReceived(object recipient, ValueChangedMessage<CodexAccount> valueChangedMessage)
     {
         if (SelectedProviderKind != CliProviderKind.Codex) return;
-        if (_dispatcherQueue.HasThreadAccess) ApplyAccountChange(valueChangedMessage.Value);
-        else _dispatcherQueue.TryEnqueue(() => ApplyAccountChange(valueChangedMessage.Value));
+        if (_dispatcherQueue.HasThreadAccess) ReloadAccounts();
+        else _dispatcherQueue.TryEnqueue(ReloadAccounts);
     }
 
     private void OnCodexAccountStoreDocumentChangedMessageReceived(object recipient, ValueChangedMessage<CodexAccountStoreDocument> valueChangedMessage)
     {
         if (SelectedProviderKind != CliProviderKind.Codex) return;
-        if (_dispatcherQueue.HasThreadAccess) ApplyAccountStoreDocumentChange(valueChangedMessage.Value);
-        else _dispatcherQueue.TryEnqueue(() => ApplyAccountStoreDocumentChange(valueChangedMessage.Value));
+        if (_dispatcherQueue.HasThreadAccess) ReloadAccounts();
+        else _dispatcherQueue.TryEnqueue(ReloadAccounts);
     }
 
     private void OnProviderKindChangedMessageReceived(object recipient, ValueChangedMessage<CliProviderKind> valueChangedMessage)
@@ -194,33 +194,14 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     private void OnAccountViewModelPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArguments)
     {
-        if (propertyChangedEventArguments.PropertyName != nameof(CodexAccountViewModel.IsSelected)) return;
+        if (propertyChangedEventArguments.PropertyName != nameof(ProviderAccountViewModel.IsSelected)) return;
         if (_isSynchronizingAccountSelection) return;
         RefreshSelectedAccountIdentifiersFromAccountViewModels();
     }
 
-    private void ApplyAccountChange(CodexAccount codexAccount)
+    private void SynchronizeAccounts(IReadOnlyList<ProviderAccount> providerAccounts)
     {
-        var existingAccountViewModel = Accounts.FirstOrDefault(accountViewModel => string.Equals(accountViewModel.AccountIdentifier, codexAccount.AccountIdentifier, StringComparison.Ordinal));
-        if (existingAccountViewModel is null) Accounts.Add(CreateAccountViewModel(codexAccount));
-        else existingAccountViewModel.Update(codexAccount);
-
-        SortAccounts();
-        ApplyFilter();
-        RefreshAccountStateProperties();
-        RefreshSelectedAccountIdentifiersFromAccountViewModels();
-    }
-
-    private void ApplyAccountStoreDocumentChange(CodexAccountStoreDocument codexAccountStoreDocument)
-    {
-        SynchronizeAccounts(codexAccountStoreDocument.Accounts);
-        ApplyFilter();
-        RefreshAccountStateProperties();
-    }
-
-    private void SynchronizeAccounts(IReadOnlyList<CodexAccount> codexAccounts)
-    {
-        var accountIdentifiers = codexAccounts.Select(codexAccount => codexAccount.AccountIdentifier).ToHashSet(StringComparer.Ordinal);
+        var accountIdentifiers = providerAccounts.Select(providerAccount => providerAccount.AccountIdentifier).ToHashSet(StringComparer.Ordinal);
         for (var accountIndex = Accounts.Count - 1; accountIndex >= 0; accountIndex--)
         {
             var accountViewModel = Accounts[accountIndex];
@@ -230,75 +211,25 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
             Accounts.RemoveAt(accountIndex);
         }
 
-        foreach (var codexAccount in codexAccounts)
+        foreach (var providerAccount in providerAccounts)
         {
-            var existingAccountViewModel = Accounts.FirstOrDefault(accountViewModel => string.Equals(accountViewModel.AccountIdentifier, codexAccount.AccountIdentifier, StringComparison.Ordinal));
-            if (existingAccountViewModel is null) Accounts.Add(CreateAccountViewModel(codexAccount));
-            else existingAccountViewModel.Update(codexAccount);
+            var existingAccountViewModel = Accounts.FirstOrDefault(accountViewModel => string.Equals(accountViewModel.AccountIdentifier, providerAccount.AccountIdentifier, StringComparison.Ordinal));
+            if (existingAccountViewModel is null) Accounts.Add(CreateAccountViewModel(providerAccount));
+            else existingAccountViewModel.Update(providerAccount);
         }
 
         SortAccounts();
         RefreshSelectedAccountIdentifiersFromAccountViewModels();
     }
 
-    private void SynchronizeAccounts(IReadOnlyList<StoredProviderAccount> storedProviderAccounts)
+    private ProviderAccountViewModel CreateAccountViewModel(ProviderAccount providerAccount)
     {
-        var storedAccountIdentifiers = storedProviderAccounts.Select(storedProviderAccount => storedProviderAccount.StoredAccountIdentifier).ToHashSet(StringComparer.Ordinal);
-        for (var accountIndex = Accounts.Count - 1; accountIndex >= 0; accountIndex--)
+        var accountViewModel = new ProviderAccountViewModel(providerAccount, _applicationSettings)
         {
-            var accountViewModel = Accounts[accountIndex];
-            if (accountViewModel.ProviderKind == CliProviderKind.ClaudeCode && storedAccountIdentifiers.Contains(accountViewModel.AccountIdentifier)) continue;
-            accountViewModel.PropertyChanged -= OnAccountViewModelPropertyChanged;
-            _selectedAccountIdentifiers.Remove(accountViewModel.AccountIdentifier);
-            Accounts.RemoveAt(accountIndex);
-        }
-
-        foreach (var storedProviderAccount in storedProviderAccounts)
-        {
-            var existingAccountViewModel = Accounts.FirstOrDefault(accountViewModel => string.Equals(accountViewModel.AccountIdentifier, storedProviderAccount.StoredAccountIdentifier, StringComparison.Ordinal));
-            if (existingAccountViewModel is null) Accounts.Add(CreateAccountViewModel(storedProviderAccount));
-            else
-            {
-                existingAccountViewModel.Update(storedProviderAccount);
-                ApplyClaudeCodeUsageSnapshotCache(existingAccountViewModel);
-            }
-        }
-
-        SortAccounts();
-        RefreshSelectedAccountIdentifiersFromAccountViewModels();
-    }
-
-    private CodexAccountViewModel CreateAccountViewModel(CodexAccount codexAccount)
-    {
-        var accountViewModel = new CodexAccountViewModel(codexAccount, _applicationSettings)
-        {
-            IsSelected = _selectedAccountIdentifiers.Contains(codexAccount.AccountIdentifier)
+            IsSelected = _selectedAccountIdentifiers.Contains(providerAccount.AccountIdentifier)
         };
         accountViewModel.PropertyChanged += OnAccountViewModelPropertyChanged;
         return accountViewModel;
-    }
-
-    private CodexAccountViewModel CreateAccountViewModel(StoredProviderAccount storedProviderAccount)
-    {
-        var accountViewModel = new CodexAccountViewModel(storedProviderAccount, _applicationSettings)
-        {
-            IsSelected = _selectedAccountIdentifiers.Contains(storedProviderAccount.StoredAccountIdentifier)
-        };
-        ApplyClaudeCodeUsageSnapshotCache(accountViewModel);
-        accountViewModel.PropertyChanged += OnAccountViewModelPropertyChanged;
-        return accountViewModel;
-    }
-
-    private static void ApplyClaudeCodeUsageSnapshotCache(CodexAccountViewModel accountViewModel)
-    {
-        if (App.CliProviderAccountService.TryGetClaudeCodeUsageSnapshot(accountViewModel.AccountIdentifier, out var providerUsageSnapshot))
-        {
-            var usageRefreshTime = App.CliProviderAccountService.TryGetClaudeCodeUsageRefreshTime(accountViewModel.AccountIdentifier, out var cachedUsageRefreshTime) ? cachedUsageRefreshTime : DateTimeOffset.UtcNow;
-            accountViewModel.UpdateProviderUsageSnapshot(providerUsageSnapshot, usageRefreshTime);
-            return;
-        }
-
-        accountViewModel.ClearProviderUsageSnapshot();
     }
 
     private void SortAccounts()
@@ -335,7 +266,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         RefreshFilteredAccountsSelectionState();
     }
 
-    private static bool IsAccountVisible(CodexAccountViewModel accountViewModel, string normalizedSearchText, string normalizedSelectedPlanFilter)
+    private static bool IsAccountVisible(ProviderAccountViewModel accountViewModel, string normalizedSearchText, string normalizedSelectedPlanFilter)
     {
         var matchesSearch = string.IsNullOrWhiteSpace(normalizedSearchText) || accountViewModel.SearchText.Contains(normalizedSearchText, StringComparison.CurrentCultureIgnoreCase);
         if (!matchesSearch) return false;

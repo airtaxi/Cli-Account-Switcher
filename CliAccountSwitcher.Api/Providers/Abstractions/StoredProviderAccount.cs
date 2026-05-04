@@ -25,4 +25,8 @@ public sealed class StoredProviderAccount
     public bool IsTokenExpired { get; set; }
 
     public DateTimeOffset LastUpdated { get; set; }
+
+    public ProviderUsageSnapshot LastProviderUsageSnapshot { get; set; } = new();
+
+    public DateTimeOffset? LastUsageRefreshTime { get; set; }
 }

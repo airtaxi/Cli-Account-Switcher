@@ -342,7 +342,8 @@ public sealed class ClaudeCodeProviderAdapter : IProviderAdapter, IDisposable
             PlanType = claudeCodeAccountState.CredentialDocument.PlanType,
             IsActive = isActive,
             IsTokenExpired = false,
-            LastUpdated = DateTimeOffset.UtcNow
+            LastUpdated = DateTimeOffset.UtcNow,
+            LastProviderUsageSnapshot = new ProviderUsageSnapshot { ProviderKind = CliProviderKind.ClaudeCode }
         };
 
     private static ClaudeCodeStoredAccountPayload CreateStoredAccountPayload(ClaudeCodeAccountState liveAccountState)
@@ -372,7 +373,9 @@ public sealed class ClaudeCodeProviderAdapter : IProviderAdapter, IDisposable
             PlanType = storedProviderAccount.PlanType,
             IsActive = isActive,
             IsTokenExpired = storedProviderAccount.IsTokenExpired,
-            LastUpdated = storedProviderAccount.LastUpdated
+            LastUpdated = storedProviderAccount.LastUpdated,
+            LastProviderUsageSnapshot = storedProviderAccount.LastProviderUsageSnapshot,
+            LastUsageRefreshTime = storedProviderAccount.LastUsageRefreshTime
         };
 
     private static bool IsSameClaudeAccount(StoredProviderAccount storedProviderAccount, ClaudeCodeGlobalConfigDocument globalConfigDocument)

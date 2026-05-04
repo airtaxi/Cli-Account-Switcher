@@ -5,6 +5,7 @@ using CliAccountSwitcher.Api.Models;
 using CliAccountSwitcher.Api.Models.Authentication;
 using CliAccountSwitcher.Api.Models.OAuth;
 using CliAccountSwitcher.Api.Models.Usage;
+using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Helpers;
 using CliAccountSwitcher.WinUI.Models;
 using CommunityToolkit.Mvvm.Messaging;
@@ -75,6 +76,11 @@ public sealed class CodexAccountService : IDisposable
     public IReadOnlyList<CodexAccount> GetAccounts()
     {
         lock (_accountsLock) return [.. _accounts];
+    }
+
+    public IReadOnlyList<ProviderAccount> GetProviderAccounts()
+    {
+        lock (_accountsLock) return _accounts.Select(CreateProviderAccount).ToArray();
     }
 
     public TimeSpan? GetActiveUsageRefreshRemainingTime()
@@ -284,6 +290,43 @@ public sealed class CodexAccountService : IDisposable
         UpdateEmailAddress(codexAccount, codexUsageSnapshot);
         return codexAccount;
     }
+
+    private static ProviderAccount CreateProviderAccount(CodexAccount codexAccount)
+        => new()
+        {
+            ProviderKind = CliProviderKind.Codex,
+            AccountIdentifier = codexAccount.AccountIdentifier,
+            ProviderAccountIdentifier = codexAccount.AccountIdentifier,
+            AccountDetailText = BuildAccessTokenPreview(codexAccount.CodexAuthenticationDocument.GetEffectiveAccessToken()),
+            CustomAlias = codexAccount.CustomAlias,
+            DisplayName = codexAccount.DisplayName,
+            EmailAddress = codexAccount.EmailAddress,
+            PlanType = codexAccount.PlanType,
+            IsActive = codexAccount.IsActive,
+            IsTokenExpired = codexAccount.IsTokenExpired,
+            LastProviderUsageSnapshot = CreateProviderUsageSnapshot(codexAccount.LastCodexUsageSnapshot),
+            LastUsageRefreshTime = codexAccount.LastUsageRefreshTime
+        };
+
+    private static ProviderUsageSnapshot CreateProviderUsageSnapshot(CodexUsageSnapshot codexUsageSnapshot)
+        => new()
+        {
+            ProviderKind = CliProviderKind.Codex,
+            PlanType = codexUsageSnapshot.PlanType,
+            EmailAddress = codexUsageSnapshot.EmailAddress,
+            RawResponseText = codexUsageSnapshot.RawResponseText,
+            FiveHour = CreateProviderUsageWindow(codexUsageSnapshot.PrimaryWindow),
+            SevenDay = CreateProviderUsageWindow(codexUsageSnapshot.SecondaryWindow)
+        };
+
+    private static ProviderUsageWindow CreateProviderUsageWindow(CodexUsageWindow codexUsageWindow)
+        => new()
+        {
+            UsedPercentage = codexUsageWindow.UsedPercentage,
+            RemainingPercentage = codexUsageWindow.RemainingPercentage,
+            ResetAfterSeconds = codexUsageWindow.ResetAfterSeconds,
+            ResetAt = CreateDateTimeOffset(codexUsageWindow.ResetAtUnixSeconds)
+        };
 
     private async Task RefreshAccountsUsageAsync(Func<CodexAccount, bool> accountPredicate, CancellationToken cancellationToken)
     {
@@ -679,6 +722,19 @@ public sealed class CodexAccountService : IDisposable
     private static void UpdateEmailAddress(CodexAccount codexAccount, CodexUsageSnapshot codexUsageSnapshot)
     {
         if (!string.IsNullOrWhiteSpace(codexUsageSnapshot.EmailAddress)) codexAccount.CodexAuthenticationDocument.EmailAddress = codexUsageSnapshot.EmailAddress;
+    }
+
+    private static DateTimeOffset? CreateDateTimeOffset(long unixSeconds)
+    {
+        if (unixSeconds < 0) return null;
+        try { return DateTimeOffset.FromUnixTimeSeconds(unixSeconds); }
+        catch { return null; }
+    }
+
+    private static string BuildAccessTokenPreview(string accessToken)
+    {
+        if (string.IsNullOrWhiteSpace(accessToken)) return "";
+        return accessToken.Length <= 18 ? accessToken : $"{accessToken[..8]}...{accessToken[^6..]}";
     }
 
     private static bool IsUsageUnderWarningThreshold(CodexUsageWindow codexUsageWindow, int usageWarningThresholdPercentage) => codexUsageWindow.RemainingPercentage >= 0 && codexUsageWindow.RemainingPercentage <= NormalizeUsageWarningThresholdPercentage(usageWarningThresholdPercentage);

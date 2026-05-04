@@ -177,52 +177,52 @@
   <data name="AddAccountDialog_FileSelectorBarItem.Text" xml:space="preserve">
     <value>載入檔案</value>
   </data>
-  <data name="CodexAccountViewModel_UnknownPlan" xml:space="preserve">
+  <data name="ProviderAccountViewModel_UnknownPlan" xml:space="preserve">
     <value>未知</value>
   </data>
-  <data name="CodexAccountViewModel_TokenExpiredStatus" xml:space="preserve">
+  <data name="ProviderAccountViewModel_TokenExpiredStatus" xml:space="preserve">
     <value>權杖已過期</value>
   </data>
-  <data name="CodexAccountViewModel_ActiveStatus" xml:space="preserve">
+  <data name="ProviderAccountViewModel_ActiveStatus" xml:space="preserve">
     <value>使用中</value>
   </data>
-  <data name="CodexAccountViewModel_WaitingStatus" xml:space="preserve">
+  <data name="ProviderAccountViewModel_WaitingStatus" xml:space="preserve">
     <value>等待中</value>
   </data>
-  <data name="CodexAccountViewModel_NotRefreshed" xml:space="preserve">
+  <data name="ProviderAccountViewModel_NotRefreshed" xml:space="preserve">
     <value>尚未重新整理</value>
   </data>
-  <data name="CodexAccountViewModel_LastUsageRefreshFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_LastUsageRefreshFormat" xml:space="preserve">
     <value>上次重新整理：{0}</value>
   </data>
-  <data name="CodexAccountViewModel_NoAccessToken" xml:space="preserve">
+  <data name="ProviderAccountViewModel_NoAccessToken" xml:space="preserve">
     <value>無</value>
   </data>
-  <data name="CodexAccountViewModel_UnknownUsage" xml:space="preserve">
+  <data name="ProviderAccountViewModel_UnknownUsage" xml:space="preserve">
     <value>無法取得用量</value>
   </data>
-  <data name="CodexAccountViewModel_UnknownResetTime" xml:space="preserve">
+  <data name="ProviderAccountViewModel_UnknownResetTime" xml:space="preserve">
     <value>無法取得重設時間</value>
   </data>
-  <data name="CodexAccountViewModel_PrimaryUsageWindowLabel" xml:space="preserve">
+  <data name="ProviderAccountViewModel_PrimaryUsageWindowLabel" xml:space="preserve">
     <value>5 小時限制</value>
   </data>
-  <data name="CodexAccountViewModel_SecondaryUsageWindowLabel" xml:space="preserve">
+  <data name="ProviderAccountViewModel_SecondaryUsageWindowLabel" xml:space="preserve">
     <value>7 天限制</value>
   </data>
-  <data name="CodexAccountViewModel_ResetAfterFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_ResetAfterFormat" xml:space="preserve">
     <value>將於 {0:hh\:mm\:ss} 後重設</value>
   </data>
-  <data name="CodexAccountViewModel_ResetAfterWithSingleDayFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_ResetAfterWithSingleDayFormat" xml:space="preserve">
     <value>將於 1 天 {0:hh\:mm\:ss} 後重設</value>
   </data>
-  <data name="CodexAccountViewModel_ResetAfterWithMultipleDaysFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_ResetAfterWithMultipleDaysFormat" xml:space="preserve">
     <value>將於 {0} 天 {1:hh\:mm\:ss} 後重設</value>
   </data>
-  <data name="CodexAccountViewModel_UsageRemainingOnlyFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_UsageRemainingOnlyFormat" xml:space="preserve">
     <value>剩餘 {0}%</value>
   </data>
-  <data name="CodexAccountViewModel_UsageRemainingFormat" xml:space="preserve">
+  <data name="ProviderAccountViewModel_UsageRemainingFormat" xml:space="preserve">
     <value>剩餘 {0}% · {1}</value>
   </data>
   <data name="AccountsPageViewModel_NoSelectedAccounts" xml:space="preserve">
@@ -1057,9 +1057,6 @@ Microsoft Store 中有 {0} 個可用更新。</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogMessage" xml:space="preserve">
     <value>帳戶切換已完成。請重新啟動 Claude Code，或重新開啟 VS Code Claude 工作階段以套用新的帳戶狀態。</value>
-  </data>
-  <data name="CodexAccountViewModel_LastUpdatedFormat" xml:space="preserve">
-    <value>最後更新：{0}</value>
   </data>
   <data name="OAuthAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
     <value>Claude Code 登入</value>
