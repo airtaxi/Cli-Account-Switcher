@@ -128,8 +128,8 @@
                             <ProgressBar
                                 Foreground="{ThemeResource UsageAverageRateWarningProgressBarForegroundBrush}"
                                 Maximum="100"
-                                Value="{x:Bind ActiveAccountPrimaryUsageRemainingPercentage, Mode=OneWay}"
-                                Visibility="{x:Bind IsActiveAccountPrimaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                Visibility="{x:Bind IsActiveAccountPrimaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Value="{x:Bind ActiveAccountPrimaryUsageRemainingPercentage, Mode=OneWay}" />
                         </Grid>
                         <TextBlock
                             x:Uid="PrimaryUsageAverageRateWarningTextBlock"
@@ -167,8 +167,8 @@
                             <ProgressBar
                                 Foreground="{ThemeResource UsageAverageRateWarningProgressBarForegroundBrush}"
                                 Maximum="100"
-                                Value="{x:Bind ActiveAccountSecondaryUsageRemainingPercentage, Mode=OneWay}"
-                                Visibility="{x:Bind IsActiveAccountSecondaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                Visibility="{x:Bind IsActiveAccountSecondaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Value="{x:Bind ActiveAccountSecondaryUsageRemainingPercentage, Mode=OneWay}" />
                         </Grid>
                         <TextBlock
                             x:Uid="SecondaryUsageAverageRateWarningTextBlock"

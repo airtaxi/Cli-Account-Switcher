@@ -10,19 +10,19 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:winuiex="using:WinUIEx"
     Width="480"
+    MinHeight="0"
     Activated="OnPopupWindowActivated"
     Closed="OnPopupWindowClosed"
     IsMaximizable="False"
     IsResizable="False"
-    MinHeight="0"
     mc:Ignorable="d">
 
     <Window.SystemBackdrop>
         <MicaBackdrop />
     </Window.SystemBackdrop>
 
-    <Frame x:Name="RootFrame">
-        <Grid x:Name="RootGrid" Loaded="OnRootGridLoaded">
+    <Frame x:Name="RootFrame" Loaded="OnRootFrameLoaded">
+        <Grid x:Name="RootGrid">
             <Grid x:Name="ContentGrid" Padding="12">
                 <controls:ActiveAccountQuotaControl
                     ShouldShowCardChrome="False"

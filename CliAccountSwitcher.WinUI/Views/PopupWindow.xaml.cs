@@ -8,6 +8,7 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -26,19 +27,15 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
     private static partial bool GetCursorPos(out NativePoint nativePoint);
 
     private int _lastResizedHeight;
+    private NativePoint? _taskbarIconAnchorPoint;
     private bool _isResizing;
     private bool _isApplyingProviderSelection;
+    private bool _hasQueuedWindowContentResize;
     private bool _disposed;
 
     public PopupWindow()
     {
-        ViewModel = new DashboardPageViewModel(App.AccountServiceManager, App.ApplicationSettings, DispatcherQueue);
-
         InitializeComponent();
-
-        App.ApplicationThemeService.ApplyThemeToWindow(this);
-        WindowInteractionHelper.DisableWindowAnimations(this);
-        if (Content is FrameworkElement { RequestedTheme: ElementTheme.Dark }) WindowInteractionHelper.SetDarkModeWindow(this);
 
         this.SetIsAlwaysOnTop(true);
         AppWindow.IsShownInSwitchers = false;
@@ -46,21 +43,35 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
         ExtendsContentIntoTitleBar = true;
         if (AppWindow.Presenter is OverlappedPresenter overlappedPresenter) overlappedPresenter.SetBorderAndTitleBar(true, false);
 
+        ViewModel = new DashboardPageViewModel(App.AccountServiceManager, App.ApplicationSettings, DispatcherQueue);
+        ViewModel.PropertyChanged += OnDashboardPageViewModelPropertyChanged;
+
+        App.ApplicationThemeService.ApplyThemeToWindow(this);
+        WindowInteractionHelper.DisableWindowAnimations(this);
+        if (Content is FrameworkElement { RequestedTheme: ElementTheme.Dark }) WindowInteractionHelper.SetDarkModeWindow(this);
+
         App.ApplicationThemeService.ThemeChanged += OnApplicationThemeServiceThemeChanged;
         App.LocalizationService.LanguageChanged += RefreshLocalizedText;
         WeakReferenceMessenger.Default.Register<ActiveAccountQuotaRefreshRequestedMessage>(this, OnActiveAccountQuotaRefreshRequestedMessageReceived);
-        WeakReferenceMessenger.Default.Register<ValueChangedMessage<CliProviderKind>>(this, OnProviderKindChangedMessageReceived);
         ApplyProviderSelection(App.ApplicationSettings.SelectedProviderKind);
         RefreshLocalizedText();
     }
 
+    private void OnRootFrameLoaded(object sender, RoutedEventArgs routedEventArguments)
+    {
+        MoveAndResizeAboveTaskbarIcon();
+        MoveAndResizeAboveTaskbarIcon(); // Call twice to ensure usage control to fit the window content size after the first call
+
+        Activate();
+    }
+
     public DashboardPageViewModel ViewModel { get; }
 
-    public void ShowAboveTaskbarIcon()
+    public void MoveAndResizeAboveTaskbarIcon()
     {
         ResizeWindowToContent(RootGrid, true);
         MoveAboveTaskbarIcon();
-        Activate();
+        WindowInteractionHelper.ForceForegroundWindow(this);
     }
 
     public void ShowLoading(string message = null)
@@ -85,8 +96,7 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
         App.ApplicationThemeService.ThemeChanged -= OnApplicationThemeServiceThemeChanged;
         App.LocalizationService.LanguageChanged -= RefreshLocalizedText;
         WeakReferenceMessenger.Default.Unregister<ActiveAccountQuotaRefreshRequestedMessage>(this);
-        WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CliProviderKind>>(this);
-        RootGrid.LayoutUpdated -= OnRootGridLayoutUpdated;
+        ViewModel.PropertyChanged -= OnDashboardPageViewModelPropertyChanged;
         ViewModel.Dispose();
         GC.SuppressFinalize(this);
     }
@@ -98,14 +108,20 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
 
         try
         {
-            if (shouldUpdateMeasure) element.Measure(new Size(WindowContentWidth, double.PositiveInfinity));
+            if (shouldUpdateMeasure)
+            {
+                element.InvalidateMeasure();
+                element.Measure(new Size(WindowContentWidth, double.PositiveInfinity));
+            }
 
             var height = (int)Math.Ceiling(element.DesiredSize.Height);
             if (height <= 0 || height == _lastResizedHeight) return false;
             _lastResizedHeight = height;
 
+            var targetHeight = height + WindowHeightPadding;
             Width = WindowContentWidth;
-            Height = height + WindowHeightPadding;
+            Height = targetHeight;
+            this.SetWindowSize(WindowContentWidth, targetHeight);
             return true;
         }
         finally { _isResizing = false; }
@@ -118,7 +134,7 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
         var windowHeight = Height * rasterizationScale;
         var taskbarRectangle = TaskbarHelper.GetTaskbarRectangle();
         var taskbarPosition = TaskbarHelper.GetTaskbarPosition();
-        var taskbarIconAnchorPoint = GetTaskbarIconAnchorPoint(taskbarRectangle);
+        var taskbarIconAnchorPoint = _taskbarIconAnchorPoint ??= GetTaskbarIconAnchorPoint(taskbarRectangle);
 
         var positionX = taskbarIconAnchorPoint.X - (windowWidth / 2);
         var positionY = taskbarRectangle.Top - windowHeight;
@@ -191,32 +207,11 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
         if (windowActivatedEventArguments.WindowActivationState == WindowActivationState.Deactivated) Close();
     }
 
-    private void OnRootGridLoaded(object sender, RoutedEventArgs routedEventArguments)
-    {
-        var rootElement = (FrameworkElement)sender;
-
-        ResizeWindowToContent(rootElement, true);
-        MoveAboveTaskbarIcon();
-        WindowInteractionHelper.ForceForegroundWindow(this);
-
-        rootElement.LayoutUpdated -= OnRootGridLayoutUpdated;
-        rootElement.LayoutUpdated += OnRootGridLayoutUpdated;
-    }
-
-    private void OnRootGridLayoutUpdated(object sender, object eventArguments)
-    {
-        if (sender is FrameworkElement rootElement && ResizeWindowToContent(rootElement, false)) MoveAboveTaskbarIcon();
-    }
-
     private void OnApplicationThemeServiceThemeChanged(ElementTheme theme) => App.ApplicationThemeService.ApplyThemeToWindow(this);
 
-    private async void OnActiveAccountQuotaRefreshRequestedMessageReceived(object messageRecipient, ActiveAccountQuotaRefreshRequestedMessage activeAccountQuotaRefreshRequestedMessage) => await RunWithLoadingAsync(App.LocalizationService.GetLocalizedString("AccountsPage_RefreshAccountLoadingMessage"), async () => await ViewModel.RefreshActiveProviderAccountAsync());
+    private void OnDashboardPageViewModelPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArguments) => QueueWindowContentResize();
 
-    private void OnProviderKindChangedMessageReceived(object messageRecipient, ValueChangedMessage<CliProviderKind> valueChangedMessage)
-    {
-        if (DispatcherQueue.HasThreadAccess) ApplyProviderSelection(valueChangedMessage.Value);
-        else DispatcherQueue.TryEnqueue(() => ApplyProviderSelection(valueChangedMessage.Value));
-    }
+    private async void OnActiveAccountQuotaRefreshRequestedMessageReceived(object messageRecipient, ActiveAccountQuotaRefreshRequestedMessage activeAccountQuotaRefreshRequestedMessage) => await RunWithLoadingAsync(App.LocalizationService.GetLocalizedString("AccountsPage_RefreshAccountLoadingMessage"), async () => await ViewModel.RefreshActiveProviderAccountAsync());
 
     private async void OnProviderToggleSwitchToggled(object sender, RoutedEventArgs routedEventArguments)
     {
@@ -226,6 +221,7 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
         if (App.ApplicationSettings.SelectedProviderKind == selectedProviderKind) return;
 
         App.ApplicationSettings.SelectedProviderKind = selectedProviderKind;
+        ApplyProviderSelection(selectedProviderKind);
         await App.ApplicationSettingsService.SaveSettingsAsync();
         WeakReferenceMessenger.Default.Send(new ValueChangedMessage<CliProviderKind>(selectedProviderKind));
     }
@@ -255,6 +251,22 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
             CliProviderKind.ClaudeCode => "Claude Code",
             _ => "Codex"
         };
+
+    private void QueueWindowContentResize()
+    {
+        if (_disposed || _hasQueuedWindowContentResize) return;
+
+        _hasQueuedWindowContentResize = true;
+        DispatcherQueue.TryEnqueue(() =>
+        {
+            _hasQueuedWindowContentResize = false;
+            if (_disposed) return;
+
+            ContentGrid.InvalidateMeasure();
+            RootGrid.InvalidateMeasure();
+            if (ResizeWindowToContent(ContentGrid, true)) MoveAboveTaskbarIcon();
+        });
+    }
 
     private async Task RunWithLoadingAsync(string loadingMessage, Func<Task> action)
     {

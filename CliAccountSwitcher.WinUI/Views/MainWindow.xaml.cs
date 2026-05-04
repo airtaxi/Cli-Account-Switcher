@@ -185,7 +185,6 @@ public sealed partial class MainWindow : WindowEx
         var activeAccountQuotaPopupWindow = new PopupWindow();
         _activeAccountQuotaPopupWindow = activeAccountQuotaPopupWindow;
         activeAccountQuotaPopupWindow.Closed += OnActiveAccountQuotaPopupWindowClosed;
-        activeAccountQuotaPopupWindow.ShowAboveTaskbarIcon();
     }
 
     private void OnCloseProgramMenuFlyoutItemClicked(object sender, RoutedEventArgs routedEventArguments) => Environment.Exit(0);

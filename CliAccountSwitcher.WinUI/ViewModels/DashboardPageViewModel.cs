@@ -166,14 +166,6 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
         SecondaryAverageUsageRemainingPercentage = ClampUsageRemainingPercentage(secondaryAverageUsageRemainingPercentage);
     }
 
-    private void SetUnknownAverageUsageProperties()
-    {
-        PrimaryAverageUsageRemainingText = GetLocalizedString("ProviderAccountViewModel_UnknownUsage");
-        PrimaryAverageUsageRemainingPercentage = 0;
-        SecondaryAverageUsageRemainingText = GetLocalizedString("ProviderAccountViewModel_UnknownUsage");
-        SecondaryAverageUsageRemainingPercentage = 0;
-    }
-
     private void SetLowUsageSummaryProperties(IReadOnlyList<ProviderAccountViewModel> accountViewModels)
     {
         var primaryLowUsageAccountCount = accountViewModels.Count(accountViewModel => accountViewModel.IsPrimaryUsageUnderWarningThreshold);
