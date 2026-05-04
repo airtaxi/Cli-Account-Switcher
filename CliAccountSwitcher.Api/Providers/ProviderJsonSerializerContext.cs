@@ -19,6 +19,8 @@ namespace CliAccountSwitcher.Api.Providers;
 [JsonSerializable(typeof(ProviderUsageWindow))]
 [JsonSerializable(typeof(List<StoredProviderAccount>))]
 [JsonSerializable(typeof(Dictionary<string, string?>))]
+[JsonSerializable(typeof(string))]
+[JsonSerializable(typeof(long))]
 internal sealed partial class ProviderJsonSerializerContext : JsonSerializerContext
 {
 }

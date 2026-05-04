@@ -189,8 +189,10 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
     {
         try
         {
-            var storedProviderAccounts = await _claudeCodeProviderAdapter.ListStoredAccountsAsync(_providerSnapshotStore, cancellationToken);
-            return storedProviderAccounts.FirstOrDefault(storedProviderAccount => storedProviderAccount.IsActive)?.StoredAccountIdentifier ?? "";
+            var currentStoredAccountIdentifier = await _claudeCodeProviderAdapter.GetCurrentStoredAccountIdentifierAsync(_providerSnapshotStore, cancellationToken);
+            if (!string.IsNullOrWhiteSpace(currentStoredAccountIdentifier)) return currentStoredAccountIdentifier;
+
+            return await _providerSnapshotStore.GetActiveStoredAccountIdentifierAsync(CliProviderKind.ClaudeCode, cancellationToken) ?? "";
         }
         catch { return ""; }
     }
@@ -206,7 +208,9 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
     {
         try
         {
-            var providerUsageSnapshot = await _claudeCodeProviderAdapter.GetUsageAsync(storedProviderAccount.StoredAccountIdentifier, cancellationToken);
+            var providerUsageSnapshot = storedProviderAccount.IsActive
+                ? await RefreshActiveAccountUsageCoreAsync(storedProviderAccount, cancellationToken)
+                : await _claudeCodeProviderAdapter.GetUsageAsync(storedProviderAccount.StoredAccountIdentifier, cancellationToken);
             var usageRefreshTime = DateTimeOffset.UtcNow;
             storedProviderAccount.IsTokenExpired = false;
             storedProviderAccount.LastUpdated = usageRefreshTime;
@@ -216,9 +220,15 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
             if (!string.IsNullOrWhiteSpace(providerUsageSnapshot.PlanType)) storedProviderAccount.PlanType = providerUsageSnapshot.PlanType;
             return storedProviderAccount.LastProviderUsageSnapshot;
         }
-        catch (ProviderActionRequiredException)
+        catch (ProviderAuthenticationExpiredException)
         {
             throw;
+        }
+        catch (ProviderActionRequiredException)
+        {
+            storedProviderAccount.IsTokenExpired = false;
+            storedProviderAccount.LastUpdated = DateTimeOffset.UtcNow;
+            return GetProviderUsageSnapshot(storedProviderAccount);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
@@ -235,7 +245,7 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
         foreach (var storedProviderAccount in accountStates) await _claudeCodeProviderAdapter.DeleteStoredAccountAsync(_providerSnapshotStore, storedProviderAccount.StoredAccountIdentifier, cancellationToken);
     }
 
-    protected override bool IsAccountExpiredException(Exception exception) => exception is ProviderActionRequiredException;
+    protected override bool IsAccountExpiredException(Exception exception) => exception is ProviderAuthenticationExpiredException;
 
     private async Task<StoredProviderAccount> SaveAndRefreshClaudeCodeAccountAsync(Task<StoredProviderAccount> saveAccountTask, CancellationToken cancellationToken)
     {
@@ -243,6 +253,32 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
         UpsertAccountState(storedProviderAccount);
         await RefreshAccountsAsync([storedProviderAccount.StoredAccountIdentifier], cancellationToken);
         return FindAccountState(storedProviderAccount.StoredAccountIdentifier) ?? storedProviderAccount;
+    }
+
+    private async Task<ProviderUsageSnapshot> RefreshActiveAccountUsageCoreAsync(StoredProviderAccount storedProviderAccount, CancellationToken cancellationToken)
+    {
+        var currentStoredAccountIdentifier = await _claudeCodeProviderAdapter.GetCurrentStoredAccountIdentifierAsync(_providerSnapshotStore, cancellationToken);
+        if (!string.Equals(currentStoredAccountIdentifier, storedProviderAccount.StoredAccountIdentifier, StringComparison.Ordinal))
+        {
+            return await _claudeCodeProviderAdapter.GetUsageAsync(storedProviderAccount.StoredAccountIdentifier, cancellationToken);
+        }
+
+        var providerUsageSnapshot = await _claudeCodeProviderAdapter.GetUsageAsync(cancellationToken: cancellationToken);
+        var updatedStoredProviderAccount = await _claudeCodeProviderAdapter.UpdateStoredAccountFromCurrentLiveAccountAsync(_providerSnapshotStore, storedProviderAccount.StoredAccountIdentifier, cancellationToken);
+        if (updatedStoredProviderAccount is not null) ApplyStoredProviderAccountMetadata(storedProviderAccount, updatedStoredProviderAccount);
+        return providerUsageSnapshot;
+    }
+
+    private static void ApplyStoredProviderAccountMetadata(StoredProviderAccount destinationStoredProviderAccount, StoredProviderAccount sourceStoredProviderAccount)
+    {
+        destinationStoredProviderAccount.EmailAddress = sourceStoredProviderAccount.EmailAddress;
+        destinationStoredProviderAccount.DisplayName = sourceStoredProviderAccount.DisplayName;
+        destinationStoredProviderAccount.AccountIdentifier = sourceStoredProviderAccount.AccountIdentifier;
+        destinationStoredProviderAccount.OrganizationIdentifier = sourceStoredProviderAccount.OrganizationIdentifier;
+        destinationStoredProviderAccount.OrganizationName = sourceStoredProviderAccount.OrganizationName;
+        destinationStoredProviderAccount.PlanType = sourceStoredProviderAccount.PlanType;
+        destinationStoredProviderAccount.IsTokenExpired = sourceStoredProviderAccount.IsTokenExpired;
+        destinationStoredProviderAccount.LastUpdated = sourceStoredProviderAccount.LastUpdated;
     }
 
     private static ClaudeCodeBackupAccountDocument CreateClaudeCodeBackupAccountDocument(string payloadJson)

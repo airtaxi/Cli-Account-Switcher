@@ -1,9 +1,9 @@
+using System.Net;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using CliAccountSwitcher.Api.Infrastructure.Http;
 using CliAccountSwitcher.Api.Providers;
 using CliAccountSwitcher.Api.Providers.Abstractions;
 
@@ -12,6 +12,7 @@ namespace CliAccountSwitcher.Api.Providers.Claude;
 public sealed class ClaudeCodeProviderAdapter : IProviderAdapter, IDisposable
 {
     private static readonly Uri s_usageAddress = new("https://api.anthropic.com/api/oauth/usage");
+    private static readonly Encoding s_utf8NoByteOrderMark = new UTF8Encoding(false);
     private readonly HttpClient _httpClient;
     private readonly ClaudeCodeCliRunner _claudeCodeCliRunner;
     private readonly ClaudeCodeOAuthClient _claudeCodeOAuthClient;
@@ -69,13 +70,35 @@ public sealed class ClaudeCodeProviderAdapter : IProviderAdapter, IDisposable
         if (string.IsNullOrWhiteSpace(storedAccountIdentifier))
         {
             var liveAccountState = await ReadLiveAccountStateAsync(cancellationToken);
-            liveAccountState = await RefreshLiveAccountIfNeededAsync(liveAccountState, cancellationToken);
-            return await GetUsageSnapshotAsync(liveAccountState.CredentialDocument.AccessToken, liveAccountState.GlobalConfigDocument.EmailAddress, cancellationToken);
+            liveAccountState = await RefreshLiveAccountAsync(liveAccountState, true, cancellationToken);
+            if (ShouldSkipUsageSnapshot(liveAccountState.CredentialDocument)) return CreateEmptyUsageSnapshot(liveAccountState.GlobalConfigDocument.EmailAddress);
+
+            try
+            {
+                return await GetUsageSnapshotAsync(liveAccountState.CredentialDocument.AccessToken, liveAccountState.GlobalConfigDocument.EmailAddress, cancellationToken);
+            }
+            catch (ClaudeCodeUsageUnauthorizedException)
+            {
+                liveAccountState = await RefreshLiveAccountAsync(liveAccountState, true, cancellationToken);
+                if (ShouldSkipUsageSnapshot(liveAccountState.CredentialDocument)) return CreateEmptyUsageSnapshot(liveAccountState.GlobalConfigDocument.EmailAddress);
+                return await GetUsageSnapshotAfterRefreshAsync(liveAccountState.CredentialDocument.AccessToken, liveAccountState.GlobalConfigDocument.EmailAddress, cancellationToken);
+            }
         }
 
         var storedPayloadContext = await LoadStoredPayloadContextAsync(_providerSnapshotStore, storedAccountIdentifier, cancellationToken);
-        storedPayloadContext = await RefreshStoredAccountIfNeededAsync(storedPayloadContext, cancellationToken);
-        return await GetUsageSnapshotAsync(storedPayloadContext.CredentialDocument.AccessToken, storedPayloadContext.Payload.EmailAddress, cancellationToken);
+        storedPayloadContext = await RefreshStoredAccountAsync(_providerSnapshotStore, storedPayloadContext, true, cancellationToken);
+        if (ShouldSkipUsageSnapshot(storedPayloadContext.CredentialDocument)) return CreateEmptyUsageSnapshot(storedPayloadContext.Payload.EmailAddress);
+
+        try
+        {
+            return await GetUsageSnapshotAsync(storedPayloadContext.CredentialDocument.AccessToken, storedPayloadContext.Payload.EmailAddress, cancellationToken);
+        }
+        catch (ClaudeCodeUsageUnauthorizedException)
+        {
+            storedPayloadContext = await RefreshStoredAccountAsync(_providerSnapshotStore, storedPayloadContext, true, cancellationToken);
+            if (ShouldSkipUsageSnapshot(storedPayloadContext.CredentialDocument)) return CreateEmptyUsageSnapshot(storedPayloadContext.Payload.EmailAddress);
+            return await GetUsageSnapshotAfterRefreshAsync(storedPayloadContext.CredentialDocument.AccessToken, storedPayloadContext.Payload.EmailAddress, cancellationToken);
+        }
     }
 
     public Task<IReadOnlyList<string>> GetModelsAsync(CancellationToken cancellationToken = default) => throw new NotSupportedException("Claude Code does not expose a models command through this provider.");
@@ -129,7 +152,7 @@ public sealed class ClaudeCodeProviderAdapter : IProviderAdapter, IDisposable
         var liveIdentityProfile = await TryGetCurrentIdentityAsync(cancellationToken);
 
         return storedProviderAccounts
-            .Select(storedProviderAccount => CloneStoredProviderAccount(storedProviderAccount, liveIdentityProfile is not null && IsSameClaudeAccount(storedProviderAccount, liveIdentityProfile) || storedProviderAccount.IsActive))
+            .Select(storedProviderAccount => CloneStoredProviderAccount(storedProviderAccount, liveIdentityProfile is not null ? IsSameClaudeAccount(storedProviderAccount, liveIdentityProfile) : storedProviderAccount.IsActive))
             .ToArray();
     }
 
@@ -175,20 +198,65 @@ public sealed class ClaudeCodeProviderAdapter : IProviderAdapter, IDisposable
 
     public async Task<StoredProviderAccount> ActivateStoredAccountAsync(IProviderSnapshotStore providerSnapshotStore, string storedAccountIdentifier, CancellationToken cancellationToken = default)
     {
+        await BackupCurrentLiveAccountIfManagedAsync(providerSnapshotStore, cancellationToken);
+
         var storedPayloadContext = await LoadStoredPayloadContextAsync(providerSnapshotStore, storedAccountIdentifier, cancellationToken);
+        storedPayloadContext = await RefreshStoredAccountAsync(providerSnapshotStore, storedPayloadContext, false, cancellationToken);
         var claudeCodePaths = new ClaudeCodePaths();
+        var originalCredentialsJson = await TryReadAllTextAsync(claudeCodePaths.CredentialsFilePath, cancellationToken);
+        var originalGlobalConfigJson = await TryReadAllTextAsync(claudeCodePaths.GlobalConfigFilePath, cancellationToken);
+        var hasWrittenCredentials = false;
+        var hasWrittenGlobalConfig = false;
 
-        await WriteTextAtomicallyAsync(claudeCodePaths.CredentialsFilePath, storedPayloadContext.Payload.CredentialsJson, cancellationToken);
-        await WriteTextAtomicallyAsync(claudeCodePaths.GlobalConfigFilePath, storedPayloadContext.Payload.GlobalConfigJson, cancellationToken);
-        await providerSnapshotStore.SetActiveStoredAccountIdentifierAsync(ProviderKind, storedAccountIdentifier, cancellationToken);
-
-        var verifiedIdentityProfile = await TryGetCurrentIdentityAsync(cancellationToken);
-        if (verifiedIdentityProfile is null || !IsSameClaudeAccount(storedPayloadContext.StoredProviderAccount, verifiedIdentityProfile))
+        try
         {
-            throw new ProviderActionRequiredException("Claude Code account files were restored, but the restored identity could not be verified. Login again or re-save the account.");
-        }
+            await WriteTextAtomicallyAsync(claudeCodePaths.CredentialsFilePath, storedPayloadContext.Payload.CredentialsJson, cancellationToken);
+            hasWrittenCredentials = true;
 
-        return CloneStoredProviderAccount(storedPayloadContext.StoredProviderAccount, true);
+            var currentGlobalConfigJson = originalGlobalConfigJson ?? "{}";
+            var updatedGlobalConfigJson = CreateGlobalConfigJsonWithTargetOauthAccount(currentGlobalConfigJson, storedPayloadContext.Payload.GlobalConfigJson);
+            await WriteTextAtomicallyAsync(claudeCodePaths.GlobalConfigFilePath, updatedGlobalConfigJson, cancellationToken);
+            hasWrittenGlobalConfig = true;
+
+            var verifiedIdentityProfile = await TryGetCurrentIdentityAsync(cancellationToken);
+            if (verifiedIdentityProfile is null || !IsSameClaudeAccount(storedPayloadContext.StoredProviderAccount, verifiedIdentityProfile))
+            {
+                throw new ProviderActionRequiredException("Claude Code account files were restored, but the restored identity could not be verified. Login again or re-save the account.");
+            }
+
+            await providerSnapshotStore.SetActiveStoredAccountIdentifierAsync(ProviderKind, storedAccountIdentifier, cancellationToken);
+            return CloneStoredProviderAccount(storedPayloadContext.StoredProviderAccount, true);
+        }
+        catch
+        {
+            try
+            {
+                await RestoreLiveClaudeCodeFilesAsync(claudeCodePaths, originalCredentialsJson, originalGlobalConfigJson, hasWrittenCredentials, hasWrittenGlobalConfig, CancellationToken.None);
+            }
+            catch { }
+
+            throw;
+        }
+    }
+
+    public async Task<string> GetCurrentStoredAccountIdentifierAsync(IProviderSnapshotStore providerSnapshotStore, CancellationToken cancellationToken = default)
+    {
+        var liveIdentityProfile = await TryGetCurrentIdentityAsync(cancellationToken);
+        if (liveIdentityProfile is null) return "";
+
+        var storedProviderAccounts = await providerSnapshotStore.GetStoredAccountsAsync(ProviderKind, cancellationToken);
+        var currentStoredProviderAccount = storedProviderAccounts.FirstOrDefault(storedProviderAccount => IsSameClaudeAccount(storedProviderAccount, liveIdentityProfile));
+        return currentStoredProviderAccount?.StoredAccountIdentifier ?? "";
+    }
+
+    public async Task<StoredProviderAccount?> UpdateStoredAccountFromCurrentLiveAccountAsync(IProviderSnapshotStore providerSnapshotStore, string storedAccountIdentifier, CancellationToken cancellationToken = default)
+    {
+        var liveAccountState = await ReadLiveAccountStateAsync(cancellationToken);
+        var storedProviderAccounts = await providerSnapshotStore.GetStoredAccountsAsync(ProviderKind, cancellationToken);
+        var storedProviderAccount = storedProviderAccounts.FirstOrDefault(candidateAccount => string.Equals(candidateAccount.StoredAccountIdentifier, storedAccountIdentifier, StringComparison.OrdinalIgnoreCase));
+        if (storedProviderAccount is null || !IsSameClaudeAccount(storedProviderAccount, liveAccountState.GlobalConfigDocument)) return null;
+
+        return await SaveLiveAccountSnapshotAsync(providerSnapshotStore, storedProviderAccount, liveAccountState, cancellationToken);
     }
 
     public Task DeleteStoredAccountAsync(IProviderSnapshotStore providerSnapshotStore, string storedAccountIdentifier, CancellationToken cancellationToken = default) => providerSnapshotStore.DeleteAsync(ProviderKind, storedAccountIdentifier, cancellationToken);
@@ -204,15 +272,36 @@ public sealed class ClaudeCodeProviderAdapter : IProviderAdapter, IDisposable
         httpRequestMessage.Headers.TryAddWithoutValidation("anthropic-beta", "oauth-2025-04-20");
 
         using var httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, cancellationToken);
-        var responseText = await CodexHttpResponseValidator.ReadRequiredContentAsync(httpResponseMessage, cancellationToken);
+        var responseText = await httpResponseMessage.Content.ReadAsStringAsync(cancellationToken);
+        if (httpResponseMessage.StatusCode == HttpStatusCode.Unauthorized) throw new ClaudeCodeUsageUnauthorizedException(responseText);
         if (!httpResponseMessage.IsSuccessStatusCode) throw new ProviderActionRequiredException($"Claude Code usage request failed. Login again if the token is expired. Response: {responseText}");
+        if (string.IsNullOrWhiteSpace(responseText)) throw new ProviderActionRequiredException("Claude Code usage request failed because the response body is empty.");
 
         return ClaudeCodeUsageResponse.Parse(responseText, emailAddress);
     }
 
-    private async Task<ClaudeCodeAccountState> RefreshLiveAccountIfNeededAsync(ClaudeCodeAccountState liveAccountState, CancellationToken cancellationToken)
+    private async Task<ProviderUsageSnapshot> GetUsageSnapshotAfterRefreshAsync(string accessToken, string emailAddress, CancellationToken cancellationToken)
     {
-        if (!liveAccountState.CredentialDocument.IsAccessTokenExpiringSoon(DateTimeOffset.UtcNow)) return liveAccountState;
+        try { return await GetUsageSnapshotAsync(accessToken, emailAddress, cancellationToken); }
+        catch (ClaudeCodeUsageUnauthorizedException exception)
+        {
+            throw new ProviderAuthenticationExpiredException("Claude Code usage request failed after refreshing the token. Login again or re-save the account.", exception);
+        }
+    }
+
+    private static bool ShouldSkipUsageSnapshot(ClaudeCodeCredentialDocument credentialDocument)
+        => credentialDocument.Scopes.Count > 0 && !credentialDocument.HasClaudeAiUsageScopes();
+
+    private static ProviderUsageSnapshot CreateEmptyUsageSnapshot(string emailAddress)
+        => new()
+        {
+            ProviderKind = CliProviderKind.ClaudeCode,
+            EmailAddress = emailAddress
+        };
+
+    private async Task<ClaudeCodeAccountState> RefreshLiveAccountAsync(ClaudeCodeAccountState liveAccountState, bool shouldForceRefresh, CancellationToken cancellationToken)
+    {
+        if (!shouldForceRefresh && !liveAccountState.CredentialDocument.IsAccessTokenExpiringSoon(DateTimeOffset.UtcNow)) return liveAccountState;
 
         var tokenRefreshResult = await _claudeCodeOAuthClient.RefreshTokenAsync(liveAccountState.CredentialDocument, cancellationToken);
         var updatedCredentialsJson = liveAccountState.CredentialDocument.CreateUpdatedCredentialsJson(tokenRefreshResult);
@@ -228,9 +317,9 @@ public sealed class ClaudeCodeProviderAdapter : IProviderAdapter, IDisposable
         };
     }
 
-    private async Task<StoredPayloadContext> RefreshStoredAccountIfNeededAsync(StoredPayloadContext storedPayloadContext, CancellationToken cancellationToken)
+    private async Task<StoredPayloadContext> RefreshStoredAccountAsync(IProviderSnapshotStore providerSnapshotStore, StoredPayloadContext storedPayloadContext, bool shouldForceRefresh, CancellationToken cancellationToken)
     {
-        if (!storedPayloadContext.CredentialDocument.IsAccessTokenExpiringSoon(DateTimeOffset.UtcNow)) return storedPayloadContext;
+        if (!shouldForceRefresh && !storedPayloadContext.CredentialDocument.IsAccessTokenExpiringSoon(DateTimeOffset.UtcNow)) return storedPayloadContext;
 
         var tokenRefreshResult = await _claudeCodeOAuthClient.RefreshTokenAsync(storedPayloadContext.CredentialDocument, cancellationToken);
         storedPayloadContext.Payload.CredentialsJson = storedPayloadContext.CredentialDocument.CreateUpdatedCredentialsJson(tokenRefreshResult);
@@ -240,7 +329,7 @@ public sealed class ClaudeCodeProviderAdapter : IProviderAdapter, IDisposable
         storedPayloadContext.StoredProviderAccount.LastUpdated = DateTimeOffset.UtcNow;
 
         var payloadJson = JsonSerializer.Serialize(storedPayloadContext.Payload, ProviderJsonSerializerOptions.Default);
-        await _providerSnapshotStore.SaveAsync(storedPayloadContext.StoredProviderAccount, payloadJson, cancellationToken);
+        await providerSnapshotStore.SaveAsync(storedPayloadContext.StoredProviderAccount, payloadJson, cancellationToken);
         return storedPayloadContext;
     }
 
@@ -302,6 +391,33 @@ public sealed class ClaudeCodeProviderAdapter : IProviderAdapter, IDisposable
             GlobalConfigDocument = ClaudeCodeGlobalConfigDocument.Parse(storedAccountPayload.GlobalConfigJson),
             StoredProviderAccount = storedProviderAccount
         };
+    }
+
+    private async Task BackupCurrentLiveAccountIfManagedAsync(IProviderSnapshotStore providerSnapshotStore, CancellationToken cancellationToken)
+    {
+        ClaudeCodeAccountState liveAccountState;
+        try { liveAccountState = await ReadLiveAccountStateAsync(cancellationToken); }
+        catch { return; }
+
+        var storedProviderAccounts = await providerSnapshotStore.GetStoredAccountsAsync(ProviderKind, cancellationToken);
+        var storedProviderAccount = storedProviderAccounts.FirstOrDefault(candidateAccount => IsSameClaudeAccount(candidateAccount, liveAccountState.GlobalConfigDocument));
+        if (storedProviderAccount is null) return;
+
+        await SaveLiveAccountSnapshotAsync(providerSnapshotStore, storedProviderAccount, liveAccountState, cancellationToken);
+    }
+
+    private static async Task<StoredProviderAccount> SaveLiveAccountSnapshotAsync(IProviderSnapshotStore providerSnapshotStore, StoredProviderAccount storedProviderAccount, ClaudeCodeAccountState liveAccountState, CancellationToken cancellationToken)
+    {
+        var updatedStoredProviderAccount = CreateStoredProviderAccount(liveAccountState, storedProviderAccount.StoredAccountIdentifier, storedProviderAccount.SlotNumber, storedProviderAccount.IsActive);
+        updatedStoredProviderAccount.IsTokenExpired = false;
+        updatedStoredProviderAccount.LastProviderUsageSnapshot = storedProviderAccount.LastProviderUsageSnapshot;
+        updatedStoredProviderAccount.LastUsageRefreshTime = storedProviderAccount.LastUsageRefreshTime;
+        updatedStoredProviderAccount.LastUpdated = DateTimeOffset.UtcNow;
+
+        var storedAccountPayload = CreateStoredAccountPayload(liveAccountState);
+        var payloadJson = JsonSerializer.Serialize(storedAccountPayload, ProviderJsonSerializerOptions.Default);
+        await providerSnapshotStore.SaveAsync(updatedStoredProviderAccount, payloadJson, cancellationToken);
+        return updatedStoredProviderAccount;
     }
 
     private async Task<ProviderIdentityProfile?> TryGetCurrentIdentityAsync(CancellationToken cancellationToken)
@@ -445,13 +561,59 @@ public sealed class ClaudeCodeProviderAdapter : IProviderAdapter, IDisposable
         return accessToken.Length <= 18 ? accessToken : $"{accessToken[..8]}...{accessToken[^6..]}";
     }
 
+    private static string CreateGlobalConfigJsonWithTargetOauthAccount(string currentGlobalConfigJson, string targetGlobalConfigJson)
+    {
+        var currentGlobalConfigObject = ParseJsonObject(currentGlobalConfigJson, "current global config");
+        var targetGlobalConfigObject = ParseJsonObject(targetGlobalConfigJson, "stored global config");
+        if (!targetGlobalConfigObject.TryGetPropertyValue("oauthAccount", out var targetOauthAccountNode) || targetOauthAccountNode is not JsonObject)
+        {
+            throw new ProviderActionRequiredException("The stored Claude Code global config is missing oauthAccount.");
+        }
+
+        currentGlobalConfigObject["oauthAccount"] = targetOauthAccountNode.DeepClone();
+        return currentGlobalConfigObject.ToJsonString(ProviderJsonSerializerOptions.Default);
+    }
+
+    private static JsonObject ParseJsonObject(string jsonText, string documentName)
+    {
+        if (string.IsNullOrWhiteSpace(jsonText)) return [];
+
+        var rootNode = JsonNode.Parse(jsonText);
+        if (rootNode is JsonObject rootObject) return rootObject;
+        throw new InvalidDataException($"The Claude Code {documentName} document must be a JSON object.");
+    }
+
+    private static async Task<string?> TryReadAllTextAsync(string filePath, CancellationToken cancellationToken)
+    {
+        try { return File.Exists(filePath) ? await File.ReadAllTextAsync(filePath, cancellationToken) : null; }
+        catch (DirectoryNotFoundException) { return null; }
+        catch (FileNotFoundException) { return null; }
+    }
+
+    private static async Task RestoreLiveClaudeCodeFilesAsync(ClaudeCodePaths claudeCodePaths, string? originalCredentialsJson, string? originalGlobalConfigJson, bool hasWrittenCredentials, bool hasWrittenGlobalConfig, CancellationToken cancellationToken)
+    {
+        if (hasWrittenCredentials) await RestoreTextFileAsync(claudeCodePaths.CredentialsFilePath, originalCredentialsJson, cancellationToken);
+        if (hasWrittenGlobalConfig) await RestoreTextFileAsync(claudeCodePaths.GlobalConfigFilePath, originalGlobalConfigJson, cancellationToken);
+    }
+
+    private static async Task RestoreTextFileAsync(string filePath, string? originalFileText, CancellationToken cancellationToken)
+    {
+        if (originalFileText is null)
+        {
+            if (File.Exists(filePath)) File.Delete(filePath);
+            return;
+        }
+
+        await WriteTextAtomicallyAsync(filePath, originalFileText, cancellationToken);
+    }
+
     private static async Task WriteTextAtomicallyAsync(string filePath, string fileText, CancellationToken cancellationToken)
     {
         var directoryPath = Path.GetDirectoryName(filePath);
         if (!string.IsNullOrWhiteSpace(directoryPath)) Directory.CreateDirectory(directoryPath);
 
         var temporaryFilePath = $"{filePath}.{Guid.NewGuid():N}.tmp";
-        await File.WriteAllTextAsync(temporaryFilePath, fileText, Encoding.UTF8, cancellationToken);
+        await File.WriteAllTextAsync(temporaryFilePath, fileText, s_utf8NoByteOrderMark, cancellationToken);
         File.Move(temporaryFilePath, filePath, true);
     }
 
@@ -475,5 +637,9 @@ public sealed class ClaudeCodeProviderAdapter : IProviderAdapter, IDisposable
         public ClaudeCodeGlobalConfigDocument GlobalConfigDocument { get; set; } = new();
 
         public StoredProviderAccount StoredProviderAccount { get; set; } = new();
+    }
+
+    private sealed class ClaudeCodeUsageUnauthorizedException(string responseText) : Exception(responseText)
+    {
     }
 }

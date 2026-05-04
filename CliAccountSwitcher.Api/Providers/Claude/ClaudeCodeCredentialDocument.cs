@@ -16,6 +16,8 @@ public sealed class ClaudeCodeCredentialDocument
 
     public long ExpiresAt { get; set; } = -1;
 
+    public IReadOnlyList<string> Scopes { get; set; } = [];
+
     public string SubscriptionType { get; set; } = "";
 
     public string RateLimitTier { get; set; } = "";
@@ -35,6 +37,7 @@ public sealed class ClaudeCodeCredentialDocument
             AccessToken = ReadString(oauthObject, "accessToken") ?? "",
             RefreshToken = ReadString(oauthObject, "refreshToken") ?? "",
             ExpiresAt = ReadInt64(oauthObject, "expiresAt") ?? -1,
+            Scopes = ReadStringArray(oauthObject, "scopes"),
             SubscriptionType = subscriptionType,
             RateLimitTier = rateLimitTier,
             PlanType = CreatePlanType(subscriptionType, rateLimitTier)
@@ -59,12 +62,17 @@ public sealed class ClaudeCodeCredentialDocument
         var oauthObject = rootObject["claudeAiOauth"] as JsonObject ?? [];
         rootObject["claudeAiOauth"] = oauthObject;
 
-        oauthObject["accessToken"] = tokenRefreshResult.AccessToken;
-        if (!string.IsNullOrWhiteSpace(tokenRefreshResult.RefreshToken)) oauthObject["refreshToken"] = tokenRefreshResult.RefreshToken;
-        oauthObject["expiresAt"] = tokenRefreshResult.ExpiresAt;
+        oauthObject["accessToken"] = JsonValue.Create(tokenRefreshResult.AccessToken);
+        if (!string.IsNullOrWhiteSpace(tokenRefreshResult.RefreshToken)) oauthObject["refreshToken"] = JsonValue.Create(tokenRefreshResult.RefreshToken);
+        if (tokenRefreshResult.Scopes.Count > 0) oauthObject["scopes"] = CreateJsonArray(tokenRefreshResult.Scopes);
+        oauthObject["expiresAt"] = JsonValue.Create(tokenRefreshResult.ExpiresAt);
 
         return rootObject.ToJsonString(ProviderJsonSerializerOptions.Default);
     }
+
+    public bool HasClaudeAiUsageScopes()
+        => Scopes.Contains(ClaudeCodeOAuthScopes.Profile, StringComparer.Ordinal)
+           && Scopes.Contains(ClaudeCodeOAuthScopes.Inference, StringComparer.Ordinal);
 
     public static long CalculateExpiresAt(DateTimeOffset issuedAt, int expiresInSeconds, long previousExpiresAt)
     {
@@ -106,6 +114,27 @@ public sealed class ClaudeCodeCredentialDocument
     {
         var propertyText = ReadString(jsonObject, propertyName);
         return long.TryParse(propertyText, out var propertyValue) ? propertyValue : null;
+    }
+
+    private static IReadOnlyList<string> ReadStringArray(JsonObject? jsonObject, string propertyName)
+    {
+        if (jsonObject is null || !jsonObject.TryGetPropertyValue(propertyName, out var propertyNode) || propertyNode is not JsonArray jsonArray) return [];
+
+        var values = new List<string>();
+        foreach (var jsonNode in jsonArray)
+        {
+            var value = jsonNode?.GetValueKind() == JsonValueKind.String ? jsonNode.ToString() : "";
+            if (!string.IsNullOrWhiteSpace(value)) values.Add(value);
+        }
+
+        return values;
+    }
+
+    private static JsonArray CreateJsonArray(IReadOnlyList<string> values)
+    {
+        var jsonArray = new JsonArray();
+        foreach (var value in values) jsonArray.Add(JsonValue.Create(value));
+        return jsonArray;
     }
 
     private static string CreatePlanType(string subscriptionType, string rateLimitTier)

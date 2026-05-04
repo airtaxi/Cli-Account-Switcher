@@ -6,6 +6,8 @@ internal sealed class ClaudeCodeTokenRefreshResult
 
     public string RefreshToken { get; set; } = "";
 
+    public IReadOnlyList<string> Scopes { get; set; } = [];
+
     public int ExpiresInSeconds { get; set; }
 
     public long ExpiresAt { get; set; }
