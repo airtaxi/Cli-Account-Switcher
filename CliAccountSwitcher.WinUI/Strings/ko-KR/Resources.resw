@@ -577,10 +577,10 @@
     <value>7일 잔여량</value>
   </data>
   <data name="PrimaryUsageAverageRateWarningTextBlock.Text" xml:space="preserve">
-    <value>평균 초과 속도</value>
+    <value>평균 속도 초과</value>
   </data>
   <data name="SecondaryUsageAverageRateWarningTextBlock.Text" xml:space="preserve">
-    <value>평균 초과 속도</value>
+    <value>평균 속도 초과</value>
   </data>
   <data name="DashboardPage_NoActiveAccountTitleTextBlock.Text" xml:space="preserve">
     <value>활성 계정이 없습니다.</value>
