@@ -164,7 +164,7 @@ public sealed class ClaudeCodeProviderAdapter : IProviderAdapter, IDisposable
         var existingStoredProviderAccount = storedProviderAccounts.FirstOrDefault(storedProviderAccount => IsSameClaudeAccount(storedProviderAccount, liveAccountState.GlobalConfigDocument));
         var slotNumber = existingStoredProviderAccount?.SlotNumber ?? GetNextSlotNumber(storedProviderAccounts);
         var storedAccountIdentifier = existingStoredProviderAccount?.StoredAccountIdentifier ?? slotNumber.ToString(System.Globalization.CultureInfo.InvariantCulture);
-        var storedProviderAccount = CreateStoredProviderAccount(liveAccountState.GlobalConfigDocument, storedAccountIdentifier, slotNumber, shouldSetActiveStoredAccountIdentifier);
+        var storedProviderAccount = CreateStoredProviderAccount(liveAccountState, storedAccountIdentifier, slotNumber, shouldSetActiveStoredAccountIdentifier);
         var storedAccountPayload = CreateStoredAccountPayload(liveAccountState);
         var payloadJson = JsonSerializer.Serialize(storedAccountPayload, ProviderJsonSerializerOptions.Default);
 
@@ -235,6 +235,8 @@ public sealed class ClaudeCodeProviderAdapter : IProviderAdapter, IDisposable
         var tokenRefreshResult = await _claudeCodeOAuthClient.RefreshTokenAsync(storedPayloadContext.CredentialDocument, cancellationToken);
         storedPayloadContext.Payload.CredentialsJson = storedPayloadContext.CredentialDocument.CreateUpdatedCredentialsJson(tokenRefreshResult);
         storedPayloadContext.CredentialDocument = ClaudeCodeCredentialDocument.Parse(storedPayloadContext.Payload.CredentialsJson);
+        storedPayloadContext.Payload.PlanType = storedPayloadContext.CredentialDocument.PlanType;
+        storedPayloadContext.StoredProviderAccount.PlanType = storedPayloadContext.CredentialDocument.PlanType;
         storedPayloadContext.StoredProviderAccount.LastUpdated = DateTimeOffset.UtcNow;
 
         var payloadJson = JsonSerializer.Serialize(storedPayloadContext.Payload, ProviderJsonSerializerOptions.Default);
@@ -320,23 +322,24 @@ public sealed class ClaudeCodeProviderAdapter : IProviderAdapter, IDisposable
             AccountIdentifier = claudeCodeAccountState.GlobalConfigDocument.AccountIdentifier,
             OrganizationIdentifier = claudeCodeAccountState.GlobalConfigDocument.OrganizationIdentifier,
             OrganizationName = claudeCodeAccountState.GlobalConfigDocument.OrganizationName,
-            PlanType = "",
+            PlanType = claudeCodeAccountState.CredentialDocument.PlanType,
             AccessTokenPreview = BuildAccessTokenPreview(claudeCodeAccountState.CredentialDocument.AccessToken),
             ExpirationText = claudeCodeAccountState.CredentialDocument.GetExpirationText(),
             IsLoggedIn = !string.IsNullOrWhiteSpace(claudeCodeAccountState.CredentialDocument.AccessToken) && !string.IsNullOrWhiteSpace(claudeCodeAccountState.GlobalConfigDocument.EmailAddress)
         };
 
-    private static StoredProviderAccount CreateStoredProviderAccount(ClaudeCodeGlobalConfigDocument globalConfigDocument, string storedAccountIdentifier, int slotNumber, bool isActive)
+    private static StoredProviderAccount CreateStoredProviderAccount(ClaudeCodeAccountState claudeCodeAccountState, string storedAccountIdentifier, int slotNumber, bool isActive)
         => new()
         {
             ProviderKind = CliProviderKind.ClaudeCode,
             StoredAccountIdentifier = storedAccountIdentifier,
             SlotNumber = slotNumber,
-            EmailAddress = globalConfigDocument.EmailAddress,
-            DisplayName = string.IsNullOrWhiteSpace(globalConfigDocument.DisplayName) ? globalConfigDocument.EmailAddress : globalConfigDocument.DisplayName,
-            AccountIdentifier = globalConfigDocument.AccountIdentifier,
-            OrganizationIdentifier = globalConfigDocument.OrganizationIdentifier,
-            OrganizationName = globalConfigDocument.OrganizationName,
+            EmailAddress = claudeCodeAccountState.GlobalConfigDocument.EmailAddress,
+            DisplayName = string.IsNullOrWhiteSpace(claudeCodeAccountState.GlobalConfigDocument.DisplayName) ? claudeCodeAccountState.GlobalConfigDocument.EmailAddress : claudeCodeAccountState.GlobalConfigDocument.DisplayName,
+            AccountIdentifier = claudeCodeAccountState.GlobalConfigDocument.AccountIdentifier,
+            OrganizationIdentifier = claudeCodeAccountState.GlobalConfigDocument.OrganizationIdentifier,
+            OrganizationName = claudeCodeAccountState.GlobalConfigDocument.OrganizationName,
+            PlanType = claudeCodeAccountState.CredentialDocument.PlanType,
             IsActive = isActive,
             IsTokenExpired = false,
             LastUpdated = DateTimeOffset.UtcNow
@@ -351,7 +354,8 @@ public sealed class ClaudeCodeProviderAdapter : IProviderAdapter, IDisposable
             DisplayName = string.IsNullOrWhiteSpace(liveAccountState.GlobalConfigDocument.DisplayName) ? liveAccountState.GlobalConfigDocument.EmailAddress : liveAccountState.GlobalConfigDocument.DisplayName,
             AccountIdentifier = liveAccountState.GlobalConfigDocument.AccountIdentifier,
             OrganizationIdentifier = liveAccountState.GlobalConfigDocument.OrganizationIdentifier,
-            OrganizationName = liveAccountState.GlobalConfigDocument.OrganizationName
+            OrganizationName = liveAccountState.GlobalConfigDocument.OrganizationName,
+            PlanType = liveAccountState.CredentialDocument.PlanType
         };
 
     private static StoredProviderAccount CloneStoredProviderAccount(StoredProviderAccount storedProviderAccount, bool isActive)
@@ -365,6 +369,7 @@ public sealed class ClaudeCodeProviderAdapter : IProviderAdapter, IDisposable
             AccountIdentifier = storedProviderAccount.AccountIdentifier,
             OrganizationIdentifier = storedProviderAccount.OrganizationIdentifier,
             OrganizationName = storedProviderAccount.OrganizationName,
+            PlanType = storedProviderAccount.PlanType,
             IsActive = isActive,
             IsTokenExpired = storedProviderAccount.IsTokenExpired,
             LastUpdated = storedProviderAccount.LastUpdated

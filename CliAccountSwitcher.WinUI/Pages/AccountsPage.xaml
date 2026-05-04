@@ -112,22 +112,39 @@
                 QueryIcon="Find"
                 TextChanged="OnAccountSearchAutoSuggestBoxTextChanged" />
 
-            <dev:SelectorBarSegmented
-                x:Name="PlanFilterSelectorBar"
-                Grid.Column="1"
-                SelectedItem="{x:Bind AllPlanFilterSelectorBarItem}"
-                SelectionChanged="OnPlanFilterSelectorBarSelectionChanged"
-                Visibility="{x:Bind ViewModel.IsPlanFilterVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
-                <SelectorBarItem
-                    x:Name="AllPlanFilterSelectorBarItem"
-                    x:Uid="AccountsPage_AllPlanFilterSelectorBarItem"
-                    Tag="All" />
-                <SelectorBarItem x:Uid="AccountsPage_FreePlanFilterSelectorBarItem" Tag="free" />
-                <SelectorBarItem x:Uid="AccountsPage_PlusPlanFilterSelectorBarItem" Tag="plus" />
-                <SelectorBarItem x:Uid="AccountsPage_TeamPlanFilterSelectorBarItem" Tag="team" />
-                <SelectorBarItem x:Uid="AccountsPage_ProLitePlanFilterSelectorBarItem" Tag="prolite" />
-                <SelectorBarItem x:Uid="AccountsPage_ProPlanFilterSelectorBarItem" Tag="pro" />
-            </dev:SelectorBarSegmented>
+            <Grid Grid.Column="1">
+                <dev:SelectorBarSegmented
+                    x:Name="CodexPlanFilterSelectorBar"
+                    SelectedItem="{x:Bind CodexAllPlanFilterSelectorBarItem}"
+                    SelectionChanged="OnPlanFilterSelectorBarSelectionChanged"
+                    Visibility="{x:Bind ViewModel.IsCodexProviderSelected, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <SelectorBarItem
+                        x:Name="CodexAllPlanFilterSelectorBarItem"
+                        x:Uid="AccountsPage_AllPlanFilterSelectorBarItem"
+                        Tag="All" />
+                    <SelectorBarItem x:Uid="AccountsPage_FreePlanFilterSelectorBarItem" Tag="free" />
+                    <SelectorBarItem x:Uid="AccountsPage_PlusPlanFilterSelectorBarItem" Tag="plus" />
+                    <SelectorBarItem x:Uid="AccountsPage_TeamPlanFilterSelectorBarItem" Tag="team" />
+                    <SelectorBarItem x:Uid="AccountsPage_ProLitePlanFilterSelectorBarItem" Tag="prolite" />
+                    <SelectorBarItem x:Uid="AccountsPage_ProPlanFilterSelectorBarItem" Tag="pro" />
+                </dev:SelectorBarSegmented>
+
+                <dev:SelectorBarSegmented
+                    x:Name="ClaudeCodePlanFilterSelectorBar"
+                    SelectedItem="{x:Bind ClaudeCodeAllPlanFilterSelectorBarItem}"
+                    SelectionChanged="OnPlanFilterSelectorBarSelectionChanged"
+                    Visibility="{x:Bind ViewModel.IsClaudeCodeProviderSelected, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <SelectorBarItem
+                        x:Name="ClaudeCodeAllPlanFilterSelectorBarItem"
+                        x:Uid="AccountsPage_ClaudeCodeAllPlanFilterSelectorBarItem"
+                        Tag="All" />
+                    <SelectorBarItem x:Uid="AccountsPage_ClaudeCodeProPlanFilterSelectorBarItem" Tag="Pro" />
+                    <SelectorBarItem x:Uid="AccountsPage_ClaudeCodeTeamPlanFilterSelectorBarItem" Tag="Team" />
+                    <SelectorBarItem x:Uid="AccountsPage_ClaudeCodeEnterprisePlanFilterSelectorBarItem" Tag="Enterprise" />
+                    <SelectorBarItem x:Uid="AccountsPage_ClaudeCodeMax5xPlanFilterSelectorBarItem" Tag="Max 5x" />
+                    <SelectorBarItem x:Uid="AccountsPage_ClaudeCodeMax20xPlanFilterSelectorBarItem" Tag="Max 20x" />
+                </dev:SelectorBarSegmented>
+            </Grid>
         </Grid>
 
         <Grid Grid.Row="2" ColumnSpacing="8">
@@ -350,8 +367,8 @@
                                                 <ProgressBar
                                                     Foreground="{ThemeResource UsageAverageRateWarningProgressBarForegroundBrush}"
                                                     Maximum="100"
-                                                    Value="{x:Bind PrimaryUsageRemainingPercentage, Mode=OneWay}"
-                                                    Visibility="{x:Bind IsPrimaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                                    Visibility="{x:Bind IsPrimaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                    Value="{x:Bind PrimaryUsageRemainingPercentage, Mode=OneWay}" />
                                             </Grid>
                                             <TextBlock
                                                 x:Uid="PrimaryUsageAverageRateWarningTextBlock"
@@ -403,8 +420,8 @@
                                                 <ProgressBar
                                                     Foreground="{ThemeResource UsageAverageRateWarningProgressBarForegroundBrush}"
                                                     Maximum="100"
-                                                    Value="{x:Bind SecondaryUsageRemainingPercentage, Mode=OneWay}"
-                                                    Visibility="{x:Bind IsSecondaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                                    Visibility="{x:Bind IsSecondaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                    Value="{x:Bind SecondaryUsageRemainingPercentage, Mode=OneWay}" />
                                             </Grid>
                                             <TextBlock
                                                 x:Uid="SecondaryUsageAverageRateWarningTextBlock"

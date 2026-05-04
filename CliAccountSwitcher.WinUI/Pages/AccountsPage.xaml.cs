@@ -7,6 +7,7 @@ using CliAccountSwitcher.WinUI.Views;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ public sealed partial class AccountsPage : Page
     {
         ViewModel = new AccountsPageViewModel(App.CodexAccountService, App.ApplicationSettings, DispatcherQueue);
         InitializeComponent();
+        ViewModel.PropertyChanged += OnViewModelPropertyChanged;
     }
 
     private IProviderAccountActions CurrentProviderAccountActions => App.GetProviderAccountActions(ViewModel.SelectedProviderKind);
@@ -156,7 +158,25 @@ public sealed partial class AccountsPage : Page
 
     private void OnSelectAllAccountsCheckBoxUnchecked(object sender, RoutedEventArgs routedEventArguments) => ViewModel.SetFilteredAccountsSelection(false);
 
-    private void OnAccountsPageUnloaded(object sender, RoutedEventArgs routedEventArguments) => ViewModel.Dispose();
+    private void OnAccountsPageUnloaded(object sender, RoutedEventArgs routedEventArguments)
+    {
+        ViewModel.PropertyChanged -= OnViewModelPropertyChanged;
+        ViewModel.Dispose();
+    }
+
+    private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArguments)
+    {
+        if (propertyChangedEventArguments.PropertyName is not nameof(AccountsPageViewModel.SelectedProviderKind) and not nameof(AccountsPageViewModel.SelectedPlanFilter)) return;
+        ResetPlanFilterSelectorBars();
+    }
+
+    private void ResetPlanFilterSelectorBars()
+    {
+        if (!string.Equals(ViewModel.SelectedPlanFilter, "All", StringComparison.OrdinalIgnoreCase)) return;
+
+        if (CodexPlanFilterSelectorBar.SelectedItem != CodexAllPlanFilterSelectorBarItem) CodexPlanFilterSelectorBar.SelectedItem = CodexAllPlanFilterSelectorBarItem;
+        if (ClaudeCodePlanFilterSelectorBar.SelectedItem != ClaudeCodeAllPlanFilterSelectorBarItem) ClaudeCodePlanFilterSelectorBar.SelectedItem = ClaudeCodeAllPlanFilterSelectorBarItem;
+    }
 
     private async Task RunWithLoadingAsync(string loadingMessage, Func<Task> action, bool shouldReloadAccounts = true)
     {

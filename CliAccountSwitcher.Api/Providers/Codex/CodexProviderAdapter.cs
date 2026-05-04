@@ -301,6 +301,7 @@ public sealed class CodexProviderAdapter : IProviderAdapter, IDisposable
             AccountIdentifier = identityProfile.AccountIdentifier,
             OrganizationIdentifier = "",
             OrganizationName = "",
+            PlanType = identityProfile.PlanType,
             IsActive = isActive,
             IsTokenExpired = false,
             LastUpdated = DateTimeOffset.UtcNow
@@ -318,6 +319,7 @@ public sealed class CodexProviderAdapter : IProviderAdapter, IDisposable
             AccountIdentifier = storedProviderAccount.AccountIdentifier,
             OrganizationIdentifier = storedProviderAccount.OrganizationIdentifier,
             OrganizationName = storedProviderAccount.OrganizationName,
+            PlanType = storedProviderAccount.PlanType,
             IsActive = isActive,
             IsTokenExpired = storedProviderAccount.IsTokenExpired,
             LastUpdated = storedProviderAccount.LastUpdated

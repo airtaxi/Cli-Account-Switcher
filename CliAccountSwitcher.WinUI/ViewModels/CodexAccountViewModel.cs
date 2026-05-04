@@ -51,11 +51,11 @@ public sealed partial class CodexAccountViewModel : ObservableObject
 
     public string EmailAddress => ProviderKind == CliProviderKind.Codex ? CodexAccount.EmailAddress : StoredProviderAccount.EmailAddress;
 
-    public string PlanType => ProviderKind == CliProviderKind.Codex ? CodexAccount.PlanType : StoredProviderAccount.OrganizationName;
+    public string PlanType => ProviderKind == CliProviderKind.Codex ? CodexAccount.PlanType : StoredProviderAccount.PlanType;
 
-    public string PlanFilterKey => ProviderKind == CliProviderKind.Codex && !string.IsNullOrWhiteSpace(PlanType) ? PlanType.Trim().ToLowerInvariant() : "";
+    public string PlanFilterKey => !string.IsNullOrWhiteSpace(PlanType) && !string.Equals(PlanType, "Unknown", StringComparison.OrdinalIgnoreCase) ? PlanType.Trim().ToLowerInvariant() : "";
 
-    public string PlanText => ProviderKind == CliProviderKind.Codex ? FormatCodexPlanText(PlanType) : FormatClaudeCodeOrganizationText();
+    public string PlanText => ProviderKind == CliProviderKind.Codex ? FormatCodexPlanText(PlanType) : FormatClaudeCodePlanText(PlanType);
 
     public bool IsActive => ProviderKind == CliProviderKind.Codex ? CodexAccount.IsActive : StoredProviderAccount.IsActive;
 
@@ -97,7 +97,7 @@ public sealed partial class CodexAccountViewModel : ObservableObject
         ? GetFormattedString("CodexAccountViewModel_LastUsageRefreshFormat", CodexAccount.LastUsageRefreshTime is null ? GetLocalizedString("CodexAccountViewModel_NotRefreshed") : CodexAccount.LastUsageRefreshTime.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.CurrentCulture))
         : GetFormattedString("CodexAccountViewModel_LastUpdatedFormat", (_providerUsageRefreshTime ?? StoredProviderAccount.LastUpdated).ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.CurrentCulture));
 
-    public string SearchText => $"{DisplayName} {EmailAddress} {PlanText} {AccountIdentifier} {StoredProviderAccount.OrganizationIdentifier}";
+    public string SearchText => $"{DisplayName} {EmailAddress} {PlanText} {AccountIdentifier}";
 
     public bool CanRename => ProviderKind == CliProviderKind.Codex;
 
@@ -176,19 +176,13 @@ public sealed partial class CodexAccountViewModel : ObservableObject
         OnPropertyChanged(nameof(IsSecondaryUsageUnderWarningThreshold));
     }
 
-    private string FormatClaudeCodeOrganizationText()
-    {
-        if (!string.IsNullOrWhiteSpace(StoredProviderAccount.OrganizationName)) return StoredProviderAccount.OrganizationName;
-        if (!string.IsNullOrWhiteSpace(StoredProviderAccount.OrganizationIdentifier)) return StoredProviderAccount.OrganizationIdentifier;
-        return GetLocalizedString("CodexAccountViewModel_UnknownPlan");
-    }
-
     private string FormatClaudeCodeAccountDetailText()
     {
-        if (!string.IsNullOrWhiteSpace(StoredProviderAccount.OrganizationName)) return StoredProviderAccount.OrganizationName;
         if (!string.IsNullOrWhiteSpace(StoredProviderAccount.AccountIdentifier)) return StoredProviderAccount.AccountIdentifier;
         return StoredProviderAccount.StoredAccountIdentifier;
     }
+
+    private static string FormatClaudeCodePlanText(string planType) => string.IsNullOrWhiteSpace(planType) ? "Unknown" : planType;
 
     private static string FormatCodexPlanText(string planType) => string.IsNullOrWhiteSpace(planType) ? GetLocalizedString("CodexAccountViewModel_UnknownPlan") : planType == "prolite" ? GetLocalizedString("AccountsPage_ProLitePlanFilterSelectorBarItem/Text") : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(planType.ToLowerInvariant());
 

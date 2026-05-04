@@ -43,7 +43,6 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     public partial string SelectedPlanFilter { get; set; } = "All";
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsPlanFilterVisible))]
     [NotifyPropertyChangedFor(nameof(IsCodexProviderSelected))]
     [NotifyPropertyChangedFor(nameof(IsClaudeCodeProviderSelected))]
     [NotifyPropertyChangedFor(nameof(PlanHeaderText))]
@@ -80,13 +79,11 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     public string SelectedAccountCountText => SelectedAccountIdentifiers.Count == 0 ? GetLocalizedString("AccountsPageViewModel_NoSelectedAccounts") : GetFormattedString("AccountsPageViewModel_SelectedAccountCountFormat", SelectedAccountIdentifiers.Count);
 
-    public bool IsPlanFilterVisible => SelectedProviderKind == CliProviderKind.Codex;
-
     public bool IsCodexProviderSelected => SelectedProviderKind == CliProviderKind.Codex;
 
     public bool IsClaudeCodeProviderSelected => SelectedProviderKind == CliProviderKind.ClaudeCode;
 
-    public string PlanHeaderText => SelectedProviderKind == CliProviderKind.Codex ? GetLocalizedString("AccountsPage_PlanHeaderTextBlock/Text") : GetLocalizedString("AccountsPage_OrganizationHeaderText");
+    public string PlanHeaderText => GetLocalizedString("AccountsPage_PlanHeaderTextBlock/Text");
 
     public void ReloadAccounts()
     {
@@ -318,7 +315,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     private void ApplyFilter()
     {
         var normalizedSearchText = (SearchText ?? "").Trim();
-        var normalizedSelectedPlanFilter = SelectedProviderKind == CliProviderKind.Codex && !string.IsNullOrWhiteSpace(SelectedPlanFilter) ? SelectedPlanFilter.Trim() : "All";
+        var normalizedSelectedPlanFilter = !string.IsNullOrWhiteSpace(SelectedPlanFilter) ? SelectedPlanFilter.Trim() : "All";
         var filteredAccountViewModels = Accounts.Where(accountViewModel => IsAccountVisible(accountViewModel, normalizedSearchText, normalizedSelectedPlanFilter)).ToList();
         var filteredAccountViewModelSet = filteredAccountViewModels.ToHashSet();
 

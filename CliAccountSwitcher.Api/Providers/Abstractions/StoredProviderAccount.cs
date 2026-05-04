@@ -18,6 +18,8 @@ public sealed class StoredProviderAccount
 
     public string OrganizationName { get; set; } = "";
 
+    public string PlanType { get; set; } = "";
+
     public bool IsActive { get; set; }
 
     public bool IsTokenExpired { get; set; }

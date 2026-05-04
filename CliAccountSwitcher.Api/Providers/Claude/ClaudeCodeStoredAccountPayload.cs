@@ -15,4 +15,6 @@ internal sealed class ClaudeCodeStoredAccountPayload
     public string OrganizationIdentifier { get; set; } = "";
 
     public string OrganizationName { get; set; } = "";
+
+    public string PlanType { get; set; } = "";
 }

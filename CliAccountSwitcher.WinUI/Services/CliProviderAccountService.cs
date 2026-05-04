@@ -315,6 +315,7 @@ public sealed class CliProviderAccountService : IDisposable
             AccountIdentifier = storedProviderAccount.AccountIdentifier,
             OrganizationIdentifier = storedProviderAccount.OrganizationIdentifier,
             OrganizationName = storedProviderAccount.OrganizationName,
+            PlanType = storedProviderAccount.PlanType,
             IsActive = storedProviderAccount.IsActive,
             IsTokenExpired = storedProviderAccount.IsTokenExpired,
             LastUpdated = storedProviderAccount.LastUpdated

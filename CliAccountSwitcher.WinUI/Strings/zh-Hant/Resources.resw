@@ -264,6 +264,24 @@
   <data name="AccountsPage_ProPlanFilterSelectorBarItem.Text" xml:space="preserve">
     <value>Pro</value>
   </data>
+  <data name="AccountsPage_ClaudeCodeAllPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="AccountsPage_ClaudeCodeProPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Pro</value>
+  </data>
+  <data name="AccountsPage_ClaudeCodeMax5xPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Max 5x</value>
+  </data>
+  <data name="AccountsPage_ClaudeCodeMax20xPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Max 20x</value>
+  </data>
+  <data name="AccountsPage_ClaudeCodeTeamPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="AccountsPage_ClaudeCodeEnterprisePlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Enterprise</value>
+  </data>
   <data name="AccountsPage_RefreshSelectedAccountsTextBlock.Text" xml:space="preserve">
     <value>重新整理所選</value>
   </data>
@@ -1033,9 +1051,6 @@ Microsoft Store 中有 {0} 個可用更新。</value>
   </data>
   <data name="ProviderToggle_AutomationName" xml:space="preserve">
     <value>CLI provider</value>
-  </data>
-  <data name="AccountsPage_OrganizationHeaderText" xml:space="preserve">
-    <value>組織</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogTitle" xml:space="preserve">
     <value>重新整理 Claude Code 工作階段</value>

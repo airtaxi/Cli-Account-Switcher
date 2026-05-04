@@ -193,6 +193,7 @@ public sealed class FileSystemProviderSnapshotStore : IProviderSnapshotStore
             AccountIdentifier = storedProviderAccount.AccountIdentifier,
             OrganizationIdentifier = storedProviderAccount.OrganizationIdentifier,
             OrganizationName = storedProviderAccount.OrganizationName,
+            PlanType = storedProviderAccount.PlanType,
             IsActive = isActive,
             IsTokenExpired = storedProviderAccount.IsTokenExpired,
             LastUpdated = storedProviderAccount.LastUpdated

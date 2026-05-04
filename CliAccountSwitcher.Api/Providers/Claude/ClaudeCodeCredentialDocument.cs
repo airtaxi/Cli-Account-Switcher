@@ -16,17 +16,28 @@ public sealed class ClaudeCodeCredentialDocument
 
     public long ExpiresAt { get; set; } = -1;
 
+    public string SubscriptionType { get; set; } = "";
+
+    public string RateLimitTier { get; set; } = "";
+
+    public string PlanType { get; set; } = "Unknown";
+
     public static ClaudeCodeCredentialDocument Parse(string credentialsJson)
     {
         var rootObject = ParseRootObject(credentialsJson);
         var oauthObject = rootObject["claudeAiOauth"] as JsonObject;
+        var subscriptionType = ReadString(oauthObject, "subscriptionType") ?? "";
+        var rateLimitTier = ReadString(oauthObject, "rateLimitTier") ?? "";
 
         return new ClaudeCodeCredentialDocument
         {
             RawJson = credentialsJson,
             AccessToken = ReadString(oauthObject, "accessToken") ?? "",
             RefreshToken = ReadString(oauthObject, "refreshToken") ?? "",
-            ExpiresAt = ReadInt64(oauthObject, "expiresAt") ?? -1
+            ExpiresAt = ReadInt64(oauthObject, "expiresAt") ?? -1,
+            SubscriptionType = subscriptionType,
+            RateLimitTier = rateLimitTier,
+            PlanType = CreatePlanType(subscriptionType, rateLimitTier)
         };
     }
 
@@ -95,5 +106,21 @@ public sealed class ClaudeCodeCredentialDocument
     {
         var propertyText = ReadString(jsonObject, propertyName);
         return long.TryParse(propertyText, out var propertyValue) ? propertyValue : null;
+    }
+
+    private static string CreatePlanType(string subscriptionType, string rateLimitTier)
+    {
+        var normalizedSubscriptionType = subscriptionType.Trim().ToLowerInvariant();
+        var normalizedRateLimitTier = rateLimitTier.Trim().ToLowerInvariant();
+
+        return normalizedSubscriptionType switch
+        {
+            "max" when normalizedRateLimitTier == "default_claude_max_20x" => "Max 20x",
+            "max" when normalizedRateLimitTier == "default_claude_max_5x" => "Max 5x",
+            "pro" => "Pro",
+            "team" => "Team",
+            "enterprise" => "Enterprise",
+            _ => "Unknown"
+        };
     }
 }
