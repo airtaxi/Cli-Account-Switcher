@@ -17,6 +17,8 @@ namespace CliAccountSwitcher.WinUI.Pages;
 
 public sealed partial class AccountsPage : Page
 {
+    private DispatcherTimer _remainingTimeRefreshTimer;
+
     public AccountsPageViewModel ViewModel { get; }
 
     public AccountsPage()
@@ -157,8 +159,11 @@ public sealed partial class AccountsPage : Page
 
     private void OnSelectAllAccountsCheckBoxUnchecked(object sender, RoutedEventArgs routedEventArguments) => ViewModel.SetFilteredAccountsSelection(false);
 
+    private void OnAccountsPageLoaded(object sender, RoutedEventArgs routedEventArguments) => StartRemainingTimeRefreshTimer();
+
     private void OnAccountsPageUnloaded(object sender, RoutedEventArgs routedEventArguments)
     {
+        StopRemainingTimeRefreshTimer();
         ViewModel.PropertyChanged -= OnViewModelPropertyChanged;
         ViewModel.Dispose();
     }
@@ -192,6 +197,27 @@ public sealed partial class AccountsPage : Page
     }
 
     private async Task ShowClaudeCodeSessionRefreshGuideAsync() => await this.ShowDialogAsync(GetLocalizedString("AccountsPage_RestartClaudeCodeSessionDialogTitle"), GetLocalizedString("AccountsPage_RestartClaudeCodeSessionDialogMessage"));
+
+    private void OnRemainingTimeRefreshTimerTick(object sender, object eventArguments) => ViewModel.RefreshUsageResetTextProperties();
+
+    private void StartRemainingTimeRefreshTimer()
+    {
+        StopRemainingTimeRefreshTimer();
+
+        _remainingTimeRefreshTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+        _remainingTimeRefreshTimer.Tick += OnRemainingTimeRefreshTimerTick;
+        _remainingTimeRefreshTimer.Start();
+        ViewModel.RefreshUsageResetTextProperties();
+    }
+
+    private void StopRemainingTimeRefreshTimer()
+    {
+        if (_remainingTimeRefreshTimer is null) return;
+
+        _remainingTimeRefreshTimer.Stop();
+        _remainingTimeRefreshTimer.Tick -= OnRemainingTimeRefreshTimerTick;
+        _remainingTimeRefreshTimer = null;
+    }
 
     private async Task HandleProviderActivationFollowUpAsync(ProviderActivationFollowUp providerActivationFollowUp)
     {

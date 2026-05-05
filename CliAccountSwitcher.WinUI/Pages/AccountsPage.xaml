@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="using:CliAccountSwitcher.WinUI.ViewModels"
     DataContext="{x:Bind ViewModel}"
+    Loaded="OnAccountsPageLoaded"
     Unloaded="OnAccountsPageUnloaded"
     mc:Ignorable="d">
 

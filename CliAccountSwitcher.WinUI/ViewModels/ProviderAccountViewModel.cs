@@ -14,6 +14,8 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
     private static readonly TimeSpan s_secondaryUsageAverageUnitDuration = TimeSpan.FromDays(1);
 
     private readonly ApplicationSettings _applicationSettings = applicationSettings;
+    private DateTimeOffset? _primaryUsageResetTime = GetUsageResetTime(GetProviderUsageSnapshot(providerAccount).FiveHour, providerAccount.LastUsageRefreshTime);
+    private DateTimeOffset? _secondaryUsageResetTime = GetUsageResetTime(GetProviderUsageSnapshot(providerAccount).SevenDay, providerAccount.LastUsageRefreshTime);
 
     [ObservableProperty]
     public partial bool IsSelected { get; set; }
@@ -22,7 +24,7 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
 
     public CliProviderKind ProviderKind => ProviderAccount.ProviderKind;
 
-    public ProviderUsageSnapshot ProviderUsageSnapshot => ProviderAccount.LastProviderUsageSnapshot ?? new ProviderUsageSnapshot { ProviderKind = ProviderKind };
+    public ProviderUsageSnapshot ProviderUsageSnapshot => GetProviderUsageSnapshot(ProviderAccount);
 
     public string AccountIdentifier => ProviderAccount.AccountIdentifier;
 
@@ -46,9 +48,9 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
 
     public string AccessTokenPreview => ProviderKind == CliProviderKind.Codex && string.IsNullOrWhiteSpace(ProviderAccount.AccountDetailText) ? GetLocalizedString("ProviderAccountViewModel_NoAccessToken") : ProviderAccount.AccountDetailText;
 
-    public string PrimaryUsageText => FormatUsageWindow(ProviderUsageSnapshot.FiveHour);
+    public string PrimaryUsageText => FormatUsageWindow(ProviderUsageSnapshot.FiveHour, _primaryUsageResetTime);
 
-    public string SecondaryUsageText => FormatUsageWindow(ProviderUsageSnapshot.SevenDay);
+    public string SecondaryUsageText => FormatUsageWindow(ProviderUsageSnapshot.SevenDay, _secondaryUsageResetTime);
 
     public string PrimaryUsageWindowLabelText => GetLocalizedString("ProviderAccountViewModel_PrimaryUsageWindowLabel");
 
@@ -58,9 +60,9 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
 
     public string SecondaryUsageRemainingText => FormatUsageRemaining(ProviderUsageSnapshot.SevenDay);
 
-    public string PrimaryUsageResetText => FormatUsageReset(ProviderUsageSnapshot.FiveHour);
+    public string PrimaryUsageResetText => FormatUsageReset(_primaryUsageResetTime);
 
-    public string SecondaryUsageResetText => FormatUsageReset(ProviderUsageSnapshot.SevenDay);
+    public string SecondaryUsageResetText => FormatUsageReset(_secondaryUsageResetTime);
 
     public int PrimaryUsageRemainingPercentage => ClampUsageRemainingPercentage(ProviderUsageSnapshot.FiveHour);
 
@@ -83,6 +85,8 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
     public void Update(ProviderAccount providerAccount)
     {
         ProviderAccount = providerAccount;
+        _primaryUsageResetTime = GetUsageResetTime(ProviderUsageSnapshot.FiveHour, ProviderAccount.LastUsageRefreshTime);
+        _secondaryUsageResetTime = GetUsageResetTime(ProviderUsageSnapshot.SevenDay, ProviderAccount.LastUsageRefreshTime);
         RefreshAccountProperties();
     }
 
@@ -127,30 +131,48 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
         OnPropertyChanged(nameof(IsSecondaryUsageUnderWarningThreshold));
     }
 
+    public void RefreshUsageResetTextProperties()
+    {
+        OnPropertyChanged(nameof(PrimaryUsageText));
+        OnPropertyChanged(nameof(SecondaryUsageText));
+        OnPropertyChanged(nameof(PrimaryUsageResetText));
+        OnPropertyChanged(nameof(SecondaryUsageResetText));
+    }
+
     private static string FormatClaudeCodePlanText(string planType) => string.IsNullOrWhiteSpace(planType) ? "Unknown" : planType;
 
     private static string FormatCodexPlanText(string planType) => string.IsNullOrWhiteSpace(planType) ? GetLocalizedString("ProviderAccountViewModel_UnknownPlan") : string.Equals(planType, "prolite", StringComparison.OrdinalIgnoreCase) ? GetLocalizedString("AccountsPage_ProLitePlanFilterSelectorBarItem/Text") : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(planType.ToLowerInvariant());
 
-    private static string FormatUsageWindow(ProviderUsageWindow providerUsageWindow)
+    private static string FormatUsageWindow(ProviderUsageWindow providerUsageWindow, DateTimeOffset? usageResetTime)
     {
         if (providerUsageWindow.RemainingPercentage < 0) return GetLocalizedString("ProviderAccountViewModel_UnknownUsage");
 
-        var resetText = FormatUsageReset(providerUsageWindow);
+        var resetText = FormatUsageReset(usageResetTime);
         return GetFormattedString("ProviderAccountViewModel_UsageRemainingFormat", providerUsageWindow.RemainingPercentage, resetText);
     }
 
     private static string FormatUsageRemaining(ProviderUsageWindow providerUsageWindow) => providerUsageWindow.RemainingPercentage < 0 ? GetLocalizedString("ProviderAccountViewModel_UnknownUsage") : GetFormattedString("ProviderAccountViewModel_UsageRemainingOnlyFormat", providerUsageWindow.RemainingPercentage);
 
-    private static string FormatUsageReset(ProviderUsageWindow providerUsageWindow)
+    private static string FormatUsageReset(DateTimeOffset? usageResetTime)
     {
-        if (providerUsageWindow.ResetAfterSeconds < 0) return GetLocalizedString("ProviderAccountViewModel_UnknownResetTime");
+        if (usageResetTime is null) return GetLocalizedString("ProviderAccountViewModel_UnknownResetTime");
 
-        var resetAfterTimeSpan = TimeSpan.FromSeconds(providerUsageWindow.ResetAfterSeconds);
+        var resetAfterSeconds = Math.Max(0, Convert.ToInt64(Math.Ceiling((usageResetTime.Value - DateTimeOffset.UtcNow).TotalSeconds)));
+        var resetAfterTimeSpan = TimeSpan.FromSeconds(resetAfterSeconds);
         var wholeDayCount = resetAfterTimeSpan.Days;
         if (wholeDayCount == 1) return GetFormattedString("ProviderAccountViewModel_ResetAfterWithSingleDayFormat", resetAfterTimeSpan);
         if (wholeDayCount > 1) return GetFormattedString("ProviderAccountViewModel_ResetAfterWithMultipleDaysFormat", wholeDayCount, resetAfterTimeSpan);
         return GetFormattedString("ProviderAccountViewModel_ResetAfterFormat", resetAfterTimeSpan);
     }
+
+    private static DateTimeOffset? GetUsageResetTime(ProviderUsageWindow providerUsageWindow, DateTimeOffset? usageRefreshTime)
+    {
+        if (providerUsageWindow.ResetAt is not null) return providerUsageWindow.ResetAt;
+        if (providerUsageWindow.ResetAfterSeconds < 0) return null;
+        return (usageRefreshTime ?? DateTimeOffset.UtcNow).AddSeconds(providerUsageWindow.ResetAfterSeconds);
+    }
+
+    private static ProviderUsageSnapshot GetProviderUsageSnapshot(ProviderAccount providerAccount) => providerAccount.LastProviderUsageSnapshot ?? new ProviderUsageSnapshot { ProviderKind = providerAccount.ProviderKind };
 
     private static int ClampUsageRemainingPercentage(ProviderUsageWindow providerUsageWindow) => providerUsageWindow.RemainingPercentage < 0 ? 0 : Math.Clamp(providerUsageWindow.RemainingPercentage, 0, 100);
 

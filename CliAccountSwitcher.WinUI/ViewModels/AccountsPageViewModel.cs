@@ -130,6 +130,11 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         RefreshSelectedAccountIdentifiersFromAccountViewModels();
     }
 
+    public void RefreshUsageResetTextProperties()
+    {
+        foreach (var accountViewModel in Accounts) accountViewModel.RefreshUsageResetTextProperties();
+    }
+
     public void Dispose()
     {
         if (_disposed) return;
