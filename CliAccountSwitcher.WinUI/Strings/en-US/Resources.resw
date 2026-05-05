@@ -652,7 +652,16 @@
     <value>Inspired by isxlan0/Codex_AccountSwitch. Thank you for sharing the original idea.</value>
   </data>
   <data name="AboutPage_InspirationRepositoryButtonTextBlock.Text" xml:space="preserve">
-    <value>Open original repository</value>
+    <value>Open repository</value>
+  </data>
+  <data name="AboutPage_ClaudeSwapSettingsCard.Header" xml:space="preserve">
+    <value>Special thanks</value>
+  </data>
+  <data name="AboutPage_ClaudeSwapSettingsCard.Description" xml:space="preserve">
+    <value>Inspired by realiti4/claude-swap. Thank you for sharing the original idea.</value>
+  </data>
+  <data name="AboutPage_ClaudeSwapRepositoryButtonTextBlock.Text" xml:space="preserve">
+    <value>Open repository</value>
   </data>
   <data name="AboutPage_LicenseSettingsGroup.Header" xml:space="preserve">
     <value>Licenses</value>

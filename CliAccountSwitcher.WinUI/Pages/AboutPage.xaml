@@ -127,6 +127,18 @@
                             </StackPanel>
                         </Button>
                     </dev:SettingsCard>
+
+                    <dev:SettingsCard x:Uid="AboutPage_ClaudeSwapSettingsCard">
+                        <dev:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xEB51;" />
+                        </dev:SettingsCard.HeaderIcon>
+                        <Button Click="OnClaudeSwapRepositoryButtonClicked">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <FontIcon FontSize="14" Glyph="&#xE71B;" />
+                                <TextBlock x:Uid="AboutPage_ClaudeSwapRepositoryButtonTextBlock" />
+                            </StackPanel>
+                        </Button>
+                    </dev:SettingsCard>
                 </dev:SimpleSettingsGroup>
 
                 <dev:SimpleSettingsGroup x:Uid="AboutPage_LicenseSettingsGroup">

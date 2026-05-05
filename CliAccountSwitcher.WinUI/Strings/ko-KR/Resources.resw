@@ -652,7 +652,16 @@
     <value>isxlan0/Codex_AccountSwitch에서 영감을 받았습니다. 좋은 아이디어를 공유해 주셔서 감사합니다.</value>
   </data>
   <data name="AboutPage_InspirationRepositoryButtonTextBlock.Text" xml:space="preserve">
-    <value>원본 저장소 열기</value>
+    <value>저장소 열기</value>
+  </data>
+  <data name="AboutPage_ClaudeSwapSettingsCard.Header" xml:space="preserve">
+    <value>감사 인사</value>
+  </data>
+  <data name="AboutPage_ClaudeSwapSettingsCard.Description" xml:space="preserve">
+    <value>realiti4/claude-swap에서 영감을 받았습니다. 좋은 아이디어를 공유해 주셔서 감사합니다.</value>
+  </data>
+  <data name="AboutPage_ClaudeSwapRepositoryButtonTextBlock.Text" xml:space="preserve">
+    <value>저장소 열기</value>
   </data>
   <data name="AboutPage_LicenseSettingsGroup.Header" xml:space="preserve">
     <value>라이선스</value>

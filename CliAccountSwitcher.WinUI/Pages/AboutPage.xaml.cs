@@ -17,6 +17,7 @@ public sealed partial class AboutPage : Page
     private const string ApplicationRepositoryAddress = "https://github.com/airtaxi/Cli-Account-Switcher";
     private const string CreatorGitHubAddress = "https://github.com/airtaxi";
     private const string InspirationRepositoryAddress = "https://github.com/isxlan0/Codex_AccountSwitch";
+    private const string ClaudeSwapRepositoryAddress = "https://github.com/realiti4/claude-swap";
 
     private static readonly List<ThirdPartyLicensePackage> s_thirdPartyLicensePackages = CreateThirdPartyLicensePackages();
 
@@ -38,6 +39,8 @@ public sealed partial class AboutPage : Page
     private async void OnCreatorGitHubButtonClicked(object sender, RoutedEventArgs routedEventArguments) => await OpenAddressAsync(CreatorGitHubAddress);
 
     private async void OnInspirationRepositoryButtonClicked(object sender, RoutedEventArgs routedEventArguments) => await OpenAddressAsync(InspirationRepositoryAddress);
+
+    private async void OnClaudeSwapRepositoryButtonClicked(object sender, RoutedEventArgs routedEventArguments) => await OpenAddressAsync(ClaudeSwapRepositoryAddress);
 
     private async void OnThirdPartyLicensesButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
