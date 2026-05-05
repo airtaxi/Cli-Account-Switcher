@@ -355,6 +355,7 @@
                                                     TextTrimming="CharacterEllipsis" />
                                                 <TextBlock
                                                     Grid.Column="1"
+                                                    FontSize="12"
                                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                                     Text="{x:Bind PrimaryUsageResetText, Mode=OneWay}"
                                                     TextTrimming="CharacterEllipsis" />
@@ -408,6 +409,7 @@
                                                     TextTrimming="CharacterEllipsis" />
                                                 <TextBlock
                                                     Grid.Column="1"
+                                                    FontSize="12"
                                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                                     Text="{x:Bind SecondaryUsageResetText, Mode=OneWay}"
                                                     TextTrimming="CharacterEllipsis" />
