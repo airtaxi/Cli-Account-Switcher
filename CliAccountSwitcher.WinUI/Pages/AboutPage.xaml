@@ -21,8 +21,8 @@
         </Style>
     </Page.Resources>
 
-    <Grid Padding="24">
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <Grid Padding="24">
             <StackPanel HorizontalAlignment="Stretch">
                 <Grid ColumnSpacing="16">
                     <Grid.ColumnDefinitions>
@@ -162,6 +162,6 @@
                     </dev:SettingsCard>
                 </dev:SimpleSettingsGroup>
             </StackPanel>
-        </ScrollViewer>
-    </Grid>
+        </Grid>
+    </ScrollViewer>
 </Page>

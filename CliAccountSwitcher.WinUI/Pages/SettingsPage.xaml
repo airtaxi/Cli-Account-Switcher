@@ -10,8 +10,8 @@
     Unloaded="OnSettingsPageUnloaded"
     mc:Ignorable="d">
 
-    <Grid Padding="24">
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <Grid Padding="24">
             <StackPanel HorizontalAlignment="Stretch">
                 <StackPanel Spacing="4">
                     <TextBlock x:Uid="SettingsPage_TitleTextBlock" Style="{ThemeResource TitleLargeTextBlockStyle}" />
@@ -242,6 +242,6 @@
                     </dev:SettingsCard>
                 </dev:SimpleSettingsGroup>
             </StackPanel>
-        </ScrollViewer>
-    </Grid>
+        </Grid>
+    </ScrollViewer>
 </Page>

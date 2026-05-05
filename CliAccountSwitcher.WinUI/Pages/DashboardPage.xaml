@@ -33,8 +33,8 @@
         </Style>
     </Page.Resources>
 
-    <Grid Padding="24">
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <Grid Padding="24">
             <StackPanel Spacing="12">
                 <Grid ColumnSpacing="12">
                     <Grid.ColumnDefinitions>
@@ -360,6 +360,6 @@
                     </Border>
                 </Grid>
             </StackPanel>
-        </ScrollViewer>
-    </Grid>
+        </Grid>
+    </ScrollViewer>
 </Page>
