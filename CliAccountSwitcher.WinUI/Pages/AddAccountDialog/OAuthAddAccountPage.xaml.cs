@@ -1,4 +1,4 @@
-using CliAccountSwitcher.Api.Authentication;
+using CliAccountSwitcher.Api.Providers.Codex.Authentication;
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Dialogs;
 using CliAccountSwitcher.WinUI.Views;

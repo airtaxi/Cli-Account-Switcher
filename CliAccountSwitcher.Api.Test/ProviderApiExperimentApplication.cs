@@ -1,6 +1,6 @@
-using CliAccountSwitcher.Api.Models;
+using CliAccountSwitcher.Api.Providers.Codex.Models;
 using CliAccountSwitcher.Api.Providers.Abstractions;
-using CliAccountSwitcher.Api.Providers.Claude;
+using CliAccountSwitcher.Api.Providers.ClaudeCode;
 using CliAccountSwitcher.Api.Providers.Codex;
 using CliAccountSwitcher.Api.Storage;
 using CliAccountSwitcher.Api.Test.Infrastructure;

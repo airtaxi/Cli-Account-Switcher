@@ -26,9 +26,15 @@ public interface IProviderAdapter
 
     Task<IReadOnlyList<StoredProviderAccount>> ListStoredAccountsAsync(IProviderSnapshotStore providerSnapshotStore, CancellationToken cancellationToken = default);
 
-    Task<StoredProviderAccount> SaveCurrentAccountAsync(IProviderSnapshotStore providerSnapshotStore, CancellationToken cancellationToken = default);
+    Task<StoredProviderAccount> SaveCurrentAccountAsync(IProviderSnapshotStore providerSnapshotStore, ProviderStoredAccountSaveOptions? providerStoredAccountSaveOptions = null, CancellationToken cancellationToken = default);
+
+    Task<StoredProviderAccount> SaveAccountAsync(IProviderSnapshotStore providerSnapshotStore, ProviderAccountDocumentSet providerAccountDocumentSet, ProviderStoredAccountSaveOptions? providerStoredAccountSaveOptions = null, CancellationToken cancellationToken = default);
 
     Task<StoredProviderAccount> ActivateStoredAccountAsync(IProviderSnapshotStore providerSnapshotStore, string storedAccountIdentifier, CancellationToken cancellationToken = default);
+
+    Task<string> GetCurrentStoredAccountIdentifierAsync(IProviderSnapshotStore providerSnapshotStore, CancellationToken cancellationToken = default);
+
+    Task<StoredProviderAccount?> UpdateStoredAccountFromCurrentLiveAccountAsync(IProviderSnapshotStore providerSnapshotStore, string storedAccountIdentifier, CancellationToken cancellationToken = default);
 
     Task DeleteStoredAccountAsync(IProviderSnapshotStore providerSnapshotStore, string storedAccountIdentifier, CancellationToken cancellationToken = default);
 }

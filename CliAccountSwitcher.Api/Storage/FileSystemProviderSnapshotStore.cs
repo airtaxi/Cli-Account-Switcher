@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json;
-using CliAccountSwitcher.Api.Providers;
+using CliAccountSwitcher.Api.Providers.Serialization;
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.Api.Security;
 
@@ -178,7 +178,7 @@ public sealed class FileSystemProviderSnapshotStore : IProviderSnapshotStore
         => providerKind switch
         {
             CliProviderKind.Codex => "codex",
-            CliProviderKind.ClaudeCode => "claude",
+            CliProviderKind.ClaudeCode => "claude-code",
             _ => providerKind.ToString().ToLowerInvariant()
         };
 

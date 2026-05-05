@@ -1,5 +1,5 @@
-using CliAccountSwitcher.Api.Models.Authentication;
-using CliAccountSwitcher.Api.Models.Usage;
+using CliAccountSwitcher.Api.Providers.Codex.Models.Authentication;
+using CliAccountSwitcher.Api.Providers.Codex.Models.Usage;
 using System;
 using System.Text.Json.Serialization;
 

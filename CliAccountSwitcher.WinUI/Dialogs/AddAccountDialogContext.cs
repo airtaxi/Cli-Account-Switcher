@@ -1,4 +1,4 @@
-using CliAccountSwitcher.Api.Authentication;
+using CliAccountSwitcher.Api.Providers.Codex.Authentication;
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Services;
 using Microsoft.UI.Xaml.Controls;

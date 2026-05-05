@@ -1,5 +1,6 @@
 using CliAccountSwitcher.Api.Providers.Abstractions;
-using CliAccountSwitcher.Api.Providers.Claude;
+using CliAccountSwitcher.Api.Providers.ClaudeCode;
+using CliAccountSwitcher.Api.Providers.ClaudeCode.Authentication;
 using CliAccountSwitcher.Api.Security;
 using CliAccountSwitcher.Api.Storage;
 using CliAccountSwitcher.WinUI.Helpers;
@@ -29,16 +30,16 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
     public override bool IsRenameSupported => false;
 
     public async Task<StoredProviderAccount> SaveCurrentClaudeCodeAccountAsync(CancellationToken cancellationToken = default)
-        => await SaveAndRefreshClaudeCodeAccountAsync(_claudeCodeProviderAdapter.SaveCurrentAccountAsync(_providerSnapshotStore, cancellationToken), cancellationToken);
+        => await SaveAndRefreshClaudeCodeAccountAsync(_claudeCodeProviderAdapter.SaveCurrentAccountAsync(_providerSnapshotStore, cancellationToken: cancellationToken), cancellationToken);
 
     public async Task<StoredProviderAccount> SaveCurrentClaudeCodeAccountWithoutActivationAsync(CancellationToken cancellationToken = default)
-        => await SaveAndRefreshClaudeCodeAccountAsync(_claudeCodeProviderAdapter.SaveCurrentAccountWithoutActivationAsync(_providerSnapshotStore, cancellationToken), cancellationToken);
+        => await SaveAndRefreshClaudeCodeAccountAsync(_claudeCodeProviderAdapter.SaveCurrentAccountAsync(_providerSnapshotStore, new ProviderStoredAccountSaveOptions { ShouldActivate = false }, cancellationToken), cancellationToken);
 
     public async Task<StoredProviderAccount> SaveClaudeCodeAccountAsync(string credentialsJson, string globalConfigJson, CancellationToken cancellationToken = default)
-        => await SaveAndRefreshClaudeCodeAccountAsync(_claudeCodeProviderAdapter.SaveAccountAsync(_providerSnapshotStore, credentialsJson, globalConfigJson, cancellationToken), cancellationToken);
+        => await SaveAndRefreshClaudeCodeAccountAsync(_claudeCodeProviderAdapter.SaveAccountAsync(_providerSnapshotStore, CreateProviderAccountDocumentSet(credentialsJson, globalConfigJson), cancellationToken: cancellationToken), cancellationToken);
 
     public async Task<StoredProviderAccount> SaveClaudeCodeAccountWithoutActivationAsync(string credentialsJson, string globalConfigJson, CancellationToken cancellationToken = default)
-        => await SaveAndRefreshClaudeCodeAccountAsync(_claudeCodeProviderAdapter.SaveAccountWithoutActivationAsync(_providerSnapshotStore, credentialsJson, globalConfigJson, cancellationToken), cancellationToken);
+        => await SaveAndRefreshClaudeCodeAccountAsync(_claudeCodeProviderAdapter.SaveAccountAsync(_providerSnapshotStore, CreateProviderAccountDocumentSet(credentialsJson, globalConfigJson), new ProviderStoredAccountSaveOptions { ShouldActivate = false }, cancellationToken), cancellationToken);
 
     public async Task RunClaudeCodeLoginAsync(CancellationToken cancellationToken = default) => await _claudeCodeProviderAdapter.RunLoginAsync(cancellationToken);
 
@@ -254,6 +255,13 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
         await RefreshAccountsAsync([storedProviderAccount.StoredAccountIdentifier], cancellationToken);
         return FindAccountState(storedProviderAccount.StoredAccountIdentifier) ?? storedProviderAccount;
     }
+
+    private static ProviderAccountDocumentSet CreateProviderAccountDocumentSet(string credentialsJson, string globalConfigJson)
+        => new()
+        {
+            CredentialsDocumentText = credentialsJson,
+            GlobalConfigDocumentText = globalConfigJson
+        };
 
     private async Task<ProviderUsageSnapshot> RefreshActiveAccountUsageCoreAsync(StoredProviderAccount storedProviderAccount, CancellationToken cancellationToken)
     {

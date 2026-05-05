@@ -1,5 +1,5 @@
 using CliAccountSwitcher.Api.Providers.Abstractions;
-using CliAccountSwitcher.Api.Providers.Claude;
+using CliAccountSwitcher.Api.Providers.ClaudeCode.Infrastructure;
 using CliAccountSwitcher.WinUI.Dialogs;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;

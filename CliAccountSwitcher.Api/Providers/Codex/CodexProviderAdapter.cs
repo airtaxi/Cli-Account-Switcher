@@ -1,18 +1,18 @@
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
-using CliAccountSwitcher.Api.Authentication;
-using CliAccountSwitcher.Api.Infrastructure;
-using CliAccountSwitcher.Api.Infrastructure.Http;
-using CliAccountSwitcher.Api.Models;
-using CliAccountSwitcher.Api.Models.Authentication;
-using CliAccountSwitcher.Api.Models.Responses;
-using CliAccountSwitcher.Api.Providers;
 using CliAccountSwitcher.Api.Providers.Abstractions;
+using CliAccountSwitcher.Api.Providers.Codex.Authentication;
+using CliAccountSwitcher.Api.Providers.Codex.Infrastructure;
+using CliAccountSwitcher.Api.Providers.Codex.Models;
+using CliAccountSwitcher.Api.Providers.Codex.Models.Authentication;
+using CliAccountSwitcher.Api.Providers.Codex.Models.Responses;
+using CliAccountSwitcher.Api.Providers.Serialization;
 
 namespace CliAccountSwitcher.Api.Providers.Codex;
 
-public sealed class CodexProviderAdapter : IProviderAdapter, IDisposable
+public sealed class CodexProviderAdapter : ProviderAdapterBase<CodexAccountState, CodexStoredAccountPayload>, IDisposable
 {
     private readonly HttpClient _httpClient;
     private readonly CodexApiClientOptions _codexApiClientOptions;
@@ -39,11 +39,11 @@ public sealed class CodexProviderAdapter : IProviderAdapter, IDisposable
         _codexResponsesClient = new CodexResponsesClient(_httpClient, codexRequestMessageFactory);
     }
 
-    public CliProviderKind ProviderKind => CliProviderKind.Codex;
+    public override CliProviderKind ProviderKind => CliProviderKind.Codex;
 
-    public string DisplayName => "Codex";
+    public override string DisplayName => "Codex";
 
-    public ProviderCapabilities Capabilities { get; } = new()
+    public override ProviderCapabilities Capabilities { get; } = new()
     {
         SupportsAuthenticationDocumentNormalization = true,
         SupportsModels = true,
@@ -57,17 +57,17 @@ public sealed class CodexProviderAdapter : IProviderAdapter, IDisposable
 
     public string? InputFilePathOverride { get; set; }
 
-    public string? GetDefaultInputFilePath() => BuildDefaultAuthenticationFilePath();
+    public override string? GetDefaultInputFilePath() => BuildDefaultAuthenticationFilePath();
 
-    public async Task<ProviderIdentityProfile> GetCurrentIdentityAsync(CancellationToken cancellationToken = default)
+    public override async Task<ProviderIdentityProfile> GetCurrentIdentityAsync(CancellationToken cancellationToken = default)
     {
-        var codexAuthenticationDocument = await LoadAuthenticationDocumentAsync(cancellationToken);
-        return CreateIdentityProfile(codexAuthenticationDocument);
+        var codexAccountState = await ReadLiveAccountStateAsync(cancellationToken);
+        return CreateIdentityProfile(codexAccountState.AuthenticationDocument);
     }
 
-    public Task<string> NormalizeAuthenticationDocumentAsync(string authenticationDocumentText, CancellationToken cancellationToken = default) => Task.FromResult(CodexAuthenticationDocumentSerializer.Normalize(authenticationDocumentText));
+    public override Task<string> NormalizeAuthenticationDocumentAsync(string authenticationDocumentText, CancellationToken cancellationToken = default) => Task.FromResult(CodexAuthenticationDocumentSerializer.Normalize(authenticationDocumentText));
 
-    public async Task<ProviderLoginResult> RunLoginAsync(CancellationToken cancellationToken = default)
+    public override async Task<ProviderLoginResult> RunLoginAsync(CancellationToken cancellationToken = default)
     {
         await using var codexOAuthSession = _codexOAuthClient.CreateSession();
 
@@ -93,11 +93,11 @@ public sealed class CodexProviderAdapter : IProviderAdapter, IDisposable
         };
     }
 
-    public async Task<ProviderUsageSnapshot> GetUsageAsync(string? storedAccountIdentifier = null, CancellationToken cancellationToken = default)
+    public override async Task<ProviderUsageSnapshot> GetUsageAsync(string? storedAccountIdentifier = null, CancellationToken cancellationToken = default)
     {
         var codexAuthenticationDocument = string.IsNullOrWhiteSpace(storedAccountIdentifier)
-            ? await LoadAuthenticationDocumentAsync(cancellationToken)
-            : await LoadStoredAuthenticationDocumentAsync(storedAccountIdentifier, cancellationToken);
+            ? (await ReadLiveAccountStateAsync(cancellationToken)).AuthenticationDocument
+            : CreateLiveAccountState(await LoadCodexStoredAccountPayloadAsync(storedAccountIdentifier, cancellationToken)).AuthenticationDocument;
         var codexUsageSnapshot = await _codexUsageClient.GetUsageAsync(codexAuthenticationDocument, cancellationToken);
 
         return new ProviderUsageSnapshot
@@ -123,19 +123,19 @@ public sealed class CodexProviderAdapter : IProviderAdapter, IDisposable
         };
     }
 
-    public async Task<IReadOnlyList<string>> GetModelsAsync(CancellationToken cancellationToken = default)
+    public override async Task<IReadOnlyList<string>> GetModelsAsync(CancellationToken cancellationToken = default)
     {
-        var codexAuthenticationDocument = await LoadAuthenticationDocumentAsync(cancellationToken);
+        var codexAuthenticationDocument = (await ReadLiveAccountStateAsync(cancellationToken)).AuthenticationDocument;
         var codexModelDefinitions = await _codexModelsClient.GetModelsAsync(codexAuthenticationDocument, cancellationToken);
         return codexModelDefinitions.Select(codexModelDefinition => $"{codexModelDefinition.Identifier} ({codexModelDefinition.SourcePath})").ToArray();
     }
 
-    public async Task<ProviderResponseResult> CreateResponseAsync(ProviderResponseRequest providerResponseRequest, CancellationToken cancellationToken = default)
+    public override async Task<ProviderResponseResult> CreateResponseAsync(ProviderResponseRequest providerResponseRequest, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(providerResponseRequest);
         if (string.IsNullOrWhiteSpace(providerResponseRequest.Model) || string.IsNullOrWhiteSpace(providerResponseRequest.Text)) throw new InvalidOperationException("The response command requires both --model and --text.");
 
-        var codexAuthenticationDocument = await LoadAuthenticationDocumentAsync(cancellationToken);
+        var codexAuthenticationDocument = (await ReadLiveAccountStateAsync(cancellationToken)).AuthenticationDocument;
         var codexResponseRequest = new CodexResponseRequest
         {
             Model = providerResponseRequest.Model,
@@ -153,12 +153,12 @@ public sealed class CodexProviderAdapter : IProviderAdapter, IDisposable
         };
     }
 
-    public async IAsyncEnumerable<ProviderResponseStreamEvent> StreamResponseAsync(ProviderResponseRequest providerResponseRequest, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public override async IAsyncEnumerable<ProviderResponseStreamEvent> StreamResponseAsync(ProviderResponseRequest providerResponseRequest, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(providerResponseRequest);
         if (string.IsNullOrWhiteSpace(providerResponseRequest.Model) || string.IsNullOrWhiteSpace(providerResponseRequest.Text)) throw new InvalidOperationException("The stream-response command requires both --model and --text.");
 
-        var codexAuthenticationDocument = await LoadAuthenticationDocumentAsync(cancellationToken);
+        var codexAuthenticationDocument = (await ReadLiveAccountStateAsync(cancellationToken)).AuthenticationDocument;
         var codexResponseRequest = new CodexResponseRequest
         {
             Model = providerResponseRequest.Model,
@@ -180,79 +180,82 @@ public sealed class CodexProviderAdapter : IProviderAdapter, IDisposable
         }
     }
 
-    public async Task<IReadOnlyList<StoredProviderAccount>> ListStoredAccountsAsync(IProviderSnapshotStore providerSnapshotStore, CancellationToken cancellationToken = default)
-    {
-        var storedProviderAccounts = await providerSnapshotStore.GetStoredAccountsAsync(ProviderKind, cancellationToken);
-        var currentIdentityProfile = await TryGetCurrentIdentityAsync(cancellationToken);
-
-        return storedProviderAccounts
-            .Select(storedProviderAccount => CloneStoredProviderAccount(storedProviderAccount, currentIdentityProfile is not null && IsSameCodexAccount(storedProviderAccount, currentIdentityProfile) || storedProviderAccount.IsActive))
-            .ToArray();
-    }
-
-    public async Task<StoredProviderAccount> SaveCurrentAccountAsync(IProviderSnapshotStore providerSnapshotStore, CancellationToken cancellationToken = default)
-    {
-        var authenticationDocumentJson = await File.ReadAllTextAsync(ResolveAuthenticationFilePath(), cancellationToken);
-        var codexAuthenticationDocument = CodexAuthenticationDocumentSerializer.Parse(authenticationDocumentJson);
-        var storedProviderAccounts = await providerSnapshotStore.GetStoredAccountsAsync(ProviderKind, cancellationToken);
-        var existingStoredProviderAccount = storedProviderAccounts.FirstOrDefault(storedProviderAccount => IsSameCodexAccount(storedProviderAccount, codexAuthenticationDocument));
-        var slotNumber = existingStoredProviderAccount?.SlotNumber ?? GetNextSlotNumber(storedProviderAccounts);
-        var storedAccountIdentifier = existingStoredProviderAccount?.StoredAccountIdentifier ?? slotNumber.ToString(System.Globalization.CultureInfo.InvariantCulture);
-        var storedProviderAccount = CreateStoredProviderAccount(codexAuthenticationDocument, storedAccountIdentifier, slotNumber, true);
-        var codexStoredAccountPayload = new CodexStoredAccountPayload { AuthenticationDocumentJson = authenticationDocumentJson };
-        var payloadJson = JsonSerializer.Serialize(codexStoredAccountPayload, ProviderJsonSerializerOptions.Default);
-
-        await providerSnapshotStore.SaveAsync(storedProviderAccount, payloadJson, cancellationToken);
-        await providerSnapshotStore.SetActiveStoredAccountIdentifierAsync(ProviderKind, storedAccountIdentifier, cancellationToken);
-        return storedProviderAccount;
-    }
-
-    public async Task<StoredProviderAccount> ActivateStoredAccountAsync(IProviderSnapshotStore providerSnapshotStore, string storedAccountIdentifier, CancellationToken cancellationToken = default)
-    {
-        var codexStoredAccountPayload = await LoadCodexStoredAccountPayloadAsync(providerSnapshotStore, storedAccountIdentifier, cancellationToken);
-        await WriteTextAtomicallyAsync(ResolveAuthenticationFilePath(), codexStoredAccountPayload.AuthenticationDocumentJson, cancellationToken);
-        await providerSnapshotStore.SetActiveStoredAccountIdentifierAsync(ProviderKind, storedAccountIdentifier, cancellationToken);
-
-        var storedProviderAccounts = await providerSnapshotStore.GetStoredAccountsAsync(ProviderKind, cancellationToken);
-        var activatedStoredProviderAccount = storedProviderAccounts.FirstOrDefault(storedProviderAccount => string.Equals(storedProviderAccount.StoredAccountIdentifier, storedAccountIdentifier, StringComparison.OrdinalIgnoreCase));
-        if (activatedStoredProviderAccount is null) throw new ProviderActionRequiredException($"The stored Codex account slot was not found: {storedAccountIdentifier}");
-        return CloneStoredProviderAccount(activatedStoredProviderAccount, true);
-    }
-
-    public Task DeleteStoredAccountAsync(IProviderSnapshotStore providerSnapshotStore, string storedAccountIdentifier, CancellationToken cancellationToken = default) => providerSnapshotStore.DeleteAsync(ProviderKind, storedAccountIdentifier, cancellationToken);
-
     public void Dispose() => _httpClient.Dispose();
 
-    private async Task<CodexAuthenticationDocument> LoadAuthenticationDocumentAsync(CancellationToken cancellationToken)
+    protected override async Task<CodexAccountState> ReadLiveAccountStateAsync(CancellationToken cancellationToken)
     {
-        var authenticationFilePath = ResolveAuthenticationFilePath();
-        var authenticationDocumentText = await File.ReadAllTextAsync(authenticationFilePath, cancellationToken);
-        return CodexAuthenticationDocumentSerializer.Parse(authenticationDocumentText);
+        var authenticationDocumentJson = await File.ReadAllTextAsync(ResolveAuthenticationFilePath(), cancellationToken);
+        return CreateCodexAccountState(authenticationDocumentJson);
     }
 
-    private async Task<CodexAuthenticationDocument> LoadStoredAuthenticationDocumentAsync(string storedAccountIdentifier, CancellationToken cancellationToken)
+    protected override CodexAccountState CreateLiveAccountState(ProviderAccountDocumentSet providerAccountDocumentSet)
     {
-        var codexStoredAccountPayload = await LoadCodexStoredAccountPayloadAsync(_providerSnapshotStore ?? throw new NotSupportedException("Stored account usage requires a snapshot store."), storedAccountIdentifier, cancellationToken);
-        return CodexAuthenticationDocumentSerializer.Parse(codexStoredAccountPayload.AuthenticationDocumentJson);
+        if (string.IsNullOrWhiteSpace(providerAccountDocumentSet.AuthenticationDocumentText)) throw new ProviderActionRequiredException("The Codex authentication document is required.");
+        return CreateCodexAccountState(providerAccountDocumentSet.AuthenticationDocumentText);
     }
 
-    private static async Task<CodexStoredAccountPayload> LoadCodexStoredAccountPayloadAsync(IProviderSnapshotStore providerSnapshotStore, string storedAccountIdentifier, CancellationToken cancellationToken)
+    protected override CodexAccountState CreateLiveAccountState(CodexStoredAccountPayload storedAccountPayload)
     {
-        var payloadJson = await providerSnapshotStore.GetPayloadJsonAsync(CliProviderKind.Codex, storedAccountIdentifier, cancellationToken);
-        if (string.IsNullOrWhiteSpace(payloadJson)) throw new ProviderActionRequiredException($"The stored Codex account slot was not found: {storedAccountIdentifier}");
+        if (storedAccountPayload is null || string.IsNullOrWhiteSpace(storedAccountPayload.AuthenticationDocumentJson)) throw new ProviderActionRequiredException("The stored Codex account payload is invalid.");
+        return CreateCodexAccountState(storedAccountPayload.AuthenticationDocumentJson);
+    }
 
+    protected override CodexStoredAccountPayload CreateStoredAccountPayload(CodexAccountState liveAccountState)
+        => new()
+        {
+            AuthenticationDocumentJson = liveAccountState.AuthenticationDocumentJson
+        };
+
+    protected override string SerializeStoredAccountPayload(CodexStoredAccountPayload storedAccountPayload) => JsonSerializer.Serialize(storedAccountPayload, ProviderJsonSerializerOptions.Default);
+
+    protected override CodexStoredAccountPayload DeserializeStoredAccountPayload(string payloadJson, string storedAccountIdentifier)
+    {
         var codexStoredAccountPayload = JsonSerializer.Deserialize<CodexStoredAccountPayload>(payloadJson, ProviderJsonSerializerOptions.Default);
         if (codexStoredAccountPayload is null || string.IsNullOrWhiteSpace(codexStoredAccountPayload.AuthenticationDocumentJson)) throw new ProviderActionRequiredException($"The stored Codex account slot is invalid: {storedAccountIdentifier}");
         return codexStoredAccountPayload;
     }
 
-    private async Task<ProviderIdentityProfile?> TryGetCurrentIdentityAsync(CancellationToken cancellationToken)
+    protected override StoredProviderAccount CreateStoredProviderAccount(CodexAccountState liveAccountState, string storedAccountIdentifier, int slotNumber, bool isActive)
     {
-        try
+        var identityProfile = CreateIdentityProfile(liveAccountState.AuthenticationDocument);
+        return new StoredProviderAccount
         {
-            return await GetCurrentIdentityAsync(cancellationToken);
+            ProviderKind = CliProviderKind.Codex,
+            StoredAccountIdentifier = storedAccountIdentifier,
+            SlotNumber = slotNumber,
+            EmailAddress = identityProfile.EmailAddress,
+            DisplayName = identityProfile.DisplayName,
+            AccountIdentifier = identityProfile.AccountIdentifier,
+            OrganizationIdentifier = "",
+            OrganizationName = "",
+            PlanType = identityProfile.PlanType,
+            IsActive = isActive,
+            IsTokenExpired = false,
+            LastUpdated = DateTimeOffset.UtcNow,
+            LastProviderUsageSnapshot = new ProviderUsageSnapshot { ProviderKind = CliProviderKind.Codex }
+        };
+    }
+
+    protected override bool IsSameAccount(StoredProviderAccount storedProviderAccount, CodexAccountState liveAccountState) => IsSameAccount(storedProviderAccount, CreateIdentityProfile(liveAccountState.AuthenticationDocument));
+
+    protected override bool IsSameAccount(StoredProviderAccount storedProviderAccount, ProviderIdentityProfile providerIdentityProfile)
+    {
+        if (!string.IsNullOrWhiteSpace(storedProviderAccount.AccountIdentifier) && !string.IsNullOrWhiteSpace(providerIdentityProfile.AccountIdentifier))
+        {
+            return string.Equals(storedProviderAccount.AccountIdentifier, providerIdentityProfile.AccountIdentifier, StringComparison.OrdinalIgnoreCase);
         }
-        catch { return null; }
+
+        return !string.IsNullOrWhiteSpace(storedProviderAccount.EmailAddress) && string.Equals(storedProviderAccount.EmailAddress, providerIdentityProfile.EmailAddress, StringComparison.OrdinalIgnoreCase);
+    }
+
+    protected override async Task WriteLiveAccountStateAsync(CodexAccountState liveAccountState, CancellationToken cancellationToken) => await WriteTextAtomicallyAsync(ResolveAuthenticationFilePath(), liveAccountState.AuthenticationDocumentJson, cancellationToken);
+
+    private async Task<CodexStoredAccountPayload> LoadCodexStoredAccountPayloadAsync(string storedAccountIdentifier, CancellationToken cancellationToken)
+    {
+        var providerSnapshotStore = _providerSnapshotStore ?? throw new NotSupportedException("Stored account usage requires a snapshot store.");
+        var payloadJson = await providerSnapshotStore.GetPayloadJsonAsync(CliProviderKind.Codex, storedAccountIdentifier, cancellationToken);
+        if (string.IsNullOrWhiteSpace(payloadJson)) throw new ProviderActionRequiredException($"The stored Codex account slot was not found: {storedAccountIdentifier}");
+        return DeserializeStoredAccountPayload(payloadJson, storedAccountIdentifier);
     }
 
     private string ResolveAuthenticationFilePath()
@@ -266,6 +269,13 @@ public sealed class CodexProviderAdapter : IProviderAdapter, IDisposable
     }
 
     private string BuildDefaultAuthenticationFilePath() => Path.Combine(_codexApiClientOptions.CodexHomeDirectoryPath, "auth.json");
+
+    private static CodexAccountState CreateCodexAccountState(string authenticationDocumentJson)
+        => new()
+        {
+            AuthenticationDocumentJson = authenticationDocumentJson,
+            AuthenticationDocument = CodexAuthenticationDocumentSerializer.Parse(authenticationDocumentJson)
+        };
 
     private static ProviderIdentityProfile CreateIdentityProfile(CodexAuthenticationDocument codexAuthenticationDocument)
     {
@@ -287,64 +297,6 @@ public sealed class CodexProviderAdapter : IProviderAdapter, IDisposable
             IsLoggedIn = !string.IsNullOrWhiteSpace(codexAuthenticationDocument.GetEffectiveAccessToken()) && !string.IsNullOrWhiteSpace(accountIdentifier)
         };
     }
-
-    private static StoredProviderAccount CreateStoredProviderAccount(CodexAuthenticationDocument codexAuthenticationDocument, string storedAccountIdentifier, int slotNumber, bool isActive)
-    {
-        var identityProfile = CreateIdentityProfile(codexAuthenticationDocument);
-        return new StoredProviderAccount
-        {
-            ProviderKind = CliProviderKind.Codex,
-            StoredAccountIdentifier = storedAccountIdentifier,
-            SlotNumber = slotNumber,
-            EmailAddress = identityProfile.EmailAddress,
-            DisplayName = identityProfile.DisplayName,
-            AccountIdentifier = identityProfile.AccountIdentifier,
-            OrganizationIdentifier = "",
-            OrganizationName = "",
-            PlanType = identityProfile.PlanType,
-            IsActive = isActive,
-            IsTokenExpired = false,
-            LastUpdated = DateTimeOffset.UtcNow,
-            LastProviderUsageSnapshot = new ProviderUsageSnapshot { ProviderKind = CliProviderKind.Codex }
-        };
-    }
-
-    private static StoredProviderAccount CloneStoredProviderAccount(StoredProviderAccount storedProviderAccount, bool isActive)
-        => new()
-        {
-            ProviderKind = storedProviderAccount.ProviderKind,
-            StoredAccountIdentifier = storedProviderAccount.StoredAccountIdentifier,
-            SlotNumber = storedProviderAccount.SlotNumber,
-            EmailAddress = storedProviderAccount.EmailAddress,
-            DisplayName = storedProviderAccount.DisplayName,
-            AccountIdentifier = storedProviderAccount.AccountIdentifier,
-            OrganizationIdentifier = storedProviderAccount.OrganizationIdentifier,
-            OrganizationName = storedProviderAccount.OrganizationName,
-            PlanType = storedProviderAccount.PlanType,
-            IsActive = isActive,
-            IsTokenExpired = storedProviderAccount.IsTokenExpired,
-            LastUpdated = storedProviderAccount.LastUpdated,
-            LastProviderUsageSnapshot = storedProviderAccount.LastProviderUsageSnapshot,
-            LastUsageRefreshTime = storedProviderAccount.LastUsageRefreshTime
-        };
-
-    private static bool IsSameCodexAccount(StoredProviderAccount storedProviderAccount, CodexAuthenticationDocument codexAuthenticationDocument)
-    {
-        var identityProfile = CreateIdentityProfile(codexAuthenticationDocument);
-        return IsSameCodexAccount(storedProviderAccount, identityProfile);
-    }
-
-    private static bool IsSameCodexAccount(StoredProviderAccount storedProviderAccount, ProviderIdentityProfile identityProfile)
-    {
-        if (!string.IsNullOrWhiteSpace(storedProviderAccount.AccountIdentifier) && !string.IsNullOrWhiteSpace(identityProfile.AccountIdentifier))
-        {
-            return string.Equals(storedProviderAccount.AccountIdentifier, identityProfile.AccountIdentifier, StringComparison.OrdinalIgnoreCase);
-        }
-
-        return !string.IsNullOrWhiteSpace(storedProviderAccount.EmailAddress) && string.Equals(storedProviderAccount.EmailAddress, identityProfile.EmailAddress, StringComparison.OrdinalIgnoreCase);
-    }
-
-    private static int GetNextSlotNumber(IReadOnlyList<StoredProviderAccount> storedProviderAccounts) => storedProviderAccounts.Count == 0 ? 1 : storedProviderAccounts.Max(storedProviderAccount => storedProviderAccount.SlotNumber) + 1;
 
     private static DateTimeOffset? CreateDateTimeOffset(long unixSeconds)
     {

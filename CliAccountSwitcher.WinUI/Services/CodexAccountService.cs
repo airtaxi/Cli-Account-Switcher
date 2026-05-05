@@ -1,10 +1,10 @@
-using CliAccountSwitcher.Api;
-using CliAccountSwitcher.Api.Authentication;
-using CliAccountSwitcher.Api.Infrastructure;
-using CliAccountSwitcher.Api.Models;
-using CliAccountSwitcher.Api.Models.Authentication;
-using CliAccountSwitcher.Api.Models.OAuth;
-using CliAccountSwitcher.Api.Models.Usage;
+using CliAccountSwitcher.Api.Providers.Codex.Authentication;
+using CliAccountSwitcher.Api.Providers.Codex;
+using CliAccountSwitcher.Api.Providers.Codex.Infrastructure;
+using CliAccountSwitcher.Api.Providers.Codex.Models;
+using CliAccountSwitcher.Api.Providers.Codex.Models.Authentication;
+using CliAccountSwitcher.Api.Providers.Codex.Models.OAuth;
+using CliAccountSwitcher.Api.Providers.Codex.Models.Usage;
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Helpers;
 using CliAccountSwitcher.WinUI.Models;
