@@ -344,7 +344,7 @@
                                             Grid.Column="1"
                                             VerticalAlignment="Center"
                                             Spacing="3">
-                                            <Grid ColumnSpacing="8">
+                                            <Grid ColumnSpacing="4">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto" />
                                                     <ColumnDefinition Width="*" />
@@ -355,6 +355,7 @@
                                                     TextTrimming="CharacterEllipsis" />
                                                 <TextBlock
                                                     Grid.Column="1"
+                                                    VerticalAlignment="Bottom"
                                                     FontSize="12"
                                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                                     Text="{x:Bind PrimaryUsageResetText, Mode=OneWay}"
@@ -398,7 +399,7 @@
                                             Grid.Column="1"
                                             VerticalAlignment="Center"
                                             Spacing="3">
-                                            <Grid ColumnSpacing="8">
+                                            <Grid ColumnSpacing="4">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto" />
                                                     <ColumnDefinition Width="*" />
@@ -409,6 +410,7 @@
                                                     TextTrimming="CharacterEllipsis" />
                                                 <TextBlock
                                                     Grid.Column="1"
+                                                    VerticalAlignment="Bottom"
                                                     FontSize="12"
                                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                                     Text="{x:Bind SecondaryUsageResetText, Mode=OneWay}"
