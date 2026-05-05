@@ -654,6 +654,15 @@
   <data name="AboutPage_InspirationRepositoryButtonTextBlock.Text" xml:space="preserve">
     <value>開啟原始儲存庫</value>
   </data>
+  <data name="AboutPage_ClaudeSwapSettingsCard.Header" xml:space="preserve">
+    <value>特別感謝</value>
+  </data>
+  <data name="AboutPage_ClaudeSwapSettingsCard.Description" xml:space="preserve">
+    <value>靈感來自 realiti4/claude-swap。感謝分享原始想法。</value>
+  </data>
+  <data name="AboutPage_ClaudeSwapRepositoryButtonTextBlock.Text" xml:space="preserve">
+    <value>開啟儲存庫</value>
+  </data>
   <data name="AboutPage_LicenseSettingsGroup.Header" xml:space="preserve">
     <value>授權</value>
   </data>
