@@ -80,6 +80,12 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
     public partial int ActiveAccountSecondaryUsageRemainingPercentage { get; set; }
 
     [ObservableProperty]
+    public partial DateTimeOffset? ActiveAccountPrimaryUsageResetAt { get; set; }
+
+    [ObservableProperty]
+    public partial DateTimeOffset? ActiveAccountSecondaryUsageResetAt { get; set; }
+
+    [ObservableProperty]
     public partial string ActiveAccountLastUsageRefreshText { get; set; } = "";
 
     [ObservableProperty]
@@ -187,6 +193,8 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
         ActiveAccountSecondaryUsageRemainingText = activeAccountViewModel?.SecondaryUsageRemainingText ?? GetLocalizedString("ProviderAccountViewModel_UnknownUsage");
         ActiveAccountPrimaryUsageRemainingPercentage = activeAccountViewModel?.PrimaryUsageRemainingPercentage ?? 0;
         ActiveAccountSecondaryUsageRemainingPercentage = activeAccountViewModel?.SecondaryUsageRemainingPercentage ?? 0;
+        ActiveAccountPrimaryUsageResetAt = activeAccountViewModel is null ? null : GetUsageResetAt(activeAccountViewModel.ProviderUsageSnapshot.FiveHour);
+        ActiveAccountSecondaryUsageResetAt = activeAccountViewModel is null ? null : GetUsageResetAt(activeAccountViewModel.ProviderUsageSnapshot.SevenDay);
         ActiveAccountLastUsageRefreshText = activeAccountViewModel?.LastUsageRefreshText ?? "";
         IsActiveAccountPrimaryUsageUnderWarningThreshold = activeAccountViewModel?.IsPrimaryUsageUnderWarningThreshold == true;
         IsActiveAccountSecondaryUsageUnderWarningThreshold = activeAccountViewModel?.IsSecondaryUsageUnderWarningThreshold == true;
@@ -227,6 +235,13 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
     }
 
     private static int ClampUsageRemainingPercentage(int usageRemainingPercentage) => usageRemainingPercentage < 0 ? 0 : Math.Clamp(usageRemainingPercentage, 0, 100);
+
+    private static DateTimeOffset? GetUsageResetAt(ProviderUsageWindow providerUsageWindow)
+    {
+        if (providerUsageWindow.ResetAt is not null) return providerUsageWindow.ResetAt;
+        if (providerUsageWindow.ResetAfterSeconds < 0) return null;
+        return DateTimeOffset.UtcNow.AddSeconds(providerUsageWindow.ResetAfterSeconds);
+    }
 
     private static string FormatUsageRemainingPercentage(int usageRemainingPercentage) => usageRemainingPercentage < 0 ? GetLocalizedString("ProviderAccountViewModel_UnknownUsage") : GetFormattedString("ProviderAccountViewModel_UsageRemainingOnlyFormat", usageRemainingPercentage);
 

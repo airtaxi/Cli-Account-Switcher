@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using System;
 using System.ComponentModel;
 
 namespace CliAccountSwitcher.WinUI.Controls;
@@ -19,13 +20,17 @@ public sealed partial class ActiveAccountQuotaControl : UserControl
 
     public static readonly DependencyProperty ShouldShowRefreshButtonProperty = DependencyProperty.Register(nameof(ShouldShowRefreshButton), typeof(bool), typeof(ActiveAccountQuotaControl), new PropertyMetadata(false, OnShouldShowRefreshButtonPropertyChanged));
 
+    private DispatcherTimer _remainingTimeRefreshTimer;
     private bool _hasInitializedComponent;
+    private bool _isLoaded;
+    private bool _isSubscribedToViewModelPropertyChanged;
 
     public ActiveAccountQuotaControl()
     {
         InitializeComponent();
         _hasInitializedComponent = true;
         UpdateCardChrome();
+        Loaded += OnActiveAccountQuotaControlLoaded;
         Unloaded += OnActiveAccountQuotaControlUnloaded;
     }
 
@@ -73,6 +78,10 @@ public sealed partial class ActiveAccountQuotaControl : UserControl
 
     public int ActiveAccountSecondaryUsageRemainingPercentage => ViewModel?.ActiveAccountSecondaryUsageRemainingPercentage ?? 0;
 
+    public string ActiveAccountPrimaryUsageResetText => FormatUsageReset(ViewModel?.ActiveAccountPrimaryUsageResetAt);
+
+    public string ActiveAccountSecondaryUsageResetText => FormatUsageReset(ViewModel?.ActiveAccountSecondaryUsageResetAt);
+
     public string ActiveAccountLastUsageRefreshText => ViewModel?.ActiveAccountLastUsageRefreshText ?? "";
 
     public bool IsActiveAccountPrimaryUsageUnderWarningThreshold => ViewModel?.IsActiveAccountPrimaryUsageUnderWarningThreshold == true;
@@ -87,8 +96,8 @@ public sealed partial class ActiveAccountQuotaControl : UserControl
     {
         var activeAccountQuotaControl = (ActiveAccountQuotaControl)dependencyObject;
 
-        if (dependencyPropertyChangedEventArguments.OldValue is DashboardPageViewModel oldDashboardPageViewModel) oldDashboardPageViewModel.PropertyChanged -= activeAccountQuotaControl.OnDashboardPageViewModelPropertyChanged;
-        if (dependencyPropertyChangedEventArguments.NewValue is DashboardPageViewModel newDashboardPageViewModel) newDashboardPageViewModel.PropertyChanged += activeAccountQuotaControl.OnDashboardPageViewModelPropertyChanged;
+        if (dependencyPropertyChangedEventArguments.OldValue is DashboardPageViewModel oldDashboardPageViewModel) activeAccountQuotaControl.UnsubscribeFromViewModelPropertyChanged(oldDashboardPageViewModel);
+        if (activeAccountQuotaControl._isLoaded && dependencyPropertyChangedEventArguments.NewValue is DashboardPageViewModel newDashboardPageViewModel) activeAccountQuotaControl.SubscribeToViewModelPropertyChanged(newDashboardPageViewModel);
 
         activeAccountQuotaControl.RefreshBindings();
     }
@@ -124,15 +133,61 @@ public sealed partial class ActiveAccountQuotaControl : UserControl
 
     private void OnRefreshActiveAccountButtonClicked(object sender, RoutedEventArgs routedEventArguments) => WeakReferenceMessenger.Default.Send(new ActiveAccountQuotaRefreshRequestedMessage());
 
+    private void OnActiveAccountQuotaControlLoaded(object sender, RoutedEventArgs routedEventArguments)
+    {
+        _isLoaded = true;
+        if (ViewModel is not null) SubscribeToViewModelPropertyChanged(ViewModel);
+        StartRemainingTimeRefreshTimer();
+    }
+
     private void OnActiveAccountQuotaControlUnloaded(object sender, RoutedEventArgs routedEventArguments)
     {
-        if (ViewModel is not null) ViewModel.PropertyChanged -= OnDashboardPageViewModelPropertyChanged;
+        _isLoaded = false;
+        if (ViewModel is not null) UnsubscribeFromViewModelPropertyChanged(ViewModel);
+        StopRemainingTimeRefreshTimer();
     }
+
+    private void OnRemainingTimeRefreshTimerTick(object sender, object eventArguments) => RefreshBindings();
 
     private void RefreshBindings()
     {
         if (!_hasInitializedComponent) return;
         Bindings.Update();
+    }
+
+    private void StartRemainingTimeRefreshTimer()
+    {
+        StopRemainingTimeRefreshTimer();
+
+        _remainingTimeRefreshTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+        _remainingTimeRefreshTimer.Tick += OnRemainingTimeRefreshTimerTick;
+        _remainingTimeRefreshTimer.Start();
+        RefreshBindings();
+    }
+
+    private void StopRemainingTimeRefreshTimer()
+    {
+        if (_remainingTimeRefreshTimer is null) return;
+
+        _remainingTimeRefreshTimer.Stop();
+        _remainingTimeRefreshTimer.Tick -= OnRemainingTimeRefreshTimerTick;
+        _remainingTimeRefreshTimer = null;
+    }
+
+    private void SubscribeToViewModelPropertyChanged(DashboardPageViewModel dashboardPageViewModel)
+    {
+        if (_isSubscribedToViewModelPropertyChanged) return;
+
+        dashboardPageViewModel.PropertyChanged += OnDashboardPageViewModelPropertyChanged;
+        _isSubscribedToViewModelPropertyChanged = true;
+    }
+
+    private void UnsubscribeFromViewModelPropertyChanged(DashboardPageViewModel dashboardPageViewModel)
+    {
+        if (!_isSubscribedToViewModelPropertyChanged) return;
+
+        dashboardPageViewModel.PropertyChanged -= OnDashboardPageViewModelPropertyChanged;
+        _isSubscribedToViewModelPropertyChanged = false;
     }
 
     private void UpdateCardChrome()
@@ -153,4 +208,20 @@ public sealed partial class ActiveAccountQuotaControl : UserControl
         ActiveAccountQuotaCardBorder.BorderBrush = null;
         ActiveAccountQuotaCardBorder.BorderThickness = new Thickness(0);
     }
+
+    private static string FormatUsageReset(DateTimeOffset? usageResetTime)
+    {
+        if (usageResetTime is null) return GetLocalizedString("ProviderAccountViewModel_UnknownResetTime");
+
+        var resetAfterSeconds = Math.Max(0, Convert.ToInt64(Math.Ceiling((usageResetTime.Value - DateTimeOffset.UtcNow).TotalSeconds)));
+        var resetAfterTimeSpan = TimeSpan.FromSeconds(resetAfterSeconds);
+        var wholeDayCount = resetAfterTimeSpan.Days;
+        if (wholeDayCount == 1) return GetFormattedString("ProviderAccountViewModel_ResetAfterWithSingleDayFormat", resetAfterTimeSpan);
+        if (wholeDayCount > 1) return GetFormattedString("ProviderAccountViewModel_ResetAfterWithMultipleDaysFormat", wholeDayCount, resetAfterTimeSpan);
+        return GetFormattedString("ProviderAccountViewModel_ResetAfterFormat", resetAfterTimeSpan);
+    }
+
+    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
+
+    private static string GetFormattedString(string resourceName, params object[] arguments) => App.LocalizationService.GetFormattedString(resourceName, arguments);
 }

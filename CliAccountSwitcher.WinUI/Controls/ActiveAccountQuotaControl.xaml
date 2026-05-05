@@ -101,7 +101,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Column="0" Spacing="8">
+                    <StackPanel Grid.Column="0" Spacing="4">
                         <Grid ColumnSpacing="8">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -120,6 +120,13 @@
                                 Text="{x:Bind ActiveAccountPrimaryUsageRemainingText, Mode=OneWay}"
                                 TextTrimming="WordEllipsis" />
                         </Grid>
+                        <TextBlock
+                            Margin="0,0,0,2"
+                            FontSize="12"
+                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                            MaxLines="1"
+                            Text="{x:Bind ActiveAccountPrimaryUsageResetText, Mode=OneWay}"
+                            TextTrimming="WordEllipsis" />
                         <Grid>
                             <ProgressBar
                                 Foreground="{x:Bind IsActiveAccountPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
@@ -140,7 +147,7 @@
                             Visibility="{x:Bind IsActiveAccountPrimaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                     </StackPanel>
 
-                    <StackPanel Grid.Column="1" Spacing="8">
+                    <StackPanel Grid.Column="1" Spacing="4">
                         <Grid ColumnSpacing="8">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -159,6 +166,13 @@
                                 Text="{x:Bind ActiveAccountSecondaryUsageRemainingText, Mode=OneWay}"
                                 TextTrimming="WordEllipsis" />
                         </Grid>
+                        <TextBlock
+                            Margin="0,0,0,2"
+                            FontSize="12"
+                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                            MaxLines="1"
+                            Text="{x:Bind ActiveAccountSecondaryUsageResetText, Mode=OneWay}"
+                            TextTrimming="WordEllipsis" />
                         <Grid>
                             <ProgressBar
                                 Foreground="{x:Bind IsActiveAccountSecondaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
