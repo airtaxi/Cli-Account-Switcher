@@ -4,7 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>CliAccountSwitcher.Api.Test</RootNamespace>
+    <RootNamespace>CliAccountSwitcher.Api.Sample</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,9 +3,9 @@ using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.Api.Providers.ClaudeCode;
 using CliAccountSwitcher.Api.Providers.Codex;
 using CliAccountSwitcher.Api.Storage;
-using CliAccountSwitcher.Api.Test.Infrastructure;
+using CliAccountSwitcher.Api.Sample.Infrastructure;
 
-namespace CliAccountSwitcher.Api.Test;
+namespace CliAccountSwitcher.Api.Sample;
 
 public sealed class ProviderApiExperimentApplication : IDisposable
 {
@@ -175,7 +175,7 @@ public sealed class ProviderApiExperimentApplication : IDisposable
 
     private int ShowHelp(IProviderAdapter providerAdapter)
     {
-        Console.WriteLine("CliAccountSwitcher.Api.Test");
+        Console.WriteLine("CliAccountSwitcher.Api.Sample");
         Console.WriteLine($"Provider: {providerAdapter.DisplayName}");
         Console.WriteLine();
         Console.WriteLine("Commands:");
@@ -487,7 +487,7 @@ public sealed class ProviderApiExperimentApplication : IDisposable
 
     private static void ShowProviderSelectionMenu()
     {
-        Console.WriteLine("CliAccountSwitcher.Api.Test");
+        Console.WriteLine("CliAccountSwitcher.Api.Sample");
         Console.WriteLine("Select a provider:");
         Console.WriteLine("  1. Codex");
         Console.WriteLine("  2. Claude Code");
@@ -497,7 +497,7 @@ public sealed class ProviderApiExperimentApplication : IDisposable
 
     private static void ShowInteractiveMenu(IProviderAdapter providerAdapter)
     {
-        Console.WriteLine("CliAccountSwitcher.Api.Test");
+        Console.WriteLine("CliAccountSwitcher.Api.Sample");
         Console.WriteLine($"Provider: {providerAdapter.DisplayName}");
         Console.WriteLine("Choose a feature:");
         Console.WriteLine("  1. Help");

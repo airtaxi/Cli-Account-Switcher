@@ -51,7 +51,7 @@ The repository contains three projects:
 | --- | --- |
 | `CliAccountSwitcher.WinUI` | Packaged WinUI 3 desktop app. |
 | `CliAccountSwitcher.Api` | Codex and Claude Code authentication, usage, models, and API client helpers. |
-| `CliAccountSwitcher.Api.Test` | Console experiment project for Codex and Claude Code API behavior. |
+| `CliAccountSwitcher.Api.Sample` | Console sample project for Codex and Claude Code API behavior. |
 
 The WinUI app targets `net10.0-windows10.0.26100.0`, enables NativeAOT publishing, uses MSIX tooling, and supports `x86`, `x64`, and `ARM64` package bundles.
 

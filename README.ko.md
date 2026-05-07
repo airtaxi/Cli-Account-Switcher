@@ -51,7 +51,7 @@ CLI Account Switcher는 AI 서비스용 CLI 인증 계정을 관리하기 위한
 | --- | --- |
 | `CliAccountSwitcher.WinUI` | 패키징된 WinUI 3 데스크톱 앱입니다. |
 | `CliAccountSwitcher.Api` | Codex와 Claude Code 인증, 사용량, 모델, API 클라이언트 도우미를 담당합니다. |
-| `CliAccountSwitcher.Api.Test` | Codex와 Claude Code API 동작을 실험하기 위한 콘솔 프로젝트입니다. |
+| `CliAccountSwitcher.Api.Sample` | Codex와 Claude Code API 동작을 확인하기 위한 콘솔 샘플 프로젝트입니다. |
 
 WinUI 앱은 `net10.0-windows10.0.26100.0`을 대상으로 하며, NativeAOT 게시와 MSIX 도구를 사용하고 `x86`, `x64`, `ARM64` 패키지 번들을 지원합니다.
 

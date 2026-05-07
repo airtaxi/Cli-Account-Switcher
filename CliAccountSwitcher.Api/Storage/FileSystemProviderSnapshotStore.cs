@@ -13,7 +13,7 @@ public sealed class FileSystemProviderSnapshotStore : IProviderSnapshotStore
     private readonly SemaphoreSlim _semaphore = new(1, 1);
 
     public FileSystemProviderSnapshotStore()
-        : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CliAccountSwitcher.Api.Test", "ProviderSnapshots"), new WindowsDataProtectionService())
+        : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CliAccountSwitcher.Api.Sample", "ProviderSnapshots"), new WindowsDataProtectionService())
     {
     }
 

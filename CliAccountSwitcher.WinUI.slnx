@@ -11,5 +11,5 @@
     <Deploy />
   </Project>
   <Project Path="CliAccountSwitcher.Api/CliAccountSwitcher.Api.csproj" />
-  <Project Path="CliAccountSwitcher.Api.Test/CliAccountSwitcher.Api.Test.csproj" />
+  <Project Path="CliAccountSwitcher.Api.Sample/CliAccountSwitcher.Api.Sample.csproj" />
 </Solution>

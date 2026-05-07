@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CliAccountSwitcher.Api.Test.Infrastructure;
+namespace CliAccountSwitcher.Api.Sample.Infrastructure;
 
 public sealed class CommandLineArguments
 {
