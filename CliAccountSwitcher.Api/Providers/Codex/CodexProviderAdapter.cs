@@ -206,11 +206,11 @@ public sealed class CodexProviderAdapter : ProviderAdapterBase<CodexAccountState
             AuthenticationDocumentJson = liveAccountState.AuthenticationDocumentJson
         };
 
-    protected override string SerializeStoredAccountPayload(CodexStoredAccountPayload storedAccountPayload) => JsonSerializer.Serialize(storedAccountPayload, ProviderJsonSerializerOptions.Default);
+    protected override string SerializeStoredAccountPayload(CodexStoredAccountPayload storedAccountPayload) => JsonSerializer.Serialize(storedAccountPayload, ProviderJsonSerializerContext.Default.CodexStoredAccountPayload);
 
     protected override CodexStoredAccountPayload DeserializeStoredAccountPayload(string payloadJson, string storedAccountIdentifier)
     {
-        var codexStoredAccountPayload = JsonSerializer.Deserialize<CodexStoredAccountPayload>(payloadJson, ProviderJsonSerializerOptions.Default);
+        var codexStoredAccountPayload = JsonSerializer.Deserialize(payloadJson, ProviderJsonSerializerContext.Default.CodexStoredAccountPayload);
         if (codexStoredAccountPayload is null || string.IsNullOrWhiteSpace(codexStoredAccountPayload.AuthenticationDocumentJson)) throw new ProviderActionRequiredException($"The stored Codex account slot is invalid: {storedAccountIdentifier}");
         return codexStoredAccountPayload;
     }

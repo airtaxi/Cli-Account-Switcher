@@ -155,7 +155,7 @@ public sealed class FileSystemProviderSnapshotStore : IProviderSnapshotStore
         var manifestJson = await File.ReadAllTextAsync(manifestFilePath, cancellationToken);
         if (string.IsNullOrWhiteSpace(manifestJson)) return new ProviderSnapshotManifestDocument();
 
-        var manifestDocument = JsonSerializer.Deserialize<ProviderSnapshotManifestDocument>(manifestJson, ProviderJsonSerializerOptions.Default) ?? new ProviderSnapshotManifestDocument();
+        var manifestDocument = JsonSerializer.Deserialize(manifestJson, ProviderJsonSerializerContext.Default.ProviderSnapshotManifestDocument) ?? new ProviderSnapshotManifestDocument();
         manifestDocument.Accounts ??= [];
         manifestDocument.ActiveStoredAccountIdentifiers ??= new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase);
         return manifestDocument;
@@ -164,7 +164,7 @@ public sealed class FileSystemProviderSnapshotStore : IProviderSnapshotStore
     private async Task WriteManifestDocumentAsync(ProviderSnapshotManifestDocument manifestDocument, CancellationToken cancellationToken)
     {
         Directory.CreateDirectory(_rootDirectoryPath);
-        var manifestJson = JsonSerializer.Serialize(manifestDocument, ProviderJsonSerializerOptions.Default);
+        var manifestJson = JsonSerializer.Serialize(manifestDocument, ProviderJsonSerializerContext.Default.ProviderSnapshotManifestDocument);
         await WriteTextAtomicallyAsync(BuildManifestFilePath(), manifestJson, cancellationToken);
     }
 

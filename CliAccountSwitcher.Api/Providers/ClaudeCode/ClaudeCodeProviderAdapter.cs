@@ -193,11 +193,11 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
             PlanType = liveAccountState.CredentialDocument.PlanType
         };
 
-    protected override string SerializeStoredAccountPayload(ClaudeCodeStoredAccountPayload storedAccountPayload) => JsonSerializer.Serialize(storedAccountPayload, ProviderJsonSerializerOptions.Default);
+    protected override string SerializeStoredAccountPayload(ClaudeCodeStoredAccountPayload storedAccountPayload) => JsonSerializer.Serialize(storedAccountPayload, ProviderJsonSerializerContext.Default.ClaudeCodeStoredAccountPayload);
 
     protected override ClaudeCodeStoredAccountPayload DeserializeStoredAccountPayload(string payloadJson, string storedAccountIdentifier)
     {
-        var storedAccountPayload = JsonSerializer.Deserialize<ClaudeCodeStoredAccountPayload>(payloadJson, ProviderJsonSerializerOptions.Default);
+        var storedAccountPayload = JsonSerializer.Deserialize(payloadJson, ProviderJsonSerializerContext.Default.ClaudeCodeStoredAccountPayload);
         if (storedAccountPayload is null || string.IsNullOrWhiteSpace(storedAccountPayload.CredentialsJson) || string.IsNullOrWhiteSpace(storedAccountPayload.GlobalConfigJson))
         {
             throw new ProviderActionRequiredException($"The stored Claude Code account slot is invalid: {storedAccountIdentifier}");
@@ -345,7 +345,7 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
         storedPayloadContext.StoredProviderAccount.PlanType = storedPayloadContext.CredentialDocument.PlanType;
         storedPayloadContext.StoredProviderAccount.LastUpdated = DateTimeOffset.UtcNow;
 
-        var payloadJson = JsonSerializer.Serialize(storedPayloadContext.Payload, ProviderJsonSerializerOptions.Default);
+        var payloadJson = JsonSerializer.Serialize(storedPayloadContext.Payload, ProviderJsonSerializerContext.Default.ClaudeCodeStoredAccountPayload);
         await providerSnapshotStore.SaveAsync(storedPayloadContext.StoredProviderAccount, payloadJson, cancellationToken);
         return storedPayloadContext;
     }

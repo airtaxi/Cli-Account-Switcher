@@ -134,7 +134,7 @@ public sealed class ClaudeCodeCredentialDocument
     private static JsonArray CreateJsonArray(IReadOnlyList<string> values)
     {
         var jsonArray = new JsonArray();
-        foreach (var value in values) jsonArray.Add(JsonValue.Create(value));
+        foreach (var value in values) jsonArray.Add((JsonNode?)JsonValue.Create(value));
         return jsonArray;
     }
 
