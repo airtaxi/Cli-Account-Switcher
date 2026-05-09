@@ -468,6 +468,7 @@
                                         <Button
                                             Click="OnSwitchAccountButtonClicked"
                                             CommandParameter="{x:Bind AccountIdentifier, Mode=OneWay}"
+                                            IsEnabled="{x:Bind IsActive, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
                                             Style="{StaticResource AccountActionButtonStyle}">
                                             <ToolTipService.ToolTip>
                                                 <ToolTip x:Uid="AccountsPage_SwitchAccountToolTip" />
