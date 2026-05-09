@@ -1074,10 +1074,22 @@ Microsoft Store に {0} 件の更新があります。</value>
     <value>Claude Code</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogTitle" xml:space="preserve">
-    <value>Claude Code セッションの更新</value>
+    <value>Claude Code を再起動</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogMessage" xml:space="preserve">
-    <value>アカウントの切り替えが完了しました。新しいアカウント状態を反映するには、Claude Code を再起動するか VS Code の Claude セッションを開き直してください。</value>
+    <value>アカウントの切り替えが完了しました。変更後のアカウントをすぐに使うには、実行中の Claude Code アプリと CLI セッションを再起動する必要があります。今すぐ再起動しますか?</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionButtonText" xml:space="preserve">
+    <value>再起動</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionLoadingMessage" xml:space="preserve">
+    <value>Claude Code を再起動しています。</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogTitle" xml:space="preserve">
+    <value>再起動に失敗しました</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogMessage" xml:space="preserve">
+    <value>Claude Code を自動的に再起動できませんでした。Claude Code アプリまたは CLI を手動で閉じてから再度開いてください。</value>
   </data>
   <data name="OAuthAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
     <value>Claude Code ログイン</value>

@@ -196,8 +196,6 @@ public sealed partial class AccountsPage : Page
         }
     }
 
-    private async Task ShowClaudeCodeSessionRefreshGuideAsync() => await this.ShowDialogAsync(GetLocalizedString("AccountsPage_RestartClaudeCodeSessionDialogTitle"), GetLocalizedString("AccountsPage_RestartClaudeCodeSessionDialogMessage"));
-
     private void OnRemainingTimeRefreshTimerTick(object sender, object eventArguments) => ViewModel.RefreshUsageResetTextProperties();
 
     private void StartRemainingTimeRefreshTimer()
@@ -227,8 +225,8 @@ public sealed partial class AccountsPage : Page
                 await AskToRestartCodexApplicationAsync();
                 break;
 
-            case ProviderActivationFollowUp.RefreshClaudeCodeSession:
-                await ShowClaudeCodeSessionRefreshGuideAsync();
+            case ProviderActivationFollowUp.RestartClaudeCode:
+                await AskToRestartClaudeCodeAsync();
                 break;
         }
     }
@@ -244,6 +242,19 @@ public sealed partial class AccountsPage : Page
         finally { MainWindow.HideLoading(); }
 
         if (!wasCodexApplicationRestarted) await this.ShowDialogAsync(GetLocalizedString("AccountsPage_RestartCodexApplicationFailedDialogTitle"), GetLocalizedString("AccountsPage_RestartCodexApplicationFailedDialogMessage"));
+    }
+
+    private async Task AskToRestartClaudeCodeAsync()
+    {
+        var contentDialogResult = await this.ShowDialogAsync(GetLocalizedString("AccountsPage_RestartClaudeCodeSessionDialogTitle"), GetLocalizedString("AccountsPage_RestartClaudeCodeSessionDialogMessage"), GetLocalizedString("AccountsPage_RestartClaudeCodeSessionButtonText"), GetLocalizedString("DialogHelper_CancelButtonText"));
+        if (contentDialogResult != ContentDialogResult.Primary) return;
+
+        MainWindow.ShowLoading(GetLocalizedString("AccountsPage_RestartClaudeCodeSessionLoadingMessage"));
+        var wasClaudeCodeRestarted = false;
+        try { wasClaudeCodeRestarted = await App.ClaudeCodeApplicationRestartService.RestartClaudeCodeAsync(); }
+        finally { MainWindow.HideLoading(); }
+
+        if (!wasClaudeCodeRestarted) await this.ShowDialogAsync(GetLocalizedString("AccountsPage_RestartClaudeCodeSessionFailedDialogTitle"), GetLocalizedString("AccountsPage_RestartClaudeCodeSessionFailedDialogMessage"));
     }
 
     private static FileOpenPicker CreateBackupFileOpenPicker(CliProviderKind providerKind)

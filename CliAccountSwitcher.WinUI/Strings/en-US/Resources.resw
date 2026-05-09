@@ -1074,10 +1074,22 @@ The installed app is already up to date.</value>
     <value>Claude Code</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogTitle" xml:space="preserve">
-    <value>Refresh Claude Code session</value>
+    <value>Restart Claude Code</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogMessage" xml:space="preserve">
-    <value>Account switching is complete. Restart Claude Code or reopen the VS Code Claude session to use the new account state.</value>
+    <value>Account switching is complete. Restart running Claude Code desktop and CLI sessions to use the changed account immediately. Restart now?</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionButtonText" xml:space="preserve">
+    <value>Restart</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionLoadingMessage" xml:space="preserve">
+    <value>Restarting Claude Code.</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogTitle" xml:space="preserve">
+    <value>Restart failed</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogMessage" xml:space="preserve">
+    <value>Claude Code could not be restarted automatically. Close and reopen Claude Code or the CLI manually.</value>
   </data>
   <data name="OAuthAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
     <value>Claude Code login</value>

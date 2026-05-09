@@ -1074,10 +1074,22 @@ Microsoft Store 中有 {0} 個可用更新。</value>
     <value>Claude Code</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogTitle" xml:space="preserve">
-    <value>重新整理 Claude Code 工作階段</value>
+    <value>重新啟動 Claude Code</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogMessage" xml:space="preserve">
-    <value>帳戶切換已完成。請重新啟動 Claude Code，或重新開啟 VS Code Claude 工作階段以套用新的帳戶狀態。</value>
+    <value>帳戶切換已完成。若要立即使用切換後的帳戶，需要重新啟動執行中的 Claude Code 應用程式與 CLI 工作階段。現在重新啟動嗎？</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionButtonText" xml:space="preserve">
+    <value>重新啟動</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionLoadingMessage" xml:space="preserve">
+    <value>正在重新啟動 Claude Code。</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogTitle" xml:space="preserve">
+    <value>重新啟動失敗</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogMessage" xml:space="preserve">
+    <value>無法自動重新啟動 Claude Code。請手動關閉並重新開啟 Claude Code 應用程式或 CLI。</value>
   </data>
   <data name="OAuthAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
     <value>Claude Code 登入</value>

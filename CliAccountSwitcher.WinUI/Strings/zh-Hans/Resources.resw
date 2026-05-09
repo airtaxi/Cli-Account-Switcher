@@ -1074,10 +1074,22 @@ Microsoft Store 中有 {0} 个可用更新。</value>
     <value>Claude Code</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogTitle" xml:space="preserve">
-    <value>刷新 Claude Code 会话</value>
+    <value>重启 Claude Code</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogMessage" xml:space="preserve">
-    <value>账号切换已完成。请重启 Claude Code，或重新打开 VS Code Claude 会话以应用新的账号状态。</value>
+    <value>账号切换已完成。若要立即使用切换后的账号，需要重启正在运行的 Claude Code 应用和 CLI 会话。现在重启吗？</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionButtonText" xml:space="preserve">
+    <value>重启</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionLoadingMessage" xml:space="preserve">
+    <value>正在重启 Claude Code。</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogTitle" xml:space="preserve">
+    <value>重启失败</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogMessage" xml:space="preserve">
+    <value>无法自动重启 Claude Code。请手动关闭并重新打开 Claude Code 应用或 CLI。</value>
   </data>
   <data name="OAuthAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
     <value>Claude Code 登录</value>

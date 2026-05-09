@@ -202,7 +202,7 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
     {
         var activatedStoredProviderAccount = await _claudeCodeProviderAdapter.ActivateStoredAccountAsync(_providerSnapshotStore, storedProviderAccount.StoredAccountIdentifier, cancellationToken);
         UpsertAccountState(activatedStoredProviderAccount);
-        return ProviderActivationFollowUp.RefreshClaudeCodeSession;
+        return ProviderActivationFollowUp.RestartClaudeCode;
     }
 
     protected override async Task<ProviderUsageSnapshot> RefreshAccountUsageCoreAsync(StoredProviderAccount storedProviderAccount, CancellationToken cancellationToken)
