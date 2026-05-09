@@ -31,7 +31,6 @@
                     ViewModel="{x:Bind ViewModel}" />
 
                 <StackPanel
-                    Margin="0,-4"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     Orientation="Horizontal"
