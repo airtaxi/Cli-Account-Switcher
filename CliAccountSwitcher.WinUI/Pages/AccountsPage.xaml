@@ -72,7 +72,7 @@
                     x:Uid="AccountsPage_TitleTextBlock"
                     FontSize="28"
                     FontWeight="SemiBold" />
-                <TextBlock x:Uid="AccountsPage_DescriptionTextBlock" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="{x:Bind ViewModel.DescriptionText, Mode=OneWay}" />
             </StackPanel>
 
             <StackPanel

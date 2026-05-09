@@ -44,6 +44,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsCodexProviderSelected))]
     [NotifyPropertyChangedFor(nameof(IsClaudeCodeProviderSelected))]
+    [NotifyPropertyChangedFor(nameof(DescriptionText))]
     [NotifyPropertyChangedFor(nameof(PlanHeaderText))]
     public partial CliProviderKind SelectedProviderKind { get; set; } = CliProviderKind.Codex;
 
@@ -81,6 +82,8 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     public bool IsCodexProviderSelected => SelectedProviderKind == CliProviderKind.Codex;
 
     public bool IsClaudeCodeProviderSelected => SelectedProviderKind == CliProviderKind.ClaudeCode;
+
+    public string DescriptionText => GetFormattedString("AccountsPageViewModel_DescriptionFormat", GetProviderDisplayName(SelectedProviderKind));
 
     public string PlanHeaderText => GetLocalizedString("AccountsPage_PlanHeaderTextBlock/Text");
 
@@ -291,6 +294,12 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     partial void OnSearchTextChanged(string value) => ApplyFilter();
 
     partial void OnSelectedPlanFilterChanged(string value) => ApplyFilter();
+
+    private static string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch
+    {
+        CliProviderKind.ClaudeCode => GetLocalizedString("Provider_ClaudeCodeDisplayName"),
+        _ => GetLocalizedString("Provider_CodexDisplayName")
+    };
 
     private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 

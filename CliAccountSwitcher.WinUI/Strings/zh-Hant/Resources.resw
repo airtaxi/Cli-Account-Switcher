@@ -234,8 +234,8 @@
   <data name="AccountsPage_TitleTextBlock.Text" xml:space="preserve">
     <value>帳號管理</value>
   </data>
-  <data name="AccountsPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>儲存支援的 CLI 帳號，並管理用量和使用中狀態。</value>
+  <data name="AccountsPageViewModel_DescriptionFormat" xml:space="preserve">
+    <value>儲存 {0} 帳號，並管理用量和使用中狀態。</value>
   </data>
   <data name="AccountsPage_RefreshAllAccountsTextBlock.Text" xml:space="preserve">
     <value>重新整理</value>
@@ -534,9 +534,6 @@
   <data name="DashboardPage_TotalAccountLabelTextBlock.Text" xml:space="preserve">
     <value>帳號總數</value>
   </data>
-  <data name="DashboardPage_TotalAccountDescriptionTextBlock.Text" xml:space="preserve">
-    <value>根據已儲存的 Codex 帳號。</value>
-  </data>
   <data name="DashboardPage_PrimaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
     <value>5 小時平均配額</value>
   </data>
@@ -599,6 +596,9 @@
   </data>
   <data name="DashboardPageViewModel_AccountCountFormat" xml:space="preserve">
     <value>{0}</value>
+  </data>
+  <data name="DashboardPageViewModel_TotalAccountDescriptionFormat" xml:space="preserve">
+    <value>根據已儲存的 {0} 帳號。</value>
   </data>
   <data name="DashboardPageViewModel_LowUsageAccountCountFormat" xml:space="preserve">
     <value>{0}</value>
@@ -1060,6 +1060,12 @@ Microsoft Store 中有 {0} 個可用更新。</value>
   </data>
   <data name="ProviderComboBox_AutomationName" xml:space="preserve">
     <value>CLI provider</value>
+  </data>
+  <data name="Provider_CodexDisplayName" xml:space="preserve">
+    <value>Codex</value>
+  </data>
+  <data name="Provider_ClaudeCodeDisplayName" xml:space="preserve">
+    <value>Claude Code</value>
   </data>
   <data name="Provider_CodexComboBoxItem.Content" xml:space="preserve">
     <value>Codex</value>

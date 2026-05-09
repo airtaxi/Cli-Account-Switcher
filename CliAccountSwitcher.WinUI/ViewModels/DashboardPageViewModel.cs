@@ -35,6 +35,9 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
     public partial string AccountCountText { get; set; } = "";
 
     [ObservableProperty]
+    public partial string TotalAccountDescriptionText { get; set; } = "";
+
+    [ObservableProperty]
     public partial string PrimaryAverageUsageRemainingText { get; set; } = "";
 
     [ObservableProperty]
@@ -112,6 +115,7 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
         var accountViewModels = providerAccounts.Select(providerAccount => new ProviderAccountViewModel(providerAccount, _applicationSettings)).ToList();
 
         AccountCountText = GetFormattedString("DashboardPageViewModel_AccountCountFormat", accountViewModels.Count);
+        TotalAccountDescriptionText = GetFormattedString("DashboardPageViewModel_TotalAccountDescriptionFormat", GetProviderDisplayName(_applicationSettings.SelectedProviderKind));
         SetAverageUsageProperties(accountViewModels);
         SetLowUsageSummaryProperties(accountViewModels);
         SetActiveAccountProperties(accountViewModels.FirstOrDefault(accountViewModel => accountViewModel.IsActive));
@@ -235,6 +239,12 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
     }
 
     private static int ClampUsageRemainingPercentage(int usageRemainingPercentage) => usageRemainingPercentage < 0 ? 0 : Math.Clamp(usageRemainingPercentage, 0, 100);
+
+    private static string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch
+    {
+        CliProviderKind.ClaudeCode => GetLocalizedString("Provider_ClaudeCodeDisplayName"),
+        _ => GetLocalizedString("Provider_CodexDisplayName")
+    };
 
     private static DateTimeOffset? GetUsageResetAt(ProviderUsageWindow providerUsageWindow)
     {

@@ -234,8 +234,8 @@
   <data name="AccountsPage_TitleTextBlock.Text" xml:space="preserve">
     <value>계정 관리</value>
   </data>
-  <data name="AccountsPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>지원되는 CLI 계정을 저장하고 사용량과 활성 상태를 관리합니다.</value>
+  <data name="AccountsPageViewModel_DescriptionFormat" xml:space="preserve">
+    <value>{0} 계정을 저장하고 사용량과 활성 상태를 관리합니다.</value>
   </data>
   <data name="AccountsPage_RefreshAllAccountsTextBlock.Text" xml:space="preserve">
     <value>새로고침</value>
@@ -534,9 +534,6 @@
   <data name="DashboardPage_TotalAccountLabelTextBlock.Text" xml:space="preserve">
     <value>총 계정 수</value>
   </data>
-  <data name="DashboardPage_TotalAccountDescriptionTextBlock.Text" xml:space="preserve">
-    <value>저장된 Codex 계정 기준입니다.</value>
-  </data>
   <data name="DashboardPage_PrimaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
     <value>5시간 평균 할당량</value>
   </data>
@@ -599,6 +596,9 @@
   </data>
   <data name="DashboardPageViewModel_AccountCountFormat" xml:space="preserve">
     <value>{0}개</value>
+  </data>
+  <data name="DashboardPageViewModel_TotalAccountDescriptionFormat" xml:space="preserve">
+    <value>저장된 {0} 계정 기준입니다.</value>
   </data>
   <data name="DashboardPageViewModel_LowUsageAccountCountFormat" xml:space="preserve">
     <value>{0}개</value>
@@ -1060,6 +1060,12 @@ Microsoft Store에서 사용 가능한 업데이트 {0}개를 찾았습니다.</
   </data>
   <data name="ProviderComboBox_AutomationName" xml:space="preserve">
     <value>CLI provider</value>
+  </data>
+  <data name="Provider_CodexDisplayName" xml:space="preserve">
+    <value>Codex</value>
+  </data>
+  <data name="Provider_ClaudeCodeDisplayName" xml:space="preserve">
+    <value>Claude Code</value>
   </data>
   <data name="Provider_CodexComboBoxItem.Content" xml:space="preserve">
     <value>Codex</value>

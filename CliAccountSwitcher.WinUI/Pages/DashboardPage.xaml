@@ -120,9 +120,9 @@
                                             Style="{StaticResource DashboardMetricLabelTextBlockStyle}"
                                             TextTrimming="WordEllipsis" />
                                         <TextBlock
-                                            x:Uid="DashboardPage_TotalAccountDescriptionTextBlock"
                                             Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                             MaxLines="1"
+                                            Text="{x:Bind ViewModel.TotalAccountDescriptionText, Mode=OneWay}"
                                             TextTrimming="WordEllipsis"
                                             TextWrapping="Wrap" />
                                     </StackPanel>

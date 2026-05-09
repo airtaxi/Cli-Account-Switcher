@@ -234,8 +234,8 @@
   <data name="AccountsPage_TitleTextBlock.Text" xml:space="preserve">
     <value>Account Management</value>
   </data>
-  <data name="AccountsPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>Store supported CLI accounts and manage usage and active status.</value>
+  <data name="AccountsPageViewModel_DescriptionFormat" xml:space="preserve">
+    <value>Store {0} accounts and manage usage and active status.</value>
   </data>
   <data name="AccountsPage_RefreshAllAccountsTextBlock.Text" xml:space="preserve">
     <value>Refresh</value>
@@ -534,9 +534,6 @@
   <data name="DashboardPage_TotalAccountLabelTextBlock.Text" xml:space="preserve">
     <value>Total Accounts</value>
   </data>
-  <data name="DashboardPage_TotalAccountDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Based on saved Codex accounts.</value>
-  </data>
   <data name="DashboardPage_PrimaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
     <value>5-hour average quota</value>
   </data>
@@ -599,6 +596,9 @@
   </data>
   <data name="DashboardPageViewModel_AccountCountFormat" xml:space="preserve">
     <value>{0}</value>
+  </data>
+  <data name="DashboardPageViewModel_TotalAccountDescriptionFormat" xml:space="preserve">
+    <value>Based on saved {0} accounts.</value>
   </data>
   <data name="DashboardPageViewModel_LowUsageAccountCountFormat" xml:space="preserve">
     <value>{0}</value>
@@ -1060,6 +1060,12 @@ The installed app is already up to date.</value>
   </data>
   <data name="ProviderComboBox_AutomationName" xml:space="preserve">
     <value>CLI provider</value>
+  </data>
+  <data name="Provider_CodexDisplayName" xml:space="preserve">
+    <value>Codex</value>
+  </data>
+  <data name="Provider_ClaudeCodeDisplayName" xml:space="preserve">
+    <value>Claude Code</value>
   </data>
   <data name="Provider_CodexComboBoxItem.Content" xml:space="preserve">
     <value>Codex</value>

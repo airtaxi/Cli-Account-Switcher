@@ -234,8 +234,8 @@
   <data name="AccountsPage_TitleTextBlock.Text" xml:space="preserve">
     <value>アカウント管理</value>
   </data>
-  <data name="AccountsPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>対応する CLI アカウントを保存し、使用量とアクティブ状態を管理します。</value>
+  <data name="AccountsPageViewModel_DescriptionFormat" xml:space="preserve">
+    <value>{0} アカウントを保存し、使用量とアクティブ状態を管理します。</value>
   </data>
   <data name="AccountsPage_RefreshAllAccountsTextBlock.Text" xml:space="preserve">
     <value>更新</value>
@@ -534,9 +534,6 @@
   <data name="DashboardPage_TotalAccountLabelTextBlock.Text" xml:space="preserve">
     <value>合計アカウント</value>
   </data>
-  <data name="DashboardPage_TotalAccountDescriptionTextBlock.Text" xml:space="preserve">
-    <value>保存済み Codex アカウントに基づきます。</value>
-  </data>
   <data name="DashboardPage_PrimaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
     <value>5時間平均クォータ</value>
   </data>
@@ -599,6 +596,9 @@
   </data>
   <data name="DashboardPageViewModel_AccountCountFormat" xml:space="preserve">
     <value>{0}</value>
+  </data>
+  <data name="DashboardPageViewModel_TotalAccountDescriptionFormat" xml:space="preserve">
+    <value>保存済み {0} アカウントに基づきます。</value>
   </data>
   <data name="DashboardPageViewModel_LowUsageAccountCountFormat" xml:space="preserve">
     <value>{0}</value>
@@ -1060,6 +1060,12 @@ Microsoft Store に {0} 件の更新があります。</value>
   </data>
   <data name="ProviderComboBox_AutomationName" xml:space="preserve">
     <value>CLI provider</value>
+  </data>
+  <data name="Provider_CodexDisplayName" xml:space="preserve">
+    <value>Codex</value>
+  </data>
+  <data name="Provider_ClaudeCodeDisplayName" xml:space="preserve">
+    <value>Claude Code</value>
   </data>
   <data name="Provider_CodexComboBoxItem.Content" xml:space="preserve">
     <value>Codex</value>
