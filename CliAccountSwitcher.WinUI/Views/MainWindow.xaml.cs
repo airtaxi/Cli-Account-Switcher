@@ -23,6 +23,8 @@ public sealed partial class MainWindow : WindowEx
     private const uint WindowsMessageQueryEndSession = 0x0011;
     private const uint WindowsMessageEndSession = 0x0016;
     private const nuint MainWindowSubclassIdentifier = 1;
+    private const int CodexProviderSelectedIndex = 0;
+    private const int ClaudeCodeProviderSelectedIndex = 1;
 
     private delegate nint WindowSubclassProcedure(nint windowHandle, uint message, nint messageWordParameter, nint messageLongParameter, nuint subclassIdentifier, nuint referenceData);
 
@@ -128,7 +130,7 @@ public sealed partial class MainWindow : WindowEx
         OpenDashboardPageMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_OpenDashboardPageMenuFlyoutItem/Text");
         OpenAccountsPageMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_OpenAccountsPageMenuFlyoutItem/Text");
         CloseProgramMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_CloseProgramMenuFlyoutItem/Text");
-        AutomationProperties.SetName(ProviderToggleSwitch, App.LocalizationService.GetLocalizedString("ProviderToggle_AutomationName"));
+        AutomationProperties.SetName(ProviderComboBox, App.LocalizationService.GetLocalizedString("ProviderComboBox_AutomationName"));
     }
 
     private void OnAppFrameNavigated(object sender, NavigationEventArgs navigationEventArguments)
@@ -159,11 +161,11 @@ public sealed partial class MainWindow : WindowEx
 
     private void OnApplicationThemeServiceThemeChanged(ElementTheme theme) => App.ApplicationThemeService.ApplyThemeToWindow(this);
 
-    private async void OnProviderToggleSwitchToggled(object sender, RoutedEventArgs routedEventArguments)
+    private async void OnProviderComboBoxSelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArguments)
     {
         if (_isApplyingProviderSelection) return;
 
-        var selectedProviderKind = ProviderToggleSwitch.IsOn ? CliProviderKind.ClaudeCode : CliProviderKind.Codex;
+        var selectedProviderKind = GetProviderKindFromSelectedIndex(ProviderComboBox.SelectedIndex);
         if (App.ApplicationSettings.SelectedProviderKind == selectedProviderKind) return;
 
         App.ApplicationSettings.SelectedProviderKind = selectedProviderKind;
@@ -247,8 +249,7 @@ public sealed partial class MainWindow : WindowEx
         _isApplyingProviderSelection = true;
         try
         {
-            ProviderToggleSwitch.IsOn = selectedProviderKind == CliProviderKind.ClaudeCode;
-            ProviderTextBlock.Text = GetProviderDisplayName(selectedProviderKind);
+            ProviderComboBox.SelectedIndex = GetProviderSelectedIndex(selectedProviderKind);
         }
         finally
         {
@@ -256,11 +257,17 @@ public sealed partial class MainWindow : WindowEx
         }
     }
 
-    private static string GetProviderDisplayName(CliProviderKind selectedProviderKind)
-        => selectedProviderKind switch
+    private static int GetProviderSelectedIndex(CliProviderKind selectedProviderKind) => selectedProviderKind switch
+    {
+        CliProviderKind.ClaudeCode => ClaudeCodeProviderSelectedIndex,
+        _ => CodexProviderSelectedIndex
+    };
+
+    private static CliProviderKind GetProviderKindFromSelectedIndex(int selectedIndex)
+        => selectedIndex switch
         {
-            CliProviderKind.ClaudeCode => "Claude Code",
-            _ => "Codex"
+            ClaudeCodeProviderSelectedIndex => CliProviderKind.ClaudeCode,
+            _ => CliProviderKind.Codex
         };
 
     private SelectorBarItem GetSelectorBarItem(MainPageNavigationSection mainPageNavigationSection) => mainPageNavigationSection switch

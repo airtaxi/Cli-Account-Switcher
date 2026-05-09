@@ -36,17 +36,13 @@
                     VerticalAlignment="Top"
                     Orientation="Horizontal"
                     Spacing="8">
-                    <TextBlock
-                        x:Name="ProviderTextBlock"
-                        VerticalAlignment="Center"
-                        FontWeight="SemiBold"
-                        TextTrimming="CharacterEllipsis" />
-                    <ToggleSwitch
-                        x:Name="ProviderToggleSwitch"
-                        MinWidth="0"
-                        OffContent=""
-                        OnContent=""
-                        Toggled="OnProviderToggleSwitchToggled" />
+                    <ComboBox
+                        x:Name="ProviderComboBox"
+                        MinWidth="132"
+                        SelectionChanged="OnProviderComboBoxSelectionChanged">
+                        <ComboBoxItem x:Uid="Provider_CodexComboBoxItem" />
+                        <ComboBoxItem x:Uid="Provider_ClaudeCodeComboBoxItem" />
+                    </ComboBox>
                 </StackPanel>
             </Grid>
 

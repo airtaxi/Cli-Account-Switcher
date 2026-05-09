@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
+using Microsoft.UI.Xaml.Controls;
 using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
@@ -21,6 +22,8 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
     private const double WindowContentWidth = 480;
     private const double WindowHeightPadding = 10;
     private const int FallbackTaskbarIconOffset = 24;
+    private const int CodexProviderSelectedIndex = 0;
+    private const int ClaudeCodeProviderSelectedIndex = 1;
 
     [LibraryImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
@@ -213,11 +216,11 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
 
     private async void OnActiveAccountQuotaRefreshRequestedMessageReceived(object messageRecipient, ActiveAccountQuotaRefreshRequestedMessage activeAccountQuotaRefreshRequestedMessage) => await RunWithLoadingAsync(App.LocalizationService.GetLocalizedString("AccountsPage_RefreshAccountLoadingMessage"), async () => await ViewModel.RefreshActiveProviderAccountAsync());
 
-    private async void OnProviderToggleSwitchToggled(object sender, RoutedEventArgs routedEventArguments)
+    private async void OnProviderComboBoxSelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArguments)
     {
         if (_isApplyingProviderSelection) return;
 
-        var selectedProviderKind = ProviderToggleSwitch.IsOn ? CliProviderKind.ClaudeCode : CliProviderKind.Codex;
+        var selectedProviderKind = GetProviderKindFromSelectedIndex(ProviderComboBox.SelectedIndex);
         if (App.ApplicationSettings.SelectedProviderKind == selectedProviderKind) return;
 
         App.ApplicationSettings.SelectedProviderKind = selectedProviderKind;
@@ -228,7 +231,7 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
 
     private void RefreshLocalizedText()
     {
-        AutomationProperties.SetName(ProviderToggleSwitch, App.LocalizationService.GetLocalizedString("ProviderToggle_AutomationName"));
+        AutomationProperties.SetName(ProviderComboBox, App.LocalizationService.GetLocalizedString("ProviderComboBox_AutomationName"));
     }
 
     private void ApplyProviderSelection(CliProviderKind selectedProviderKind)
@@ -236,8 +239,7 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
         _isApplyingProviderSelection = true;
         try
         {
-            ProviderToggleSwitch.IsOn = selectedProviderKind == CliProviderKind.ClaudeCode;
-            ProviderTextBlock.Text = GetProviderDisplayName(selectedProviderKind);
+            ProviderComboBox.SelectedIndex = GetProviderSelectedIndex(selectedProviderKind);
         }
         finally
         {
@@ -245,11 +247,17 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
         }
     }
 
-    private static string GetProviderDisplayName(CliProviderKind selectedProviderKind)
-        => selectedProviderKind switch
+    private static int GetProviderSelectedIndex(CliProviderKind selectedProviderKind) => selectedProviderKind switch
+    {
+        CliProviderKind.ClaudeCode => ClaudeCodeProviderSelectedIndex,
+        _ => CodexProviderSelectedIndex
+    };
+
+    private static CliProviderKind GetProviderKindFromSelectedIndex(int selectedIndex)
+        => selectedIndex switch
         {
-            CliProviderKind.ClaudeCode => "Claude Code",
-            _ => "Codex"
+            ClaudeCodeProviderSelectedIndex => CliProviderKind.ClaudeCode,
+            _ => CliProviderKind.Codex
         };
 
     private void QueueWindowContentResize()

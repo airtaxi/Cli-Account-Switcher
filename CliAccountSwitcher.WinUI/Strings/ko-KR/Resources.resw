@@ -1058,8 +1058,14 @@ Microsoft Store에서 사용 가능한 업데이트 {0}개를 찾았습니다.</
   <data name="SettingsPage_RemainingTimeWithDaysFormat" xml:space="preserve">
     <value>{0}일 {1}</value>
   </data>
-  <data name="ProviderToggle_AutomationName" xml:space="preserve">
+  <data name="ProviderComboBox_AutomationName" xml:space="preserve">
     <value>CLI provider</value>
+  </data>
+  <data name="Provider_CodexComboBoxItem.Content" xml:space="preserve">
+    <value>Codex</value>
+  </data>
+  <data name="Provider_ClaudeCodeComboBoxItem.Content" xml:space="preserve">
+    <value>Claude Code</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogTitle" xml:space="preserve">
     <value>Claude Code 세션 갱신</value>
