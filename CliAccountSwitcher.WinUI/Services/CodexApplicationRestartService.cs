@@ -14,6 +14,7 @@ public sealed partial class CodexApplicationRestartService
     private const string CodexApplicationLowercaseProcessName = "codex";
     private const string CodexApplicationExecutableName = "Codex.exe";
     private const string DefaultCodexApplicationShellActivationAddress = "shell:AppsFolder\\OpenAI.Codex_2p2nqsd0c76g0!App";
+    private const string VisualStudioCodeProcessName = "Code";
     private const int ProcessExitTimeoutMilliseconds = 5000;
     private static readonly string[] s_codexApplicationProcessNames = [CodexApplicationProcessName, CodexApplicationLowercaseProcessName];
 
@@ -28,11 +29,23 @@ public sealed partial class CodexApplicationRestartService
     private static bool RestartCodexApplication()
     {
         var runningCodexApplicationProcesses = GetRunningCodexApplicationProcesses();
-        var executableFilePath = runningCodexApplicationProcesses.Select(TryGetProcessExecutableFilePath).FirstOrDefault(filePath => !string.IsNullOrWhiteSpace(filePath));
+        var runningVisualStudioCodeProcesses = GetRunningVisualStudioCodeProcesses();
+        if (runningCodexApplicationProcesses.Count == 0 && runningVisualStudioCodeProcesses.Count == 0) return true;
+
+        var executableFilePath = runningCodexApplicationProcesses.Select(TryGetProcessExecutableFilePath).FirstOrDefault(filePath => !string.IsNullOrWhiteSpace(filePath)) ?? "";
         var shellActivationAddress = CreateShellActivationAddress(executableFilePath);
+        var visualStudioCodeExecutableFilePaths = GetRestartExecutableFilePaths(runningVisualStudioCodeProcesses);
 
         StopCodexApplicationProcesses(runningCodexApplicationProcesses);
+        StopVisualStudioCodeProcesses(runningVisualStudioCodeProcesses);
 
+        var wasCodexApplicationRestarted = runningCodexApplicationProcesses.Count == 0 || TryRestartCodexApplication(shellActivationAddress, executableFilePath);
+        var wasVisualStudioCodeRestarted = runningVisualStudioCodeProcesses.Count == 0 || TryStartExecutableFilePaths(visualStudioCodeExecutableFilePaths);
+        return wasCodexApplicationRestarted && wasVisualStudioCodeRestarted;
+    }
+
+    private static bool TryRestartCodexApplication(string shellActivationAddress, string executableFilePath)
+    {
         if (!string.IsNullOrWhiteSpace(shellActivationAddress) && TryStartShellActivationAddress(shellActivationAddress)) return true;
         if (!string.IsNullOrWhiteSpace(executableFilePath) && TryStartExecutableFilePath(executableFilePath)) return true;
         if (TryStartShellActivationAddress(DefaultCodexApplicationShellActivationAddress)) return true;
@@ -68,6 +81,39 @@ public sealed partial class CodexApplicationRestartService
         return string.Equals(process.ProcessName, CodexApplicationProcessName, StringComparison.Ordinal);
     }
 
+    private static IReadOnlyList<Process> GetRunningVisualStudioCodeProcesses()
+    {
+        var currentProcessIdentifier = Environment.ProcessId;
+        var discoveredProcessIdentifiers = new HashSet<int>();
+        var visualStudioCodeProcesses = new List<Process>();
+        foreach (var visualStudioCodeProcess in Process.GetProcessesByName(VisualStudioCodeProcessName))
+        {
+            if (visualStudioCodeProcess.Id == currentProcessIdentifier || !IsVisualStudioCodeProcess(visualStudioCodeProcess) || !discoveredProcessIdentifiers.Add(visualStudioCodeProcess.Id))
+            {
+                visualStudioCodeProcess.Dispose();
+                continue;
+            }
+
+            visualStudioCodeProcesses.Add(visualStudioCodeProcess);
+        }
+
+        return visualStudioCodeProcesses;
+    }
+
+    private static bool IsVisualStudioCodeProcess(Process process)
+    {
+        var executableFilePath = TryGetProcessExecutableFilePath(process);
+        if (executableFilePath.EndsWith("\\Code.exe", StringComparison.OrdinalIgnoreCase)) return true;
+        return string.Equals(process.ProcessName, VisualStudioCodeProcessName, StringComparison.Ordinal);
+    }
+
+    private static IReadOnlyList<string> GetRestartExecutableFilePaths(IReadOnlyList<Process> processes)
+        => processes
+            .Select(TryGetProcessExecutableFilePath)
+            .Where(executableFilePath => !string.IsNullOrWhiteSpace(executableFilePath))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+
     private static void StopCodexApplicationProcesses(IReadOnlyList<Process> codexApplicationProcesses)
     {
         foreach (var codexApplicationProcess in codexApplicationProcesses)
@@ -88,6 +134,29 @@ public sealed partial class CodexApplicationRestartService
             }
             catch { }
             finally { codexApplicationProcess.Dispose(); }
+        }
+    }
+
+    private static void StopVisualStudioCodeProcesses(IReadOnlyList<Process> visualStudioCodeProcesses)
+    {
+        foreach (var visualStudioCodeProcess in visualStudioCodeProcesses)
+        {
+            try
+            {
+                if (visualStudioCodeProcess.HasExited) continue;
+                visualStudioCodeProcess.Kill(entireProcessTree: true);
+            }
+            catch { }
+        }
+
+        foreach (var visualStudioCodeProcess in visualStudioCodeProcesses)
+        {
+            try
+            {
+                if (!visualStudioCodeProcess.HasExited) visualStudioCodeProcess.WaitForExit(ProcessExitTimeoutMilliseconds);
+            }
+            catch { }
+            finally { visualStudioCodeProcess.Dispose(); }
         }
     }
 
@@ -130,6 +199,17 @@ public sealed partial class CodexApplicationRestartService
             return true;
         }
         catch { return false; }
+    }
+
+    private static bool TryStartExecutableFilePaths(IReadOnlyList<string> executableFilePaths)
+    {
+        var wasAnyExecutableFilePathStarted = false;
+        foreach (var executableFilePath in executableFilePaths)
+        {
+            if (TryStartExecutableFilePath(executableFilePath)) wasAnyExecutableFilePathStarted = true;
+        }
+
+        return wasAnyExecutableFilePathStarted;
     }
 
     private static bool TryStartExecutableFilePath(string executableFilePath)

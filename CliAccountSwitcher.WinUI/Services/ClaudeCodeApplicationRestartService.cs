@@ -8,12 +8,8 @@ namespace CliAccountSwitcher.WinUI.Services;
 
 public sealed class ClaudeCodeApplicationRestartService
 {
-    private const string ClaudeCodeApplicationProcessName = "Claude";
-    private const string ClaudeCodeCliProcessName = "claude";
-    private const string ClaudeCodeCliExecutableName = "claude.exe";
-    private const string DefaultClaudeCodeDesktopProtocolAddress = "claude://code/new";
+    private const string VisualStudioCodeProcessName = "Code";
     private const int ProcessExitTimeoutMilliseconds = 5000;
-    private static readonly string[] s_claudeCodeProcessNames = [ClaudeCodeApplicationProcessName, ClaudeCodeCliProcessName];
 
     public Task<bool> RestartClaudeCodeAsync() => Task.Run(TryRestartClaudeCode);
 
@@ -25,75 +21,69 @@ public sealed class ClaudeCodeApplicationRestartService
 
     private static bool RestartClaudeCode()
     {
-        var runningClaudeCodeProcesses = GetRunningClaudeCodeProcesses();
-        var executableFilePaths = GetRestartExecutableFilePaths(runningClaudeCodeProcesses);
+        var runningVisualStudioCodeProcesses = GetRunningVisualStudioCodeProcesses();
+        if (runningVisualStudioCodeProcesses.Count == 0) return true;
 
-        StopClaudeCodeProcesses(runningClaudeCodeProcesses);
+        var executableFilePaths = GetRestartExecutableFilePaths(runningVisualStudioCodeProcesses);
 
-        if (TryStartExecutableFilePaths(executableFilePaths)) return true;
-        if (TryStartProtocolAddress(DefaultClaudeCodeDesktopProtocolAddress)) return true;
-        return TryStartExecutableFilePath(ClaudeCodeCliExecutableName);
+        StopVisualStudioCodeProcesses(runningVisualStudioCodeProcesses);
+
+        return TryStartExecutableFilePaths(executableFilePaths);
     }
 
-    private static IReadOnlyList<Process> GetRunningClaudeCodeProcesses()
+    private static IReadOnlyList<Process> GetRunningVisualStudioCodeProcesses()
     {
         var currentProcessIdentifier = Environment.ProcessId;
         var discoveredProcessIdentifiers = new HashSet<int>();
-        var claudeCodeProcesses = new List<Process>();
-        foreach (var claudeCodeProcessName in s_claudeCodeProcessNames)
+        var visualStudioCodeProcesses = new List<Process>();
+        foreach (var visualStudioCodeProcess in Process.GetProcessesByName(VisualStudioCodeProcessName))
         {
-            foreach (var claudeCodeProcess in Process.GetProcessesByName(claudeCodeProcessName))
+            if (visualStudioCodeProcess.Id == currentProcessIdentifier || !IsVisualStudioCodeProcess(visualStudioCodeProcess) || !discoveredProcessIdentifiers.Add(visualStudioCodeProcess.Id))
             {
-                if (claudeCodeProcess.Id == currentProcessIdentifier || !IsClaudeCodeProcess(claudeCodeProcess) || !discoveredProcessIdentifiers.Add(claudeCodeProcess.Id))
-                {
-                    claudeCodeProcess.Dispose();
-                    continue;
-                }
-
-                claudeCodeProcesses.Add(claudeCodeProcess);
+                visualStudioCodeProcess.Dispose();
+                continue;
             }
+
+            visualStudioCodeProcesses.Add(visualStudioCodeProcess);
         }
 
-        return claudeCodeProcesses;
+        return visualStudioCodeProcesses;
     }
 
-    private static bool IsClaudeCodeProcess(Process process)
+    private static bool IsVisualStudioCodeProcess(Process process)
     {
         var executableFilePath = TryGetProcessExecutableFilePath(process);
-        if (executableFilePath.Contains("\\WindowsApps\\claude.ai-", StringComparison.OrdinalIgnoreCase)) return false;
-        if (executableFilePath.Contains("\\AnthropicClaude\\", StringComparison.OrdinalIgnoreCase)) return true;
-        if (executableFilePath.EndsWith("\\claude.exe", StringComparison.OrdinalIgnoreCase)) return true;
-        return string.Equals(process.ProcessName, ClaudeCodeApplicationProcessName, StringComparison.Ordinal)
-               || string.Equals(process.ProcessName, ClaudeCodeCliProcessName, StringComparison.Ordinal);
+        if (executableFilePath.EndsWith("\\Code.exe", StringComparison.OrdinalIgnoreCase)) return true;
+        return string.Equals(process.ProcessName, VisualStudioCodeProcessName, StringComparison.Ordinal);
     }
 
-    private static IReadOnlyList<string> GetRestartExecutableFilePaths(IReadOnlyList<Process> claudeCodeProcesses)
-        => claudeCodeProcesses
+    private static IReadOnlyList<string> GetRestartExecutableFilePaths(IReadOnlyList<Process> visualStudioCodeProcesses)
+        => visualStudioCodeProcesses
             .Select(TryGetProcessExecutableFilePath)
             .Where(executableFilePath => !string.IsNullOrWhiteSpace(executableFilePath))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToArray();
 
-    private static void StopClaudeCodeProcesses(IReadOnlyList<Process> claudeCodeProcesses)
+    private static void StopVisualStudioCodeProcesses(IReadOnlyList<Process> visualStudioCodeProcesses)
     {
-        foreach (var claudeCodeProcess in claudeCodeProcesses)
+        foreach (var visualStudioCodeProcess in visualStudioCodeProcesses)
         {
             try
             {
-                if (claudeCodeProcess.HasExited) continue;
-                claudeCodeProcess.Kill(entireProcessTree: true);
+                if (visualStudioCodeProcess.HasExited) continue;
+                visualStudioCodeProcess.Kill(entireProcessTree: true);
             }
             catch { }
         }
 
-        foreach (var claudeCodeProcess in claudeCodeProcesses)
+        foreach (var visualStudioCodeProcess in visualStudioCodeProcesses)
         {
             try
             {
-                if (!claudeCodeProcess.HasExited) claudeCodeProcess.WaitForExit(ProcessExitTimeoutMilliseconds);
+                if (!visualStudioCodeProcess.HasExited) visualStudioCodeProcess.WaitForExit(ProcessExitTimeoutMilliseconds);
             }
             catch { }
-            finally { claudeCodeProcess.Dispose(); }
+            finally { visualStudioCodeProcess.Dispose(); }
         }
     }
 
@@ -112,20 +102,6 @@ public sealed class ClaudeCodeApplicationRestartService
         }
 
         return wasAnyExecutableFilePathStarted;
-    }
-
-    private static bool TryStartProtocolAddress(string protocolAddress)
-    {
-        try
-        {
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = protocolAddress,
-                UseShellExecute = true
-            });
-            return true;
-        }
-        catch { return false; }
     }
 
     private static bool TryStartExecutableFilePath(string executableFilePath)

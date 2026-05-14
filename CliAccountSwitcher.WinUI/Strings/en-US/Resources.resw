@@ -391,22 +391,22 @@
     <value>Delete this account?</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationDialogTitle" xml:space="preserve">
-    <value>Restart Codex</value>
+    <value>Restart Codex and VS Code</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationDialogMessage" xml:space="preserve">
-    <value>The account has been switched. Restart Codex to use the changed account immediately. Restart now?</value>
+    <value>The account has been switched. Restart running Codex and VS Code windows to use the changed account immediately. Restart now?</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationButtonText" xml:space="preserve">
     <value>Restart</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationLoadingMessage" xml:space="preserve">
-    <value>Restarting Codex.</value>
+    <value>Restarting Codex and VS Code.</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationFailedDialogTitle" xml:space="preserve">
     <value>Restart failed</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationFailedDialogMessage" xml:space="preserve">
-    <value>Codex could not be restarted automatically. Please close Codex and open it again manually.</value>
+    <value>Codex or VS Code could not be restarted automatically. Close and reopen Codex and VS Code manually.</value>
   </data>
   <data name="AccountsPage_ZipBackupFileTypeChoice" xml:space="preserve">
     <value>ZIP Backup</value>
@@ -1074,22 +1074,22 @@ The installed app is already up to date.</value>
     <value>Claude Code</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogTitle" xml:space="preserve">
-    <value>Restart Claude Code</value>
+    <value>Restart VS Code</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogMessage" xml:space="preserve">
-    <value>Account switching is complete. Restart running Claude Code desktop and CLI sessions to use the changed account immediately. Restart now?</value>
+    <value>Account switching is complete. Restart running VS Code windows to use the changed account immediately. Restart now?</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionButtonText" xml:space="preserve">
     <value>Restart</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionLoadingMessage" xml:space="preserve">
-    <value>Restarting Claude Code.</value>
+    <value>Restarting VS Code.</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogTitle" xml:space="preserve">
     <value>Restart failed</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogMessage" xml:space="preserve">
-    <value>Claude Code could not be restarted automatically. Close and reopen Claude Code or the CLI manually.</value>
+    <value>VS Code could not be restarted automatically. Close and reopen VS Code manually.</value>
   </data>
   <data name="OAuthAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
     <value>Claude Code login</value>

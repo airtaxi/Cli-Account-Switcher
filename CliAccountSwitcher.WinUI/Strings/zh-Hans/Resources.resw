@@ -391,22 +391,22 @@
     <value>要删除此账号吗？</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationDialogTitle" xml:space="preserve">
-    <value>重启 Codex</value>
+    <value>重启 Codex 和 VS Code</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationDialogMessage" xml:space="preserve">
-    <value>账号已切换。若要立即使用切换后的账号，请重启 Codex。现在重启吗？</value>
+    <value>账号已切换。若要立即使用切换后的账号，请重启正在运行的 Codex 和 VS Code。现在重启吗？</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationButtonText" xml:space="preserve">
     <value>重启</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationLoadingMessage" xml:space="preserve">
-    <value>正在重启 Codex。</value>
+    <value>正在重启 Codex 和 VS Code。</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationFailedDialogTitle" xml:space="preserve">
     <value>重启失败</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationFailedDialogMessage" xml:space="preserve">
-    <value>无法自动重启 Codex。请手动关闭 Codex 后重新打开。</value>
+    <value>无法自动重启 Codex 或 VS Code。请手动关闭并重新打开 Codex 和 VS Code。</value>
   </data>
   <data name="AccountsPage_ZipBackupFileTypeChoice" xml:space="preserve">
     <value>ZIP 备份</value>
@@ -1074,22 +1074,22 @@ Microsoft Store 中有 {0} 个可用更新。</value>
     <value>Claude Code</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogTitle" xml:space="preserve">
-    <value>重启 Claude Code</value>
+    <value>重启 VS Code</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogMessage" xml:space="preserve">
-    <value>账号切换已完成。若要立即使用切换后的账号，需要重启正在运行的 Claude Code 应用和 CLI 会话。现在重启吗？</value>
+    <value>账号切换已完成。若要立即使用切换后的账号，需要重启正在运行的 VS Code。现在重启吗？</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionButtonText" xml:space="preserve">
     <value>重启</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionLoadingMessage" xml:space="preserve">
-    <value>正在重启 Claude Code。</value>
+    <value>正在重启 VS Code。</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogTitle" xml:space="preserve">
     <value>重启失败</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogMessage" xml:space="preserve">
-    <value>无法自动重启 Claude Code。请手动关闭并重新打开 Claude Code 应用或 CLI。</value>
+    <value>无法自动重启 VS Code。请手动关闭并重新打开 VS Code。</value>
   </data>
   <data name="OAuthAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
     <value>Claude Code 登录</value>

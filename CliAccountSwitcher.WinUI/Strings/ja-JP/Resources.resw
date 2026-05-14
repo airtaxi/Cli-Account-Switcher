@@ -391,22 +391,22 @@
     <value>このアカウントを削除しますか?</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationDialogTitle" xml:space="preserve">
-    <value>Codex を再起動</value>
+    <value>Codex と VS Code を再起動</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationDialogMessage" xml:space="preserve">
-    <value>アカウントを切り替えました。変更後のアカウントをすぐに使用するには Codex を再起動してください。今すぐ再起動しますか?</value>
+    <value>アカウントを切り替えました。変更後のアカウントをすぐに使用するには、実行中の Codex と VS Code を再起動してください。今すぐ再起動しますか?</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationButtonText" xml:space="preserve">
     <value>再起動</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationLoadingMessage" xml:space="preserve">
-    <value>Codex を再起動しています。</value>
+    <value>Codex と VS Code を再起動しています。</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationFailedDialogTitle" xml:space="preserve">
     <value>再起動に失敗しました</value>
   </data>
   <data name="AccountsPage_RestartCodexApplicationFailedDialogMessage" xml:space="preserve">
-    <value>Codex を自動的に再起動できませんでした。Codex を手動で閉じて、もう一度開いてください。</value>
+    <value>Codex または VS Code を自動的に再起動できませんでした。Codex と VS Code を手動で閉じて、もう一度開いてください。</value>
   </data>
   <data name="AccountsPage_ZipBackupFileTypeChoice" xml:space="preserve">
     <value>ZIP バックアップ</value>
@@ -1074,22 +1074,22 @@ Microsoft Store に {0} 件の更新があります。</value>
     <value>Claude Code</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogTitle" xml:space="preserve">
-    <value>Claude Code を再起動</value>
+    <value>VS Code を再起動</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionDialogMessage" xml:space="preserve">
-    <value>アカウントの切り替えが完了しました。変更後のアカウントをすぐに使うには、実行中の Claude Code アプリと CLI セッションを再起動する必要があります。今すぐ再起動しますか?</value>
+    <value>アカウントの切り替えが完了しました。変更後のアカウントをすぐに使うには、実行中の VS Code を再起動する必要があります。今すぐ再起動しますか?</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionButtonText" xml:space="preserve">
     <value>再起動</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionLoadingMessage" xml:space="preserve">
-    <value>Claude Code を再起動しています。</value>
+    <value>VS Code を再起動しています。</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogTitle" xml:space="preserve">
     <value>再起動に失敗しました</value>
   </data>
   <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogMessage" xml:space="preserve">
-    <value>Claude Code を自動的に再起動できませんでした。Claude Code アプリまたは CLI を手動で閉じてから再度開いてください。</value>
+    <value>VS Code を自動的に再起動できませんでした。VS Code を手動で閉じてから再度開いてください。</value>
   </data>
   <data name="OAuthAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
     <value>Claude Code ログイン</value>
