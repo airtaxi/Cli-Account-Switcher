@@ -11,6 +11,8 @@ namespace CliAccountSwitcher.WinUI.Services;
 
 public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAccount>
 {
+    private const int MaximumRefreshTokenFailureCount = 3;
+
     private readonly FileSystemProviderSnapshotStore _providerSnapshotStore;
     private readonly ClaudeCodeProviderAdapter _claudeCodeProviderAdapter;
     private readonly SemaphoreSlim _saveSemaphore = new(1, 1);
@@ -209,11 +211,10 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
     {
         try
         {
-            var providerUsageSnapshot = storedProviderAccount.IsActive
-                ? await RefreshActiveAccountUsageCoreAsync(storedProviderAccount, cancellationToken)
-                : await _claudeCodeProviderAdapter.GetUsageAsync(storedProviderAccount.StoredAccountIdentifier, cancellationToken);
+            var providerUsageSnapshot = await GetUsageWithRefreshTokenRetryAsync(storedProviderAccount, cancellationToken);
             var usageRefreshTime = DateTimeOffset.UtcNow;
             storedProviderAccount.IsTokenExpired = false;
+            storedProviderAccount.RefreshTokenFailureCount = 0;
             storedProviderAccount.LastUpdated = usageRefreshTime;
             storedProviderAccount.LastProviderUsageSnapshot = CreateProviderUsageSnapshot(CliProviderKind.ClaudeCode, providerUsageSnapshot);
             storedProviderAccount.LastUsageRefreshTime = usageRefreshTime;
@@ -263,6 +264,34 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
             GlobalConfigDocumentText = globalConfigJson
         };
 
+    private async Task<ProviderUsageSnapshot> GetUsageWithRefreshTokenRetryAsync(StoredProviderAccount storedProviderAccount, CancellationToken cancellationToken)
+    {
+        if (storedProviderAccount.RefreshTokenFailureCount >= MaximumRefreshTokenFailureCount)
+        {
+            throw new ProviderAuthenticationExpiredException("The Claude Code refresh token retry limit has been reached. Login again or re-save the account.");
+        }
+
+        ProviderAuthenticationExpiredException lastAuthenticationExpiredException = null;
+        while (storedProviderAccount.RefreshTokenFailureCount < MaximumRefreshTokenFailureCount)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            try
+            {
+                return storedProviderAccount.IsActive
+                    ? await RefreshActiveAccountUsageCoreAsync(storedProviderAccount, cancellationToken)
+                    : await _claudeCodeProviderAdapter.GetUsageAsync(storedProviderAccount.StoredAccountIdentifier, cancellationToken);
+            }
+            catch (ProviderAuthenticationExpiredException exception)
+            {
+                lastAuthenticationExpiredException = exception;
+                storedProviderAccount.RefreshTokenFailureCount++;
+            }
+        }
+
+        throw new ProviderAuthenticationExpiredException("The Claude Code refresh token retry limit has been reached. Login again or re-save the account.", lastAuthenticationExpiredException);
+    }
+
     private async Task<ProviderUsageSnapshot> RefreshActiveAccountUsageCoreAsync(StoredProviderAccount storedProviderAccount, CancellationToken cancellationToken)
     {
         var currentStoredAccountIdentifier = await _claudeCodeProviderAdapter.GetCurrentStoredAccountIdentifierAsync(_providerSnapshotStore, cancellationToken);
@@ -286,6 +315,7 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
         destinationStoredProviderAccount.OrganizationName = sourceStoredProviderAccount.OrganizationName;
         destinationStoredProviderAccount.PlanType = sourceStoredProviderAccount.PlanType;
         destinationStoredProviderAccount.IsTokenExpired = sourceStoredProviderAccount.IsTokenExpired;
+        destinationStoredProviderAccount.RefreshTokenFailureCount = sourceStoredProviderAccount.RefreshTokenFailureCount;
         destinationStoredProviderAccount.LastUpdated = sourceStoredProviderAccount.LastUpdated;
     }
 

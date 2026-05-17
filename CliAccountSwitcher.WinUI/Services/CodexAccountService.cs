@@ -16,6 +16,8 @@ namespace CliAccountSwitcher.WinUI.Services;
 
 public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
 {
+    private const int MaximumRefreshTokenFailureCount = 3;
+
     private readonly SemaphoreSlim _saveSemaphore = new(1, 1);
     private readonly HttpClient _httpClient;
     private readonly CodexAuthenticationDocumentSerializer _codexAuthenticationDocumentSerializer = new();
@@ -233,15 +235,135 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
 
     protected override async Task<ProviderUsageSnapshot> RefreshAccountUsageCoreAsync(CodexAccount codexAccount, CancellationToken cancellationToken)
     {
-        var codexUsageSnapshot = await _codexUsageClient.GetUsageAsync(codexAccount.CodexAuthenticationDocument, cancellationToken);
-        codexAccount.LastCodexUsageSnapshot = codexUsageSnapshot;
-        codexAccount.LastUsageRefreshTime = DateTimeOffset.UtcNow;
-        codexAccount.MarkAsValid();
-        UpdateEmailAddress(codexAccount, codexUsageSnapshot);
+        var activeAuthenticationDocumentUsageSnapshot = await TryRefreshActiveAccountUsageFromCurrentAuthenticationDocumentAsync(codexAccount, cancellationToken);
+        if (activeAuthenticationDocumentUsageSnapshot is not null) return activeAuthenticationDocumentUsageSnapshot;
+
+        var refreshResult = await GetUsageWithRefreshTokenRetryAsync(codexAccount, codexAccount.CodexAuthenticationDocument, codexAccount.IsActive, cancellationToken);
+        codexAccount.CodexAuthenticationDocument = refreshResult.AuthenticationDocument;
+        var codexUsageSnapshot = refreshResult.UsageSnapshot;
+        ApplySuccessfulUsageRefresh(codexAccount, codexUsageSnapshot);
         return CreateProviderUsageSnapshot(codexUsageSnapshot);
     }
 
     protected override bool IsAccountExpiredException(Exception exception) => exception is CodexApiException { StatusCode: HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden };
+
+    private async Task<ProviderUsageSnapshot> TryRefreshActiveAccountUsageFromCurrentAuthenticationDocumentAsync(CodexAccount codexAccount, CancellationToken cancellationToken)
+    {
+        if (!codexAccount.IsActive) return null;
+
+        var currentAuthenticationDocument = await TryReadCurrentAuthenticationDocumentAsync(cancellationToken);
+        if (currentAuthenticationDocument is null) return null;
+
+        var currentAccountIdentifier = TryGetAccountIdentifier(currentAuthenticationDocument);
+        if (string.IsNullOrWhiteSpace(currentAccountIdentifier) || !string.Equals(currentAccountIdentifier, codexAccount.AccountIdentifier, StringComparison.Ordinal)) return null;
+        if (!HasAuthenticationTokenInfoChanged(codexAccount.CodexAuthenticationDocument, currentAuthenticationDocument)) return null;
+
+        var refreshResult = await GetUsageWithRefreshTokenRetryAsync(codexAccount, currentAuthenticationDocument, true, cancellationToken);
+        codexAccount.CodexAuthenticationDocument = refreshResult.AuthenticationDocument;
+        var codexUsageSnapshot = refreshResult.UsageSnapshot;
+        ApplySuccessfulUsageRefresh(codexAccount, codexUsageSnapshot);
+        return CreateProviderUsageSnapshot(codexUsageSnapshot);
+    }
+
+    private async Task<(CodexAuthenticationDocument AuthenticationDocument, CodexUsageSnapshot UsageSnapshot)> GetUsageWithRefreshTokenRetryAsync(CodexAccount codexAccount, CodexAuthenticationDocument authenticationDocument, bool shouldWriteCurrentAuthenticationDocument, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var codexUsageSnapshot = await _codexUsageClient.GetUsageAsync(authenticationDocument, cancellationToken);
+            return (authenticationDocument, codexUsageSnapshot);
+        }
+        catch (Exception exception) when (IsAccountExpiredException(exception))
+        {
+            if (codexAccount.RefreshTokenFailureCount >= MaximumRefreshTokenFailureCount)
+            {
+                throw new CodexApiException("The Codex refresh token retry limit has been reached. Login again or re-save the account.", HttpStatusCode.Unauthorized, null, exception);
+            }
+
+            return await RefreshAuthenticationDocumentAndGetUsageWithRetryAsync(codexAccount, authenticationDocument, shouldWriteCurrentAuthenticationDocument, exception, cancellationToken);
+        }
+    }
+
+    private async Task<(CodexAuthenticationDocument AuthenticationDocument, CodexUsageSnapshot UsageSnapshot)> RefreshAuthenticationDocumentAndGetUsageWithRetryAsync(CodexAccount codexAccount, CodexAuthenticationDocument authenticationDocument, bool shouldWriteCurrentAuthenticationDocument, Exception expiredException, CancellationToken cancellationToken)
+    {
+        var currentAuthenticationDocument = authenticationDocument;
+        var lastRefreshTokenException = expiredException;
+
+        while (codexAccount.RefreshTokenFailureCount < MaximumRefreshTokenFailureCount)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            try
+            {
+                currentAuthenticationDocument = await RefreshAuthenticationDocumentAsync(currentAuthenticationDocument, cancellationToken);
+                if (shouldWriteCurrentAuthenticationDocument) await WriteCurrentAuthenticationDocumentAsync(currentAuthenticationDocument, cancellationToken);
+
+                var codexUsageSnapshot = await _codexUsageClient.GetUsageAsync(currentAuthenticationDocument, cancellationToken);
+                return (currentAuthenticationDocument, codexUsageSnapshot);
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                throw;
+            }
+            catch (Exception exception) when (IsRefreshTokenFailureException(exception))
+            {
+                lastRefreshTokenException = exception;
+                codexAccount.RefreshTokenFailureCount++;
+            }
+        }
+
+        throw new CodexApiException("The Codex refresh token retry limit has been reached. Login again or re-save the account.", HttpStatusCode.Unauthorized, null, lastRefreshTokenException);
+    }
+
+    private async Task<CodexAuthenticationDocument> RefreshAuthenticationDocumentAsync(CodexAuthenticationDocument authenticationDocument, CancellationToken cancellationToken)
+    {
+        var refreshToken = authenticationDocument.GetEffectiveRefreshToken();
+        var tokenExchangeResult = await _codexOAuthClient.ExchangeRefreshTokenAsync(refreshToken, cancellationToken);
+        var refreshedAuthenticationDocument = CodexOAuthClient.CreateAuthenticationDocument(tokenExchangeResult);
+        refreshedAuthenticationDocument.AuthenticationMode = authenticationDocument.AuthenticationMode;
+        refreshedAuthenticationDocument.OpenAiApiKey = authenticationDocument.OpenAiApiKey;
+        refreshedAuthenticationDocument.AuthenticationType = authenticationDocument.AuthenticationType;
+        if (string.IsNullOrWhiteSpace(tokenExchangeResult.EmailAddress)) refreshedAuthenticationDocument.EmailAddress = authenticationDocument.EmailAddress;
+        if (!string.IsNullOrWhiteSpace(refreshedAuthenticationDocument.GetEffectiveRefreshToken())) return refreshedAuthenticationDocument;
+
+        refreshedAuthenticationDocument.Tokens.RefreshToken = refreshToken;
+        refreshedAuthenticationDocument.RefreshToken = refreshToken;
+        return refreshedAuthenticationDocument;
+    }
+
+    private async Task WriteCurrentAuthenticationDocumentAsync(CodexAuthenticationDocument authenticationDocument, CancellationToken cancellationToken)
+    {
+        var authenticationDocumentText = _codexAuthenticationDocumentSerializer.Serialize(authenticationDocument);
+        Directory.CreateDirectory(Constants.CodexHomeDirectory);
+        await File.WriteAllTextAsync(Constants.CurrentAuthenticationFilePath, authenticationDocumentText, cancellationToken);
+    }
+
+    private async Task<CodexAuthenticationDocument> TryReadCurrentAuthenticationDocumentAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            if (!File.Exists(Constants.CurrentAuthenticationFilePath)) return null;
+
+            var authenticationDocumentText = await File.ReadAllTextAsync(Constants.CurrentAuthenticationFilePath, cancellationToken);
+            return CodexAuthenticationDocumentSerializer.Parse(authenticationDocumentText);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static void ApplySuccessfulUsageRefresh(CodexAccount codexAccount, CodexUsageSnapshot codexUsageSnapshot)
+    {
+        codexAccount.LastCodexUsageSnapshot = codexUsageSnapshot;
+        codexAccount.LastUsageRefreshTime = DateTimeOffset.UtcNow;
+        codexAccount.RefreshTokenFailureCount = 0;
+        codexAccount.MarkAsValid();
+        UpdateEmailAddress(codexAccount, codexUsageSnapshot);
+    }
 
     private async Task<CodexAccount> CreateValidatedAccountAsync(CodexAuthenticationDocument codexAuthenticationDocument, string customAlias, CancellationToken cancellationToken)
     {
@@ -368,6 +490,22 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
     private static void UpdateEmailAddress(CodexAccount codexAccount, CodexUsageSnapshot codexUsageSnapshot)
     {
         if (!string.IsNullOrWhiteSpace(codexUsageSnapshot.EmailAddress)) codexAccount.CodexAuthenticationDocument.EmailAddress = codexUsageSnapshot.EmailAddress;
+    }
+
+    private static bool HasAuthenticationTokenInfoChanged(CodexAuthenticationDocument firstAuthenticationDocument, CodexAuthenticationDocument secondAuthenticationDocument)
+        => !string.Equals(firstAuthenticationDocument.GetEffectiveIdentityToken(), secondAuthenticationDocument.GetEffectiveIdentityToken(), StringComparison.Ordinal)
+           || !string.Equals(firstAuthenticationDocument.GetEffectiveAccessToken(), secondAuthenticationDocument.GetEffectiveAccessToken(), StringComparison.Ordinal)
+           || !string.Equals(firstAuthenticationDocument.GetEffectiveRefreshToken(), secondAuthenticationDocument.GetEffectiveRefreshToken(), StringComparison.Ordinal)
+           || !string.Equals(firstAuthenticationDocument.GetEffectiveAccountIdentifier(), secondAuthenticationDocument.GetEffectiveAccountIdentifier(), StringComparison.Ordinal)
+           || !string.Equals(firstAuthenticationDocument.LastRefreshText, secondAuthenticationDocument.LastRefreshText, StringComparison.Ordinal)
+           || !string.Equals(firstAuthenticationDocument.ExpirationText, secondAuthenticationDocument.ExpirationText, StringComparison.Ordinal);
+
+    private static bool IsRefreshTokenFailureException(Exception exception)
+    {
+        if (exception is not CodexApiException codexApiException) return false;
+
+        var statusCode = codexApiException.StatusCode;
+        return statusCode is null || statusCode is HttpStatusCode.BadRequest or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden;
     }
 
     private static DateTimeOffset? CreateDateTimeOffset(long unixSeconds)

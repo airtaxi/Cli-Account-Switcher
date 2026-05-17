@@ -17,6 +17,8 @@ public sealed class CodexAccount
 
     public bool IsTokenExpired { get; set; }
 
+    public int RefreshTokenFailureCount { get; set; }
+
     public DateTimeOffset? LastUsageRefreshTime { get; set; }
 
     [JsonIgnore]

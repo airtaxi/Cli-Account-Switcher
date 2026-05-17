@@ -79,6 +79,7 @@ public abstract class ProviderAdapterBase<TLiveAccountState, TStoredAccountPaylo
 
         var updatedStoredProviderAccount = CreateStoredProviderAccount(liveAccountState, storedProviderAccount.StoredAccountIdentifier, storedProviderAccount.SlotNumber, storedProviderAccount.IsActive);
         updatedStoredProviderAccount.IsTokenExpired = false;
+        updatedStoredProviderAccount.RefreshTokenFailureCount = 0;
         updatedStoredProviderAccount.LastProviderUsageSnapshot = storedProviderAccount.LastProviderUsageSnapshot;
         updatedStoredProviderAccount.LastUsageRefreshTime = storedProviderAccount.LastUsageRefreshTime;
         updatedStoredProviderAccount.LastUpdated = DateTimeOffset.UtcNow;
@@ -169,6 +170,7 @@ public abstract class ProviderAdapterBase<TLiveAccountState, TStoredAccountPaylo
             PlanType = storedProviderAccount.PlanType,
             IsActive = isActive,
             IsTokenExpired = storedProviderAccount.IsTokenExpired,
+            RefreshTokenFailureCount = storedProviderAccount.RefreshTokenFailureCount,
             LastUpdated = storedProviderAccount.LastUpdated,
             LastProviderUsageSnapshot = storedProviderAccount.LastProviderUsageSnapshot,
             LastUsageRefreshTime = storedProviderAccount.LastUsageRefreshTime

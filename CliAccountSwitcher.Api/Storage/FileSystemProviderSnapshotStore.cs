@@ -196,6 +196,7 @@ public sealed class FileSystemProviderSnapshotStore : IProviderSnapshotStore
             PlanType = storedProviderAccount.PlanType,
             IsActive = isActive,
             IsTokenExpired = storedProviderAccount.IsTokenExpired,
+            RefreshTokenFailureCount = storedProviderAccount.RefreshTokenFailureCount,
             LastUpdated = storedProviderAccount.LastUpdated,
             LastProviderUsageSnapshot = storedProviderAccount.LastProviderUsageSnapshot,
             LastUsageRefreshTime = storedProviderAccount.LastUsageRefreshTime
