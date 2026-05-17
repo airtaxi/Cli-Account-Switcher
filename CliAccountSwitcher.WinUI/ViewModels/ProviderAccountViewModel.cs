@@ -72,9 +72,17 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
 
     public bool IsSecondaryUsageUnderWarningThreshold => IsUsageUnderWarningThreshold(ProviderUsageSnapshot.SevenDay, _applicationSettings.SecondaryUsageWarningThresholdPercentage);
 
-    public bool IsPrimaryUsageOverAverageRateLimit => IsUsageOverAverageRateLimit(ProviderUsageSnapshot.FiveHour, s_primaryUsageWindowDuration, s_primaryUsageAverageUnitDuration);
+    public bool IsPrimaryUsageOverAverageRateLimit => PrimaryUsageAverageRateLimitExceededPercentage > 0;
 
-    public bool IsSecondaryUsageOverAverageRateLimit => IsUsageOverAverageRateLimit(ProviderUsageSnapshot.SevenDay, s_secondaryUsageWindowDuration, s_secondaryUsageAverageUnitDuration);
+    public bool IsSecondaryUsageOverAverageRateLimit => SecondaryUsageAverageRateLimitExceededPercentage > 0;
+
+    public int PrimaryUsageAverageRateLimitExceededPercentage => CalculateUsageAverageRateLimitExceededPercentage(ProviderUsageSnapshot.FiveHour, s_primaryUsageWindowDuration, s_primaryUsageAverageUnitDuration);
+
+    public int SecondaryUsageAverageRateLimitExceededPercentage => CalculateUsageAverageRateLimitExceededPercentage(ProviderUsageSnapshot.SevenDay, s_secondaryUsageWindowDuration, s_secondaryUsageAverageUnitDuration);
+
+    public string PrimaryUsageAverageRateWarningText => FormatUsageAverageRateWarning(PrimaryUsageAverageRateLimitExceededPercentage);
+
+    public string SecondaryUsageAverageRateWarningText => FormatUsageAverageRateWarning(SecondaryUsageAverageRateLimitExceededPercentage);
 
     public string LastUsageRefreshText => GetFormattedString("ProviderAccountViewModel_LastUsageRefreshFormat", ProviderAccount.LastUsageRefreshTime is null ? GetLocalizedString("ProviderAccountViewModel_NotRefreshed") : ProviderAccount.LastUsageRefreshTime.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.CurrentCulture));
 
@@ -120,6 +128,10 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
         OnPropertyChanged(nameof(IsSecondaryUsageUnderWarningThreshold));
         OnPropertyChanged(nameof(IsPrimaryUsageOverAverageRateLimit));
         OnPropertyChanged(nameof(IsSecondaryUsageOverAverageRateLimit));
+        OnPropertyChanged(nameof(PrimaryUsageAverageRateLimitExceededPercentage));
+        OnPropertyChanged(nameof(SecondaryUsageAverageRateLimitExceededPercentage));
+        OnPropertyChanged(nameof(PrimaryUsageAverageRateWarningText));
+        OnPropertyChanged(nameof(SecondaryUsageAverageRateWarningText));
         OnPropertyChanged(nameof(LastUsageRefreshText));
         OnPropertyChanged(nameof(SearchText));
         OnPropertyChanged(nameof(CanRename));
@@ -165,6 +177,8 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
         return GetFormattedString("ProviderAccountViewModel_ResetAfterFormat", resetAfterTimeSpan);
     }
 
+    private static string FormatUsageAverageRateWarning(int exceededPercentage) => GetFormattedString("UsageAverageRateWarningFormat", Math.Max(0, exceededPercentage));
+
     private static DateTimeOffset? GetUsageResetTime(ProviderUsageWindow providerUsageWindow, DateTimeOffset? usageRefreshTime)
     {
         if (providerUsageWindow.ResetAt is not null) return providerUsageWindow.ResetAt;
@@ -178,28 +192,29 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
 
     private static bool IsUsageUnderWarningThreshold(ProviderUsageWindow providerUsageWindow, int usageWarningThresholdPercentage) => providerUsageWindow.RemainingPercentage >= 0 && providerUsageWindow.RemainingPercentage <= NormalizeUsageWarningThresholdPercentage(usageWarningThresholdPercentage);
 
-    private static bool IsUsageOverAverageRateLimit(ProviderUsageWindow providerUsageWindow, TimeSpan usageWindowDuration, TimeSpan averageUnitDuration) => IsUsageOverAverageRateLimit(providerUsageWindow.UsedPercentage, providerUsageWindow.ResetAfterSeconds, usageWindowDuration, averageUnitDuration);
+    private static int CalculateUsageAverageRateLimitExceededPercentage(ProviderUsageWindow providerUsageWindow, TimeSpan usageWindowDuration, TimeSpan averageUnitDuration) => CalculateUsageAverageRateLimitExceededPercentage(providerUsageWindow.UsedPercentage, providerUsageWindow.ResetAfterSeconds, usageWindowDuration, averageUnitDuration);
 
-    private static bool IsUsageOverAverageRateLimit(int usedPercentage, long resetAfterSeconds, TimeSpan usageWindowDuration, TimeSpan averageUnitDuration)
+    private static int CalculateUsageAverageRateLimitExceededPercentage(int usedPercentage, long resetAfterSeconds, TimeSpan usageWindowDuration, TimeSpan averageUnitDuration)
     {
-        if (usedPercentage < 0 || usedPercentage > 100 || resetAfterSeconds < 0) return false;
-        if (usageWindowDuration <= TimeSpan.Zero || averageUnitDuration <= TimeSpan.Zero) return false;
+        if (usedPercentage < 0 || usedPercentage > 100 || resetAfterSeconds < 0) return 0;
+        if (usageWindowDuration <= TimeSpan.Zero || averageUnitDuration <= TimeSpan.Zero) return 0;
 
         var resetAfterDuration = TimeSpan.FromSeconds(resetAfterSeconds);
-        if (resetAfterDuration >= usageWindowDuration) return false;
+        if (resetAfterDuration >= usageWindowDuration) return 0;
 
         var elapsedDuration = usageWindowDuration - resetAfterDuration;
-        if (elapsedDuration <= TimeSpan.Zero) return false;
+        if (elapsedDuration <= TimeSpan.Zero) return 0;
 
         var usageWindowAverageUnitCount = usageWindowDuration.TotalSeconds / averageUnitDuration.TotalSeconds;
-        if (usageWindowAverageUnitCount <= 0) return false;
+        if (usageWindowAverageUnitCount <= 0) return 0;
 
         var elapsedAverageUnitCount = elapsedDuration.TotalSeconds / averageUnitDuration.TotalSeconds;
         elapsedAverageUnitCount = Math.Min(Math.Max(elapsedAverageUnitCount, 1.0), usageWindowAverageUnitCount);
 
         var averageUsageLimitPercentage = 100.0 / usageWindowAverageUnitCount;
         var currentAverageUsagePercentage = usedPercentage / elapsedAverageUnitCount;
-        return currentAverageUsagePercentage > averageUsageLimitPercentage;
+        var exceededPercentage = currentAverageUsagePercentage - averageUsageLimitPercentage;
+        return exceededPercentage <= 0 ? 0 : Convert.ToInt32(Math.Ceiling(exceededPercentage));
     }
 
     private static int NormalizeUsageWarningThresholdPercentage(int usageWarningThresholdPercentage) => Math.Clamp(usageWarningThresholdPercentage, 0, 100);

@@ -139,10 +139,10 @@
                                 Value="{x:Bind ActiveAccountPrimaryUsageRemainingPercentage, Mode=OneWay}" />
                         </Grid>
                         <TextBlock
-                            x:Uid="PrimaryUsageAverageRateWarningTextBlock"
                             FontSize="12"
                             FontWeight="SemiBold"
                             Foreground="{ThemeResource UsageAverageRateWarningTextBrush}"
+                            Text="{x:Bind ActiveAccountPrimaryUsageAverageRateWarningText, Mode=OneWay}"
                             TextTrimming="WordEllipsis"
                             Visibility="{x:Bind IsActiveAccountPrimaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                     </StackPanel>
@@ -185,10 +185,10 @@
                                 Value="{x:Bind ActiveAccountSecondaryUsageRemainingPercentage, Mode=OneWay}" />
                         </Grid>
                         <TextBlock
-                            x:Uid="SecondaryUsageAverageRateWarningTextBlock"
                             FontSize="12"
                             FontWeight="SemiBold"
                             Foreground="{ThemeResource UsageAverageRateWarningTextBrush}"
+                            Text="{x:Bind ActiveAccountSecondaryUsageAverageRateWarningText, Mode=OneWay}"
                             TextTrimming="WordEllipsis"
                             Visibility="{x:Bind IsActiveAccountSecondaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                     </StackPanel>

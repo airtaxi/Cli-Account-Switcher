@@ -579,6 +579,9 @@
   <data name="SecondaryUsageAverageRateWarningTextBlock.Text" xml:space="preserve">
     <value>超过平均速度</value>
   </data>
+  <data name="UsageAverageRateWarningFormat" xml:space="preserve">
+    <value>超过平均速度 {0}%</value>
+  </data>
   <data name="DashboardPage_NoActiveAccountTitleTextBlock.Text" xml:space="preserve">
     <value>没有活跃账号。</value>
   </data>

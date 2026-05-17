@@ -92,6 +92,10 @@ public sealed partial class ActiveAccountQuotaControl : UserControl
 
     public bool IsActiveAccountSecondaryUsageOverAverageRateLimit => ViewModel?.IsActiveAccountSecondaryUsageOverAverageRateLimit == true;
 
+    public string ActiveAccountPrimaryUsageAverageRateWarningText => FormatUsageAverageRateWarning(ViewModel?.ActiveAccountPrimaryUsageAverageRateLimitExceededPercentage ?? 0);
+
+    public string ActiveAccountSecondaryUsageAverageRateWarningText => FormatUsageAverageRateWarning(ViewModel?.ActiveAccountSecondaryUsageAverageRateLimitExceededPercentage ?? 0);
+
     private static void OnViewModelPropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArguments)
     {
         var activeAccountQuotaControl = (ActiveAccountQuotaControl)dependencyObject;
@@ -220,6 +224,8 @@ public sealed partial class ActiveAccountQuotaControl : UserControl
         if (wholeDayCount > 1) return GetFormattedString("ProviderAccountViewModel_ResetAfterWithMultipleDaysFormat", wholeDayCount, resetAfterTimeSpan);
         return GetFormattedString("ProviderAccountViewModel_ResetAfterFormat", resetAfterTimeSpan);
     }
+
+    private static string FormatUsageAverageRateWarning(int exceededPercentage) => GetFormattedString("UsageAverageRateWarningFormat", Math.Max(0, exceededPercentage));
 
     private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 
