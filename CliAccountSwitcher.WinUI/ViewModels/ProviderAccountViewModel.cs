@@ -250,7 +250,7 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
         if (averageUsageLimitPercentage <= 0) return false;
 
         var currentAverageUsagePercentage = usedPercentage / elapsedAverageUnitCount;
-        differencePercentage = ((currentAverageUsagePercentage - averageUsageLimitPercentage) / averageUsageLimitPercentage) * 100.0;
+        differencePercentage = currentAverageUsagePercentage - averageUsageLimitPercentage;
         return true;
     }
 
