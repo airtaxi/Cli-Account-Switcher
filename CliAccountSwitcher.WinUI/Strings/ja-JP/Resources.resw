@@ -582,6 +582,12 @@
   <data name="UsageAverageRateWarningFormat" xml:space="preserve">
     <value>平均ペースを{0}%超過</value>
   </data>
+  <data name="UsageAverageRateHeadroomFormat" xml:space="preserve">
+    <value>平均ペース比で{0}%余裕</value>
+  </data>
+  <data name="UsageAverageRateAtLimitText" xml:space="preserve">
+    <value>平均ペースと同じ</value>
+  </data>
   <data name="DashboardPage_NoActiveAccountTitleTextBlock.Text" xml:space="preserve">
     <value>アクティブアカウントがありません。</value>
   </data>

@@ -582,6 +582,12 @@
   <data name="UsageAverageRateWarningFormat" xml:space="preserve">
     <value>평균 속도 {0}% 초과</value>
   </data>
+  <data name="UsageAverageRateHeadroomFormat" xml:space="preserve">
+    <value>평균 속도 대비 {0}% 여유</value>
+  </data>
+  <data name="UsageAverageRateAtLimitText" xml:space="preserve">
+    <value>평균 속도와 동일</value>
+  </data>
   <data name="DashboardPage_NoActiveAccountTitleTextBlock.Text" xml:space="preserve">
     <value>활성 계정이 없습니다.</value>
   </data>

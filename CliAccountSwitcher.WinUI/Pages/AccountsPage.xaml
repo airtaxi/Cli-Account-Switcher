@@ -377,9 +377,23 @@
                                                 FontSize="12"
                                                 FontWeight="SemiBold"
                                                 Foreground="{ThemeResource UsageAverageRateWarningTextBrush}"
-                                                Text="{x:Bind PrimaryUsageAverageRateWarningText, Mode=OneWay}"
+                                                Text="{x:Bind PrimaryUsageAverageRateStatusText, Mode=OneWay}"
                                                 TextTrimming="CharacterEllipsis"
                                                 Visibility="{x:Bind IsPrimaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                            <TextBlock
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Text="{x:Bind PrimaryUsageAverageRateStatusText, Mode=OneWay}"
+                                                TextTrimming="CharacterEllipsis"
+                                                Visibility="{x:Bind IsPrimaryUsageAtAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                            <TextBlock
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                Foreground="{ThemeResource UsageAverageRateNormalTextBrush}"
+                                                Text="{x:Bind PrimaryUsageAverageRateStatusText, Mode=OneWay}"
+                                                TextTrimming="CharacterEllipsis"
+                                                Visibility="{x:Bind HasPrimaryUsageAverageRateLimitHeadroom, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                                         </StackPanel>
                                         <Border
                                             Grid.Row="1"
@@ -432,9 +446,23 @@
                                                 FontSize="12"
                                                 FontWeight="SemiBold"
                                                 Foreground="{ThemeResource UsageAverageRateWarningTextBrush}"
-                                                Text="{x:Bind SecondaryUsageAverageRateWarningText, Mode=OneWay}"
+                                                Text="{x:Bind SecondaryUsageAverageRateStatusText, Mode=OneWay}"
                                                 TextTrimming="CharacterEllipsis"
                                                 Visibility="{x:Bind IsSecondaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                            <TextBlock
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Text="{x:Bind SecondaryUsageAverageRateStatusText, Mode=OneWay}"
+                                                TextTrimming="CharacterEllipsis"
+                                                Visibility="{x:Bind IsSecondaryUsageAtAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                            <TextBlock
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                Foreground="{ThemeResource UsageAverageRateNormalTextBrush}"
+                                                Text="{x:Bind SecondaryUsageAverageRateStatusText, Mode=OneWay}"
+                                                TextTrimming="CharacterEllipsis"
+                                                Visibility="{x:Bind HasSecondaryUsageAverageRateLimitHeadroom, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                                         </StackPanel>
                                         <TextBlock
                                             Grid.Row="2"

@@ -142,9 +142,23 @@
                             FontSize="12"
                             FontWeight="SemiBold"
                             Foreground="{ThemeResource UsageAverageRateWarningTextBrush}"
-                            Text="{x:Bind ActiveAccountPrimaryUsageAverageRateWarningText, Mode=OneWay}"
+                            Text="{x:Bind ActiveAccountPrimaryUsageAverageRateStatusText, Mode=OneWay}"
                             TextTrimming="WordEllipsis"
                             Visibility="{x:Bind IsActiveAccountPrimaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <TextBlock
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="{x:Bind ActiveAccountPrimaryUsageAverageRateStatusText, Mode=OneWay}"
+                            TextTrimming="WordEllipsis"
+                            Visibility="{x:Bind IsActiveAccountPrimaryUsageAtAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <TextBlock
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Foreground="{ThemeResource UsageAverageRateNormalTextBrush}"
+                            Text="{x:Bind ActiveAccountPrimaryUsageAverageRateStatusText, Mode=OneWay}"
+                            TextTrimming="WordEllipsis"
+                            Visibility="{x:Bind HasActiveAccountPrimaryUsageAverageRateLimitHeadroom, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Spacing="4">
@@ -188,9 +202,23 @@
                             FontSize="12"
                             FontWeight="SemiBold"
                             Foreground="{ThemeResource UsageAverageRateWarningTextBrush}"
-                            Text="{x:Bind ActiveAccountSecondaryUsageAverageRateWarningText, Mode=OneWay}"
+                            Text="{x:Bind ActiveAccountSecondaryUsageAverageRateStatusText, Mode=OneWay}"
                             TextTrimming="WordEllipsis"
                             Visibility="{x:Bind IsActiveAccountSecondaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <TextBlock
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="{x:Bind ActiveAccountSecondaryUsageAverageRateStatusText, Mode=OneWay}"
+                            TextTrimming="WordEllipsis"
+                            Visibility="{x:Bind IsActiveAccountSecondaryUsageAtAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <TextBlock
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Foreground="{ThemeResource UsageAverageRateNormalTextBrush}"
+                            Text="{x:Bind ActiveAccountSecondaryUsageAverageRateStatusText, Mode=OneWay}"
+                            TextTrimming="WordEllipsis"
+                            Visibility="{x:Bind HasActiveAccountSecondaryUsageAverageRateLimitHeadroom, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                     </StackPanel>
                 </Grid>
             </StackPanel>

@@ -582,6 +582,12 @@
   <data name="UsageAverageRateWarningFormat" xml:space="preserve">
     <value>超過平均速度 {0}%</value>
   </data>
+  <data name="UsageAverageRateHeadroomFormat" xml:space="preserve">
+    <value>比平均速度有 {0}% 餘量</value>
+  </data>
+  <data name="UsageAverageRateAtLimitText" xml:space="preserve">
+    <value>與平均速度相同</value>
+  </data>
   <data name="DashboardPage_NoActiveAccountTitleTextBlock.Text" xml:space="preserve">
     <value>沒有使用中帳號。</value>
   </data>

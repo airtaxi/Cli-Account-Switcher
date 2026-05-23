@@ -582,6 +582,12 @@
   <data name="UsageAverageRateWarningFormat" xml:space="preserve">
     <value>Average pace {0}% over</value>
   </data>
+  <data name="UsageAverageRateHeadroomFormat" xml:space="preserve">
+    <value>Average pace {0}% spare</value>
+  </data>
+  <data name="UsageAverageRateAtLimitText" xml:space="preserve">
+    <value>At average pace</value>
+  </data>
   <data name="DashboardPage_NoActiveAccountTitleTextBlock.Text" xml:space="preserve">
     <value>No active account.</value>
   </data>

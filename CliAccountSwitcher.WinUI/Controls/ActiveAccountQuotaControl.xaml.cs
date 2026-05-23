@@ -92,9 +92,17 @@ public sealed partial class ActiveAccountQuotaControl : UserControl
 
     public bool IsActiveAccountSecondaryUsageOverAverageRateLimit => ViewModel?.IsActiveAccountSecondaryUsageOverAverageRateLimit == true;
 
-    public string ActiveAccountPrimaryUsageAverageRateWarningText => FormatUsageAverageRateWarning(ViewModel?.ActiveAccountPrimaryUsageAverageRateLimitExceededPercentage ?? 0);
+    public bool IsActiveAccountPrimaryUsageAtAverageRateLimit => !IsActiveAccountPrimaryUsageOverAverageRateLimit && (ViewModel?.ActiveAccountPrimaryUsageAverageRateLimitHeadroomPercentage ?? 0) == 0;
 
-    public string ActiveAccountSecondaryUsageAverageRateWarningText => FormatUsageAverageRateWarning(ViewModel?.ActiveAccountSecondaryUsageAverageRateLimitExceededPercentage ?? 0);
+    public bool IsActiveAccountSecondaryUsageAtAverageRateLimit => !IsActiveAccountSecondaryUsageOverAverageRateLimit && (ViewModel?.ActiveAccountSecondaryUsageAverageRateLimitHeadroomPercentage ?? 0) == 0;
+
+    public bool HasActiveAccountPrimaryUsageAverageRateLimitHeadroom => (ViewModel?.ActiveAccountPrimaryUsageAverageRateLimitHeadroomPercentage ?? 0) > 0;
+
+    public bool HasActiveAccountSecondaryUsageAverageRateLimitHeadroom => (ViewModel?.ActiveAccountSecondaryUsageAverageRateLimitHeadroomPercentage ?? 0) > 0;
+
+    public string ActiveAccountPrimaryUsageAverageRateStatusText => FormatUsageAverageRateStatus(ViewModel?.ActiveAccountPrimaryUsageAverageRateLimitExceededPercentage ?? 0, ViewModel?.ActiveAccountPrimaryUsageAverageRateLimitHeadroomPercentage ?? 0);
+
+    public string ActiveAccountSecondaryUsageAverageRateStatusText => FormatUsageAverageRateStatus(ViewModel?.ActiveAccountSecondaryUsageAverageRateLimitExceededPercentage ?? 0, ViewModel?.ActiveAccountSecondaryUsageAverageRateLimitHeadroomPercentage ?? 0);
 
     private static void OnViewModelPropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArguments)
     {
@@ -225,7 +233,7 @@ public sealed partial class ActiveAccountQuotaControl : UserControl
         return GetFormattedString("ProviderAccountViewModel_ResetAfterFormat", resetAfterTimeSpan);
     }
 
-    private static string FormatUsageAverageRateWarning(int exceededPercentage) => GetFormattedString("UsageAverageRateWarningFormat", Math.Max(0, exceededPercentage));
+    private static string FormatUsageAverageRateStatus(int exceededPercentage, int headroomPercentage) => exceededPercentage > 0 ? GetFormattedString("UsageAverageRateWarningFormat", exceededPercentage) : headroomPercentage > 0 ? GetFormattedString("UsageAverageRateHeadroomFormat", headroomPercentage) : GetLocalizedString("UsageAverageRateAtLimitText");
 
     private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 

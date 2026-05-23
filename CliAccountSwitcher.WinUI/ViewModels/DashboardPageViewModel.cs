@@ -110,6 +110,12 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
     public partial int ActiveAccountSecondaryUsageAverageRateLimitExceededPercentage { get; set; }
 
     [ObservableProperty]
+    public partial int ActiveAccountPrimaryUsageAverageRateLimitHeadroomPercentage { get; set; }
+
+    [ObservableProperty]
+    public partial int ActiveAccountSecondaryUsageAverageRateLimitHeadroomPercentage { get; set; }
+
+    [ObservableProperty]
     public partial bool HasLowUsageAccounts { get; set; }
 
     [ObservableProperty]
@@ -212,6 +218,8 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
         IsActiveAccountSecondaryUsageOverAverageRateLimit = activeAccountViewModel?.IsSecondaryUsageOverAverageRateLimit == true;
         ActiveAccountPrimaryUsageAverageRateLimitExceededPercentage = activeAccountViewModel?.PrimaryUsageAverageRateLimitExceededPercentage ?? 0;
         ActiveAccountSecondaryUsageAverageRateLimitExceededPercentage = activeAccountViewModel?.SecondaryUsageAverageRateLimitExceededPercentage ?? 0;
+        ActiveAccountPrimaryUsageAverageRateLimitHeadroomPercentage = activeAccountViewModel?.PrimaryUsageAverageRateLimitHeadroomPercentage ?? 0;
+        ActiveAccountSecondaryUsageAverageRateLimitHeadroomPercentage = activeAccountViewModel?.SecondaryUsageAverageRateLimitHeadroomPercentage ?? 0;
     }
 
     private void SetLowUsageAccounts(IReadOnlyList<ProviderAccountViewModel> accountViewModels)
