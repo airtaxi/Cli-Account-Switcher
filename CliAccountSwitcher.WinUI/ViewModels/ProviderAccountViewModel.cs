@@ -240,17 +240,8 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
         var elapsedDuration = usageWindowDuration - TimeSpan.FromSeconds(resetAfterSeconds);
         if (elapsedDuration < TimeSpan.Zero) elapsedDuration = TimeSpan.Zero;
 
-        var usageWindowAverageUnitCount = usageWindowDuration.TotalSeconds / averageUnitDuration.TotalSeconds;
-        if (usageWindowAverageUnitCount <= 0) return false;
-
-        var elapsedAverageUnitCount = elapsedDuration.TotalSeconds / averageUnitDuration.TotalSeconds;
-        elapsedAverageUnitCount = Math.Min(Math.Max(elapsedAverageUnitCount, 1.0), usageWindowAverageUnitCount);
-
-        var averageUsageLimitPercentage = 100.0 / usageWindowAverageUnitCount;
-        if (averageUsageLimitPercentage <= 0) return false;
-
-        var currentAverageUsagePercentage = usedPercentage / elapsedAverageUnitCount;
-        differencePercentage = currentAverageUsagePercentage - averageUsageLimitPercentage;
+        var averagePaceUsedPercentage = Math.Clamp((elapsedDuration.TotalSeconds / usageWindowDuration.TotalSeconds) * 100.0, 0.0, 100.0);
+        differencePercentage = usedPercentage - averagePaceUsedPercentage;
         return true;
     }
 
