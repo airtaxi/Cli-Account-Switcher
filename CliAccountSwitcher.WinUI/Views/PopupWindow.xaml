@@ -9,7 +9,7 @@
     xmlns:local="using:CliAccountSwitcher.WinUI.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:winuiex="using:WinUIEx"
-    Width="480"
+    Width="500"
     MinHeight="0"
     Activated="OnPopupWindowActivated"
     Closed="OnPopupWindowClosed"
