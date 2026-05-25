@@ -2,6 +2,8 @@ namespace CliAccountSwitcher.Api.Providers.Codex.Models;
 
 public sealed class CodexIdentityProfile
 {
+    public string UserIdentifier { get; set; } = "";
+
     public string EmailAddress { get; set; } = "";
 
     public string AccountIdentifier { get; set; } = "";

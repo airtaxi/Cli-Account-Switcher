@@ -169,7 +169,7 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
         {
             ProviderKind = CliProviderKind.Codex,
             AccountIdentifier = codexAccount.AccountIdentifier,
-            ProviderAccountIdentifier = codexAccount.AccountIdentifier,
+            ProviderAccountIdentifier = codexAccount.CodexAuthenticationDocument.GetEffectiveAccountIdentifier(),
             AccountDetailText = BuildAccessTokenPreview(codexAccount.CodexAuthenticationDocument.GetEffectiveAccessToken()),
             CustomAlias = codexAccount.CustomAlias,
             DisplayName = codexAccount.DisplayName,
@@ -220,7 +220,7 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
             if (!File.Exists(Constants.CurrentAuthenticationFilePath)) return "";
             var authenticationDocumentText = await File.ReadAllTextAsync(Constants.CurrentAuthenticationFilePath, cancellationToken);
             var codexAuthenticationDocument = CodexAuthenticationDocumentSerializer.Parse(authenticationDocumentText);
-            return codexAuthenticationDocument.GetEffectiveAccountIdentifier();
+            return codexAuthenticationDocument.GetEffectiveProfileIdentifier();
         }
         catch { return ""; }
     }
@@ -483,7 +483,7 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
 
     private static string TryGetAccountIdentifier(CodexAuthenticationDocument codexAuthenticationDocument)
     {
-        try { return codexAuthenticationDocument.GetEffectiveAccountIdentifier(); }
+        try { return codexAuthenticationDocument.GetEffectiveProfileIdentifier(); }
         catch { return ""; }
     }
 

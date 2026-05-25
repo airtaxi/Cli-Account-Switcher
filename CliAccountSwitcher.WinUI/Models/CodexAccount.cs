@@ -22,7 +22,7 @@ public sealed class CodexAccount
     public DateTimeOffset? LastUsageRefreshTime { get; set; }
 
     [JsonIgnore]
-    public string AccountIdentifier => CodexAuthenticationDocument.GetEffectiveAccountIdentifier();
+    public string AccountIdentifier => CodexAuthenticationDocument.GetEffectiveProfileIdentifier();
 
     [JsonIgnore]
     public string EmailAddress => ResolveEmailAddress();
