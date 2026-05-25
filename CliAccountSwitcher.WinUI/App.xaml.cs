@@ -96,11 +96,7 @@ public partial class App : Application
             return;
         }
 
-        s_mainWindow.DispatcherQueue.TryEnqueue(() =>
-        {
-            s_mainWindow.Activate();
-            s_mainWindow.BringToFront();
-        });
+        s_mainWindow.DispatcherQueue.TryEnqueue(ActivateMainWindow);
     }
 
     public static void HandleApplicationInstanceActivated(AppActivationArguments applicationActivationArguments)
@@ -115,6 +111,12 @@ public partial class App : Application
         }
 
         s_currentApplication.ProcessRedirectedActivationArguments(applicationActivationArguments);
+    }
+
+    private static void ActivateMainWindow()
+    {
+        s_mainWindow.Activate();
+        s_mainWindow.BringToFront();
     }
 
     private void RegisterAppNotificationManager()

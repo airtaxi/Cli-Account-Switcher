@@ -75,9 +75,7 @@ internal sealed class ClaudeCodeOAuthClient(HttpClient httpClient)
     }
 
     private static IReadOnlyList<string> ParseScopes(string? scopeText)
-        => string.IsNullOrWhiteSpace(scopeText)
-            ? []
-            : scopeText.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        => string.IsNullOrWhiteSpace(scopeText) ? [] : scopeText.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
     private static bool TryGetProperty(JsonElement jsonElement, string propertyName, out JsonElement propertyElement)
     {

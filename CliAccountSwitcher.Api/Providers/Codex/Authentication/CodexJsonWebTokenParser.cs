@@ -32,12 +32,7 @@ public static class CodexJsonWebTokenParser
             if (string.IsNullOrWhiteSpace(identityProfile.AccountIdentifier)) identityProfile.AccountIdentifier = CodexJsonElementReader.ReadStringOrNull(rootElement, "chatgpt_account_id") ?? "";
             if (string.IsNullOrWhiteSpace(identityProfile.PlanType)) identityProfile.PlanType = CodexJsonElementReader.ReadStringOrNull(rootElement, "chatgpt_plan_type") ?? "";
 
-            return string.IsNullOrWhiteSpace(identityProfile.UserIdentifier)
-                   && string.IsNullOrWhiteSpace(identityProfile.EmailAddress)
-                   && string.IsNullOrWhiteSpace(identityProfile.AccountIdentifier)
-                   && string.IsNullOrWhiteSpace(identityProfile.PlanType)
-                ? null
-                : identityProfile;
+            return string.IsNullOrWhiteSpace(identityProfile.UserIdentifier) && string.IsNullOrWhiteSpace(identityProfile.EmailAddress) && string.IsNullOrWhiteSpace(identityProfile.AccountIdentifier) && string.IsNullOrWhiteSpace(identityProfile.PlanType) ? null : identityProfile;
         }
         catch
         {

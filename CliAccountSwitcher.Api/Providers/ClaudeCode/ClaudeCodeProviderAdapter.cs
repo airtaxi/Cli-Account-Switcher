@@ -157,10 +157,7 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
         if (!File.Exists(claudeCodePaths.CredentialsFilePath)) throw new ProviderActionRequiredException("Claude Code login is required.");
         if (!File.Exists(claudeCodePaths.GlobalConfigFilePath)) throw new ProviderActionRequiredException("Claude Code login is required.");
 
-        return CreateClaudeCodeAccountState(
-            await File.ReadAllTextAsync(claudeCodePaths.CredentialsFilePath, cancellationToken),
-            await File.ReadAllTextAsync(claudeCodePaths.GlobalConfigFilePath, cancellationToken),
-            true);
+        return CreateClaudeCodeAccountState(await File.ReadAllTextAsync(claudeCodePaths.CredentialsFilePath, cancellationToken), await File.ReadAllTextAsync(claudeCodePaths.GlobalConfigFilePath, cancellationToken), true);
     }
 
     protected override ClaudeCodeAccountState CreateLiveAccountState(ProviderAccountDocumentSet providerAccountDocumentSet)
@@ -436,12 +433,10 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
         };
 
     private static bool IsSameClaudeCodeAccount(StoredProviderAccount storedProviderAccount, ClaudeCodeGlobalConfigDocument globalConfigDocument)
-        => string.Equals(storedProviderAccount.EmailAddress, globalConfigDocument.EmailAddress, StringComparison.OrdinalIgnoreCase)
-           && string.Equals(storedProviderAccount.OrganizationIdentifier, globalConfigDocument.OrganizationIdentifier, StringComparison.OrdinalIgnoreCase);
+        => string.Equals(storedProviderAccount.EmailAddress, globalConfigDocument.EmailAddress, StringComparison.OrdinalIgnoreCase) && string.Equals(storedProviderAccount.OrganizationIdentifier, globalConfigDocument.OrganizationIdentifier, StringComparison.OrdinalIgnoreCase);
 
     private static bool IsSameClaudeCodeAccount(StoredProviderAccount storedProviderAccount, ProviderIdentityProfile identityProfile)
-        => string.Equals(storedProviderAccount.EmailAddress, identityProfile.EmailAddress, StringComparison.OrdinalIgnoreCase)
-           && string.Equals(storedProviderAccount.OrganizationIdentifier, identityProfile.OrganizationIdentifier, StringComparison.OrdinalIgnoreCase);
+        => string.Equals(storedProviderAccount.EmailAddress, identityProfile.EmailAddress, StringComparison.OrdinalIgnoreCase) && string.Equals(storedProviderAccount.OrganizationIdentifier, identityProfile.OrganizationIdentifier, StringComparison.OrdinalIgnoreCase);
 
     private static IReadOnlyList<string> CreateResponseArguments(ProviderResponseRequest providerResponseRequest, bool useStreamingOutput)
     {

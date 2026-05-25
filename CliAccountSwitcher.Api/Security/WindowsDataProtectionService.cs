@@ -23,9 +23,7 @@ public sealed class WindowsDataProtectionService
 
         try
         {
-            var succeeded = shouldProtect
-                ? CryptProtectData(ref inputBlob, null, ref entropyBlob, IntPtr.Zero, IntPtr.Zero, 0, out outputBlob)
-                : CryptUnprotectData(ref inputBlob, null, ref entropyBlob, IntPtr.Zero, IntPtr.Zero, 0, out outputBlob);
+            var succeeded = shouldProtect ? CryptProtectData(ref inputBlob, null, ref entropyBlob, IntPtr.Zero, IntPtr.Zero, 0, out outputBlob) : CryptUnprotectData(ref inputBlob, null, ref entropyBlob, IntPtr.Zero, IntPtr.Zero, 0, out outputBlob);
 
             if (!succeeded) throw new CryptographicException("DPAPI operation failed.", new Win32Exception(Marshal.GetLastWin32Error()));
             return CopyDataBlob(outputBlob);

@@ -41,11 +41,13 @@ public sealed class CodexModelsClient(HttpClient httpClient, CodexRequestMessage
                         var identifier = property.Value.GetString() ?? "";
                         if (!LooksLikeModelIdentifier(identifier) || !discoveredIdentifiers.Add(identifier)) continue;
 
-                        modelDefinitions.Add(new CodexModelDefinition
+                        var modelDefinition = new CodexModelDefinition
                         {
                             Identifier = identifier,
                             SourcePath = requestPath
-                        });
+                        };
+
+                        modelDefinitions.Add(modelDefinition);
                     }
 
                     CollectModelDefinitions(property.Value, requestPath, modelDefinitions, discoveredIdentifiers);

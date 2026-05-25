@@ -16,9 +16,7 @@ public sealed class CodexOAuthClient(HttpClient httpClient, CodexApiClientOption
     {
         const int maximumDynamicRedirectPortAttemptCount = 16;
 
-        var redirectPorts = codexApiClientOptions.UseDynamicOAuthRedirectPort
-            ? CodexOAuthLoopbackPortAllocator.FindAvailablePorts(codexApiClientOptions.MinimumOAuthRedirectPort, codexApiClientOptions.MaximumOAuthRedirectPort, maximumDynamicRedirectPortAttemptCount)
-            : [CodexOAuthLoopbackPortAllocator.ValidateFixedPort(codexApiClientOptions.OAuthRedirectPort)];
+        var redirectPorts = codexApiClientOptions.UseDynamicOAuthRedirectPort ? CodexOAuthLoopbackPortAllocator.FindAvailablePorts(codexApiClientOptions.MinimumOAuthRedirectPort, codexApiClientOptions.MaximumOAuthRedirectPort, maximumDynamicRedirectPortAttemptCount) : [CodexOAuthLoopbackPortAllocator.ValidateFixedPort(codexApiClientOptions.OAuthRedirectPort)];
         var lastException = (CodexApiException?)null;
 
         foreach (var redirectPort in redirectPorts)
@@ -48,14 +46,15 @@ public sealed class CodexOAuthClient(HttpClient httpClient, CodexApiClientOption
         ArgumentNullException.ThrowIfNull(codexOAuthCallbackPayload);
 
         codexOAuthSession.ValidateCallback(codexOAuthCallbackPayload);
-        var postContent = new FormUrlEncodedContent(new Dictionary<string, string>
+        var tokenExchangeValues = new Dictionary<string, string>
         {
             ["grant_type"] = "authorization_code",
             ["client_id"] = codexApiClientOptions.OAuthClientId,
             ["code"] = codexOAuthCallbackPayload.AuthorizationCode,
             ["redirect_uri"] = codexOAuthSession.RedirectAddress.ToString(),
             ["code_verifier"] = codexOAuthSession.CodeVerifier
-        });
+        };
+        var postContent = new FormUrlEncodedContent(tokenExchangeValues);
 
         return await SendTokenExchangeRequestAsync(postContent, cancellationToken);
     }
@@ -64,12 +63,13 @@ public sealed class CodexOAuthClient(HttpClient httpClient, CodexApiClientOption
     {
         if (string.IsNullOrWhiteSpace(refreshToken)) throw new CodexApiException("The refresh token is required.");
 
-        var postContent = new FormUrlEncodedContent(new Dictionary<string, string>
+        var tokenExchangeValues = new Dictionary<string, string>
         {
             ["grant_type"] = "refresh_token",
             ["client_id"] = codexApiClientOptions.OAuthClientId,
             ["refresh_token"] = refreshToken
-        });
+        };
+        var postContent = new FormUrlEncodedContent(tokenExchangeValues);
 
         return await SendTokenExchangeRequestAsync(postContent, cancellationToken);
     }

@@ -72,15 +72,12 @@ public sealed class ClaudeCodeCredentialDocument
     }
 
     public bool HasClaudeAiUsageScopes()
-        => Scopes.Contains(ClaudeCodeOAuthScopes.Profile, StringComparer.Ordinal)
-           && Scopes.Contains(ClaudeCodeOAuthScopes.Inference, StringComparer.Ordinal);
+        => Scopes.Contains(ClaudeCodeOAuthScopes.Profile, StringComparer.Ordinal) && Scopes.Contains(ClaudeCodeOAuthScopes.Inference, StringComparer.Ordinal);
 
     public static long CalculateExpiresAt(DateTimeOffset issuedAt, int expiresInSeconds, long previousExpiresAt)
     {
         var expirationTime = issuedAt.AddSeconds(expiresInSeconds);
-        return previousExpiresAt is > 0 and < MillisecondUnixTimestampThreshold
-            ? expirationTime.ToUnixTimeSeconds()
-            : expirationTime.ToUnixTimeMilliseconds();
+        return previousExpiresAt is > 0 and < MillisecondUnixTimestampThreshold ? expirationTime.ToUnixTimeSeconds() : expirationTime.ToUnixTimeMilliseconds();
     }
 
     public static DateTimeOffset? ConvertExpiresAtToDateTimeOffset(long expiresAt)
@@ -89,9 +86,7 @@ public sealed class ClaudeCodeCredentialDocument
 
         try
         {
-            return expiresAt >= MillisecondUnixTimestampThreshold
-                ? DateTimeOffset.FromUnixTimeMilliseconds(expiresAt)
-                : DateTimeOffset.FromUnixTimeSeconds(expiresAt);
+            return expiresAt >= MillisecondUnixTimestampThreshold ? DateTimeOffset.FromUnixTimeMilliseconds(expiresAt) : DateTimeOffset.FromUnixTimeSeconds(expiresAt);
         }
         catch { return null; }
     }

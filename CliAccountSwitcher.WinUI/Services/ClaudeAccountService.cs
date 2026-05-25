@@ -278,9 +278,7 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
 
             try
             {
-                return storedProviderAccount.IsActive
-                    ? await RefreshActiveAccountUsageCoreAsync(storedProviderAccount, cancellationToken)
-                    : await _claudeCodeProviderAdapter.GetUsageAsync(storedProviderAccount.StoredAccountIdentifier, cancellationToken);
+                return storedProviderAccount.IsActive ? await RefreshActiveAccountUsageCoreAsync(storedProviderAccount, cancellationToken) : await _claudeCodeProviderAdapter.GetUsageAsync(storedProviderAccount.StoredAccountIdentifier, cancellationToken);
             }
             catch (ProviderAuthenticationExpiredException exception)
             {
@@ -353,26 +351,30 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
     }
 
     private static ProviderUsageSnapshot CreateProviderUsageSnapshot(CliProviderKind providerKind, ProviderUsageSnapshot providerUsageSnapshot)
-        => providerUsageSnapshot is null
-            ? new ProviderUsageSnapshot { ProviderKind = providerKind }
-            : new ProviderUsageSnapshot
-            {
-                ProviderKind = providerKind,
-                PlanType = providerUsageSnapshot.PlanType,
-                EmailAddress = providerUsageSnapshot.EmailAddress,
-                RawResponseText = providerUsageSnapshot.RawResponseText,
-                FiveHour = CreateProviderUsageWindow(providerUsageSnapshot.FiveHour),
-                SevenDay = CreateProviderUsageWindow(providerUsageSnapshot.SevenDay)
-            };
+    {
+        if (providerUsageSnapshot is null) return new ProviderUsageSnapshot { ProviderKind = providerKind };
+
+        return new ProviderUsageSnapshot
+        {
+            ProviderKind = providerKind,
+            PlanType = providerUsageSnapshot.PlanType,
+            EmailAddress = providerUsageSnapshot.EmailAddress,
+            RawResponseText = providerUsageSnapshot.RawResponseText,
+            FiveHour = CreateProviderUsageWindow(providerUsageSnapshot.FiveHour),
+            SevenDay = CreateProviderUsageWindow(providerUsageSnapshot.SevenDay)
+        };
+    }
 
     private static ProviderUsageWindow CreateProviderUsageWindow(ProviderUsageWindow providerUsageWindow)
-        => providerUsageWindow is null
-            ? new ProviderUsageWindow()
-            : new ProviderUsageWindow
-            {
-                UsedPercentage = providerUsageWindow.UsedPercentage,
-                RemainingPercentage = providerUsageWindow.RemainingPercentage,
-                ResetAfterSeconds = providerUsageWindow.ResetAfterSeconds,
-                ResetAt = providerUsageWindow.ResetAt
-            };
+    {
+        if (providerUsageWindow is null) return new ProviderUsageWindow();
+
+        return new ProviderUsageWindow
+        {
+            UsedPercentage = providerUsageWindow.UsedPercentage,
+            RemainingPercentage = providerUsageWindow.RemainingPercentage,
+            ResetAfterSeconds = providerUsageWindow.ResetAfterSeconds,
+            ResetAt = providerUsageWindow.ResetAt
+        };
+    }
 }

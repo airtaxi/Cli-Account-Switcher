@@ -108,11 +108,13 @@ public sealed class ClaudeCodeApplicationRestartService
     {
         try
         {
-            Process.Start(new ProcessStartInfo
+            var processStartInfo = new ProcessStartInfo
             {
                 FileName = executableFilePath,
                 UseShellExecute = true
-            });
+            };
+
+            Process.Start(processStartInfo);
             return true;
         }
         catch { return false; }

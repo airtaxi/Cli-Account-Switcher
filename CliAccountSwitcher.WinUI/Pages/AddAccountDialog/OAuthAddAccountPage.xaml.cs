@@ -137,11 +137,13 @@ public sealed partial class OAuthAddAccountPage : Page
     {
         try
         {
-            _ = Process.Start(new ProcessStartInfo
+            var processStartInfo = new ProcessStartInfo
             {
                 FileName = authorizationAddress.ToString(),
                 UseShellExecute = true
-            });
+            };
+
+            _ = Process.Start(processStartInfo);
             return true;
         }
         catch { return false; }

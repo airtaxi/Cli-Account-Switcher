@@ -493,12 +493,7 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
     }
 
     private static bool HasAuthenticationTokenInfoChanged(CodexAuthenticationDocument firstAuthenticationDocument, CodexAuthenticationDocument secondAuthenticationDocument)
-        => !string.Equals(firstAuthenticationDocument.GetEffectiveIdentityToken(), secondAuthenticationDocument.GetEffectiveIdentityToken(), StringComparison.Ordinal)
-           || !string.Equals(firstAuthenticationDocument.GetEffectiveAccessToken(), secondAuthenticationDocument.GetEffectiveAccessToken(), StringComparison.Ordinal)
-           || !string.Equals(firstAuthenticationDocument.GetEffectiveRefreshToken(), secondAuthenticationDocument.GetEffectiveRefreshToken(), StringComparison.Ordinal)
-           || !string.Equals(firstAuthenticationDocument.GetEffectiveAccountIdentifier(), secondAuthenticationDocument.GetEffectiveAccountIdentifier(), StringComparison.Ordinal)
-           || !string.Equals(firstAuthenticationDocument.LastRefreshText, secondAuthenticationDocument.LastRefreshText, StringComparison.Ordinal)
-           || !string.Equals(firstAuthenticationDocument.ExpirationText, secondAuthenticationDocument.ExpirationText, StringComparison.Ordinal);
+        => !string.Equals(firstAuthenticationDocument.GetEffectiveIdentityToken(), secondAuthenticationDocument.GetEffectiveIdentityToken(), StringComparison.Ordinal) || !string.Equals(firstAuthenticationDocument.GetEffectiveAccessToken(), secondAuthenticationDocument.GetEffectiveAccessToken(), StringComparison.Ordinal) || !string.Equals(firstAuthenticationDocument.GetEffectiveRefreshToken(), secondAuthenticationDocument.GetEffectiveRefreshToken(), StringComparison.Ordinal) || !string.Equals(firstAuthenticationDocument.GetEffectiveAccountIdentifier(), secondAuthenticationDocument.GetEffectiveAccountIdentifier(), StringComparison.Ordinal) || !string.Equals(firstAuthenticationDocument.LastRefreshText, secondAuthenticationDocument.LastRefreshText, StringComparison.Ordinal) || !string.Equals(firstAuthenticationDocument.ExpirationText, secondAuthenticationDocument.ExpirationText, StringComparison.Ordinal);
 
     private static bool IsRefreshTokenFailureException(Exception exception)
     {

@@ -265,15 +265,17 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
         if (_disposed || _hasQueuedWindowContentResize) return;
 
         _hasQueuedWindowContentResize = true;
-        DispatcherQueue.TryEnqueue(() =>
-        {
-            _hasQueuedWindowContentResize = false;
-            if (_disposed) return;
+        DispatcherQueue.TryEnqueue(ResizeQueuedWindowContent);
+    }
 
-            ContentGrid.InvalidateMeasure();
-            RootGrid.InvalidateMeasure();
-            if (ResizeWindowToContent(ContentGrid, true)) MoveAboveTaskbarIcon();
-        });
+    private void ResizeQueuedWindowContent()
+    {
+        _hasQueuedWindowContentResize = false;
+        if (_disposed) return;
+
+        ContentGrid.InvalidateMeasure();
+        RootGrid.InvalidateMeasure();
+        if (ResizeWindowToContent(ContentGrid, true)) MoveAboveTaskbarIcon();
     }
 
     private async Task RunWithLoadingAsync(string loadingMessage, Func<Task> action)

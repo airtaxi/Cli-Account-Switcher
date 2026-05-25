@@ -191,11 +191,13 @@ public sealed partial class CodexApplicationRestartService
     {
         try
         {
-            Process.Start(new ProcessStartInfo
+            var processStartInfo = new ProcessStartInfo
             {
                 FileName = shellActivationAddress,
                 UseShellExecute = true
-            });
+            };
+
+            Process.Start(processStartInfo);
             return true;
         }
         catch { return false; }
@@ -216,11 +218,13 @@ public sealed partial class CodexApplicationRestartService
     {
         try
         {
-            Process.Start(new ProcessStartInfo
+            var processStartInfo = new ProcessStartInfo
             {
                 FileName = executableFilePath,
                 UseShellExecute = true
-            });
+            };
+
+            Process.Start(processStartInfo);
             return true;
         }
         catch { return false; }

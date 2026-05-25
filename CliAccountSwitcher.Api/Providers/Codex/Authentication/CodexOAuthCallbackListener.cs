@@ -52,9 +52,7 @@ public sealed class CodexOAuthCallbackListener : IAsyncDisposable
                 }
 
                 var callbackPayload = callbackPayloadFactory(listenerContext.Request.Url?.ToString() ?? "");
-                var htmlText = callbackPayload.HasError
-                    ? "<html><body><h1>Authorization Failed</h1><p>You can close this window now.</p></body></html>"
-                    : "<html><body><h1>Authorization Successful</h1><p>You can close this window now.</p></body></html>";
+                var htmlText = callbackPayload.HasError ? "<html><body><h1>Authorization Failed</h1><p>You can close this window now.</p></body></html>" : "<html><body><h1>Authorization Successful</h1><p>You can close this window now.</p></body></html>";
                 await WriteResponseAsync(listenerContext.Response, callbackPayload.HasError ? 400 : 200, htmlText, timeoutCancellationTokenSource.Token);
                 return callbackPayload;
             }

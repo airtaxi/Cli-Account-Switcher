@@ -72,19 +72,7 @@ public sealed class CodexRequestMessageFactory(CodexApiClientOptions codexApiCli
 
     public Uri BuildOAuthAuthorizationUri(string state, string codeChallenge, Uri redirectUri)
     {
-        var queryString = string.Join("&",
-        [
-            $"client_id={Uri.EscapeDataString(codexApiClientOptions.OAuthClientId)}",
-            "response_type=code",
-            $"redirect_uri={Uri.EscapeDataString(redirectUri.ToString())}",
-            $"scope={Uri.EscapeDataString("openid email profile offline_access")}",
-            $"state={Uri.EscapeDataString(state)}",
-            $"code_challenge={Uri.EscapeDataString(codeChallenge)}",
-            "code_challenge_method=S256",
-            "prompt=login",
-            "id_token_add_organizations=true",
-            "codex_cli_simplified_flow=true"
-        ]);
+        var queryString = string.Join("&", [$"client_id={Uri.EscapeDataString(codexApiClientOptions.OAuthClientId)}", "response_type=code", $"redirect_uri={Uri.EscapeDataString(redirectUri.ToString())}", $"scope={Uri.EscapeDataString("openid email profile offline_access")}", $"state={Uri.EscapeDataString(state)}", $"code_challenge={Uri.EscapeDataString(codeChallenge)}", "code_challenge_method=S256", "prompt=login", "id_token_add_organizations=true", "codex_cli_simplified_flow=true"]);
         return new Uri(CodexApiConventions.OAuthBaseUri, $"{CodexApiConventions.OAuthAuthorizePath}?{queryString}");
     }
 

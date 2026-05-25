@@ -431,9 +431,7 @@ public sealed class ProviderApiExperimentApplication : IDisposable
         };
 
     private static string GetUnsupportedCommandMessage(string commandName, IProviderAdapter providerAdapter)
-        => providerAdapter.ProviderKind == CliProviderKind.ClaudeCode && commandName == "normalize-auth"
-            ? "Claude Code는 raw auth 문서 정규화를 지원하지 않습니다. save-current-account 를 사용하세요."
-            : $"{providerAdapter.DisplayName} does not support `{commandName}`.";
+        => providerAdapter.ProviderKind == CliProviderKind.ClaudeCode && commandName == "normalize-auth" ? "Claude Code는 raw auth 문서 정규화를 지원하지 않습니다. save-current-account 를 사용하세요." : $"{providerAdapter.DisplayName} does not support `{commandName}`.";
 
     private IProviderAdapter GetProviderAdapter(CliProviderKind providerKind) => _providerAdapters[providerKind];
 

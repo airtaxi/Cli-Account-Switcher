@@ -18,9 +18,7 @@ public sealed class ClaudeCodePaths
     private static string ResolveConfigHomeDirectoryPath()
     {
         var claudeConfigDirectoryPath = Environment.GetEnvironmentVariable("CLAUDE_CONFIG_DIR");
-        return string.IsNullOrWhiteSpace(claudeConfigDirectoryPath)
-            ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".claude")
-            : Path.GetFullPath(claudeConfigDirectoryPath);
+        return string.IsNullOrWhiteSpace(claudeConfigDirectoryPath) ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".claude") : Path.GetFullPath(claudeConfigDirectoryPath);
     }
 
     private static string ResolveGlobalConfigFilePath(string configHomeDirectoryPath)

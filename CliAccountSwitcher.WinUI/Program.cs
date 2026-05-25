@@ -17,12 +17,7 @@ public static class Program
         var isRedirectedToCurrentApplicationInstance = TryRedirectToCurrentApplicationInstance();
         if (isRedirectedToCurrentApplicationInstance) return;
 
-        Application.Start(applicationStartCallback =>
-        {
-            var dispatcherQueueSynchronizationContext = new DispatcherQueueSynchronizationContext(DispatcherQueue.GetForCurrentThread());
-            SynchronizationContext.SetSynchronizationContext(dispatcherQueueSynchronizationContext);
-            _ = new App();
-        });
+        Application.Start(OnApplicationStarted);
     }
 
     private static bool TryRedirectToCurrentApplicationInstance()
@@ -38,6 +33,13 @@ public static class Program
 
         currentApplicationInstance.Activated += OnApplicationInstanceActivated;
         return false;
+    }
+
+    private static void OnApplicationStarted(ApplicationInitializationCallbackParams applicationInitializationCallbackParameters)
+    {
+        var dispatcherQueueSynchronizationContext = new DispatcherQueueSynchronizationContext(DispatcherQueue.GetForCurrentThread());
+        SynchronizationContext.SetSynchronizationContext(dispatcherQueueSynchronizationContext);
+        _ = new App();
     }
 
     private static void OnApplicationInstanceActivated(object sender, AppActivationArguments applicationActivationArguments) => App.HandleApplicationInstanceActivated(applicationActivationArguments);

@@ -95,9 +95,7 @@ public sealed class CodexProviderAdapter : ProviderAdapterBase<CodexAccountState
 
     public override async Task<ProviderUsageSnapshot> GetUsageAsync(string? storedAccountIdentifier = null, CancellationToken cancellationToken = default)
     {
-        var codexAuthenticationDocument = string.IsNullOrWhiteSpace(storedAccountIdentifier)
-            ? (await ReadLiveAccountStateAsync(cancellationToken)).AuthenticationDocument
-            : CreateLiveAccountState(await LoadCodexStoredAccountPayloadAsync(storedAccountIdentifier, cancellationToken)).AuthenticationDocument;
+        var codexAuthenticationDocument = string.IsNullOrWhiteSpace(storedAccountIdentifier) ? (await ReadLiveAccountStateAsync(cancellationToken)).AuthenticationDocument : CreateLiveAccountState(await LoadCodexStoredAccountPayloadAsync(storedAccountIdentifier, cancellationToken)).AuthenticationDocument;
         var codexUsageSnapshot = await _codexUsageClient.GetUsageAsync(codexAuthenticationDocument, cancellationToken);
 
         return new ProviderUsageSnapshot
@@ -309,11 +307,13 @@ public sealed class CodexProviderAdapter : ProviderAdapterBase<CodexAccountState
     {
         try
         {
-            _ = Process.Start(new ProcessStartInfo
+            var processStartInfo = new ProcessStartInfo
             {
                 FileName = address.ToString(),
                 UseShellExecute = true
-            });
+            };
+
+            _ = Process.Start(processStartInfo);
             return true;
         }
         catch { return false; }
