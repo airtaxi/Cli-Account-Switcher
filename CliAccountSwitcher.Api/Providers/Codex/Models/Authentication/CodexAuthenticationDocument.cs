@@ -35,6 +35,19 @@ public sealed class CodexAuthenticationDocument
 
     public string GetEffectiveAccountIdentifier() => string.IsNullOrWhiteSpace(Tokens.AccountIdentifier) ? AccountIdentifier : Tokens.AccountIdentifier;
 
+    public string GetEffectiveProfileIdentifier()
+    {
+        var accountIdentifier = GetEffectiveAccountIdentifier();
+        if (string.IsNullOrWhiteSpace(accountIdentifier)) return "";
+
+        var identityProfile = TryReadIdentityProfile();
+        if (!string.IsNullOrWhiteSpace(identityProfile?.UserIdentifier)) return $"{accountIdentifier}:{identityProfile.UserIdentifier}";
+        if (!string.IsNullOrWhiteSpace(identityProfile?.EmailAddress)) return $"{accountIdentifier}:{identityProfile.EmailAddress.Trim().ToLowerInvariant()}";
+        if (!string.IsNullOrWhiteSpace(EmailAddress)) return $"{accountIdentifier}:{EmailAddress.Trim().ToLowerInvariant()}";
+
+        return accountIdentifier;
+    }
+
     public CodexRequestContext CreateRequestContext()
     {
         var effectiveAccessToken = GetEffectiveAccessToken();
