@@ -39,7 +39,10 @@ public static partial class WindowInteractionHelper
         var shouldDetachThreadInput = foregroundThreadIdentifier != 0 && foregroundThreadIdentifier != currentThreadIdentifier && AttachThreadInput(foregroundThreadIdentifier, currentThreadIdentifier, true);
 
         try { SetForegroundWindow(windowHandle); }
-        finally { if (shouldDetachThreadInput) AttachThreadInput(foregroundThreadIdentifier, currentThreadIdentifier, false); }
+        finally
+        {
+            if (shouldDetachThreadInput) AttachThreadInput(foregroundThreadIdentifier, currentThreadIdentifier, false);
+        }
     }
 
     public static void DisableWindowAnimations(Window window)

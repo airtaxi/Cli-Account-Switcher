@@ -173,11 +173,9 @@ public sealed partial class MainWindow : WindowEx
         WeakReferenceMessenger.Default.Send(new ValueChangedMessage<CliProviderKind>(selectedProviderKind));
     }
 
-    [RelayCommand]
-    private void OpenDashboardPage() => NavigateToMainPageSection(MainPageNavigationSection.Dashboard);
+    [RelayCommand] private void OpenDashboardPage() => NavigateToMainPageSection(MainPageNavigationSection.Dashboard);
 
-    [RelayCommand]
-    private void OpenAccountsPage() => NavigateToMainPageSection(MainPageNavigationSection.Accounts);
+    [RelayCommand] private void OpenAccountsPage() => NavigateToMainPageSection(MainPageNavigationSection.Accounts);
 
     [RelayCommand]
     private void OpenActiveAccountQuotaPopup()
@@ -245,18 +243,9 @@ public sealed partial class MainWindow : WindowEx
         finally { _isApplyingProviderSelection = false; }
     }
 
-    private static int GetProviderSelectedIndex(CliProviderKind selectedProviderKind) => selectedProviderKind switch
-    {
-        CliProviderKind.ClaudeCode => ClaudeCodeProviderSelectedIndex,
-        _ => CodexProviderSelectedIndex
-    };
+    private static int GetProviderSelectedIndex(CliProviderKind selectedProviderKind) => selectedProviderKind switch { CliProviderKind.ClaudeCode => ClaudeCodeProviderSelectedIndex, _ => CodexProviderSelectedIndex  };
 
-    private static CliProviderKind GetProviderKindFromSelectedIndex(int selectedIndex)
-        => selectedIndex switch
-        {
-            ClaudeCodeProviderSelectedIndex => CliProviderKind.ClaudeCode,
-            _ => CliProviderKind.Codex
-        };
+    private static CliProviderKind GetProviderKindFromSelectedIndex(int selectedIndex) => selectedIndex switch { ClaudeCodeProviderSelectedIndex => CliProviderKind.ClaudeCode, _ => CliProviderKind.Codex  };
 
     private SelectorBarItem GetSelectorBarItem(MainPageNavigationSection mainPageNavigationSection) => mainPageNavigationSection switch
     {

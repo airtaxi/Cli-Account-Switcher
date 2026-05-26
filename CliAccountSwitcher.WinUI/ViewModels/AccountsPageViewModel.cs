@@ -106,7 +106,10 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         _selectedAccountIdentifiers.Clear();
         foreach (var accountIdentifier in accountIdentifiers.Where(accountIdentifier => !string.IsNullOrWhiteSpace(accountIdentifier))) _selectedAccountIdentifiers.Add(accountIdentifier);
         _isSynchronizingAccountSelection = true;
-        try { foreach (var accountViewModel in Accounts) accountViewModel.IsSelected = _selectedAccountIdentifiers.Contains(accountViewModel.AccountIdentifier); }
+        try
+        {
+            foreach (var accountViewModel in Accounts) accountViewModel.IsSelected = _selectedAccountIdentifiers.Contains(accountViewModel.AccountIdentifier);
+        }
         finally { _isSynchronizingAccountSelection = false; }
         SelectedAccountIdentifiers = [.. _selectedAccountIdentifiers];
         RefreshFilteredAccountsSelectionState();
@@ -115,7 +118,10 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     public void SetFilteredAccountsSelection(bool isSelected)
     {
         _isSynchronizingAccountSelection = true;
-        try { foreach (var accountViewModel in FilteredAccounts) accountViewModel.IsSelected = isSelected; }
+        try
+        {
+            foreach (var accountViewModel in FilteredAccounts) accountViewModel.IsSelected = isSelected;
+        }
         finally { _isSynchronizingAccountSelection = false; }
 
         RefreshSelectedAccountIdentifiersFromAccountViewModels();
@@ -283,11 +289,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     partial void OnSelectedPlanFilterChanged(string value) => ApplyFilter();
 
-    private static string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch
-    {
-        CliProviderKind.ClaudeCode => GetLocalizedString("Provider_ClaudeCodeDisplayName"),
-        _ => GetLocalizedString("Provider_CodexDisplayName")
-    };
+    private static string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => GetLocalizedString("Provider_CodexDisplayName") };
 
     private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 

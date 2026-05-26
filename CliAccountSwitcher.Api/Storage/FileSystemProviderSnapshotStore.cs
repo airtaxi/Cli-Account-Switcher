@@ -12,10 +12,7 @@ public sealed class FileSystemProviderSnapshotStore : IProviderSnapshotStore
     private readonly WindowsDataProtectionService _windowsDataProtectionService;
     private readonly SemaphoreSlim _semaphore = new(1, 1);
 
-    public FileSystemProviderSnapshotStore()
-        : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CliAccountSwitcher.Api.Sample", "ProviderSnapshots"), new WindowsDataProtectionService())
-    {
-    }
+    public FileSystemProviderSnapshotStore() : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CliAccountSwitcher.Api.Sample", "ProviderSnapshots"), new WindowsDataProtectionService()) { }
 
     public FileSystemProviderSnapshotStore(string rootDirectoryPath, WindowsDataProtectionService windowsDataProtectionService)
     {
@@ -89,10 +86,7 @@ public sealed class FileSystemProviderSnapshotStore : IProviderSnapshotStore
             var providerKindText = providerKind.ToString();
             var manifestDocument = await ReadManifestDocumentAsync(cancellationToken);
             manifestDocument.Accounts.RemoveAll(storedProviderAccount => storedProviderAccount.ProviderKind == providerKind && string.Equals(storedProviderAccount.StoredAccountIdentifier, storedAccountIdentifier, StringComparison.OrdinalIgnoreCase));
-            if (manifestDocument.ActiveStoredAccountIdentifiers.TryGetValue(providerKindText, out var activeStoredAccountIdentifier) && string.Equals(activeStoredAccountIdentifier, storedAccountIdentifier, StringComparison.OrdinalIgnoreCase))
-            {
-                manifestDocument.ActiveStoredAccountIdentifiers[providerKindText] = null;
-            }
+            if (manifestDocument.ActiveStoredAccountIdentifiers.TryGetValue(providerKindText, out var activeStoredAccountIdentifier) && string.Equals(activeStoredAccountIdentifier, storedAccountIdentifier, StringComparison.OrdinalIgnoreCase)) manifestDocument.ActiveStoredAccountIdentifiers[providerKindText] = null;
 
             await WriteManifestDocumentAsync(manifestDocument, cancellationToken);
 
@@ -156,33 +150,26 @@ public sealed class FileSystemProviderSnapshotStore : IProviderSnapshotStore
 
     private string BuildPayloadFilePath(CliProviderKind providerKind, string storedAccountIdentifier) => Path.Combine(BuildProviderDirectoryPath(providerKind), $"{storedAccountIdentifier}.bin");
 
-    private static string GetProviderDirectoryName(CliProviderKind providerKind)
-        => providerKind switch
-        {
-            CliProviderKind.Codex => "codex",
-            CliProviderKind.ClaudeCode => "claude-code",
-            _ => providerKind.ToString().ToLowerInvariant()
-        };
+    private static string GetProviderDirectoryName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.Codex => "codex", CliProviderKind.ClaudeCode => "claude-code", _ => providerKind.ToString().ToLowerInvariant() };
 
-    private static StoredProviderAccount CloneStoredProviderAccount(StoredProviderAccount storedProviderAccount, bool isActive)
-        => new()
-        {
-            ProviderKind = storedProviderAccount.ProviderKind,
-            StoredAccountIdentifier = storedProviderAccount.StoredAccountIdentifier,
-            SlotNumber = storedProviderAccount.SlotNumber,
-            EmailAddress = storedProviderAccount.EmailAddress,
-            DisplayName = storedProviderAccount.DisplayName,
-            AccountIdentifier = storedProviderAccount.AccountIdentifier,
-            OrganizationIdentifier = storedProviderAccount.OrganizationIdentifier,
-            OrganizationName = storedProviderAccount.OrganizationName,
-            PlanType = storedProviderAccount.PlanType,
-            IsActive = isActive,
-            IsTokenExpired = storedProviderAccount.IsTokenExpired,
-            RefreshTokenFailureCount = storedProviderAccount.RefreshTokenFailureCount,
-            LastUpdated = storedProviderAccount.LastUpdated,
-            LastProviderUsageSnapshot = storedProviderAccount.LastProviderUsageSnapshot,
-            LastUsageRefreshTime = storedProviderAccount.LastUsageRefreshTime
-        };
+    private static StoredProviderAccount CloneStoredProviderAccount(StoredProviderAccount storedProviderAccount, bool isActive) => new()
+    {
+        ProviderKind = storedProviderAccount.ProviderKind,
+        StoredAccountIdentifier = storedProviderAccount.StoredAccountIdentifier,
+        SlotNumber = storedProviderAccount.SlotNumber,
+        EmailAddress = storedProviderAccount.EmailAddress,
+        DisplayName = storedProviderAccount.DisplayName,
+        AccountIdentifier = storedProviderAccount.AccountIdentifier,
+        OrganizationIdentifier = storedProviderAccount.OrganizationIdentifier,
+        OrganizationName = storedProviderAccount.OrganizationName,
+        PlanType = storedProviderAccount.PlanType,
+        IsActive = isActive,
+        IsTokenExpired = storedProviderAccount.IsTokenExpired,
+        RefreshTokenFailureCount = storedProviderAccount.RefreshTokenFailureCount,
+        LastUpdated = storedProviderAccount.LastUpdated,
+        LastProviderUsageSnapshot = storedProviderAccount.LastProviderUsageSnapshot,
+        LastUsageRefreshTime = storedProviderAccount.LastUsageRefreshTime
+    };
 
     private static async Task WriteTextAtomicallyAsync(string filePath, string fileText, CancellationToken cancellationToken)
     {

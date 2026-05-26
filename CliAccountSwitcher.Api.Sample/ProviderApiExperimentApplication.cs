@@ -167,7 +167,10 @@ public sealed class ProviderApiExperimentApplication : IDisposable
                 _ => ShowUnknownCommand(normalizedCommandName)
             };
         }
-        finally { if (codexProviderAdapter is not null) codexProviderAdapter.InputFilePathOverride = null; }
+        finally
+        {
+            if (codexProviderAdapter is not null) codexProviderAdapter.InputFilePathOverride = null;
+        }
     }
 
     private int ShowHelp(IProviderAdapter providerAdapter)
@@ -260,10 +263,7 @@ public sealed class ProviderApiExperimentApplication : IDisposable
             await File.WriteAllTextAsync(outputFilePath, providerLoginResult.OutputText);
             Console.WriteLine($"Authentication document written to: {outputFilePath}");
         }
-        else if (!string.IsNullOrWhiteSpace(providerLoginResult.OutputText))
-        {
-            Console.WriteLine(providerLoginResult.OutputText);
-        }
+        else if (!string.IsNullOrWhiteSpace(providerLoginResult.OutputText)) Console.WriteLine(providerLoginResult.OutputText);
 
         if (!string.IsNullOrWhiteSpace(providerLoginResult.CompletionMessage)) Console.WriteLine(providerLoginResult.CompletionMessage);
         if (providerLoginResult.ShouldPromptSaveCurrentAccount) Console.WriteLine("Run save-current-account after login completes.");

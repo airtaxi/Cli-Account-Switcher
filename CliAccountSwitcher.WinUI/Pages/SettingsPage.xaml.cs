@@ -385,39 +385,13 @@ public sealed partial class SettingsPage : Page
         return fileSavePicker;
     }
 
-    private static int GetLanguageSelectedIndex(string languageOverride) => languageOverride switch
-    {
-        "ko-KR" => 1,
-        "en-US" => 2,
-        "ja-JP" => 3,
-        "zh-Hans" => 4,
-        "zh-Hant" => 5,
-        _ => 0
-    };
+    private static int GetLanguageSelectedIndex(string languageOverride) => languageOverride switch { "ko-KR" => 1, "en-US" => 2, "ja-JP" => 3, "zh-Hans" => 4, "zh-Hant" => 5, _ => 0  };
 
-    private static string GetLanguageOverrideFromSelectedIndex(int selectedIndex) => selectedIndex switch
-    {
-        1 => "ko-KR",
-        2 => "en-US",
-        3 => "ja-JP",
-        4 => "zh-Hans",
-        5 => "zh-Hant",
-        _ => ""
-    };
+    private static string GetLanguageOverrideFromSelectedIndex(int selectedIndex) => selectedIndex switch { 1 => "ko-KR", 2 => "en-US", 3 => "ja-JP", 4 => "zh-Hans", 5 => "zh-Hant", _ => ""  };
 
-    private static int GetThemeSelectedIndex(ElementTheme theme) => theme switch
-    {
-        ElementTheme.Light => 1,
-        ElementTheme.Dark => 2,
-        _ => 0
-    };
+    private static int GetThemeSelectedIndex(ElementTheme theme) => theme switch { ElementTheme.Light => 1, ElementTheme.Dark => 2, _ => 0  };
 
-    private static ElementTheme GetThemeFromSelectedIndex(int selectedIndex) => selectedIndex switch
-    {
-        1 => ElementTheme.Light,
-        2 => ElementTheme.Dark,
-        _ => ElementTheme.Default
-    };
+    private static ElementTheme GetThemeFromSelectedIndex(int selectedIndex) => selectedIndex switch { 1 => ElementTheme.Light, 2 => ElementTheme.Dark, _ => ElementTheme.Default  };
 
     private void SetNumberBoxValue(NumberBox numberBox, int value)
     {

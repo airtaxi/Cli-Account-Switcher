@@ -198,11 +198,10 @@ public sealed class CodexProviderAdapter : ProviderAdapterBase<CodexAccountState
         return CreateCodexAccountState(storedAccountPayload.AuthenticationDocumentJson);
     }
 
-    protected override CodexStoredAccountPayload CreateStoredAccountPayload(CodexAccountState liveAccountState)
-        => new()
-        {
-            AuthenticationDocumentJson = liveAccountState.AuthenticationDocumentJson
-        };
+    protected override CodexStoredAccountPayload CreateStoredAccountPayload(CodexAccountState liveAccountState) => new()
+    {
+        AuthenticationDocumentJson = liveAccountState.AuthenticationDocumentJson
+    };
 
     protected override string SerializeStoredAccountPayload(CodexStoredAccountPayload storedAccountPayload) => JsonSerializer.Serialize(storedAccountPayload, ProviderJsonSerializerContext.Default.CodexStoredAccountPayload);
 
@@ -238,10 +237,7 @@ public sealed class CodexProviderAdapter : ProviderAdapterBase<CodexAccountState
 
     protected override bool IsSameAccount(StoredProviderAccount storedProviderAccount, ProviderIdentityProfile providerIdentityProfile)
     {
-        if (!string.IsNullOrWhiteSpace(storedProviderAccount.AccountIdentifier) && !string.IsNullOrWhiteSpace(providerIdentityProfile.AccountIdentifier))
-        {
-            return string.Equals(storedProviderAccount.AccountIdentifier, providerIdentityProfile.AccountIdentifier, StringComparison.OrdinalIgnoreCase);
-        }
+        if (!string.IsNullOrWhiteSpace(storedProviderAccount.AccountIdentifier) && !string.IsNullOrWhiteSpace(providerIdentityProfile.AccountIdentifier)) return string.Equals(storedProviderAccount.AccountIdentifier, providerIdentityProfile.AccountIdentifier, StringComparison.OrdinalIgnoreCase);
 
         return !string.IsNullOrWhiteSpace(storedProviderAccount.EmailAddress) && string.Equals(storedProviderAccount.EmailAddress, providerIdentityProfile.EmailAddress, StringComparison.OrdinalIgnoreCase);
     }
@@ -268,12 +264,11 @@ public sealed class CodexProviderAdapter : ProviderAdapterBase<CodexAccountState
 
     private string BuildDefaultAuthenticationFilePath() => Path.Combine(_codexApiClientOptions.CodexHomeDirectoryPath, "auth.json");
 
-    private static CodexAccountState CreateCodexAccountState(string authenticationDocumentJson)
-        => new()
-        {
-            AuthenticationDocumentJson = authenticationDocumentJson,
-            AuthenticationDocument = CodexAuthenticationDocumentSerializer.Parse(authenticationDocumentJson)
-        };
+    private static CodexAccountState CreateCodexAccountState(string authenticationDocumentJson) => new()
+    {
+        AuthenticationDocumentJson = authenticationDocumentJson,
+        AuthenticationDocument = CodexAuthenticationDocumentSerializer.Parse(authenticationDocumentJson)
+    };
 
     private static ProviderIdentityProfile CreateIdentityProfile(CodexAuthenticationDocument codexAuthenticationDocument)
     {

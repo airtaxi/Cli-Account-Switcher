@@ -256,11 +256,7 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
 
     private static int ClampUsageRemainingPercentage(int usageRemainingPercentage) => usageRemainingPercentage < 0 ? 0 : Math.Clamp(usageRemainingPercentage, 0, 100);
 
-    private static string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch
-    {
-        CliProviderKind.ClaudeCode => GetLocalizedString("Provider_ClaudeCodeDisplayName"),
-        _ => GetLocalizedString("Provider_CodexDisplayName")
-    };
+    private static string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => GetLocalizedString("Provider_CodexDisplayName") };
 
     private static DateTimeOffset? GetUsageResetAt(ProviderUsageWindow providerUsageWindow)
     {

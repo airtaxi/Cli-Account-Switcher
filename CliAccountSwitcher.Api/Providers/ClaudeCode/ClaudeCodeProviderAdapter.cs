@@ -125,10 +125,7 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
         await _claudeCodeCliRunner.EnsureInstalledAsync(cancellationToken);
 
         var arguments = CreateResponseArguments(providerResponseRequest, true);
-        await foreach (var outputLine in _claudeCodeCliRunner.StreamOutputLinesAsync(arguments, cancellationToken))
-        {
-            yield return CreateStreamEvent(outputLine);
-        }
+        await foreach (var outputLine in _claudeCodeCliRunner.StreamOutputLinesAsync(arguments, cancellationToken)) yield return CreateStreamEvent(outputLine);
 
         yield return new ProviderResponseStreamEvent
         {
@@ -159,57 +156,52 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
 
     protected override ClaudeCodeAccountState CreateLiveAccountState(ClaudeCodeStoredAccountPayload storedAccountPayload)
     {
-        if (storedAccountPayload is null || string.IsNullOrWhiteSpace(storedAccountPayload.CredentialsJson) || string.IsNullOrWhiteSpace(storedAccountPayload.GlobalConfigJson))
-        {
-            throw new ProviderActionRequiredException("The stored Claude Code account payload is invalid.");
-        }
+        if (storedAccountPayload is null || string.IsNullOrWhiteSpace(storedAccountPayload.CredentialsJson) || string.IsNullOrWhiteSpace(storedAccountPayload.GlobalConfigJson)) throw new ProviderActionRequiredException("The stored Claude Code account payload is invalid.");
 
         return CreateClaudeCodeAccountState(storedAccountPayload.CredentialsJson, storedAccountPayload.GlobalConfigJson, true);
     }
 
-    protected override ClaudeCodeStoredAccountPayload CreateStoredAccountPayload(ClaudeCodeAccountState liveAccountState)
-        => new()
-        {
-            CredentialsJson = liveAccountState.CredentialsJson,
-            GlobalConfigJson = liveAccountState.GlobalConfigJson,
-            EmailAddress = liveAccountState.GlobalConfigDocument.EmailAddress,
-            DisplayName = string.IsNullOrWhiteSpace(liveAccountState.GlobalConfigDocument.DisplayName) ? liveAccountState.GlobalConfigDocument.EmailAddress : liveAccountState.GlobalConfigDocument.DisplayName,
-            AccountIdentifier = liveAccountState.GlobalConfigDocument.AccountIdentifier,
-            OrganizationIdentifier = liveAccountState.GlobalConfigDocument.OrganizationIdentifier,
-            OrganizationName = liveAccountState.GlobalConfigDocument.OrganizationName,
-            PlanType = liveAccountState.CredentialDocument.PlanType
-        };
+    protected override ClaudeCodeStoredAccountPayload CreateStoredAccountPayload(ClaudeCodeAccountState liveAccountState) => new()
+    {
+        CredentialsJson = liveAccountState.CredentialsJson,
+        GlobalConfigJson = liveAccountState.GlobalConfigJson,
+        EmailAddress = liveAccountState.GlobalConfigDocument.EmailAddress,
+        DisplayName = string.IsNullOrWhiteSpace(liveAccountState.GlobalConfigDocument.DisplayName) ? liveAccountState.GlobalConfigDocument.EmailAddress : liveAccountState.GlobalConfigDocument.DisplayName,
+        AccountIdentifier = liveAccountState.GlobalConfigDocument.AccountIdentifier,
+        OrganizationIdentifier = liveAccountState.GlobalConfigDocument.OrganizationIdentifier,
+        OrganizationName = liveAccountState.GlobalConfigDocument.OrganizationName,
+        PlanType = liveAccountState.CredentialDocument.PlanType
+    };
 
     protected override string SerializeStoredAccountPayload(ClaudeCodeStoredAccountPayload storedAccountPayload) => JsonSerializer.Serialize(storedAccountPayload, ProviderJsonSerializerContext.Default.ClaudeCodeStoredAccountPayload);
 
     protected override ClaudeCodeStoredAccountPayload DeserializeStoredAccountPayload(string payloadJson, string storedAccountIdentifier)
     {
         var storedAccountPayload = JsonSerializer.Deserialize(payloadJson, ProviderJsonSerializerContext.Default.ClaudeCodeStoredAccountPayload);
-        if (storedAccountPayload is null || string.IsNullOrWhiteSpace(storedAccountPayload.CredentialsJson) || string.IsNullOrWhiteSpace(storedAccountPayload.GlobalConfigJson))
-        {
-            throw new ProviderActionRequiredException($"The stored Claude Code account slot is invalid: {storedAccountIdentifier}");
-        }
+        if (storedAccountPayload is null || string.IsNullOrWhiteSpace(storedAccountPayload.CredentialsJson) || string.IsNullOrWhiteSpace(storedAccountPayload.GlobalConfigJson)) throw new ProviderActionRequiredException($"The stored Claude Code account slot is invalid: {storedAccountIdentifier}");
 
         return storedAccountPayload;
     }
 
-    protected override StoredProviderAccount CreateStoredProviderAccount(ClaudeCodeAccountState liveAccountState, string storedAccountIdentifier, int slotNumber, bool isActive)
-        => new()
+    protected override StoredProviderAccount CreateStoredProviderAccount(ClaudeCodeAccountState liveAccountState, string storedAccountIdentifier, int slotNumber, bool isActive) => new()
+    {
+        ProviderKind = CliProviderKind.ClaudeCode,
+        StoredAccountIdentifier = storedAccountIdentifier,
+        SlotNumber = slotNumber,
+        EmailAddress = liveAccountState.GlobalConfigDocument.EmailAddress,
+        DisplayName = string.IsNullOrWhiteSpace(liveAccountState.GlobalConfigDocument.DisplayName) ? liveAccountState.GlobalConfigDocument.EmailAddress : liveAccountState.GlobalConfigDocument.DisplayName,
+        AccountIdentifier = liveAccountState.GlobalConfigDocument.AccountIdentifier,
+        OrganizationIdentifier = liveAccountState.GlobalConfigDocument.OrganizationIdentifier,
+        OrganizationName = liveAccountState.GlobalConfigDocument.OrganizationName,
+        PlanType = liveAccountState.CredentialDocument.PlanType,
+        IsActive = isActive,
+        IsTokenExpired = false,
+        LastUpdated = DateTimeOffset.UtcNow,
+        LastProviderUsageSnapshot = new ProviderUsageSnapshot
         {
-            ProviderKind = CliProviderKind.ClaudeCode,
-            StoredAccountIdentifier = storedAccountIdentifier,
-            SlotNumber = slotNumber,
-            EmailAddress = liveAccountState.GlobalConfigDocument.EmailAddress,
-            DisplayName = string.IsNullOrWhiteSpace(liveAccountState.GlobalConfigDocument.DisplayName) ? liveAccountState.GlobalConfigDocument.EmailAddress : liveAccountState.GlobalConfigDocument.DisplayName,
-            AccountIdentifier = liveAccountState.GlobalConfigDocument.AccountIdentifier,
-            OrganizationIdentifier = liveAccountState.GlobalConfigDocument.OrganizationIdentifier,
-            OrganizationName = liveAccountState.GlobalConfigDocument.OrganizationName,
-            PlanType = liveAccountState.CredentialDocument.PlanType,
-            IsActive = isActive,
-            IsTokenExpired = false,
-            LastUpdated = DateTimeOffset.UtcNow,
-            LastProviderUsageSnapshot = new ProviderUsageSnapshot { ProviderKind = CliProviderKind.ClaudeCode }
-        };
+            ProviderKind = CliProviderKind.ClaudeCode
+        }
+    };
 
     protected override bool IsSameAccount(StoredProviderAccount storedProviderAccount, ClaudeCodeAccountState liveAccountState) => IsSameClaudeCodeAccount(storedProviderAccount, liveAccountState.GlobalConfigDocument);
 
@@ -250,10 +242,7 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
             hasWrittenGlobalConfig = true;
 
             var verifiedIdentityProfile = await TryGetCurrentIdentityForActivationAsync(cancellationToken);
-            if (verifiedIdentityProfile is null || !IsSameClaudeCodeAccount(storedProviderAccount, verifiedIdentityProfile))
-            {
-                throw new ProviderActionRequiredException("Claude Code account files were restored, but the restored identity could not be verified. Login again or re-save the account.");
-            }
+            if (verifiedIdentityProfile is null || !IsSameClaudeCodeAccount(storedProviderAccount, verifiedIdentityProfile)) throw new ProviderActionRequiredException("Claude Code account files were restored, but the restored identity could not be verified. Login again or re-save the account.");
         }
         catch
         {
@@ -287,15 +276,13 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
         catch (ClaudeCodeUsageAuthenticationRequiredException exception) { throw new ProviderAuthenticationExpiredException("Claude Code usage request failed after refreshing the token. Login again or re-save the account.", exception); }
     }
 
-    private static bool ShouldSkipUsageSnapshot(ClaudeCodeCredentialDocument credentialDocument)
-        => credentialDocument.Scopes.Count > 0 && !credentialDocument.HasClaudeAiUsageScopes();
+    private static bool ShouldSkipUsageSnapshot(ClaudeCodeCredentialDocument credentialDocument) => credentialDocument.Scopes.Count > 0 && !credentialDocument.HasClaudeAiUsageScopes();
 
-    private static ProviderUsageSnapshot CreateEmptyUsageSnapshot(string emailAddress)
-        => new()
-        {
-            ProviderKind = CliProviderKind.ClaudeCode,
-            EmailAddress = emailAddress
-        };
+    private static ProviderUsageSnapshot CreateEmptyUsageSnapshot(string emailAddress) => new()
+    {
+        ProviderKind = CliProviderKind.ClaudeCode,
+        EmailAddress = emailAddress
+    };
 
     private async Task<ClaudeCodeAccountState> RefreshLiveAccountAsync(ClaudeCodeAccountState liveAccountState, bool shouldForceRefresh, CancellationToken cancellationToken)
     {
@@ -356,14 +343,13 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
         if (string.IsNullOrWhiteSpace(claudeCodeAccountState.GlobalConfigDocument.OrganizationName)) throw new ProviderActionRequiredException("Claude Code global config is missing oauthAccount.organizationName.");
     }
 
-    private static StoredPayloadContext CreateStoredPayloadContext(StoredProviderAccount storedProviderAccount, ClaudeCodeStoredAccountPayload storedAccountPayload)
-        => new()
-        {
-            Payload = storedAccountPayload,
-            CredentialDocument = ClaudeCodeCredentialDocument.Parse(storedAccountPayload.CredentialsJson),
-            GlobalConfigDocument = ClaudeCodeGlobalConfigDocument.Parse(storedAccountPayload.GlobalConfigJson),
-            StoredProviderAccount = storedProviderAccount
-        };
+    private static StoredPayloadContext CreateStoredPayloadContext(StoredProviderAccount storedProviderAccount, ClaudeCodeStoredAccountPayload storedAccountPayload) => new()
+    {
+        Payload = storedAccountPayload,
+        CredentialDocument = ClaudeCodeCredentialDocument.Parse(storedAccountPayload.CredentialsJson),
+        GlobalConfigDocument = ClaudeCodeGlobalConfigDocument.Parse(storedAccountPayload.GlobalConfigJson),
+        StoredProviderAccount = storedProviderAccount
+    };
 
     private async Task<StoredPayloadContext> LoadStoredPayloadContextAsync(IProviderSnapshotStore providerSnapshotStore, string storedAccountIdentifier, CancellationToken cancellationToken)
     {
@@ -398,20 +384,19 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
         catch { return null; }
     }
 
-    private static ProviderIdentityProfile CreateIdentityProfile(ClaudeCodeAccountState claudeCodeAccountState)
-        => new()
-        {
-            ProviderKind = CliProviderKind.ClaudeCode,
-            EmailAddress = claudeCodeAccountState.GlobalConfigDocument.EmailAddress,
-            DisplayName = string.IsNullOrWhiteSpace(claudeCodeAccountState.GlobalConfigDocument.DisplayName) ? claudeCodeAccountState.GlobalConfigDocument.EmailAddress : claudeCodeAccountState.GlobalConfigDocument.DisplayName,
-            AccountIdentifier = claudeCodeAccountState.GlobalConfigDocument.AccountIdentifier,
-            OrganizationIdentifier = claudeCodeAccountState.GlobalConfigDocument.OrganizationIdentifier,
-            OrganizationName = claudeCodeAccountState.GlobalConfigDocument.OrganizationName,
-            PlanType = claudeCodeAccountState.CredentialDocument.PlanType,
-            AccessTokenPreview = BuildAccessTokenPreview(claudeCodeAccountState.CredentialDocument.AccessToken),
-            ExpirationText = claudeCodeAccountState.CredentialDocument.GetExpirationText(),
-            IsLoggedIn = !string.IsNullOrWhiteSpace(claudeCodeAccountState.CredentialDocument.AccessToken) && !string.IsNullOrWhiteSpace(claudeCodeAccountState.GlobalConfigDocument.EmailAddress)
-        };
+    private static ProviderIdentityProfile CreateIdentityProfile(ClaudeCodeAccountState claudeCodeAccountState) => new()
+    {
+        ProviderKind = CliProviderKind.ClaudeCode,
+        EmailAddress = claudeCodeAccountState.GlobalConfigDocument.EmailAddress,
+        DisplayName = string.IsNullOrWhiteSpace(claudeCodeAccountState.GlobalConfigDocument.DisplayName) ? claudeCodeAccountState.GlobalConfigDocument.EmailAddress : claudeCodeAccountState.GlobalConfigDocument.DisplayName,
+        AccountIdentifier = claudeCodeAccountState.GlobalConfigDocument.AccountIdentifier,
+        OrganizationIdentifier = claudeCodeAccountState.GlobalConfigDocument.OrganizationIdentifier,
+        OrganizationName = claudeCodeAccountState.GlobalConfigDocument.OrganizationName,
+        PlanType = claudeCodeAccountState.CredentialDocument.PlanType,
+        AccessTokenPreview = BuildAccessTokenPreview(claudeCodeAccountState.CredentialDocument.AccessToken),
+        ExpirationText = claudeCodeAccountState.CredentialDocument.GetExpirationText(),
+        IsLoggedIn = !string.IsNullOrWhiteSpace(claudeCodeAccountState.CredentialDocument.AccessToken) && !string.IsNullOrWhiteSpace(claudeCodeAccountState.GlobalConfigDocument.EmailAddress)
+    };
 
     private static bool IsSameClaudeCodeAccount(StoredProviderAccount storedProviderAccount, ClaudeCodeGlobalConfigDocument globalConfigDocument)
         => string.Equals(storedProviderAccount.EmailAddress, globalConfigDocument.EmailAddress, StringComparison.OrdinalIgnoreCase) && string.Equals(storedProviderAccount.OrganizationIdentifier, globalConfigDocument.OrganizationIdentifier, StringComparison.OrdinalIgnoreCase);
@@ -480,10 +465,7 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
     {
         var currentGlobalConfigObject = ParseJsonObject(currentGlobalConfigJson, "current global config");
         var targetGlobalConfigObject = ParseJsonObject(targetGlobalConfigJson, "stored global config");
-        if (!targetGlobalConfigObject.TryGetPropertyValue("oauthAccount", out var targetOauthAccountNode) || targetOauthAccountNode is not JsonObject)
-        {
-            throw new ProviderActionRequiredException("The stored Claude Code global config is missing oauthAccount.");
-        }
+        if (!targetGlobalConfigObject.TryGetPropertyValue("oauthAccount", out var targetOauthAccountNode) || targetOauthAccountNode is not JsonObject) throw new ProviderActionRequiredException("The stored Claude Code global config is missing oauthAccount.");
 
         currentGlobalConfigObject["oauthAccount"] = targetOauthAccountNode.DeepClone();
         return currentGlobalConfigObject.ToJsonString(ProviderJsonSerializerOptions.Default);

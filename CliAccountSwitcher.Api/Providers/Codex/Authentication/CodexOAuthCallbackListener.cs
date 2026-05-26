@@ -94,8 +94,7 @@ public sealed class CodexOAuthCallbackListener : IAsyncDisposable
         }
     }
 
-    private bool IsExpectedCallbackPath(Uri? requestAddress)
-        => requestAddress is not null && string.Equals(requestAddress.AbsolutePath.TrimEnd('/'), _redirectAddress.AbsolutePath.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
+    private bool IsExpectedCallbackPath(Uri? requestAddress) => requestAddress is not null && string.Equals(requestAddress.AbsolutePath.TrimEnd('/'), _redirectAddress.AbsolutePath.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
 
     private static async Task WriteResponseAsync(HttpListenerResponse httpListenerResponse, int statusCode, string responseText, CancellationToken cancellationToken)
     {

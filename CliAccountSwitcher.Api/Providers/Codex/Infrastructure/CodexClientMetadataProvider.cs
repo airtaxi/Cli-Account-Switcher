@@ -29,12 +29,5 @@ public sealed class CodexClientMetadataProvider(CodexApiClientOptions codexApiCl
 
     private static string BuildOperatingSystemVersionTag() => Environment.OSVersion.Version.ToString();
 
-    private static string BuildProcessorArchitectureTag() => RuntimeInformation.ProcessArchitecture switch
-    {
-        Architecture.X64 => "x86_64",
-        Architecture.X86 => "x86",
-        Architecture.Arm64 => "arm64",
-        Architecture.Arm => "arm",
-        _ => "unknown"
-    };
+    private static string BuildProcessorArchitectureTag() => RuntimeInformation.ProcessArchitecture switch { Architecture.X64 => "x86_64", Architecture.X86 => "x86", Architecture.Arm64 => "arm64", Architecture.Arm => "arm", _ => "unknown"  };
 }

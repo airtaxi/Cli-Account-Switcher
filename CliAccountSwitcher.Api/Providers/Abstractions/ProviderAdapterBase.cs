@@ -153,25 +153,24 @@ public abstract class ProviderAdapterBase<TLiveAccountState, TStoredAccountPaylo
         catch { return null; }
     }
 
-    private static StoredProviderAccount CloneStoredProviderAccount(StoredProviderAccount storedProviderAccount, bool isActive)
-        => new()
-        {
-            ProviderKind = storedProviderAccount.ProviderKind,
-            StoredAccountIdentifier = storedProviderAccount.StoredAccountIdentifier,
-            SlotNumber = storedProviderAccount.SlotNumber,
-            EmailAddress = storedProviderAccount.EmailAddress,
-            DisplayName = storedProviderAccount.DisplayName,
-            AccountIdentifier = storedProviderAccount.AccountIdentifier,
-            OrganizationIdentifier = storedProviderAccount.OrganizationIdentifier,
-            OrganizationName = storedProviderAccount.OrganizationName,
-            PlanType = storedProviderAccount.PlanType,
-            IsActive = isActive,
-            IsTokenExpired = storedProviderAccount.IsTokenExpired,
-            RefreshTokenFailureCount = storedProviderAccount.RefreshTokenFailureCount,
-            LastUpdated = storedProviderAccount.LastUpdated,
-            LastProviderUsageSnapshot = storedProviderAccount.LastProviderUsageSnapshot,
-            LastUsageRefreshTime = storedProviderAccount.LastUsageRefreshTime
-        };
+    private static StoredProviderAccount CloneStoredProviderAccount(StoredProviderAccount storedProviderAccount, bool isActive) => new()
+    {
+        ProviderKind = storedProviderAccount.ProviderKind,
+        StoredAccountIdentifier = storedProviderAccount.StoredAccountIdentifier,
+        SlotNumber = storedProviderAccount.SlotNumber,
+        EmailAddress = storedProviderAccount.EmailAddress,
+        DisplayName = storedProviderAccount.DisplayName,
+        AccountIdentifier = storedProviderAccount.AccountIdentifier,
+        OrganizationIdentifier = storedProviderAccount.OrganizationIdentifier,
+        OrganizationName = storedProviderAccount.OrganizationName,
+        PlanType = storedProviderAccount.PlanType,
+        IsActive = isActive,
+        IsTokenExpired = storedProviderAccount.IsTokenExpired,
+        RefreshTokenFailureCount = storedProviderAccount.RefreshTokenFailureCount,
+        LastUpdated = storedProviderAccount.LastUpdated,
+        LastProviderUsageSnapshot = storedProviderAccount.LastProviderUsageSnapshot,
+        LastUsageRefreshTime = storedProviderAccount.LastUsageRefreshTime
+    };
 
     private static int GetNextSlotNumber(IReadOnlyList<StoredProviderAccount> storedProviderAccounts) => storedProviderAccounts.Count == 0 ? 1 : storedProviderAccounts.Max(storedProviderAccount => storedProviderAccount.SlotNumber) + 1;
 

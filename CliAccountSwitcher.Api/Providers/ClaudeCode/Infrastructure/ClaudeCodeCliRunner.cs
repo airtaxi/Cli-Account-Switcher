@@ -110,7 +110,11 @@ internal sealed class ClaudeCodeCliRunner
         var errorTask = process.StandardError.ReadToEndAsync(timeoutCancellationTokenSource.Token);
 
         try { await process.WaitForExitAsync(timeoutCancellationTokenSource.Token); }
-        catch (OperationCanceledException) { try { process.Kill(true); } catch { } }
+        catch (OperationCanceledException)
+        {
+            try { process.Kill(true); }
+            catch { }
+        }
 
         return new ClaudeCodeProcessResult
         {

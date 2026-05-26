@@ -164,22 +164,21 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
         base.Dispose();
     }
 
-    protected override ProviderAccount CreateProviderAccount(CodexAccount codexAccount)
-        => new()
-        {
-            ProviderKind = CliProviderKind.Codex,
-            AccountIdentifier = codexAccount.AccountIdentifier,
-            ProviderAccountIdentifier = codexAccount.CodexAuthenticationDocument.GetEffectiveAccountIdentifier(),
-            AccountDetailText = BuildAccessTokenPreview(codexAccount.CodexAuthenticationDocument.GetEffectiveAccessToken()),
-            CustomAlias = codexAccount.CustomAlias,
-            DisplayName = codexAccount.DisplayName,
-            EmailAddress = codexAccount.EmailAddress,
-            PlanType = codexAccount.PlanType,
-            IsActive = codexAccount.IsActive,
-            IsTokenExpired = codexAccount.IsTokenExpired,
-            LastProviderUsageSnapshot = CreateProviderUsageSnapshot(codexAccount.LastCodexUsageSnapshot),
-            LastUsageRefreshTime = codexAccount.LastUsageRefreshTime
-        };
+    protected override ProviderAccount CreateProviderAccount(CodexAccount codexAccount) => new()
+    {
+        ProviderKind = CliProviderKind.Codex,
+        AccountIdentifier = codexAccount.AccountIdentifier,
+        ProviderAccountIdentifier = codexAccount.CodexAuthenticationDocument.GetEffectiveAccountIdentifier(),
+        AccountDetailText = BuildAccessTokenPreview(codexAccount.CodexAuthenticationDocument.GetEffectiveAccessToken()),
+        CustomAlias = codexAccount.CustomAlias,
+        DisplayName = codexAccount.DisplayName,
+        EmailAddress = codexAccount.EmailAddress,
+        PlanType = codexAccount.PlanType,
+        IsActive = codexAccount.IsActive,
+        IsTokenExpired = codexAccount.IsTokenExpired,
+        LastProviderUsageSnapshot = CreateProviderUsageSnapshot(codexAccount.LastCodexUsageSnapshot),
+        LastUsageRefreshTime = codexAccount.LastUsageRefreshTime
+    };
 
     protected override string GetAccountIdentifier(CodexAccount codexAccount) => codexAccount.AccountIdentifier;
 
@@ -271,10 +270,7 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
         }
         catch (Exception exception) when (IsAccountExpiredException(exception))
         {
-            if (codexAccount.RefreshTokenFailureCount >= MaximumRefreshTokenFailureCount)
-            {
-                throw new CodexApiException("The Codex refresh token retry limit has been reached. Login again or re-save the account.", HttpStatusCode.Unauthorized, null, exception);
-            }
+            if (codexAccount.RefreshTokenFailureCount >= MaximumRefreshTokenFailureCount) throw new CodexApiException("The Codex refresh token retry limit has been reached. Login again or re-save the account.", HttpStatusCode.Unauthorized, null, exception);
 
             return await RefreshAuthenticationDocumentAndGetUsageWithRetryAsync(codexAccount, authenticationDocument, shouldWriteCurrentAuthenticationDocument, exception, cancellationToken);
         }
@@ -415,11 +411,10 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
         catch { return []; }
     }
 
-    private CodexAccountStoreDocument CreateStoreDocumentSnapshot()
-        => new()
-        {
-            Accounts = [.. GetAccountStatesSnapshot()]
-        };
+    private CodexAccountStoreDocument CreateStoreDocumentSnapshot() => new()
+    {
+        Accounts = [..GetAccountStatesSnapshot()]
+    };
 
     private void StartAuthenticationFileSystemWatcher()
     {
@@ -449,25 +444,23 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
         catch { }
     }
 
-    private static ProviderUsageSnapshot CreateProviderUsageSnapshot(CodexUsageSnapshot codexUsageSnapshot)
-        => new()
-        {
-            ProviderKind = CliProviderKind.Codex,
-            PlanType = codexUsageSnapshot.PlanType,
-            EmailAddress = codexUsageSnapshot.EmailAddress,
-            RawResponseText = codexUsageSnapshot.RawResponseText,
-            FiveHour = CreateProviderUsageWindow(codexUsageSnapshot.PrimaryWindow),
-            SevenDay = CreateProviderUsageWindow(codexUsageSnapshot.SecondaryWindow)
-        };
+    private static ProviderUsageSnapshot CreateProviderUsageSnapshot(CodexUsageSnapshot codexUsageSnapshot) => new()
+    {
+        ProviderKind = CliProviderKind.Codex,
+        PlanType = codexUsageSnapshot.PlanType,
+        EmailAddress = codexUsageSnapshot.EmailAddress,
+        RawResponseText = codexUsageSnapshot.RawResponseText,
+        FiveHour = CreateProviderUsageWindow(codexUsageSnapshot.PrimaryWindow),
+        SevenDay = CreateProviderUsageWindow(codexUsageSnapshot.SecondaryWindow)
+    };
 
-    private static ProviderUsageWindow CreateProviderUsageWindow(CodexUsageWindow codexUsageWindow)
-        => new()
-        {
-            UsedPercentage = codexUsageWindow.UsedPercentage,
-            RemainingPercentage = codexUsageWindow.RemainingPercentage,
-            ResetAfterSeconds = codexUsageWindow.ResetAfterSeconds,
-            ResetAt = CreateDateTimeOffset(codexUsageWindow.ResetAtUnixSeconds)
-        };
+    private static ProviderUsageWindow CreateProviderUsageWindow(CodexUsageWindow codexUsageWindow) => new()
+    {
+        UsedPercentage = codexUsageWindow.UsedPercentage,
+        RemainingPercentage = codexUsageWindow.RemainingPercentage,
+        ResetAfterSeconds = codexUsageWindow.ResetAfterSeconds,
+        ResetAt = CreateDateTimeOffset(codexUsageWindow.ResetAtUnixSeconds)
+    };
 
     private static string TryGetAccountIdentifier(CodexAuthenticationDocument codexAuthenticationDocument)
     {

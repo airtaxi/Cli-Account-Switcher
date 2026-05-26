@@ -21,17 +21,13 @@ public sealed class CodexAccount
 
     public DateTimeOffset? LastUsageRefreshTime { get; set; }
 
-    [JsonIgnore]
-    public string AccountIdentifier => CodexAuthenticationDocument.GetEffectiveProfileIdentifier();
+    [JsonIgnore] public string AccountIdentifier => CodexAuthenticationDocument.GetEffectiveProfileIdentifier();
 
-    [JsonIgnore]
-    public string EmailAddress => ResolveEmailAddress();
+    [JsonIgnore] public string EmailAddress => ResolveEmailAddress();
 
-    [JsonIgnore]
-    public string DisplayName => string.IsNullOrWhiteSpace(CustomAlias) ? EmailAddress : CustomAlias;
+    [JsonIgnore] public string DisplayName => string.IsNullOrWhiteSpace(CustomAlias) ? EmailAddress : CustomAlias;
 
-    [JsonIgnore]
-    public string PlanType => string.IsNullOrWhiteSpace(LastCodexUsageSnapshot.PlanType) ? CodexAuthenticationDocument.TryReadIdentityProfile()?.PlanType ?? "" : LastCodexUsageSnapshot.PlanType;
+    [JsonIgnore] public string PlanType => string.IsNullOrWhiteSpace(LastCodexUsageSnapshot.PlanType) ? CodexAuthenticationDocument.TryReadIdentityProfile()?.PlanType ?? "" : LastCodexUsageSnapshot.PlanType;
 
     public void MarkAsExpired() => IsTokenExpired = true;
 

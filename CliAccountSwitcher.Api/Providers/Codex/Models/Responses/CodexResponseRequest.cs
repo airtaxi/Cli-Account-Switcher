@@ -39,28 +39,24 @@ public sealed class CodexResponseRequest
         payloadObject["instructions"] = string.IsNullOrWhiteSpace(Instructions) ? CodexApiConventions.DefaultResponsesInstructionsText : Instructions;
         payloadObject["input"] = InputPayload?.DeepClone() ?? CreateTextInputPayload(InputText!);
 
-        foreach (var additionalProperty in AdditionalProperties)
-        {
-            payloadObject[additionalProperty.Key] = additionalProperty.Value?.DeepClone();
-        }
+        foreach (var additionalProperty in AdditionalProperties) payloadObject[additionalProperty.Key] = additionalProperty.Value?.DeepClone();
 
         return payloadObject;
     }
 
-    private static JsonArray CreateTextInputPayload(string inputText)
-        => [
-            new JsonObject
+    private static JsonArray CreateTextInputPayload(string inputText) => [
+        new JsonObject
+        {
+            ["type"] = "message",
+            ["role"] = "user",
+            ["content"] = new JsonArray
             {
-                ["type"] = "message",
-                ["role"] = "user",
-                ["content"] = new JsonArray
+                new JsonObject
                 {
-                    new JsonObject
-                    {
-                        ["type"] = "input_text",
-                        ["text"] = inputText
-                    }
+                    ["type"] = "input_text",
+                    ["text"] = inputText
                 }
             }
-        ];
+        }
+    ];
 }

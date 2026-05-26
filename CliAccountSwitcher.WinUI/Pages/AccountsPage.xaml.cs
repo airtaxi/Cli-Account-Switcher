@@ -277,19 +277,9 @@ public sealed partial class AccountsPage : Page
         return fileSavePicker;
     }
 
-    private static string GetBackupFileExtension(CliProviderKind providerKind)
-        => providerKind switch
-        {
-            CliProviderKind.ClaudeCode => ".ccb",
-            _ => ".zip"
-        };
+    private static string GetBackupFileExtension(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => ".ccb", _ => ".zip"  };
 
-    private static string GetBackupFileTypeChoiceResourceName(CliProviderKind providerKind)
-        => providerKind switch
-        {
-            CliProviderKind.ClaudeCode => "AccountsPage_ClaudeCodeBackupFileTypeChoice",
-            _ => "AccountsPage_ZipBackupFileTypeChoice"
-        };
+    private static string GetBackupFileTypeChoiceResourceName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => "AccountsPage_ClaudeCodeBackupFileTypeChoice", _ => "AccountsPage_ZipBackupFileTypeChoice"  };
 
     private static string ReadCommandParameter(object sender) => sender is FrameworkElement { Tag: string accountIdentifier } ? accountIdentifier : sender is Button { CommandParameter: string buttonAccountIdentifier } ? buttonAccountIdentifier : "";
 

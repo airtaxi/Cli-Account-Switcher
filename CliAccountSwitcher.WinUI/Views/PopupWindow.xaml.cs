@@ -241,18 +241,9 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
         finally { _isApplyingProviderSelection = false; }
     }
 
-    private static int GetProviderSelectedIndex(CliProviderKind selectedProviderKind) => selectedProviderKind switch
-    {
-        CliProviderKind.ClaudeCode => ClaudeCodeProviderSelectedIndex,
-        _ => CodexProviderSelectedIndex
-    };
+    private static int GetProviderSelectedIndex(CliProviderKind selectedProviderKind) => selectedProviderKind switch { CliProviderKind.ClaudeCode => ClaudeCodeProviderSelectedIndex, _ => CodexProviderSelectedIndex  };
 
-    private static CliProviderKind GetProviderKindFromSelectedIndex(int selectedIndex)
-        => selectedIndex switch
-        {
-            ClaudeCodeProviderSelectedIndex => CliProviderKind.ClaudeCode,
-            _ => CliProviderKind.Codex
-        };
+    private static CliProviderKind GetProviderKindFromSelectedIndex(int selectedIndex) => selectedIndex switch { ClaudeCodeProviderSelectedIndex => CliProviderKind.ClaudeCode, _ => CliProviderKind.Codex  };
 
     private void QueueWindowContentResize()
     {

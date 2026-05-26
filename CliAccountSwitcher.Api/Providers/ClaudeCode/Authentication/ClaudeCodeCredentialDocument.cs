@@ -71,8 +71,7 @@ public sealed class ClaudeCodeCredentialDocument
         return rootObject.ToJsonString(ProviderJsonSerializerOptions.Default);
     }
 
-    public bool HasClaudeAiUsageScopes()
-        => Scopes.Contains(ClaudeCodeOAuthScopes.Profile, StringComparer.Ordinal) && Scopes.Contains(ClaudeCodeOAuthScopes.Inference, StringComparer.Ordinal);
+    public bool HasClaudeAiUsageScopes() => Scopes.Contains(ClaudeCodeOAuthScopes.Profile, StringComparer.Ordinal) && Scopes.Contains(ClaudeCodeOAuthScopes.Inference, StringComparer.Ordinal);
 
     public static long CalculateExpiresAt(DateTimeOffset issuedAt, int expiresInSeconds, long previousExpiresAt)
     {

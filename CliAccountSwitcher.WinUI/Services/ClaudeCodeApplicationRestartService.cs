@@ -57,12 +57,7 @@ public sealed class ClaudeCodeApplicationRestartService
         return string.Equals(process.ProcessName, VisualStudioCodeProcessName, StringComparison.Ordinal);
     }
 
-    private static IReadOnlyList<string> GetRestartExecutableFilePaths(IReadOnlyList<Process> visualStudioCodeProcesses)
-        => visualStudioCodeProcesses
-            .Select(TryGetProcessExecutableFilePath)
-            .Where(executableFilePath => !string.IsNullOrWhiteSpace(executableFilePath))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToArray();
+    private static IReadOnlyList<string> GetRestartExecutableFilePaths(IReadOnlyList<Process> visualStudioCodeProcesses) => visualStudioCodeProcesses.Select(TryGetProcessExecutableFilePath).Where(executableFilePath => !string.IsNullOrWhiteSpace(executableFilePath)).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
 
     private static void StopVisualStudioCodeProcesses(IReadOnlyList<Process> visualStudioCodeProcesses)
     {
@@ -78,7 +73,10 @@ public sealed class ClaudeCodeApplicationRestartService
 
         foreach (var visualStudioCodeProcess in visualStudioCodeProcesses)
         {
-            try { if (!visualStudioCodeProcess.HasExited) visualStudioCodeProcess.WaitForExit(ProcessExitTimeoutMilliseconds); }
+            try
+            {
+                if (!visualStudioCodeProcess.HasExited) visualStudioCodeProcess.WaitForExit(ProcessExitTimeoutMilliseconds);
+            }
             catch { }
             finally { visualStudioCodeProcess.Dispose(); }
         }

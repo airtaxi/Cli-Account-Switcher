@@ -57,7 +57,10 @@ public sealed partial class OAuthAddAccountPage : Page
             _isCompletingSuccessfully = true;
             _addAccountDialogContext.CompleteSuccessfully();
         }
-        catch (OperationCanceledException) { if (_callbackCancellationTokenSource?.IsCancellationRequested != true) ShowError(); }
+        catch (OperationCanceledException)
+        {
+            if (_callbackCancellationTokenSource?.IsCancellationRequested != true) ShowError();
+        }
         catch { ShowError(); }
         finally
         {
