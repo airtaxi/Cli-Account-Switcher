@@ -73,14 +73,12 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
         if (string.IsNullOrWhiteSpace(storedAccountIdentifier))
         {
             var liveAccountState = await ReadLiveAccountStateAsync(cancellationToken);
-            liveAccountState = await RefreshLiveAccountAsync(liveAccountState, true, cancellationToken);
-            if (ShouldSkipUsageSnapshot(liveAccountState.CredentialDocument)) return CreateEmptyUsageSnapshot(liveAccountState.GlobalConfigDocument.EmailAddress);
 
             try
             {
                 return await GetUsageSnapshotAsync(liveAccountState.CredentialDocument.AccessToken, liveAccountState.GlobalConfigDocument.EmailAddress, cancellationToken);
             }
-            catch (ClaudeCodeUsageUnauthorizedException)
+            catch (ClaudeCodeUsageAuthenticationRequiredException)
             {
                 liveAccountState = await RefreshLiveAccountAsync(liveAccountState, true, cancellationToken);
                 if (ShouldSkipUsageSnapshot(liveAccountState.CredentialDocument)) return CreateEmptyUsageSnapshot(liveAccountState.GlobalConfigDocument.EmailAddress);
@@ -89,14 +87,12 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
         }
 
         var storedPayloadContext = await LoadStoredPayloadContextAsync(_providerSnapshotStore, storedAccountIdentifier, cancellationToken);
-        storedPayloadContext = await RefreshStoredAccountAsync(_providerSnapshotStore, storedPayloadContext, true, cancellationToken);
-        if (ShouldSkipUsageSnapshot(storedPayloadContext.CredentialDocument)) return CreateEmptyUsageSnapshot(storedPayloadContext.Payload.EmailAddress);
 
         try
         {
             return await GetUsageSnapshotAsync(storedPayloadContext.CredentialDocument.AccessToken, storedPayloadContext.Payload.EmailAddress, cancellationToken);
         }
-        catch (ClaudeCodeUsageUnauthorizedException)
+        catch (ClaudeCodeUsageAuthenticationRequiredException)
         {
             storedPayloadContext = await RefreshStoredAccountAsync(_providerSnapshotStore, storedPayloadContext, true, cancellationToken);
             if (ShouldSkipUsageSnapshot(storedPayloadContext.CredentialDocument)) return CreateEmptyUsageSnapshot(storedPayloadContext.Payload.EmailAddress);
@@ -287,7 +283,7 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
 
         using var httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, cancellationToken);
         var responseText = await httpResponseMessage.Content.ReadAsStringAsync(cancellationToken);
-        if (httpResponseMessage.StatusCode == HttpStatusCode.Unauthorized) throw new ClaudeCodeUsageUnauthorizedException(responseText);
+        if (httpResponseMessage.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden) throw new ClaudeCodeUsageAuthenticationRequiredException(responseText);
         if (!httpResponseMessage.IsSuccessStatusCode) throw new ProviderActionRequiredException($"Claude Code usage request failed. Login again if the token is expired. Response: {responseText}");
         if (string.IsNullOrWhiteSpace(responseText)) throw new ProviderActionRequiredException("Claude Code usage request failed because the response body is empty.");
 
@@ -297,7 +293,7 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
     private async Task<ProviderUsageSnapshot> GetUsageSnapshotAfterRefreshAsync(string accessToken, string emailAddress, CancellationToken cancellationToken)
     {
         try { return await GetUsageSnapshotAsync(accessToken, emailAddress, cancellationToken); }
-        catch (ClaudeCodeUsageUnauthorizedException exception)
+        catch (ClaudeCodeUsageAuthenticationRequiredException exception)
         {
             throw new ProviderAuthenticationExpiredException("Claude Code usage request failed after refreshing the token. Login again or re-save the account.", exception);
         }
@@ -562,7 +558,7 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
         public StoredProviderAccount StoredProviderAccount { get; set; } = new();
     }
 
-    private sealed class ClaudeCodeUsageUnauthorizedException(string responseText) : Exception(responseText)
+    private sealed class ClaudeCodeUsageAuthenticationRequiredException(string responseText) : Exception(responseText)
     {
     }
 }
