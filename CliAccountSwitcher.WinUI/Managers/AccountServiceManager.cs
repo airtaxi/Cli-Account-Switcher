@@ -119,10 +119,7 @@ public sealed class AccountServiceManager : IDisposable
     private async Task RunActiveStatusRefreshLoopAsync()
     {
         using var periodicTimer = new PeriodicTimer(ActiveStatusRefreshInterval);
-        try
-        {
-            while (await periodicTimer.WaitForNextTickAsync(_backgroundCancellationTokenSource.Token)) await SynchronizeActiveStatusesSilentlyAsync();
-        }
+        try { while (await periodicTimer.WaitForNextTickAsync(_backgroundCancellationTokenSource.Token)) await SynchronizeActiveStatusesSilentlyAsync(); }
         catch (OperationCanceledException) { }
     }
 

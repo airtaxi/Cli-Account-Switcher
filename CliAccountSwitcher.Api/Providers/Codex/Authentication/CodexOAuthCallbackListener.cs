@@ -62,10 +62,7 @@ public sealed class CodexOAuthCallbackListener : IAsyncDisposable
             if (timeoutCancellationTokenSource.IsCancellationRequested) throw new OperationCanceledException("The OAuth callback listener timed out or was canceled.", exception, timeoutCancellationTokenSource.Token);
             throw new CodexApiException($"The OAuth callback listener failed on {_redirectAddress}.", null, null, exception);
         }
-        finally
-        {
-            StopListener();
-        }
+        finally { StopListener(); }
     }
 
     public ValueTask DisposeAsync()
@@ -118,13 +115,8 @@ public sealed class CodexOAuthCallbackListener : IAsyncDisposable
             _httpListener?.Stop();
             _httpListener?.Close();
         }
-        catch
-        {
-        }
-        finally
-        {
-            _httpListener = null;
-        }
+        catch { }
+        finally { _httpListener = null; }
     }
 
     private void ThrowIfDisposed()

@@ -167,10 +167,7 @@ public sealed class ProviderApiExperimentApplication : IDisposable
                 _ => ShowUnknownCommand(normalizedCommandName)
             };
         }
-        finally
-        {
-            if (codexProviderAdapter is not null) codexProviderAdapter.InputFilePathOverride = null;
-        }
+        finally { if (codexProviderAdapter is not null) codexProviderAdapter.InputFilePathOverride = null; }
     }
 
     private int ShowHelp(IProviderAdapter providerAdapter)

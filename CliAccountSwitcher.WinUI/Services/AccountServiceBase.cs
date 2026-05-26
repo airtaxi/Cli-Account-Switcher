@@ -220,10 +220,7 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
                 await RefreshAccountUsageAsync(accountState, cancellationToken);
             }
         }
-        finally
-        {
-            _refreshSemaphore.Release();
-        }
+        finally { _refreshSemaphore.Release(); }
     }
 
     private async Task RefreshAccountUsageAsync(TAccountState accountState, CancellationToken cancellationToken)
@@ -239,10 +236,7 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
             await SaveAccountStatesAsync(cancellationToken);
             NotifyAccountsChanged();
         }
-        catch (Exception exception) when (IsAccountExpiredException(exception))
-        {
-            await HandleExpiredAccountAsync(accountState, cancellationToken);
-        }
+        catch (Exception exception) when (IsAccountExpiredException(exception)) { await HandleExpiredAccountAsync(accountState, cancellationToken); }
     }
 
     private async Task HandleExpiredAccountAsync(TAccountState accountState, CancellationToken cancellationToken)

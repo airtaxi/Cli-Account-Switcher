@@ -128,10 +128,7 @@ public sealed partial class CodexApplicationRestartService
 
         foreach (var codexApplicationProcess in codexApplicationProcesses)
         {
-            try
-            {
-                if (!codexApplicationProcess.HasExited) codexApplicationProcess.WaitForExit(ProcessExitTimeoutMilliseconds);
-            }
+            try { if (!codexApplicationProcess.HasExited) codexApplicationProcess.WaitForExit(ProcessExitTimeoutMilliseconds); }
             catch { }
             finally { codexApplicationProcess.Dispose(); }
         }
@@ -151,10 +148,7 @@ public sealed partial class CodexApplicationRestartService
 
         foreach (var visualStudioCodeProcess in visualStudioCodeProcesses)
         {
-            try
-            {
-                if (!visualStudioCodeProcess.HasExited) visualStudioCodeProcess.WaitForExit(ProcessExitTimeoutMilliseconds);
-            }
+            try { if (!visualStudioCodeProcess.HasExited) visualStudioCodeProcess.WaitForExit(ProcessExitTimeoutMilliseconds); }
             catch { }
             finally { visualStudioCodeProcess.Dispose(); }
         }

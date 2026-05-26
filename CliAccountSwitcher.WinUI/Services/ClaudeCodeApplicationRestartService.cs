@@ -78,10 +78,7 @@ public sealed class ClaudeCodeApplicationRestartService
 
         foreach (var visualStudioCodeProcess in visualStudioCodeProcesses)
         {
-            try
-            {
-                if (!visualStudioCodeProcess.HasExited) visualStudioCodeProcess.WaitForExit(ProcessExitTimeoutMilliseconds);
-            }
+            try { if (!visualStudioCodeProcess.HasExited) visualStudioCodeProcess.WaitForExit(ProcessExitTimeoutMilliseconds); }
             catch { }
             finally { visualStudioCodeProcess.Dispose(); }
         }

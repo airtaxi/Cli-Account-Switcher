@@ -207,10 +207,7 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
             await using var fileStream = File.Create(Constants.AccountsFilePath);
             await JsonSerializer.SerializeAsync(fileStream, codexAccountStoreDocument, CodexAccountJsonSerializerContext.Default.CodexAccountStoreDocument, cancellationToken);
         }
-        finally
-        {
-            _saveSemaphore.Release();
-        }
+        finally { _saveSemaphore.Release(); }
     }
 
     protected override async Task<string> ReadActiveAccountIdentifierAsync(CancellationToken cancellationToken)
@@ -300,10 +297,7 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
                 var codexUsageSnapshot = await _codexUsageClient.GetUsageAsync(currentAuthenticationDocument, cancellationToken);
                 return (currentAuthenticationDocument, codexUsageSnapshot);
             }
-            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
-            {
-                throw;
-            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { throw; }
             catch (Exception exception) when (IsRefreshTokenFailureException(exception))
             {
                 lastRefreshTokenException = exception;
@@ -346,14 +340,8 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
             var authenticationDocumentText = await File.ReadAllTextAsync(Constants.CurrentAuthenticationFilePath, cancellationToken);
             return CodexAuthenticationDocumentSerializer.Parse(authenticationDocumentText);
         }
-        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
-        {
-            throw;
-        }
-        catch
-        {
-            return null;
-        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { throw; }
+        catch { return null; }
     }
 
     private static void ApplySuccessfulUsageRefresh(CodexAccount codexAccount, CodexUsageSnapshot codexUsageSnapshot)

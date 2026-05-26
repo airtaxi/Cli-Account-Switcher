@@ -34,10 +34,7 @@ public static class CodexJsonWebTokenParser
 
             return string.IsNullOrWhiteSpace(identityProfile.UserIdentifier) && string.IsNullOrWhiteSpace(identityProfile.EmailAddress) && string.IsNullOrWhiteSpace(identityProfile.AccountIdentifier) && string.IsNullOrWhiteSpace(identityProfile.PlanType) ? null : identityProfile;
         }
-        catch
-        {
-            return null;
-        }
+        catch { return null; }
     }
 
     private static string ReadPayloadText(string identityToken)

@@ -36,10 +36,7 @@ internal sealed class ClaudeCodeCliRunner
             await loginProcess.WaitForExitAsync(cancellationToken);
             if (loginProcess.ExitCode == 0) return new ClaudeCodeProcessResult { ExitCode = loginProcess.ExitCode };
         }
-        catch (Win32Exception exception)
-        {
-            throw new ProviderInstallNotFoundException("Claude Code CLI was not found. Ensure `claude` is installed and available on PATH.", exception);
-        }
+        catch (Win32Exception exception) { throw new ProviderInstallNotFoundException("Claude Code CLI was not found. Ensure `claude` is installed and available on PATH.", exception); }
 
         var fallbackResult = await TryRunSlashLoginFallbackAsync(cancellationToken);
         if (fallbackResult.ExitCode == 0 && LooksLikeLoginSucceeded(fallbackResult)) return fallbackResult;
@@ -64,10 +61,7 @@ internal sealed class ClaudeCodeCliRunner
                 ErrorText = await errorTask
             };
         }
-        catch (Win32Exception exception)
-        {
-            throw new ProviderInstallNotFoundException("Claude Code CLI was not found. Ensure `claude` is installed and available on PATH.", exception);
-        }
+        catch (Win32Exception exception) { throw new ProviderInstallNotFoundException("Claude Code CLI was not found. Ensure `claude` is installed and available on PATH.", exception); }
     }
 
     public async IAsyncEnumerable<string> StreamOutputLinesAsync(IReadOnlyList<string> arguments, [EnumeratorCancellation] CancellationToken cancellationToken = default)
@@ -115,15 +109,8 @@ internal sealed class ClaudeCodeCliRunner
         var outputTask = process.StandardOutput.ReadToEndAsync(timeoutCancellationTokenSource.Token);
         var errorTask = process.StandardError.ReadToEndAsync(timeoutCancellationTokenSource.Token);
 
-        try
-        {
-            await process.WaitForExitAsync(timeoutCancellationTokenSource.Token);
-        }
-        catch (OperationCanceledException)
-        {
-            try { process.Kill(true); }
-            catch { }
-        }
+        try { await process.WaitForExitAsync(timeoutCancellationTokenSource.Token); }
+        catch (OperationCanceledException) { try { process.Kill(true); } catch { } }
 
         return new ClaudeCodeProcessResult
         {
@@ -135,14 +122,8 @@ internal sealed class ClaudeCodeCliRunner
 
     private static Process StartProcess(ProcessStartInfo processStartInfo)
     {
-        try
-        {
-            return Process.Start(processStartInfo) ?? throw new ProviderInstallNotFoundException("Claude Code CLI could not be started.");
-        }
-        catch (Win32Exception exception)
-        {
-            throw new ProviderInstallNotFoundException("Claude Code CLI was not found. Ensure `claude` is installed and available on PATH.", exception);
-        }
+        try { return Process.Start(processStartInfo) ?? throw new ProviderInstallNotFoundException("Claude Code CLI could not be started."); }
+        catch (Win32Exception exception) { throw new ProviderInstallNotFoundException("Claude Code CLI was not found. Ensure `claude` is installed and available on PATH.", exception); }
     }
 
     private static ProcessStartInfo CreateRedirectedProcessStartInfo(IReadOnlyList<string> arguments)

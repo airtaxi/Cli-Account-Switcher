@@ -74,10 +74,7 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
         {
             var liveAccountState = await ReadLiveAccountStateAsync(cancellationToken);
 
-            try
-            {
-                return await GetUsageSnapshotAsync(liveAccountState.CredentialDocument.AccessToken, liveAccountState.GlobalConfigDocument.EmailAddress, cancellationToken);
-            }
+            try { return await GetUsageSnapshotAsync(liveAccountState.CredentialDocument.AccessToken, liveAccountState.GlobalConfigDocument.EmailAddress, cancellationToken); }
             catch (ClaudeCodeUsageAuthenticationRequiredException)
             {
                 liveAccountState = await RefreshLiveAccountAsync(liveAccountState, true, cancellationToken);
@@ -88,10 +85,7 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
 
         var storedPayloadContext = await LoadStoredPayloadContextAsync(_providerSnapshotStore, storedAccountIdentifier, cancellationToken);
 
-        try
-        {
-            return await GetUsageSnapshotAsync(storedPayloadContext.CredentialDocument.AccessToken, storedPayloadContext.Payload.EmailAddress, cancellationToken);
-        }
+        try { return await GetUsageSnapshotAsync(storedPayloadContext.CredentialDocument.AccessToken, storedPayloadContext.Payload.EmailAddress, cancellationToken); }
         catch (ClaudeCodeUsageAuthenticationRequiredException)
         {
             storedPayloadContext = await RefreshStoredAccountAsync(_providerSnapshotStore, storedPayloadContext, true, cancellationToken);
@@ -263,10 +257,7 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
         }
         catch
         {
-            try
-            {
-                await RestoreLiveClaudeCodeFilesAsync(claudeCodePaths, originalCredentialsJson, originalGlobalConfigJson, hasWrittenCredentials, hasWrittenGlobalConfig, CancellationToken.None);
-            }
+            try { await RestoreLiveClaudeCodeFilesAsync(claudeCodePaths, originalCredentialsJson, originalGlobalConfigJson, hasWrittenCredentials, hasWrittenGlobalConfig, CancellationToken.None); }
             catch { }
 
             throw;
@@ -293,10 +284,7 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
     private async Task<ProviderUsageSnapshot> GetUsageSnapshotAfterRefreshAsync(string accessToken, string emailAddress, CancellationToken cancellationToken)
     {
         try { return await GetUsageSnapshotAsync(accessToken, emailAddress, cancellationToken); }
-        catch (ClaudeCodeUsageAuthenticationRequiredException exception)
-        {
-            throw new ProviderAuthenticationExpiredException("Claude Code usage request failed after refreshing the token. Login again or re-save the account.", exception);
-        }
+        catch (ClaudeCodeUsageAuthenticationRequiredException exception) { throw new ProviderAuthenticationExpiredException("Claude Code usage request failed after refreshing the token. Login again or re-save the account.", exception); }
     }
 
     private static bool ShouldSkipUsageSnapshot(ClaudeCodeCredentialDocument credentialDocument)
@@ -406,10 +394,7 @@ public sealed class ClaudeCodeProviderAdapter : ProviderAdapterBase<ClaudeCodeAc
 
     private async Task<ProviderIdentityProfile?> TryGetCurrentIdentityForActivationAsync(CancellationToken cancellationToken)
     {
-        try
-        {
-            return await GetCurrentIdentityAsync(cancellationToken);
-        }
+        try { return await GetCurrentIdentityAsync(cancellationToken); }
         catch { return null; }
     }
 

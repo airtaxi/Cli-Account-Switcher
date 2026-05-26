@@ -237,14 +237,8 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
     private void ApplyProviderSelection(CliProviderKind selectedProviderKind)
     {
         _isApplyingProviderSelection = true;
-        try
-        {
-            ProviderComboBox.SelectedIndex = GetProviderSelectedIndex(selectedProviderKind);
-        }
-        finally
-        {
-            _isApplyingProviderSelection = false;
-        }
+        try { ProviderComboBox.SelectedIndex = GetProviderSelectedIndex(selectedProviderKind); }
+        finally { _isApplyingProviderSelection = false; }
     }
 
     private static int GetProviderSelectedIndex(CliProviderKind selectedProviderKind) => selectedProviderKind switch
@@ -286,10 +280,7 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
             await action();
             ViewModel.ReloadDashboard();
         }
-        finally
-        {
-            HideLoading();
-        }
+        finally { HideLoading(); }
     }
 
     private void OnPopupWindowClosed(object sender, WindowEventArgs windowEventArguments) => Dispose();

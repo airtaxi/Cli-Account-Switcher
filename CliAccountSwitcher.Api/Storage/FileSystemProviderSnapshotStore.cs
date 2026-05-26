@@ -38,10 +38,7 @@ public sealed class FileSystemProviderSnapshotStore : IProviderSnapshotStore
                 .Select(storedProviderAccount => CloneStoredProviderAccount(storedProviderAccount, string.Equals(storedProviderAccount.StoredAccountIdentifier, activeStoredAccountIdentifier, StringComparison.OrdinalIgnoreCase)))
                 .ToArray();
         }
-        finally
-        {
-            _semaphore.Release();
-        }
+        finally { _semaphore.Release(); }
     }
 
     public async Task<string?> GetPayloadJsonAsync(CliProviderKind providerKind, string storedAccountIdentifier, CancellationToken cancellationToken = default)
@@ -56,10 +53,7 @@ public sealed class FileSystemProviderSnapshotStore : IProviderSnapshotStore
             var payloadBytes = _windowsDataProtectionService.Unprotect(protectedBytes, providerKind.ToString());
             return Encoding.UTF8.GetString(payloadBytes);
         }
-        finally
-        {
-            _semaphore.Release();
-        }
+        finally { _semaphore.Release(); }
     }
 
     public async Task SaveAsync(StoredProviderAccount storedProviderAccount, string payloadJson, CancellationToken cancellationToken = default)
@@ -84,10 +78,7 @@ public sealed class FileSystemProviderSnapshotStore : IProviderSnapshotStore
 
             await WriteManifestDocumentAsync(manifestDocument, cancellationToken);
         }
-        finally
-        {
-            _semaphore.Release();
-        }
+        finally { _semaphore.Release(); }
     }
 
     public async Task DeleteAsync(CliProviderKind providerKind, string storedAccountIdentifier, CancellationToken cancellationToken = default)
@@ -112,10 +103,7 @@ public sealed class FileSystemProviderSnapshotStore : IProviderSnapshotStore
             }
             catch { }
         }
-        finally
-        {
-            _semaphore.Release();
-        }
+        finally { _semaphore.Release(); }
     }
 
     public async Task SetActiveStoredAccountIdentifierAsync(CliProviderKind providerKind, string? storedAccountIdentifier, CancellationToken cancellationToken = default)
@@ -127,10 +115,7 @@ public sealed class FileSystemProviderSnapshotStore : IProviderSnapshotStore
             manifestDocument.ActiveStoredAccountIdentifiers[providerKind.ToString()] = storedAccountIdentifier;
             await WriteManifestDocumentAsync(manifestDocument, cancellationToken);
         }
-        finally
-        {
-            _semaphore.Release();
-        }
+        finally { _semaphore.Release(); }
     }
 
     public async Task<string?> GetActiveStoredAccountIdentifierAsync(CliProviderKind providerKind, CancellationToken cancellationToken = default)
@@ -141,10 +126,7 @@ public sealed class FileSystemProviderSnapshotStore : IProviderSnapshotStore
             var manifestDocument = await ReadManifestDocumentAsync(cancellationToken);
             return manifestDocument.ActiveStoredAccountIdentifiers.TryGetValue(providerKind.ToString(), out var storedAccountIdentifier) ? storedAccountIdentifier : null;
         }
-        finally
-        {
-            _semaphore.Release();
-        }
+        finally { _semaphore.Release(); }
     }
 
     private async Task<ProviderSnapshotManifestDocument> ReadManifestDocumentAsync(CancellationToken cancellationToken)

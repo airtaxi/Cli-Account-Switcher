@@ -88,10 +88,7 @@ public sealed partial class AccountsPage : Page
             await ViewModel.ReloadAccountsAsync();
         }
         catch { providerAccountBackupImportResult = new ProviderAccountBackupImportResult { FailureCount = 1 }; }
-        finally
-        {
-            MainWindow.HideLoading();
-        }
+        finally { MainWindow.HideLoading(); }
 
         await this.ShowDialogAsync(GetLocalizedString("AccountsPage_ImportBackupDialogTitle"), BuildBackupImportResultText(providerAccountBackupImportResult.SuccessCount, providerAccountBackupImportResult.FailureCount, providerAccountBackupImportResult.DuplicateCount));
     }
@@ -190,10 +187,7 @@ public sealed partial class AccountsPage : Page
             await action();
             if (shouldReloadAccounts) await ViewModel.ReloadAccountsAsync();
         }
-        finally
-        {
-            MainWindow.HideLoading();
-        }
+        finally { MainWindow.HideLoading(); }
     }
 
     private void OnRemainingTimeRefreshTimerTick(object sender, object eventArguments) => ViewModel.RefreshUsageResetTextProperties();

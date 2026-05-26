@@ -234,27 +234,15 @@ public sealed partial class MainWindow : WindowEx
         if (PageSelectorBar.SelectedItem == selectorBarItem) return;
 
         _isApplyingNavigationSelection = true;
-        try
-        {
-            PageSelectorBar.SelectedItem = selectorBarItem;
-        }
-        finally
-        {
-            _isApplyingNavigationSelection = false;
-        }
+        try { PageSelectorBar.SelectedItem = selectorBarItem; }
+        finally { _isApplyingNavigationSelection = false; }
     }
 
     private void ApplyProviderSelection(CliProviderKind selectedProviderKind)
     {
         _isApplyingProviderSelection = true;
-        try
-        {
-            ProviderComboBox.SelectedIndex = GetProviderSelectedIndex(selectedProviderKind);
-        }
-        finally
-        {
-            _isApplyingProviderSelection = false;
-        }
+        try { ProviderComboBox.SelectedIndex = GetProviderSelectedIndex(selectedProviderKind); }
+        finally { _isApplyingProviderSelection = false; }
     }
 
     private static int GetProviderSelectedIndex(CliProviderKind selectedProviderKind) => selectedProviderKind switch

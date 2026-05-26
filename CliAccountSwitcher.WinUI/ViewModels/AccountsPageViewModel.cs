@@ -106,14 +106,8 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         _selectedAccountIdentifiers.Clear();
         foreach (var accountIdentifier in accountIdentifiers.Where(accountIdentifier => !string.IsNullOrWhiteSpace(accountIdentifier))) _selectedAccountIdentifiers.Add(accountIdentifier);
         _isSynchronizingAccountSelection = true;
-        try
-        {
-            foreach (var accountViewModel in Accounts) accountViewModel.IsSelected = _selectedAccountIdentifiers.Contains(accountViewModel.AccountIdentifier);
-        }
-        finally
-        {
-            _isSynchronizingAccountSelection = false;
-        }
+        try { foreach (var accountViewModel in Accounts) accountViewModel.IsSelected = _selectedAccountIdentifiers.Contains(accountViewModel.AccountIdentifier); }
+        finally { _isSynchronizingAccountSelection = false; }
         SelectedAccountIdentifiers = [.. _selectedAccountIdentifiers];
         RefreshFilteredAccountsSelectionState();
     }
@@ -121,14 +115,8 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     public void SetFilteredAccountsSelection(bool isSelected)
     {
         _isSynchronizingAccountSelection = true;
-        try
-        {
-            foreach (var accountViewModel in FilteredAccounts) accountViewModel.IsSelected = isSelected;
-        }
-        finally
-        {
-            _isSynchronizingAccountSelection = false;
-        }
+        try { foreach (var accountViewModel in FilteredAccounts) accountViewModel.IsSelected = isSelected; }
+        finally { _isSynchronizingAccountSelection = false; }
 
         RefreshSelectedAccountIdentifiersFromAccountViewModels();
     }

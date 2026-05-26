@@ -149,10 +149,7 @@ public abstract class ProviderAdapterBase<TLiveAccountState, TStoredAccountPaylo
 
     private async Task<ProviderIdentityProfile?> TryGetCurrentIdentityAsync(CancellationToken cancellationToken)
     {
-        try
-        {
-            return await GetCurrentIdentityAsync(cancellationToken);
-        }
+        try { return await GetCurrentIdentityAsync(cancellationToken); }
         catch { return null; }
     }
 

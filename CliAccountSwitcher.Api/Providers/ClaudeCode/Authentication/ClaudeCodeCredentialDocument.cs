@@ -84,10 +84,7 @@ public sealed class ClaudeCodeCredentialDocument
     {
         if (expiresAt <= 0) return null;
 
-        try
-        {
-            return expiresAt >= MillisecondUnixTimestampThreshold ? DateTimeOffset.FromUnixTimeMilliseconds(expiresAt) : DateTimeOffset.FromUnixTimeSeconds(expiresAt);
-        }
+        try { return expiresAt >= MillisecondUnixTimestampThreshold ? DateTimeOffset.FromUnixTimeMilliseconds(expiresAt) : DateTimeOffset.FromUnixTimeSeconds(expiresAt); }
         catch { return null; }
     }
 

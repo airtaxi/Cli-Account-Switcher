@@ -109,10 +109,7 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
                 duplicateKeys.Add(duplicateKey);
                 importResult.SuccessCount++;
             }
-            catch
-            {
-                importResult.FailureCount++;
-            }
+            catch { importResult.FailureCount++; }
         }
 
         if (importResult.SuccessCount > 0)
@@ -182,10 +179,7 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
                 await _providerSnapshotStore.SaveAsync(storedProviderAccount, payloadJson, cancellationToken);
             }
         }
-        finally
-        {
-            _saveSemaphore.Release();
-        }
+        finally { _saveSemaphore.Release(); }
     }
 
     protected override async Task<string> ReadActiveAccountIdentifierAsync(CancellationToken cancellationToken)
@@ -222,24 +216,15 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
             if (!string.IsNullOrWhiteSpace(providerUsageSnapshot.PlanType)) storedProviderAccount.PlanType = providerUsageSnapshot.PlanType;
             return storedProviderAccount.LastProviderUsageSnapshot;
         }
-        catch (ProviderAuthenticationExpiredException)
-        {
-            throw;
-        }
+        catch (ProviderAuthenticationExpiredException) { throw; }
         catch (ProviderActionRequiredException)
         {
             storedProviderAccount.IsTokenExpired = false;
             storedProviderAccount.LastUpdated = DateTimeOffset.UtcNow;
             return GetProviderUsageSnapshot(storedProviderAccount);
         }
-        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
-        {
-            throw;
-        }
-        catch
-        {
-            return GetProviderUsageSnapshot(storedProviderAccount);
-        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { throw; }
+        catch { return GetProviderUsageSnapshot(storedProviderAccount); }
     }
 
     protected override async Task DeleteAccountStatesCoreAsync(IReadOnlyList<StoredProviderAccount> accountStates, CancellationToken cancellationToken)
@@ -276,10 +261,7 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            try
-            {
-                return storedProviderAccount.IsActive ? await RefreshActiveAccountUsageCoreAsync(storedProviderAccount, cancellationToken) : await _claudeCodeProviderAdapter.GetUsageAsync(storedProviderAccount.StoredAccountIdentifier, cancellationToken);
-            }
+            try { return storedProviderAccount.IsActive ? await RefreshActiveAccountUsageCoreAsync(storedProviderAccount, cancellationToken) : await _claudeCodeProviderAdapter.GetUsageAsync(storedProviderAccount.StoredAccountIdentifier, cancellationToken); }
             catch (ProviderAuthenticationExpiredException exception)
             {
                 lastAuthenticationExpiredException = exception;

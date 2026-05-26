@@ -54,10 +54,7 @@ public sealed partial class DashboardPage : Page
             await action();
             if (shouldReloadDashboard) await ViewModel.ReloadDashboardAsync();
         }
-        finally
-        {
-            MainWindow.HideLoading();
-        }
+        finally { MainWindow.HideLoading(); }
     }
 
     private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);

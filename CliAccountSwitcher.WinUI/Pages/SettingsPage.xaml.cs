@@ -68,10 +68,7 @@ public sealed partial class SettingsPage : Page
             PrimaryUsageLowQuotaNotificationToggleSwitch.IsOn = applicationSettings.IsPrimaryUsageLowQuotaNotificationEnabled;
             SecondaryUsageLowQuotaNotificationToggleSwitch.IsOn = applicationSettings.IsSecondaryUsageLowQuotaNotificationEnabled;
         }
-        finally
-        {
-            _isSynchronizingControls = false;
-        }
+        finally { _isSynchronizingControls = false; }
     }
 
     private async void OnExportApplicationSettingsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
@@ -86,14 +83,8 @@ public sealed partial class SettingsPage : Page
             await App.ApplicationSettingsService.ExportSettingsAsync(storageFile.Path);
             await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ExportApplicationSettingsDialogTitle"), GetLocalizedString("SettingsPage_ExportApplicationSettingsDialogMessage"));
         }
-        catch
-        {
-            await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ExportApplicationSettingsFailedDialogTitle"), GetLocalizedString("SettingsPage_ExportApplicationSettingsFailedDialogMessage"));
-        }
-        finally
-        {
-            ExportApplicationSettingsButton.IsEnabled = true;
-        }
+        catch { await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ExportApplicationSettingsFailedDialogTitle"), GetLocalizedString("SettingsPage_ExportApplicationSettingsFailedDialogMessage")); }
+        finally { ExportApplicationSettingsButton.IsEnabled = true; }
     }
 
     private async void OnImportApplicationSettingsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
