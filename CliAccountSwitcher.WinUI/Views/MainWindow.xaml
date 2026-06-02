@@ -35,6 +35,7 @@
                     <MenuFlyoutItem x:Name="TrayAuthorMenuFlyoutItem" IsEnabled="False" />
                     <MenuFlyoutItem x:Name="OpenDashboardPageMenuFlyoutItem" />
                     <MenuFlyoutItem x:Name="OpenAccountsPageMenuFlyoutItem" />
+                    <MenuFlyoutItem x:Name="OpenSkillsPageMenuFlyoutItem" />
                     <MenuFlyoutSeparator />
                     <MenuFlyoutItem x:Name="CloseProgramMenuFlyoutItem" Click="OnCloseProgramMenuFlyoutItemClicked" />
                 </MenuFlyout>
@@ -62,6 +63,14 @@
                         Tag="Dashboard">
                         <SelectorBarItem.Icon>
                             <FontIcon Glyph="&#xECA5;" />
+                        </SelectorBarItem.Icon>
+                    </SelectorBarItem>
+                    <SelectorBarItem
+                        x:Name="SkillsSelectorBarItem"
+                        x:Uid="MainPage_SkillsSelectorBarItem"
+                        Tag="Skills">
+                        <SelectorBarItem.Icon>
+                            <FontIcon Glyph="&#xE943;" />
                         </SelectorBarItem.Icon>
                     </SelectorBarItem>
                     <SelectorBarItem

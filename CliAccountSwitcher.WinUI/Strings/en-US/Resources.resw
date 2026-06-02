@@ -1169,4 +1169,88 @@ The installed app is already up to date.</value>
   <data name="FileAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
     <value>Claude Code files could not be imported. Check the selected credentials and global config JSON files.</value>
   </data>
+  <data name="MainPage_SkillsSelectorBarItem.Text" xml:space="preserve">
+    <value>Skills</value>
+  </data>
+  <data name="MainWindow_OpenSkillsPageMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Skills</value>
+  </data>
+  <data name="SkillsPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Skills</value>
+  </data>
+  <data name="SkillsPage_DeleteSelectedSkillsTextBlock.Text" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="SkillsPage_ExportBackupTextBlock.Text" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="SkillsPage_ImportBackupTextBlock.Text" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="SkillsPage_SkillNameHeaderTextBlock.Text" xml:space="preserve">
+    <value>Skill Name</value>
+  </data>
+  <data name="SkillsPage_DescriptionHeaderTextBlock.Text" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="SkillsPage_FilesHeaderTextBlock.Text" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="SkillsPage_ModifiedHeaderTextBlock.Text" xml:space="preserve">
+    <value>Modified</value>
+  </data>
+  <data name="SkillsPage_NoSkillsTitleTextBlock.Text" xml:space="preserve">
+    <value>No skills found</value>
+  </data>
+  <data name="SkillsPage_NoSkillsDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Create skills playbooks inside the skills directory to get started.</value>
+  </data>
+  <data name="SkillsPage_DeleteSelectedSkillsDialogTitle.Text" xml:space="preserve">
+    <value>Delete skills</value>
+  </data>
+  <data name="SkillsPage_DeleteSelectedSkillsDialogMessage.Text" xml:space="preserve">
+    <value>{0} skill(s) will be deleted permanently. Continue?</value>
+  </data>
+  <data name="SkillsPage_DeleteButtonText.Text" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="SkillsPage_ExportBackupNoSelectionDialogTitle.Text" xml:space="preserve">
+    <value>No skills selected</value>
+  </data>
+  <data name="SkillsPage_ExportBackupNoSelectionDialogMessage.Text" xml:space="preserve">
+    <value>Select skills to export first.</value>
+  </data>
+  <data name="SkillsPage_ExportBackupLoadingMessage.Text" xml:space="preserve">
+    <value>Exporting skills...</value>
+  </data>
+  <data name="SkillsPage_ExportBackupDialogTitle.Text" xml:space="preserve">
+    <value>Export complete</value>
+  </data>
+  <data name="SkillsPage_ExportBackupDialogMessage.Text" xml:space="preserve">
+    <value>Skills have been exported successfully.</value>
+  </data>
+  <data name="SkillsPage_ImportBackupLoadingMessage.Text" xml:space="preserve">
+    <value>Importing skills...</value>
+  </data>
+  <data name="SkillsPage_ImportBackupDialogTitle.Text" xml:space="preserve">
+    <value>Import complete</value>
+  </data>
+  <data name="SkillsPage_ImportBackupResultMessageFormat.Text" xml:space="preserve">
+    <value>{0} skill(s) imported.</value>
+  </data>
+  <data name="SkillsPage_CaskillsBackupFileTypeChoice.Text" xml:space="preserve">
+    <value>Codex Account Skills Backup (.caskills)</value>
+  </data>
+  <data name="SkillsPageViewModel_NoSelectedSkills.Text" xml:space="preserve">
+    <value>No skills selected</value>
+  </data>
+  <data name="SkillsPageViewModel_SelectedSkillCountFormat.Text" xml:space="preserve">
+    <value>{0} skill(s) selected</value>
+  </data>
+  <data name="SkillsPageViewModel_DescriptionFormat.Text" xml:space="preserve">
+    <value>Manage skills for {0}</value>
+  </data>
 </root>

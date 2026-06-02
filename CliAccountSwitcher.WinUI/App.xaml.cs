@@ -44,6 +44,8 @@ public partial class App : Application
 
     public static ClaudeCodeApplicationRestartService ClaudeCodeApplicationRestartService { get; private set; }
 
+    public static SkillService SkillService { get; private set; }
+
     public static FileLogService FileLogService { get; private set; }
 
     public App()
@@ -68,6 +70,7 @@ public partial class App : Application
         AccountServiceManager = new AccountServiceManager(ApplicationSettingsService, [CodexAccountService, ClaudeAccountService]);
         CodexApplicationRestartService = new CodexApplicationRestartService();
         ClaudeCodeApplicationRestartService = new ClaudeCodeApplicationRestartService();
+        SkillService = new SkillService();
         RegisterAppNotificationManager();
         StoreUpdateService.Start();
         AccountServiceManager.Start();

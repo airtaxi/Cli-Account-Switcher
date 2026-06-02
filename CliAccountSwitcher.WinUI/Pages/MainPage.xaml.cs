@@ -26,6 +26,7 @@ public sealed partial class MainPage : Page
     private static Type GetSelectedPageType(MainPageNavigationSection mainPageNavigationSection) => mainPageNavigationSection switch
     {
         MainPageNavigationSection.Dashboard => typeof(DashboardPage),
+        MainPageNavigationSection.Skills => typeof(SkillsPage),
         MainPageNavigationSection.Accounts => typeof(AccountsPage),
         MainPageNavigationSection.About => typeof(AboutPage),
         MainPageNavigationSection.Settings => typeof(SettingsPage),

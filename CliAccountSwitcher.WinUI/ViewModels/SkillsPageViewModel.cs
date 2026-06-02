@@ -1,0 +1,255 @@
+﻿using CliAccountSwitcher.Api.Providers.Abstractions;
+using CliAccountSwitcher.WinUI.Models;
+using CliAccountSwitcher.WinUI.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
+using Microsoft.UI.Dispatching;
+using System.Collections.ObjectModel;
+
+namespace CliAccountSwitcher.WinUI.ViewModels;
+
+public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
+{
+    private readonly ApplicationSettings _applicationSettings;
+    private readonly DispatcherQueue _dispatcherQueue;
+    private readonly SkillService _skillService;
+    private readonly HashSet<string> _selectedSkillDirectoryNames = new(StringComparer.Ordinal);
+    private bool _isSynchronizingSkillSelection;
+    private bool _disposed;
+
+    public SkillsPageViewModel(SkillService skillService, ApplicationSettings applicationSettings, DispatcherQueue dispatcherQueue)
+    {
+        _skillService = skillService;
+        _applicationSettings = applicationSettings;
+        _dispatcherQueue = dispatcherQueue;
+        SelectedProviderKind = _applicationSettings.SelectedProviderKind;
+        _applicationSettings.PropertyChanged += OnApplicationSettingsPropertyChanged;
+        WeakReferenceMessenger.Default.Register<ValueChangedMessage<CliProviderKind>>(this, OnProviderKindChangedMessageReceived);
+        ReloadSkills();
+    }
+
+    public ObservableCollection<SkillItem> Skills { get; } = [];
+
+    public ObservableCollection<SkillItem> FilteredSkills { get; } = [];
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsCodexProviderSelected))]
+    [NotifyPropertyChangedFor(nameof(IsClaudeCodeProviderSelected))]
+    [NotifyPropertyChangedFor(nameof(DescriptionText))]
+    public partial CliProviderKind SelectedProviderKind { get; set; } = CliProviderKind.Codex;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasSkills))]
+    [NotifyPropertyChangedFor(nameof(HasNoSkills))]
+    [NotifyPropertyChangedFor(nameof(HasNoFilteredSkills))]
+    public partial int SkillCount { get; set; }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasFilteredSkills))]
+    [NotifyPropertyChangedFor(nameof(HasNoFilteredSkills))]
+    public partial int FilteredSkillCount { get; set; }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasSelectedSkills))]
+    [NotifyPropertyChangedFor(nameof(SelectedSkillCountText))]
+    public partial IReadOnlyList<string> SelectedSkillDirectoryNames { get; set; } = [];
+
+    [ObservableProperty]
+    public partial bool? FilteredSkillsSelectionState { get; set; } = false;
+
+    public bool HasSkills => SkillCount > 0;
+
+    public bool HasNoSkills => SkillCount == 0;
+
+    public bool HasFilteredSkills => FilteredSkillCount > 0;
+
+    public bool HasNoFilteredSkills => SkillCount > 0 && FilteredSkillCount == 0;
+
+    public bool HasSelectedSkills => SelectedSkillDirectoryNames.Count > 0;
+
+    public string SelectedSkillCountText => SelectedSkillDirectoryNames.Count == 0 ? GetLocalizedString("SkillsPageViewModel_NoSelectedSkills") : GetFormattedString("SkillsPageViewModel_SelectedSkillCountFormat", SelectedSkillDirectoryNames.Count);
+
+    public bool IsCodexProviderSelected => SelectedProviderKind == CliProviderKind.Codex;
+
+    public bool IsClaudeCodeProviderSelected => SelectedProviderKind == CliProviderKind.ClaudeCode;
+
+    public string DescriptionText => GetFormattedString("SkillsPageViewModel_DescriptionFormat", GetProviderDisplayName(SelectedProviderKind));
+
+    public void ReloadSkills()
+    {
+        SelectedProviderKind = _applicationSettings.SelectedProviderKind;
+        SynchronizeSkills(_skillService.ScanSkills(SelectedProviderKind));
+        ApplyFilter();
+        RefreshSkillStateProperties();
+    }
+
+    public Task ReloadSkillsAsync()
+    {
+        ReloadSkills();
+        return Task.CompletedTask;
+    }
+
+    public void SetSelectedSkillDirectoryNames(IEnumerable<string> skillDirectoryNames)
+    {
+        _selectedSkillDirectoryNames.Clear();
+        foreach (var skillDirectoryName in skillDirectoryNames.Where(skillDirectoryName => !string.IsNullOrWhiteSpace(skillDirectoryName))) _selectedSkillDirectoryNames.Add(skillDirectoryName);
+        _isSynchronizingSkillSelection = true;
+        try
+        {
+            foreach (var skillItem in Skills)
+            {
+                skillItem.IsSelected = _selectedSkillDirectoryNames.Contains(skillItem.DirectoryName);
+            }
+        }
+        finally { _isSynchronizingSkillSelection = false; }
+        SelectedSkillDirectoryNames = [.. _selectedSkillDirectoryNames];
+        RefreshFilteredSkillsSelectionState();
+    }
+
+    public void SetFilteredSkillsSelection(bool isSelected)
+    {
+        _isSynchronizingSkillSelection = true;
+        try
+        {
+            foreach (var skillItem in FilteredSkills)
+            {
+                skillItem.IsSelected = isSelected;
+            }
+        }
+        finally { _isSynchronizingSkillSelection = false; }
+
+        RefreshSelectedSkillDirectoryNamesFromSkillItems();
+    }
+
+    public void Dispose()
+    {
+        if (_disposed) return;
+        _disposed = true;
+
+        _applicationSettings.PropertyChanged -= OnApplicationSettingsPropertyChanged;
+        WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CliProviderKind>>(this);
+    }
+
+    private void OnApplicationSettingsPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs propertyChangedEventArguments)
+    {
+        if (propertyChangedEventArguments.PropertyName is not nameof(ApplicationSettings.SelectedProviderKind)) return;
+    }
+
+    private void OnProviderKindChangedMessageReceived(object recipient, ValueChangedMessage<CliProviderKind> valueChangedMessage)
+    {
+        if (_dispatcherQueue.HasThreadAccess) ApplyProviderKindChange(valueChangedMessage.Value);
+        else _dispatcherQueue.TryEnqueue(() => ApplyProviderKindChange(valueChangedMessage.Value));
+    }
+
+    private void OnSkillItemPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs propertyChangedEventArguments)
+    {
+        if (propertyChangedEventArguments.PropertyName != nameof(SkillItem.IsSelected)) return;
+        if (_isSynchronizingSkillSelection) return;
+
+        RefreshSelectedSkillDirectoryNamesFromSkillItems();
+    }
+
+    private void SynchronizeSkills(IReadOnlyList<SkillItem> skillItems)
+    {
+        var skillDirectoryNames = skillItems.Select(skillItem => skillItem.DirectoryName).ToHashSet(StringComparer.Ordinal);
+        for (var skillIndex = Skills.Count - 1; skillIndex >= 0; skillIndex--)
+        {
+            var skillItem = Skills[skillIndex];
+            if (skillDirectoryNames.Contains(skillItem.DirectoryName)) continue;
+            skillItem.PropertyChanged -= OnSkillItemPropertyChanged;
+            _selectedSkillDirectoryNames.Remove(skillItem.DirectoryName);
+            Skills.RemoveAt(skillIndex);
+        }
+
+        foreach (var skillItem in skillItems)
+        {
+            var existingSkillItem = Skills.FirstOrDefault(candidateSkillItem => string.Equals(candidateSkillItem.DirectoryName, skillItem.DirectoryName, StringComparison.Ordinal));
+            if (existingSkillItem is null) Skills.Add(CreateSkillItemViewModel(skillItem));
+            else existingSkillItem.IsSelected = _selectedSkillDirectoryNames.Contains(skillItem.DirectoryName);
+        }
+
+        RefreshSelectedSkillDirectoryNamesFromSkillItems();
+    }
+
+    private SkillItem CreateSkillItemViewModel(SkillItem skillItem)
+    {
+        var viewModel = new SkillItem
+        {
+            Name = skillItem.Name,
+            DirectoryName = skillItem.DirectoryName,
+            FullPath = skillItem.FullPath,
+            Description = skillItem.Description,
+            FileCount = skillItem.FileCount,
+            LastModified = skillItem.LastModified,
+            IsSelected = _selectedSkillDirectoryNames.Contains(skillItem.DirectoryName)
+        };
+        viewModel.PropertyChanged += OnSkillItemPropertyChanged;
+        return viewModel;
+    }
+
+    private void ApplyFilter()
+    {
+        for (var skillIndex = FilteredSkills.Count - 1; skillIndex >= 0; skillIndex--)
+        {
+            if (!Skills.Contains(FilteredSkills[skillIndex]))
+            {
+                FilteredSkills.RemoveAt(skillIndex);
+            }
+        }
+
+        for (var skillIndex = 0; skillIndex < Skills.Count; skillIndex++)
+        {
+            var skillItem = Skills[skillIndex];
+            var currentSkillIndex = FilteredSkills.IndexOf(skillItem);
+
+            if (currentSkillIndex < 0) FilteredSkills.Insert(skillIndex, skillItem);
+            else if (currentSkillIndex != skillIndex) FilteredSkills.Move(currentSkillIndex, skillIndex);
+        }
+
+        RefreshSkillCounts();
+        RefreshFilteredSkillsSelectionState();
+    }
+
+    private void RefreshSkillStateProperties() => RefreshSkillCounts();
+
+    private void RefreshSelectedSkillDirectoryNamesFromSkillItems()
+    {
+        _selectedSkillDirectoryNames.Clear();
+        foreach (var skillItem in Skills.Where(skillItem => skillItem.IsSelected)) _selectedSkillDirectoryNames.Add(skillItem.DirectoryName);
+
+        SelectedSkillDirectoryNames = [.. _selectedSkillDirectoryNames];
+        RefreshFilteredSkillsSelectionState();
+    }
+
+    private void RefreshFilteredSkillsSelectionState()
+    {
+        if (FilteredSkills.Count == 0)
+        {
+            FilteredSkillsSelectionState = false;
+            return;
+        }
+
+        var selectedFilteredSkillCount = FilteredSkills.Count(skillItem => skillItem.IsSelected);
+        FilteredSkillsSelectionState = selectedFilteredSkillCount == 0 ? false : selectedFilteredSkillCount == FilteredSkills.Count ? true : null;
+    }
+
+    private void RefreshSkillCounts()
+    {
+        SkillCount = Skills.Count;
+        FilteredSkillCount = FilteredSkills.Count;
+    }
+
+    private void ApplyProviderKindChange(CliProviderKind providerKind)
+    {
+        SelectedProviderKind = providerKind;
+        SetSelectedSkillDirectoryNames([]);
+        ReloadSkills();
+    }
+
+    private static string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => GetLocalizedString("Provider_CodexDisplayName") };
+
+    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
+
+    private static string GetFormattedString(string resourceName, params object[] arguments) => App.LocalizationService.GetFormattedString(resourceName, arguments);
+}

@@ -57,6 +57,7 @@ public sealed partial class MainWindow : WindowEx
         // When the app is launched by StartupTask, the window is not activated, so tray commands are wired in code instead of XAML.
         OpenAccountsPageMenuFlyoutItem.Command = OpenAccountsPageCommand;
         OpenDashboardPageMenuFlyoutItem.Command = OpenDashboardPageCommand;
+        OpenSkillsPageMenuFlyoutItem.Command = OpenSkillsPageCommand;
         TaskbarIcon.LeftClickCommand = OpenActiveAccountQuotaPopupCommand;
 
         _windowSubclassProcedure = WindowSubclassProc;
@@ -122,6 +123,7 @@ public sealed partial class MainWindow : WindowEx
         AppTitleBar.Title = localizedWindowTitle;
 
         DashboardSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_DashboardSelectorBarItem/Text");
+        SkillsSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_SkillsSelectorBarItem/Text");
         AccountsSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_AccountsSelectorBarItem/Text");
         AboutSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_AboutSelectorBarItem/Text");
         SettingsSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_SettingsSelectorBarItem/Text");
@@ -129,6 +131,7 @@ public sealed partial class MainWindow : WindowEx
         TrayAuthorMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_TrayAuthorMenuFlyoutItem/Text");
         OpenDashboardPageMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_OpenDashboardPageMenuFlyoutItem/Text");
         OpenAccountsPageMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_OpenAccountsPageMenuFlyoutItem/Text");
+        OpenSkillsPageMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_OpenSkillsPageMenuFlyoutItem/Text");
         CloseProgramMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_CloseProgramMenuFlyoutItem/Text");
         AutomationProperties.SetName(ProviderComboBox, App.LocalizationService.GetLocalizedString("ProviderComboBox_AutomationName"));
     }
@@ -176,6 +179,8 @@ public sealed partial class MainWindow : WindowEx
     [RelayCommand] private void OpenDashboardPage() => NavigateToMainPageSection(MainPageNavigationSection.Dashboard);
 
     [RelayCommand] private void OpenAccountsPage() => NavigateToMainPageSection(MainPageNavigationSection.Accounts);
+
+    [RelayCommand] private void OpenSkillsPage() => NavigateToMainPageSection(MainPageNavigationSection.Skills);
 
     [RelayCommand]
     private void OpenActiveAccountQuotaPopup()
@@ -250,6 +255,7 @@ public sealed partial class MainWindow : WindowEx
     private SelectorBarItem GetSelectorBarItem(MainPageNavigationSection mainPageNavigationSection) => mainPageNavigationSection switch
     {
         MainPageNavigationSection.Dashboard => DashboardSelectorBarItem,
+        MainPageNavigationSection.Skills => SkillsSelectorBarItem,
         MainPageNavigationSection.Accounts => AccountsSelectorBarItem,
         MainPageNavigationSection.About => AboutSelectorBarItem,
         MainPageNavigationSection.Settings => SettingsSelectorBarItem,
@@ -259,6 +265,7 @@ public sealed partial class MainWindow : WindowEx
     private static MainPageNavigationSection GetSelectedNavigationSection(SelectorBarItem selectorBarItem) => (selectorBarItem?.Tag as string) switch
     {
         "Dashboard" => MainPageNavigationSection.Dashboard,
+        "Skills" => MainPageNavigationSection.Skills,
         "Accounts" => MainPageNavigationSection.Accounts,
         "About" => MainPageNavigationSection.About,
         "Settings" => MainPageNavigationSection.Settings,

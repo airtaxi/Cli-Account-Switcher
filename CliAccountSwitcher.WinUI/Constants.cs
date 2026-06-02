@@ -6,7 +6,10 @@ namespace CliAccountSwitcher.WinUI;
 public static class Constants
 {
     public static string CodexHomeDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".codex");
+    public static string CodexSkillsDirectory => Path.Combine(CodexHomeDirectory, "skills");
     public static string CurrentAuthenticationFilePath => Path.Combine(CodexHomeDirectory, "auth.json");
+    public static string ClaudeCodeHomeDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".claude");
+    public static string ClaudeCodeSkillsDirectory => Path.Combine(ClaudeCodeHomeDirectory, "skills");
     public static string UserDataDirectory { get; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CodexAccountSwitch.WinUI");
     public static string BackupsDirectory => Path.Combine(UserDataDirectory, "backups");
     public static string ProviderSnapshotsDirectory => Path.Combine(UserDataDirectory, "provider-snapshots");

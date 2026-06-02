@@ -1169,4 +1169,88 @@ Microsoft Store 中有 {0} 个可用更新。</value>
   <data name="FileAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
     <value>无法导入 Claude Code 文件。请检查所选 credential 和 global config JSON 文件。</value>
   </data>
+  <data name="MainPage_SkillsSelectorBarItem.Text" xml:space="preserve">
+    <value>技能</value>
+  </data>
+  <data name="MainWindow_OpenSkillsPageMenuFlyoutItem.Text" xml:space="preserve">
+    <value>技能</value>
+  </data>
+  <data name="SkillsPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>技能</value>
+  </data>
+  <data name="SkillsPage_DeleteSelectedSkillsTextBlock.Text" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="SkillsPage_ExportBackupTextBlock.Text" xml:space="preserve">
+    <value>导出</value>
+  </data>
+  <data name="SkillsPage_ImportBackupTextBlock.Text" xml:space="preserve">
+    <value>导入</value>
+  </data>
+  <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
+    <value>刷新</value>
+  </data>
+  <data name="SkillsPage_SkillNameHeaderTextBlock.Text" xml:space="preserve">
+    <value>技能名称</value>
+  </data>
+  <data name="SkillsPage_DescriptionHeaderTextBlock.Text" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="SkillsPage_FilesHeaderTextBlock.Text" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="SkillsPage_ModifiedHeaderTextBlock.Text" xml:space="preserve">
+    <value>修改时间</value>
+  </data>
+  <data name="SkillsPage_NoSkillsTitleTextBlock.Text" xml:space="preserve">
+    <value>未找到技能</value>
+  </data>
+  <data name="SkillsPage_NoSkillsDescriptionTextBlock.Text" xml:space="preserve">
+    <value>请在技能目录中创建技能剧本以开始使用。</value>
+  </data>
+  <data name="SkillsPage_DeleteSelectedSkillsDialogTitle.Text" xml:space="preserve">
+    <value>删除技能</value>
+  </data>
+  <data name="SkillsPage_DeleteSelectedSkillsDialogMessage.Text" xml:space="preserve">
+    <value>将永久删除 {0} 个技能。是否继续？</value>
+  </data>
+  <data name="SkillsPage_DeleteButtonText.Text" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="SkillsPage_ExportBackupNoSelectionDialogTitle.Text" xml:space="preserve">
+    <value>未选择技能</value>
+  </data>
+  <data name="SkillsPage_ExportBackupNoSelectionDialogMessage.Text" xml:space="preserve">
+    <value>请先选择要导出的技能。</value>
+  </data>
+  <data name="SkillsPage_ExportBackupLoadingMessage.Text" xml:space="preserve">
+    <value>正在导出技能...</value>
+  </data>
+  <data name="SkillsPage_ExportBackupDialogTitle.Text" xml:space="preserve">
+    <value>导出完成</value>
+  </data>
+  <data name="SkillsPage_ExportBackupDialogMessage.Text" xml:space="preserve">
+    <value>技能已成功导出。</value>
+  </data>
+  <data name="SkillsPage_ImportBackupLoadingMessage.Text" xml:space="preserve">
+    <value>正在导入技能...</value>
+  </data>
+  <data name="SkillsPage_ImportBackupDialogTitle.Text" xml:space="preserve">
+    <value>导入完成</value>
+  </data>
+  <data name="SkillsPage_ImportBackupResultMessageFormat.Text" xml:space="preserve">
+    <value>已导入 {0} 个技能。</value>
+  </data>
+  <data name="SkillsPage_CaskillsBackupFileTypeChoice.Text" xml:space="preserve">
+    <value>Codex Account Skills Backup (.caskills)</value>
+  </data>
+  <data name="SkillsPageViewModel_NoSelectedSkills.Text" xml:space="preserve">
+    <value>未选择技能</value>
+  </data>
+  <data name="SkillsPageViewModel_SelectedSkillCountFormat.Text" xml:space="preserve">
+    <value>已选择 {0} 个技能</value>
+  </data>
+  <data name="SkillsPageViewModel_DescriptionFormat.Text" xml:space="preserve">
+    <value>管理 {0} 的技能</value>
+  </data>
 </root>
