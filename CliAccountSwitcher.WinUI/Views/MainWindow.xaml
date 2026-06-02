@@ -66,19 +66,19 @@
                         </SelectorBarItem.Icon>
                     </SelectorBarItem>
                     <SelectorBarItem
-                        x:Name="SkillsSelectorBarItem"
-                        x:Uid="MainPage_SkillsSelectorBarItem"
-                        Tag="Skills">
-                        <SelectorBarItem.Icon>
-                            <FontIcon Glyph="&#xE943;" />
-                        </SelectorBarItem.Icon>
-                    </SelectorBarItem>
-                    <SelectorBarItem
                         x:Name="AccountsSelectorBarItem"
                         x:Uid="MainPage_AccountsSelectorBarItem"
                         Tag="Accounts">
                         <SelectorBarItem.Icon>
                             <FontIcon Glyph="&#xE748;" />
+                        </SelectorBarItem.Icon>
+                    </SelectorBarItem>
+                    <SelectorBarItem
+                        x:Name="SkillsSelectorBarItem"
+                        x:Uid="MainPage_SkillsSelectorBarItem"
+                        Tag="Skills">
+                        <SelectorBarItem.Icon>
+                            <FontIcon Glyph="&#xE943;" />
                         </SelectorBarItem.Icon>
                     </SelectorBarItem>
                     <SelectorBarItem
