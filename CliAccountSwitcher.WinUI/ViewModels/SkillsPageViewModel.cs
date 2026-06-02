@@ -1,4 +1,4 @@
-﻿using CliAccountSwitcher.Api.Providers.Abstractions;
+using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -68,13 +68,13 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
 
     public bool HasSelectedSkills => SelectedSkillDirectoryNames.Count > 0;
 
-    public string SelectedSkillCountText => SelectedSkillDirectoryNames.Count == 0 ? GetLocalizedString("SkillsPageViewModel_NoSelectedSkills") : GetFormattedString("SkillsPageViewModel_SelectedSkillCountFormat", SelectedSkillDirectoryNames.Count);
+    public string SelectedSkillCountText => SelectedSkillDirectoryNames.Count == 0 ? App.LocalizationService.GetLocalizedString("SkillsPageViewModel_NoSelectedSkills") : App.LocalizationService.GetFormattedString("SkillsPageViewModel_SelectedSkillCountFormat", SelectedSkillDirectoryNames.Count);
 
     public bool IsCodexProviderSelected => SelectedProviderKind == CliProviderKind.Codex;
 
     public bool IsClaudeCodeProviderSelected => SelectedProviderKind == CliProviderKind.ClaudeCode;
 
-    public string DescriptionText => GetFormattedString("SkillsPageViewModel_DescriptionFormat", GetProviderDisplayName(SelectedProviderKind));
+    public string DescriptionText => App.LocalizationService.GetFormattedString("SkillsPageViewModel_DescriptionFormat", GetProviderDisplayName(SelectedProviderKind));
 
     public void ReloadSkills()
     {
@@ -247,9 +247,7 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
         ReloadSkills();
     }
 
-    private static string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => GetLocalizedString("Provider_CodexDisplayName") };
+    private static string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => App.LocalizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => App.LocalizationService.GetLocalizedString("Provider_CodexDisplayName") };
 
-    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 
-    private static string GetFormattedString(string resourceName, params object[] arguments) => App.LocalizationService.GetFormattedString(resourceName, arguments);
 }
