@@ -1173,7 +1173,7 @@ The installed app is already up to date.</value>
     <value>Skills</value>
   </data>
   <data name="MainWindow_OpenSkillsPageMenuFlyoutItem.Text" xml:space="preserve">
-    <value>Skills</value>
+    <value>Open Skills page</value>
   </data>
   <data name="SkillsPage_TitleTextBlock.Text" xml:space="preserve">
     <value>Skills</value>

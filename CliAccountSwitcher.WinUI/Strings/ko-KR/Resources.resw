@@ -1173,7 +1173,7 @@ Microsoft Store에서 사용 가능한 업데이트 {0}개를 찾았습니다.</
     <value>스킬</value>
   </data>
   <data name="MainWindow_OpenSkillsPageMenuFlyoutItem.Text" xml:space="preserve">
-    <value>스킬</value>
+    <value>스킬 페이지 열기</value>
   </data>
   <data name="SkillsPage_TitleTextBlock.Text" xml:space="preserve">
     <value>스킬</value>

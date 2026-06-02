@@ -1173,7 +1173,7 @@ Microsoft Store 中有 {0} 个可用更新。</value>
     <value>技能</value>
   </data>
   <data name="MainWindow_OpenSkillsPageMenuFlyoutItem.Text" xml:space="preserve">
-    <value>技能</value>
+    <value>打开技能页面</value>
   </data>
   <data name="SkillsPage_TitleTextBlock.Text" xml:space="preserve">
     <value>技能</value>

@@ -1173,7 +1173,7 @@ Microsoft Store に {0} 件の更新があります。</value>
     <value>スキル</value>
   </data>
   <data name="MainWindow_OpenSkillsPageMenuFlyoutItem.Text" xml:space="preserve">
-    <value>スキル</value>
+    <value>スキルページを開く</value>
   </data>
   <data name="SkillsPage_TitleTextBlock.Text" xml:space="preserve">
     <value>スキル</value>
