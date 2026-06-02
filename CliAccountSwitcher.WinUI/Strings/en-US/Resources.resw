@@ -1179,16 +1179,19 @@ The installed app is already up to date.</value>
     <value>Skills</value>
   </data>
   <data name="SkillsPage_DeleteSelectedSkillsTextBlock.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Delete Selected</value>
   </data>
   <data name="SkillsPage_ExportBackupTextBlock.Text" xml:space="preserve">
-    <value>Export</value>
+    <value>Export Backup</value>
   </data>
   <data name="SkillsPage_ImportBackupTextBlock.Text" xml:space="preserve">
-    <value>Import</value>
+    <value>Import Backup</value>
   </data>
   <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
     <value>Refresh</value>
+  </data>
+  <data name="SkillsPage_SkillSearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>Search skill name, directory, or description</value>
   </data>
   <data name="SkillsPage_SkillNameHeaderTextBlock.Text" xml:space="preserve">
     <value>Skill Name</value>
@@ -1203,54 +1206,60 @@ The installed app is already up to date.</value>
     <value>Modified</value>
   </data>
   <data name="SkillsPage_NoSkillsTitleTextBlock.Text" xml:space="preserve">
-    <value>No skills found</value>
+    <value>No skills available.</value>
   </data>
   <data name="SkillsPage_NoSkillsDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Create skills playbooks inside the skills directory to get started.</value>
+    <value>Add skills that include SKILL.md files to the skills directory.</value>
   </data>
-  <data name="SkillsPage_DeleteSelectedSkillsDialogTitle.Text" xml:space="preserve">
-    <value>Delete skills</value>
+  <data name="SkillsPage_NoFilteredSkillsTitleTextBlock.Text" xml:space="preserve">
+    <value>No skills match the filter.</value>
   </data>
-  <data name="SkillsPage_DeleteSelectedSkillsDialogMessage.Text" xml:space="preserve">
+  <data name="SkillsPage_NoFilteredSkillsDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Adjust the search text.</value>
+  </data>
+  <data name="SkillsPage_DeleteSelectedSkillsDialogTitle" xml:space="preserve">
+    <value>Delete selected skills</value>
+  </data>
+  <data name="SkillsPage_DeleteSelectedSkillsDialogMessage" xml:space="preserve">
     <value>{0} skill(s) will be deleted permanently. Continue?</value>
   </data>
-  <data name="SkillsPage_DeleteButtonText.Text" xml:space="preserve">
+  <data name="SkillsPage_DeleteButtonText" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="SkillsPage_ExportBackupNoSelectionDialogTitle.Text" xml:space="preserve">
+  <data name="SkillsPage_ExportBackupNoSelectionDialogTitle" xml:space="preserve">
     <value>No skills selected</value>
   </data>
-  <data name="SkillsPage_ExportBackupNoSelectionDialogMessage.Text" xml:space="preserve">
+  <data name="SkillsPage_ExportBackupNoSelectionDialogMessage" xml:space="preserve">
     <value>Select skills to export first.</value>
   </data>
-  <data name="SkillsPage_ExportBackupLoadingMessage.Text" xml:space="preserve">
-    <value>Exporting skills...</value>
+  <data name="SkillsPage_ExportBackupLoadingMessage" xml:space="preserve">
+    <value>Exporting skills backup.</value>
   </data>
-  <data name="SkillsPage_ExportBackupDialogTitle.Text" xml:space="preserve">
-    <value>Export complete</value>
+  <data name="SkillsPage_ExportBackupDialogTitle" xml:space="preserve">
+    <value>Backup export complete</value>
   </data>
-  <data name="SkillsPage_ExportBackupDialogMessage.Text" xml:space="preserve">
-    <value>Skills have been exported successfully.</value>
+  <data name="SkillsPage_ExportBackupDialogMessage" xml:space="preserve">
+    <value>Skills backup has been saved.</value>
   </data>
-  <data name="SkillsPage_ImportBackupLoadingMessage.Text" xml:space="preserve">
-    <value>Importing skills...</value>
+  <data name="SkillsPage_ImportBackupLoadingMessage" xml:space="preserve">
+    <value>Importing skills backup.</value>
   </data>
-  <data name="SkillsPage_ImportBackupDialogTitle.Text" xml:space="preserve">
-    <value>Import complete</value>
+  <data name="SkillsPage_ImportBackupDialogTitle" xml:space="preserve">
+    <value>Backup import complete</value>
   </data>
-  <data name="SkillsPage_ImportBackupResultMessageFormat.Text" xml:space="preserve">
+  <data name="SkillsPage_ImportBackupResultMessageFormat" xml:space="preserve">
     <value>{0} skill(s) imported.</value>
   </data>
-  <data name="SkillsPage_CaskillsBackupFileTypeChoice.Text" xml:space="preserve">
+  <data name="SkillsPage_CaskillsBackupFileTypeChoice" xml:space="preserve">
     <value>Codex Account Skills Backup (.caskills)</value>
   </data>
-  <data name="SkillsPageViewModel_NoSelectedSkills.Text" xml:space="preserve">
+  <data name="SkillsPageViewModel_NoSelectedSkills" xml:space="preserve">
     <value>No skills selected</value>
   </data>
-  <data name="SkillsPageViewModel_SelectedSkillCountFormat.Text" xml:space="preserve">
+  <data name="SkillsPageViewModel_SelectedSkillCountFormat" xml:space="preserve">
     <value>{0} skill(s) selected</value>
   </data>
-  <data name="SkillsPageViewModel_DescriptionFormat.Text" xml:space="preserve">
+  <data name="SkillsPageViewModel_DescriptionFormat" xml:space="preserve">
     <value>Manage skills for {0}</value>
   </data>
 </root>

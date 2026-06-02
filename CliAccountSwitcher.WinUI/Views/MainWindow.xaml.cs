@@ -182,11 +182,14 @@ public sealed partial class MainWindow : WindowEx
         WeakReferenceMessenger.Default.Send(new ValueChangedMessage<CliProviderKind>(selectedProviderKind));
     }
 
-    [RelayCommand] private void OpenDashboardPage() => NavigateToMainPageSection(MainPageNavigationSection.Dashboard);
+    [RelayCommand]
+    private void OpenDashboardPage() => NavigateToMainPageSection(MainPageNavigationSection.Dashboard);
 
-    [RelayCommand] private void OpenAccountsPage() => NavigateToMainPageSection(MainPageNavigationSection.Accounts);
+    [RelayCommand]
+    private void OpenAccountsPage() => NavigateToMainPageSection(MainPageNavigationSection.Accounts);
 
-    [RelayCommand] private void OpenSkillsPage() => NavigateToMainPageSection(MainPageNavigationSection.Skills);
+    [RelayCommand]
+    private void OpenSkillsPage() => NavigateToMainPageSection(MainPageNavigationSection.Skills);
 
     [RelayCommand]
     private void OpenActiveAccountQuotaPopup()

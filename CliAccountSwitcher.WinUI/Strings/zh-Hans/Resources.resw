@@ -1179,16 +1179,19 @@ Microsoft Store 中有 {0} 个可用更新。</value>
     <value>技能</value>
   </data>
   <data name="SkillsPage_DeleteSelectedSkillsTextBlock.Text" xml:space="preserve">
-    <value>删除</value>
+    <value>删除所选</value>
   </data>
   <data name="SkillsPage_ExportBackupTextBlock.Text" xml:space="preserve">
-    <value>导出</value>
+    <value>导出备份</value>
   </data>
   <data name="SkillsPage_ImportBackupTextBlock.Text" xml:space="preserve">
-    <value>导入</value>
+    <value>导入备份</value>
   </data>
   <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
     <value>刷新</value>
+  </data>
+  <data name="SkillsPage_SkillSearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>搜索技能名称、目录或描述</value>
   </data>
   <data name="SkillsPage_SkillNameHeaderTextBlock.Text" xml:space="preserve">
     <value>技能名称</value>
@@ -1203,54 +1206,60 @@ Microsoft Store 中有 {0} 个可用更新。</value>
     <value>修改时间</value>
   </data>
   <data name="SkillsPage_NoSkillsTitleTextBlock.Text" xml:space="preserve">
-    <value>未找到技能</value>
+    <value>没有已注册的技能。</value>
   </data>
   <data name="SkillsPage_NoSkillsDescriptionTextBlock.Text" xml:space="preserve">
-    <value>请在技能目录中创建技能剧本以开始使用。</value>
+    <value>请在技能目录中添加包含 SKILL.md 的技能。</value>
   </data>
-  <data name="SkillsPage_DeleteSelectedSkillsDialogTitle.Text" xml:space="preserve">
-    <value>删除技能</value>
+  <data name="SkillsPage_NoFilteredSkillsTitleTextBlock.Text" xml:space="preserve">
+    <value>没有符合筛选条件的技能。</value>
   </data>
-  <data name="SkillsPage_DeleteSelectedSkillsDialogMessage.Text" xml:space="preserve">
+  <data name="SkillsPage_NoFilteredSkillsDescriptionTextBlock.Text" xml:space="preserve">
+    <value>请调整搜索文本。</value>
+  </data>
+  <data name="SkillsPage_DeleteSelectedSkillsDialogTitle" xml:space="preserve">
+    <value>删除所选技能</value>
+  </data>
+  <data name="SkillsPage_DeleteSelectedSkillsDialogMessage" xml:space="preserve">
     <value>将永久删除 {0} 个技能。是否继续？</value>
   </data>
-  <data name="SkillsPage_DeleteButtonText.Text" xml:space="preserve">
+  <data name="SkillsPage_DeleteButtonText" xml:space="preserve">
     <value>删除</value>
   </data>
-  <data name="SkillsPage_ExportBackupNoSelectionDialogTitle.Text" xml:space="preserve">
+  <data name="SkillsPage_ExportBackupNoSelectionDialogTitle" xml:space="preserve">
     <value>未选择技能</value>
   </data>
-  <data name="SkillsPage_ExportBackupNoSelectionDialogMessage.Text" xml:space="preserve">
+  <data name="SkillsPage_ExportBackupNoSelectionDialogMessage" xml:space="preserve">
     <value>请先选择要导出的技能。</value>
   </data>
-  <data name="SkillsPage_ExportBackupLoadingMessage.Text" xml:space="preserve">
-    <value>正在导出技能...</value>
+  <data name="SkillsPage_ExportBackupLoadingMessage" xml:space="preserve">
+    <value>正在导出技能备份。</value>
   </data>
-  <data name="SkillsPage_ExportBackupDialogTitle.Text" xml:space="preserve">
-    <value>导出完成</value>
+  <data name="SkillsPage_ExportBackupDialogTitle" xml:space="preserve">
+    <value>备份导出完成</value>
   </data>
-  <data name="SkillsPage_ExportBackupDialogMessage.Text" xml:space="preserve">
-    <value>技能已成功导出。</value>
+  <data name="SkillsPage_ExportBackupDialogMessage" xml:space="preserve">
+    <value>技能备份已保存。</value>
   </data>
-  <data name="SkillsPage_ImportBackupLoadingMessage.Text" xml:space="preserve">
-    <value>正在导入技能...</value>
+  <data name="SkillsPage_ImportBackupLoadingMessage" xml:space="preserve">
+    <value>正在导入技能备份。</value>
   </data>
-  <data name="SkillsPage_ImportBackupDialogTitle.Text" xml:space="preserve">
-    <value>导入完成</value>
+  <data name="SkillsPage_ImportBackupDialogTitle" xml:space="preserve">
+    <value>备份导入完成</value>
   </data>
-  <data name="SkillsPage_ImportBackupResultMessageFormat.Text" xml:space="preserve">
+  <data name="SkillsPage_ImportBackupResultMessageFormat" xml:space="preserve">
     <value>已导入 {0} 个技能。</value>
   </data>
-  <data name="SkillsPage_CaskillsBackupFileTypeChoice.Text" xml:space="preserve">
+  <data name="SkillsPage_CaskillsBackupFileTypeChoice" xml:space="preserve">
     <value>Codex Account Skills Backup (.caskills)</value>
   </data>
-  <data name="SkillsPageViewModel_NoSelectedSkills.Text" xml:space="preserve">
+  <data name="SkillsPageViewModel_NoSelectedSkills" xml:space="preserve">
     <value>未选择技能</value>
   </data>
-  <data name="SkillsPageViewModel_SelectedSkillCountFormat.Text" xml:space="preserve">
+  <data name="SkillsPageViewModel_SelectedSkillCountFormat" xml:space="preserve">
     <value>已选择 {0} 个技能</value>
   </data>
-  <data name="SkillsPageViewModel_DescriptionFormat.Text" xml:space="preserve">
+  <data name="SkillsPageViewModel_DescriptionFormat" xml:space="preserve">
     <value>管理 {0} 的技能</value>
   </data>
 </root>

@@ -1179,16 +1179,19 @@ Microsoft Store에서 사용 가능한 업데이트 {0}개를 찾았습니다.</
     <value>스킬</value>
   </data>
   <data name="SkillsPage_DeleteSelectedSkillsTextBlock.Text" xml:space="preserve">
-    <value>삭제</value>
+    <value>선택 삭제</value>
   </data>
   <data name="SkillsPage_ExportBackupTextBlock.Text" xml:space="preserve">
-    <value>내보내기</value>
+    <value>백업 내보내기</value>
   </data>
   <data name="SkillsPage_ImportBackupTextBlock.Text" xml:space="preserve">
-    <value>가져오기</value>
+    <value>백업 불러오기</value>
   </data>
   <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
     <value>새로고침</value>
+  </data>
+  <data name="SkillsPage_SkillSearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>스킬 이름, 디렉터리, 설명 검색</value>
   </data>
   <data name="SkillsPage_SkillNameHeaderTextBlock.Text" xml:space="preserve">
     <value>스킬 이름</value>
@@ -1203,54 +1206,60 @@ Microsoft Store에서 사용 가능한 업데이트 {0}개를 찾았습니다.</
     <value>수정일</value>
   </data>
   <data name="SkillsPage_NoSkillsTitleTextBlock.Text" xml:space="preserve">
-    <value>스킬을 찾을 수 없음</value>
+    <value>등록된 스킬이 없습니다.</value>
   </data>
   <data name="SkillsPage_NoSkillsDescriptionTextBlock.Text" xml:space="preserve">
-    <value>시작하려면 스킬 디렉터리에 스킬 플레이북을 만드세요.</value>
+    <value>스킬 디렉터리에 SKILL.md를 포함한 스킬을 추가하세요.</value>
   </data>
-  <data name="SkillsPage_DeleteSelectedSkillsDialogTitle.Text" xml:space="preserve">
-    <value>스킬 삭제</value>
+  <data name="SkillsPage_NoFilteredSkillsTitleTextBlock.Text" xml:space="preserve">
+    <value>조건에 맞는 스킬이 없습니다.</value>
   </data>
-  <data name="SkillsPage_DeleteSelectedSkillsDialogMessage.Text" xml:space="preserve">
-    <value>선택한 스킬 {0}개가 영구 삭제됩니다. 계속하시겠습니까?</value>
+  <data name="SkillsPage_NoFilteredSkillsDescriptionTextBlock.Text" xml:space="preserve">
+    <value>검색어를 조정하세요.</value>
   </data>
-  <data name="SkillsPage_DeleteButtonText.Text" xml:space="preserve">
+  <data name="SkillsPage_DeleteSelectedSkillsDialogTitle" xml:space="preserve">
+    <value>선택 스킬 삭제</value>
+  </data>
+  <data name="SkillsPage_DeleteSelectedSkillsDialogMessage" xml:space="preserve">
+    <value>{0}개 스킬을 삭제할까요?</value>
+  </data>
+  <data name="SkillsPage_DeleteButtonText" xml:space="preserve">
     <value>삭제</value>
   </data>
-  <data name="SkillsPage_ExportBackupNoSelectionDialogTitle.Text" xml:space="preserve">
-    <value>선택된 스킬 없음</value>
+  <data name="SkillsPage_ExportBackupNoSelectionDialogTitle" xml:space="preserve">
+    <value>선택 없음</value>
   </data>
-  <data name="SkillsPage_ExportBackupNoSelectionDialogMessage.Text" xml:space="preserve">
+  <data name="SkillsPage_ExportBackupNoSelectionDialogMessage" xml:space="preserve">
     <value>내보낼 스킬을 먼저 선택하세요.</value>
   </data>
-  <data name="SkillsPage_ExportBackupLoadingMessage.Text" xml:space="preserve">
-    <value>스킬 내보내는 중...</value>
+  <data name="SkillsPage_ExportBackupLoadingMessage" xml:space="preserve">
+    <value>스킬 백업을 내보내는 중입니다.</value>
   </data>
-  <data name="SkillsPage_ExportBackupDialogTitle.Text" xml:space="preserve">
-    <value>내보내기 완료</value>
+  <data name="SkillsPage_ExportBackupDialogTitle" xml:space="preserve">
+    <value>백업 내보내기</value>
   </data>
-  <data name="SkillsPage_ExportBackupDialogMessage.Text" xml:space="preserve">
-    <value>스킬을 성공적으로 내보냈습니다.</value>
+  <data name="SkillsPage_ExportBackupDialogMessage" xml:space="preserve">
+    <value>스킬 백업을 저장했습니다.</value>
   </data>
-  <data name="SkillsPage_ImportBackupLoadingMessage.Text" xml:space="preserve">
-    <value>스킬 가져오는 중...</value>
+  <data name="SkillsPage_ImportBackupLoadingMessage" xml:space="preserve">
+    <value>스킬 백업을 불러오는 중입니다.</value>
   </data>
-  <data name="SkillsPage_ImportBackupDialogTitle.Text" xml:space="preserve">
-    <value>가져오기 완료</value>
+  <data name="SkillsPage_ImportBackupDialogTitle" xml:space="preserve">
+    <value>백업 불러오기</value>
   </data>
-  <data name="SkillsPage_ImportBackupResultMessageFormat.Text" xml:space="preserve">
+  <data name="SkillsPage_ImportBackupResultMessageFormat" xml:space="preserve">
     <value>{0}개 스킬을 가져왔습니다.</value>
   </data>
-  <data name="SkillsPage_CaskillsBackupFileTypeChoice.Text" xml:space="preserve">
+  <data name="SkillsPage_CaskillsBackupFileTypeChoice" xml:space="preserve">
     <value>Codex Account Skills Backup (.caskills)</value>
   </data>
-  <data name="SkillsPageViewModel_NoSelectedSkills.Text" xml:space="preserve">
-    <value>선택된 스킬 없음</value>
+  <data name="SkillsPageViewModel_NoSelectedSkills" xml:space="preserve">
+    <value>선택 없음</value>
   </data>
-  <data name="SkillsPageViewModel_SelectedSkillCountFormat.Text" xml:space="preserve">
-    <value>{0}개 스킬 선택됨</value>
+  <data name="SkillsPageViewModel_SelectedSkillCountFormat" xml:space="preserve">
+    <value>{0}개 선택됨</value>
   </data>
-  <data name="SkillsPageViewModel_DescriptionFormat.Text" xml:space="preserve">
-    <value>{0}의 스킬 관리</value>
+  <data name="SkillsPageViewModel_DescriptionFormat" xml:space="preserve">
+    <value>{0} 스킬을 저장하고 관리합니다.</value>
   </data>
 </root>

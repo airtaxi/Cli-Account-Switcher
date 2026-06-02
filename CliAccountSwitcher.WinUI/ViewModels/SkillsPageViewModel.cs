@@ -36,6 +36,9 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
     public ObservableCollection<SkillItem> FilteredSkills { get; } = [];
 
     [ObservableProperty]
+    public partial string SearchText { get; set; } = "";
+
+    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsCodexProviderSelected))]
     [NotifyPropertyChangedFor(nameof(IsClaudeCodeProviderSelected))]
     [NotifyPropertyChangedFor(nameof(DescriptionText))]
@@ -99,10 +102,7 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
         _isSynchronizingSkillSelection = true;
         try
         {
-            foreach (var skillItem in Skills)
-            {
-                skillItem.IsSelected = _selectedSkillDirectoryNames.Contains(skillItem.DirectoryName);
-            }
+            foreach (var skillItem in Skills) skillItem.IsSelected = _selectedSkillDirectoryNames.Contains(skillItem.DirectoryName);
         }
         finally { _isSynchronizingSkillSelection = false; }
         SelectedSkillDirectoryNames = [.. _selectedSkillDirectoryNames];
@@ -114,10 +114,7 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
         _isSynchronizingSkillSelection = true;
         try
         {
-            foreach (var skillItem in FilteredSkills)
-            {
-                skillItem.IsSelected = isSelected;
-            }
+            foreach (var skillItem in FilteredSkills) skillItem.IsSelected = isSelected;
         }
         finally { _isSynchronizingSkillSelection = false; }
 
@@ -192,17 +189,18 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
 
     private void ApplyFilter()
     {
+        var normalizedSearchText = (SearchText ?? "").Trim();
+        var filteredSkillItems = Skills.Where(skillItem => IsSkillVisible(skillItem, normalizedSearchText)).ToList();
+        var filteredSkillItemSet = filteredSkillItems.ToHashSet();
+
         for (var skillIndex = FilteredSkills.Count - 1; skillIndex >= 0; skillIndex--)
         {
-            if (!Skills.Contains(FilteredSkills[skillIndex]))
-            {
-                FilteredSkills.RemoveAt(skillIndex);
-            }
+            if (!filteredSkillItemSet.Contains(FilteredSkills[skillIndex])) FilteredSkills.RemoveAt(skillIndex);
         }
 
-        for (var skillIndex = 0; skillIndex < Skills.Count; skillIndex++)
+        for (var skillIndex = 0; skillIndex < filteredSkillItems.Count; skillIndex++)
         {
-            var skillItem = Skills[skillIndex];
+            var skillItem = filteredSkillItems[skillIndex];
             var currentSkillIndex = FilteredSkills.IndexOf(skillItem);
 
             if (currentSkillIndex < 0) FilteredSkills.Insert(skillIndex, skillItem);
@@ -212,6 +210,8 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
         RefreshSkillCounts();
         RefreshFilteredSkillsSelectionState();
     }
+
+    private static bool IsSkillVisible(SkillItem skillItem, string normalizedSearchText) => string.IsNullOrWhiteSpace(normalizedSearchText) || skillItem.SearchText.Contains(normalizedSearchText, StringComparison.CurrentCultureIgnoreCase);
 
     private void RefreshSkillStateProperties() => RefreshSkillCounts();
 
@@ -248,6 +248,8 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
         SetSelectedSkillDirectoryNames([]);
         ReloadSkills();
     }
+
+    partial void OnSearchTextChanged(string value) => ApplyFilter();
 
     private string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => _localizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => _localizationService.GetLocalizedString("Provider_CodexDisplayName") };
 

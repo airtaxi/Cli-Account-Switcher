@@ -1179,16 +1179,19 @@ Microsoft Store に {0} 件の更新があります。</value>
     <value>スキル</value>
   </data>
   <data name="SkillsPage_DeleteSelectedSkillsTextBlock.Text" xml:space="preserve">
-    <value>削除</value>
+    <value>選択項目を削除</value>
   </data>
   <data name="SkillsPage_ExportBackupTextBlock.Text" xml:space="preserve">
-    <value>エクスポート</value>
+    <value>バックアップをエクスポート</value>
   </data>
   <data name="SkillsPage_ImportBackupTextBlock.Text" xml:space="preserve">
-    <value>インポート</value>
+    <value>バックアップをインポート</value>
   </data>
   <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
     <value>更新</value>
+  </data>
+  <data name="SkillsPage_SkillSearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>スキル名、ディレクトリ、説明を検索</value>
   </data>
   <data name="SkillsPage_SkillNameHeaderTextBlock.Text" xml:space="preserve">
     <value>スキル名</value>
@@ -1203,54 +1206,60 @@ Microsoft Store に {0} 件の更新があります。</value>
     <value>更新日</value>
   </data>
   <data name="SkillsPage_NoSkillsTitleTextBlock.Text" xml:space="preserve">
-    <value>スキルが見つかりません</value>
+    <value>登録されたスキルがありません。</value>
   </data>
   <data name="SkillsPage_NoSkillsDescriptionTextBlock.Text" xml:space="preserve">
-    <value>スキルディレクトリにスキルプレイブックを作成してください。</value>
+    <value>スキルディレクトリに SKILL.md を含むスキルを追加してください。</value>
   </data>
-  <data name="SkillsPage_DeleteSelectedSkillsDialogTitle.Text" xml:space="preserve">
-    <value>スキルを削除</value>
+  <data name="SkillsPage_NoFilteredSkillsTitleTextBlock.Text" xml:space="preserve">
+    <value>条件に一致するスキルがありません。</value>
   </data>
-  <data name="SkillsPage_DeleteSelectedSkillsDialogMessage.Text" xml:space="preserve">
+  <data name="SkillsPage_NoFilteredSkillsDescriptionTextBlock.Text" xml:space="preserve">
+    <value>検索テキストを調整してください。</value>
+  </data>
+  <data name="SkillsPage_DeleteSelectedSkillsDialogTitle" xml:space="preserve">
+    <value>選択したスキルを削除</value>
+  </data>
+  <data name="SkillsPage_DeleteSelectedSkillsDialogMessage" xml:space="preserve">
     <value>{0}件のスキルが完全に削除されます。続行しますか？</value>
   </data>
-  <data name="SkillsPage_DeleteButtonText.Text" xml:space="preserve">
+  <data name="SkillsPage_DeleteButtonText" xml:space="preserve">
     <value>削除</value>
   </data>
-  <data name="SkillsPage_ExportBackupNoSelectionDialogTitle.Text" xml:space="preserve">
+  <data name="SkillsPage_ExportBackupNoSelectionDialogTitle" xml:space="preserve">
     <value>スキルが選択されていません</value>
   </data>
-  <data name="SkillsPage_ExportBackupNoSelectionDialogMessage.Text" xml:space="preserve">
+  <data name="SkillsPage_ExportBackupNoSelectionDialogMessage" xml:space="preserve">
     <value>エクスポートするスキルを先に選択してください。</value>
   </data>
-  <data name="SkillsPage_ExportBackupLoadingMessage.Text" xml:space="preserve">
-    <value>スキルをエクスポート中...</value>
+  <data name="SkillsPage_ExportBackupLoadingMessage" xml:space="preserve">
+    <value>スキルバックアップをエクスポートしています。</value>
   </data>
-  <data name="SkillsPage_ExportBackupDialogTitle.Text" xml:space="preserve">
-    <value>エクスポート完了</value>
+  <data name="SkillsPage_ExportBackupDialogTitle" xml:space="preserve">
+    <value>バックアップのエクスポート完了</value>
   </data>
-  <data name="SkillsPage_ExportBackupDialogMessage.Text" xml:space="preserve">
-    <value>スキルを正常にエクスポートしました。</value>
+  <data name="SkillsPage_ExportBackupDialogMessage" xml:space="preserve">
+    <value>スキルバックアップを保存しました。</value>
   </data>
-  <data name="SkillsPage_ImportBackupLoadingMessage.Text" xml:space="preserve">
-    <value>スキルをインポート中...</value>
+  <data name="SkillsPage_ImportBackupLoadingMessage" xml:space="preserve">
+    <value>スキルバックアップをインポートしています。</value>
   </data>
-  <data name="SkillsPage_ImportBackupDialogTitle.Text" xml:space="preserve">
-    <value>インポート完了</value>
+  <data name="SkillsPage_ImportBackupDialogTitle" xml:space="preserve">
+    <value>バックアップのインポート完了</value>
   </data>
-  <data name="SkillsPage_ImportBackupResultMessageFormat.Text" xml:space="preserve">
+  <data name="SkillsPage_ImportBackupResultMessageFormat" xml:space="preserve">
     <value>{0}件のスキルをインポートしました。</value>
   </data>
-  <data name="SkillsPage_CaskillsBackupFileTypeChoice.Text" xml:space="preserve">
+  <data name="SkillsPage_CaskillsBackupFileTypeChoice" xml:space="preserve">
     <value>Codex Account Skills Backup (.caskills)</value>
   </data>
-  <data name="SkillsPageViewModel_NoSelectedSkills.Text" xml:space="preserve">
+  <data name="SkillsPageViewModel_NoSelectedSkills" xml:space="preserve">
     <value>スキルが選択されていません</value>
   </data>
-  <data name="SkillsPageViewModel_SelectedSkillCountFormat.Text" xml:space="preserve">
+  <data name="SkillsPageViewModel_SelectedSkillCountFormat" xml:space="preserve">
     <value>{0}件のスキルが選択されています</value>
   </data>
-  <data name="SkillsPageViewModel_DescriptionFormat.Text" xml:space="preserve">
+  <data name="SkillsPageViewModel_DescriptionFormat" xml:space="preserve">
     <value>{0}のスキルを管理</value>
   </data>
 </root>

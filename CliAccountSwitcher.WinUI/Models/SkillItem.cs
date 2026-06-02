@@ -18,6 +18,8 @@ public sealed partial class SkillItem : ObservableObject
 
     public string LastModifiedText => LastModified.ToString("g");
 
+    public string SearchText => $"{Name} {DirectoryName} {Description} {FullPath}";
+
     [ObservableProperty]
     public partial bool IsSelected { get; set; }
 }

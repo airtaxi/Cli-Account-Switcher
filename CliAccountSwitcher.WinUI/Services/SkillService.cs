@@ -1,4 +1,4 @@
-﻿using CliAccountSwitcher.Api.Providers.Abstractions;
+using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Models;
 using System.IO.Compression;
 
@@ -6,17 +6,9 @@ namespace CliAccountSwitcher.WinUI.Services;
 
 public sealed class SkillService
 {
-    public static string GetSkillsDirectoryPath(CliProviderKind providerKind) => providerKind switch
-    {
-        CliProviderKind.ClaudeCode => Constants.ClaudeCodeSkillsDirectory,
-        _ => Constants.CodexSkillsDirectory
-    };
+    public static string GetSkillsDirectoryPath(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => Constants.ClaudeCodeSkillsDirectory, _ => Constants.CodexSkillsDirectory  };
 
-    public static string GetBackupFileNamePrefix(CliProviderKind providerKind) => providerKind switch
-    {
-        CliProviderKind.ClaudeCode => "claude-skills",
-        _ => "codex-skills"
-    };
+    public static string GetBackupFileNamePrefix(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => "claude-skills", _ => "codex-skills"  };
 
     public IReadOnlyList<SkillItem> ScanSkills(CliProviderKind providerKind)
     {
@@ -36,7 +28,7 @@ public sealed class SkillService
             var fileCount = Directory.EnumerateFiles(skillDirectoryPath, "*", SearchOption.AllDirectories).Count();
             var lastModified = Directory.GetLastWriteTime(skillDirectoryPath);
 
-            skillItems.Add(new SkillItem
+            var skillItem = new SkillItem
             {
                 Name = name,
                 DirectoryName = skillDirectoryName,
@@ -44,7 +36,8 @@ public sealed class SkillService
                 Description = description,
                 FileCount = fileCount,
                 LastModified = lastModified
-            });
+            };
+            skillItems.Add(skillItem);
         }
 
         return skillItems.OrderBy(skillItem => skillItem.Name, StringComparer.CurrentCultureIgnoreCase).ToArray();
@@ -178,9 +171,6 @@ public sealed class SkillService
 
             return (name, description);
         }
-        catch
-        {
-            return (fallbackName, "");
-        }
+        catch { return (fallbackName, ""); }
     }
 }

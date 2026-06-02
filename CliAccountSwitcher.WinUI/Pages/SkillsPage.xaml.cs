@@ -32,7 +32,7 @@ public sealed partial class SkillsPage : Page
 
     private async void OnDeleteSelectedSkillsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
-        var selectedSkillItems = ViewModel.FilteredSkills.Where(skillItem => skillItem.IsSelected).ToArray();
+        var selectedSkillItems = ViewModel.Skills.Where(skillItem => skillItem.IsSelected).ToArray();
         if (selectedSkillItems.Length == 0) return;
 
         var contentDialogResult = await this.ShowDialogAsync(_localizationService.GetLocalizedString("SkillsPage_DeleteSelectedSkillsDialogTitle"), _localizationService.GetFormattedString("SkillsPage_DeleteSelectedSkillsDialogMessage", selectedSkillItems.Length), _localizationService.GetLocalizedString("SkillsPage_DeleteButtonText"), _localizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
@@ -44,7 +44,7 @@ public sealed partial class SkillsPage : Page
 
     private async void OnExportSkillsBackupButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
-        var selectedSkillItems = ViewModel.FilteredSkills.Where(skillItem => skillItem.IsSelected).ToArray();
+        var selectedSkillItems = ViewModel.Skills.Where(skillItem => skillItem.IsSelected).ToArray();
         if (selectedSkillItems.Length == 0)
         {
             await this.ShowDialogAsync(_localizationService.GetLocalizedString("SkillsPage_ExportBackupNoSelectionDialogTitle"), _localizationService.GetLocalizedString("SkillsPage_ExportBackupNoSelectionDialogMessage"));
@@ -81,6 +81,8 @@ public sealed partial class SkillsPage : Page
     }
 
     private void OnRefreshSkillsButtonClicked(object sender, RoutedEventArgs routedEventArguments) => ViewModel.ReloadSkills();
+
+    private void OnSkillSearchAutoSuggestBoxTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs autoSuggestBoxTextChangedEventArguments) => ViewModel.SearchText = sender.Text;
 
     private void OnSelectAllSkillsCheckBoxChecked(object sender, RoutedEventArgs routedEventArguments) => ViewModel.SetFilteredSkillsSelection(true);
 
