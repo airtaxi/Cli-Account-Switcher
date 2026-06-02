@@ -1,4 +1,4 @@
-﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using System;
@@ -15,8 +15,8 @@ public static class DialogHelper
 
         var dialog = new ContentDialog
         {
-            Title = title ?? GetLocalizedString("DialogHelper_DefaultInputTitle"),
-            PrimaryButtonText = GetLocalizedString("DialogHelper_ConfirmButtonText"),
+            Title = title ?? App.LocalizationService.GetLocalizedString("DialogHelper_DefaultInputTitle"),
+            PrimaryButtonText = App.LocalizationService.GetLocalizedString("DialogHelper_ConfirmButtonText"),
             DefaultButton = ContentDialogButton.Primary,
             XamlRoot = element.XamlRoot
         };
@@ -27,7 +27,7 @@ public static class DialogHelper
         textBox.PlaceholderText = placeholderText;
         if (!string.IsNullOrEmpty(defaultText)) textBox.Text = defaultText;
         dialog.Content = textBox;
-        if (showCancel) dialog.SecondaryButtonText = GetLocalizedString("DialogHelper_CancelButtonText");
+        if (showCancel) dialog.SecondaryButtonText = App.LocalizationService.GetLocalizedString("DialogHelper_CancelButtonText");
         TaskCompletionSource<string> taskCompletionSource = new();
         dialog.Closing += (contentDialogSender, contentDialogClosingEventArguments) =>
         {
@@ -46,7 +46,7 @@ public static class DialogHelper
         {
             Title = title,
             Content = description,
-            PrimaryButtonText = primaryButtonText ?? GetLocalizedString("DialogHelper_ConfirmButtonText"),
+            PrimaryButtonText = primaryButtonText ?? App.LocalizationService.GetLocalizedString("DialogHelper_ConfirmButtonText"),
             XamlRoot = xamlRoot,
             DefaultButton = ContentDialogButton.Primary
         };
@@ -70,5 +70,4 @@ public static class DialogHelper
         foreach (var contentDialog in contentDialogs) contentDialog.Hide();
     }
 
-    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 }

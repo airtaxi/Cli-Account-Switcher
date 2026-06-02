@@ -63,19 +63,18 @@ public sealed partial class CurrentAccountAddAccountPage : Page
     {
         if (_addAccountDialogContext?.SelectedProviderKind == CliProviderKind.ClaudeCode)
         {
-            CurrentAccountTitleTextBlock.Text = GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeTitle");
-            CurrentAccountDescriptionTextBlock.Text = GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeDescription");
-            CurrentAccountImportButtonTextBlock.Text = GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeImportButtonText");
-            CurrentAccountFilePathHeaderTextBlock.Text = GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeFilePathHeader");
-            CurrentAccountErrorInfoBar.Message = GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeErrorMessage");
+            CurrentAccountTitleTextBlock.Text = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeTitle");
+            CurrentAccountDescriptionTextBlock.Text = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeDescription");
+            CurrentAccountImportButtonTextBlock.Text = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeImportButtonText");
+            CurrentAccountFilePathHeaderTextBlock.Text = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeFilePathHeader");
+            CurrentAccountErrorInfoBar.Message = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeErrorMessage");
             return;
         }
 
-        CurrentAccountTitleTextBlock.Text = GetLocalizedString("CurrentAccountAddAccountPage_TitleTextBlock/Text");
-        CurrentAccountDescriptionTextBlock.Text = GetLocalizedString("CurrentAccountAddAccountPage_DescriptionTextBlock/Text");
-        CurrentAccountImportButtonTextBlock.Text = GetLocalizedString("CurrentAccountAddAccountPage_ImportButtonTextBlock/Text");
-        CurrentAccountFilePathHeaderTextBlock.Text = GetLocalizedString("CurrentAccountAddAccountPage_FilePathHeaderTextBlock/Text");
+        CurrentAccountTitleTextBlock.Text = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_TitleTextBlock/Text");
+        CurrentAccountDescriptionTextBlock.Text = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_DescriptionTextBlock/Text");
+        CurrentAccountImportButtonTextBlock.Text = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_ImportButtonTextBlock/Text");
+        CurrentAccountFilePathHeaderTextBlock.Text = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_FilePathHeaderTextBlock/Text");
     }
 
-    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 }

@@ -223,19 +223,17 @@ public sealed partial class ActiveAccountQuotaControl : UserControl
 
     private static string FormatUsageReset(DateTimeOffset? usageResetTime)
     {
-        if (usageResetTime is null) return GetLocalizedString("ProviderAccountViewModel_UnknownResetTime");
+        if (usageResetTime is null) return App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_UnknownResetTime");
 
         var resetAfterSeconds = Math.Max(0, Convert.ToInt64(Math.Ceiling((usageResetTime.Value - DateTimeOffset.UtcNow).TotalSeconds)));
         var resetAfterTimeSpan = TimeSpan.FromSeconds(resetAfterSeconds);
         var wholeDayCount = resetAfterTimeSpan.Days;
-        if (wholeDayCount == 1) return GetFormattedString("ProviderAccountViewModel_ResetAfterWithSingleDayFormat", resetAfterTimeSpan);
-        if (wholeDayCount > 1) return GetFormattedString("ProviderAccountViewModel_ResetAfterWithMultipleDaysFormat", wholeDayCount, resetAfterTimeSpan);
-        return GetFormattedString("ProviderAccountViewModel_ResetAfterFormat", resetAfterTimeSpan);
+        if (wholeDayCount == 1) return App.LocalizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterWithSingleDayFormat", resetAfterTimeSpan);
+        if (wholeDayCount > 1) return App.LocalizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterWithMultipleDaysFormat", wholeDayCount, resetAfterTimeSpan);
+        return App.LocalizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterFormat", resetAfterTimeSpan);
     }
 
-    private static string FormatUsageAverageRateStatus(int exceededPercentage, int headroomPercentage) => exceededPercentage > 0 ? GetFormattedString("UsageAverageRateWarningFormat", exceededPercentage) : headroomPercentage > 0 ? GetFormattedString("UsageAverageRateHeadroomFormat", headroomPercentage) : GetLocalizedString("UsageAverageRateAtLimitText");
+    private static string FormatUsageAverageRateStatus(int exceededPercentage, int headroomPercentage) => exceededPercentage > 0 ? App.LocalizationService.GetFormattedString("UsageAverageRateWarningFormat", exceededPercentage) : headroomPercentage > 0 ? App.LocalizationService.GetFormattedString("UsageAverageRateHeadroomFormat", headroomPercentage) : App.LocalizationService.GetLocalizedString("UsageAverageRateAtLimitText");
 
-    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 
-    private static string GetFormattedString(string resourceName, params object[] arguments) => App.LocalizationService.GetFormattedString(resourceName, arguments);
 }

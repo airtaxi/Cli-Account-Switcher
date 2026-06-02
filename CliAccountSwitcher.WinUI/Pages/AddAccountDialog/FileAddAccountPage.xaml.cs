@@ -82,7 +82,7 @@ public sealed partial class FileAddAccountPage : Page
         }
         catch
         {
-            FileErrorInfoBar.Message = GetLocalizedString("FileAddAccountPage_ClaudeCodeErrorMessage");
+            FileErrorInfoBar.Message = App.LocalizationService.GetLocalizedString("FileAddAccountPage_ClaudeCodeErrorMessage");
             FileErrorInfoBar.IsOpen = true;
         }
         finally
@@ -97,20 +97,20 @@ public sealed partial class FileAddAccountPage : Page
     {
         if (_addAccountDialogContext?.SelectedProviderKind == CliProviderKind.ClaudeCode)
         {
-            FileTitleTextBlock.Text = GetLocalizedString("FileAddAccountPage_ClaudeCodeTitle");
-            FileDescriptionTextBlock.Text = GetLocalizedString("FileAddAccountPage_ClaudeCodeDescription");
-            FileImportButtonTextBlock.Text = GetLocalizedString("FileAddAccountPage_ClaudeCodeImportButtonText");
-            FileSupportedFormatHeaderTextBlock.Text = GetLocalizedString("FileAddAccountPage_ClaudeCodeSupportedFormatHeader");
-            FileSupportedFormatDescriptionTextBlock.Text = GetLocalizedString("FileAddAccountPage_ClaudeCodeSupportedFormatDescription");
-            FileErrorInfoBar.Message = GetLocalizedString("FileAddAccountPage_ClaudeCodeErrorMessage");
+            FileTitleTextBlock.Text = App.LocalizationService.GetLocalizedString("FileAddAccountPage_ClaudeCodeTitle");
+            FileDescriptionTextBlock.Text = App.LocalizationService.GetLocalizedString("FileAddAccountPage_ClaudeCodeDescription");
+            FileImportButtonTextBlock.Text = App.LocalizationService.GetLocalizedString("FileAddAccountPage_ClaudeCodeImportButtonText");
+            FileSupportedFormatHeaderTextBlock.Text = App.LocalizationService.GetLocalizedString("FileAddAccountPage_ClaudeCodeSupportedFormatHeader");
+            FileSupportedFormatDescriptionTextBlock.Text = App.LocalizationService.GetLocalizedString("FileAddAccountPage_ClaudeCodeSupportedFormatDescription");
+            FileErrorInfoBar.Message = App.LocalizationService.GetLocalizedString("FileAddAccountPage_ClaudeCodeErrorMessage");
             return;
         }
 
-        FileTitleTextBlock.Text = GetLocalizedString("FileAddAccountPage_TitleTextBlock/Text");
-        FileDescriptionTextBlock.Text = GetLocalizedString("FileAddAccountPage_DescriptionTextBlock/Text");
-        FileImportButtonTextBlock.Text = GetLocalizedString("FileAddAccountPage_ImportButtonTextBlock/Text");
-        FileSupportedFormatHeaderTextBlock.Text = GetLocalizedString("FileAddAccountPage_SupportedFormatHeaderTextBlock/Text");
-        FileSupportedFormatDescriptionTextBlock.Text = GetLocalizedString("FileAddAccountPage_SupportedFormatDescriptionTextBlock/Text");
+        FileTitleTextBlock.Text = App.LocalizationService.GetLocalizedString("FileAddAccountPage_TitleTextBlock/Text");
+        FileDescriptionTextBlock.Text = App.LocalizationService.GetLocalizedString("FileAddAccountPage_DescriptionTextBlock/Text");
+        FileImportButtonTextBlock.Text = App.LocalizationService.GetLocalizedString("FileAddAccountPage_ImportButtonTextBlock/Text");
+        FileSupportedFormatHeaderTextBlock.Text = App.LocalizationService.GetLocalizedString("FileAddAccountPage_SupportedFormatHeaderTextBlock/Text");
+        FileSupportedFormatDescriptionTextBlock.Text = App.LocalizationService.GetLocalizedString("FileAddAccountPage_SupportedFormatDescriptionTextBlock/Text");
     }
 
     private static FileOpenPicker CreateAuthenticationFileOpenPicker()
@@ -124,5 +124,4 @@ public sealed partial class FileAddAccountPage : Page
         return fileOpenPicker;
     }
 
-    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 }

@@ -53,7 +53,7 @@ public sealed partial class AboutPage : Page
 
     private static List<ThirdPartyLicensePackage> CreateThirdPartyLicensePackages()
     {
-        var windowsSoftwareDevelopmentKitLicenseText = GetLocalizedString("ThirdPartyLicensePackage_WindowsSoftwareDevelopmentKitLicense");
+        var windowsSoftwareDevelopmentKitLicenseText = App.LocalizationService.GetLocalizedString("ThirdPartyLicensePackage_WindowsSoftwareDevelopmentKitLicense");
 
         return
         [
@@ -71,5 +71,4 @@ public sealed partial class AboutPage : Page
 
     public static string GetCurrentApplicationVersion() => FormatCurrentApplicationVersion(Package.Current.Id.Version);
 
-    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 }

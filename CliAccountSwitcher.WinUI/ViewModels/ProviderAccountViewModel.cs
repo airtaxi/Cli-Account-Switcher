@@ -44,17 +44,17 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
 
     public bool IsTokenExpired => ProviderAccount.IsTokenExpired;
 
-    public string StatusText => IsTokenExpired ? GetLocalizedString("ProviderAccountViewModel_TokenExpiredStatus") : IsActive ? GetLocalizedString("ProviderAccountViewModel_ActiveStatus") : GetLocalizedString("ProviderAccountViewModel_WaitingStatus");
+    public string StatusText => IsTokenExpired ? App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_TokenExpiredStatus") : IsActive ? App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_ActiveStatus") : App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_WaitingStatus");
 
-    public string AccessTokenPreview => ProviderKind == CliProviderKind.Codex && string.IsNullOrWhiteSpace(ProviderAccount.AccountDetailText) ? GetLocalizedString("ProviderAccountViewModel_NoAccessToken") : ProviderAccount.AccountDetailText;
+    public string AccessTokenPreview => ProviderKind == CliProviderKind.Codex && string.IsNullOrWhiteSpace(ProviderAccount.AccountDetailText) ? App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_NoAccessToken") : ProviderAccount.AccountDetailText;
 
     public string PrimaryUsageText => FormatUsageWindow(ProviderUsageSnapshot.FiveHour, _primaryUsageResetTime);
 
     public string SecondaryUsageText => FormatUsageWindow(ProviderUsageSnapshot.SevenDay, _secondaryUsageResetTime);
 
-    public string PrimaryUsageWindowLabelText => GetLocalizedString("ProviderAccountViewModel_PrimaryUsageWindowLabel");
+    public string PrimaryUsageWindowLabelText => App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_PrimaryUsageWindowLabel");
 
-    public string SecondaryUsageWindowLabelText => GetLocalizedString("ProviderAccountViewModel_SecondaryUsageWindowLabel");
+    public string SecondaryUsageWindowLabelText => App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_SecondaryUsageWindowLabel");
 
     public string PrimaryUsageRemainingText => FormatUsageRemaining(ProviderUsageSnapshot.FiveHour);
 
@@ -96,7 +96,7 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
 
     public string SecondaryUsageAverageRateStatusText => FormatUsageAverageRateStatus(SecondaryUsageAverageRateLimitExceededPercentage, SecondaryUsageAverageRateLimitHeadroomPercentage);
 
-    public string LastUsageRefreshText => GetFormattedString("ProviderAccountViewModel_LastUsageRefreshFormat", ProviderAccount.LastUsageRefreshTime is null ? GetLocalizedString("ProviderAccountViewModel_NotRefreshed") : ProviderAccount.LastUsageRefreshTime.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.CurrentCulture));
+    public string LastUsageRefreshText => App.LocalizationService.GetFormattedString("ProviderAccountViewModel_LastUsageRefreshFormat", ProviderAccount.LastUsageRefreshTime is null ? App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_NotRefreshed") : ProviderAccount.LastUsageRefreshTime.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.CurrentCulture));
 
     public string SearchText => $"{DisplayName} {EmailAddress} {PlanText} {AccountIdentifier} {ProviderAccount.ProviderAccountIdentifier}";
 
@@ -171,31 +171,31 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
 
     private static string FormatClaudeCodePlanText(string planType) => string.IsNullOrWhiteSpace(planType) ? "Unknown" : planType;
 
-    private static string FormatCodexPlanText(string planType) => string.IsNullOrWhiteSpace(planType) ? GetLocalizedString("ProviderAccountViewModel_UnknownPlan") : string.Equals(planType, "prolite", StringComparison.OrdinalIgnoreCase) ? GetLocalizedString("AccountsPage_ProLitePlanFilterSelectorBarItem/Text") : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(planType.ToLowerInvariant());
+    private static string FormatCodexPlanText(string planType) => string.IsNullOrWhiteSpace(planType) ? App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_UnknownPlan") : string.Equals(planType, "prolite", StringComparison.OrdinalIgnoreCase) ? App.LocalizationService.GetLocalizedString("AccountsPage_ProLitePlanFilterSelectorBarItem/Text") : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(planType.ToLowerInvariant());
 
     private static string FormatUsageWindow(ProviderUsageWindow providerUsageWindow, DateTimeOffset? usageResetTime)
     {
-        if (providerUsageWindow.RemainingPercentage < 0) return GetLocalizedString("ProviderAccountViewModel_UnknownUsage");
+        if (providerUsageWindow.RemainingPercentage < 0) return App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_UnknownUsage");
 
         var resetText = FormatUsageReset(usageResetTime);
-        return GetFormattedString("ProviderAccountViewModel_UsageRemainingFormat", providerUsageWindow.RemainingPercentage, resetText);
+        return App.LocalizationService.GetFormattedString("ProviderAccountViewModel_UsageRemainingFormat", providerUsageWindow.RemainingPercentage, resetText);
     }
 
-    private static string FormatUsageRemaining(ProviderUsageWindow providerUsageWindow) => providerUsageWindow.RemainingPercentage < 0 ? GetLocalizedString("ProviderAccountViewModel_UnknownUsage") : GetFormattedString("ProviderAccountViewModel_UsageRemainingOnlyFormat", providerUsageWindow.RemainingPercentage);
+    private static string FormatUsageRemaining(ProviderUsageWindow providerUsageWindow) => providerUsageWindow.RemainingPercentage < 0 ? App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_UnknownUsage") : App.LocalizationService.GetFormattedString("ProviderAccountViewModel_UsageRemainingOnlyFormat", providerUsageWindow.RemainingPercentage);
 
     private static string FormatUsageReset(DateTimeOffset? usageResetTime)
     {
-        if (usageResetTime is null) return GetLocalizedString("ProviderAccountViewModel_UnknownResetTime");
+        if (usageResetTime is null) return App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_UnknownResetTime");
 
         var resetAfterSeconds = Math.Max(0, Convert.ToInt64(Math.Ceiling((usageResetTime.Value - DateTimeOffset.UtcNow).TotalSeconds)));
         var resetAfterTimeSpan = TimeSpan.FromSeconds(resetAfterSeconds);
         var wholeDayCount = resetAfterTimeSpan.Days;
-        if (wholeDayCount == 1) return GetFormattedString("ProviderAccountViewModel_ResetAfterWithSingleDayFormat", resetAfterTimeSpan);
-        if (wholeDayCount > 1) return GetFormattedString("ProviderAccountViewModel_ResetAfterWithMultipleDaysFormat", wholeDayCount, resetAfterTimeSpan);
-        return GetFormattedString("ProviderAccountViewModel_ResetAfterFormat", resetAfterTimeSpan);
+        if (wholeDayCount == 1) return App.LocalizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterWithSingleDayFormat", resetAfterTimeSpan);
+        if (wholeDayCount > 1) return App.LocalizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterWithMultipleDaysFormat", wholeDayCount, resetAfterTimeSpan);
+        return App.LocalizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterFormat", resetAfterTimeSpan);
     }
 
-    private static string FormatUsageAverageRateStatus(int exceededPercentage, int headroomPercentage) => exceededPercentage > 0 ? GetFormattedString("UsageAverageRateWarningFormat", exceededPercentage) : headroomPercentage > 0 ? GetFormattedString("UsageAverageRateHeadroomFormat", headroomPercentage) : GetLocalizedString("UsageAverageRateAtLimitText");
+    private static string FormatUsageAverageRateStatus(int exceededPercentage, int headroomPercentage) => exceededPercentage > 0 ? App.LocalizationService.GetFormattedString("UsageAverageRateWarningFormat", exceededPercentage) : headroomPercentage > 0 ? App.LocalizationService.GetFormattedString("UsageAverageRateHeadroomFormat", headroomPercentage) : App.LocalizationService.GetLocalizedString("UsageAverageRateAtLimitText");
 
     private static DateTimeOffset? GetUsageResetTime(ProviderUsageWindow providerUsageWindow, DateTimeOffset? usageRefreshTime)
     {
@@ -247,7 +247,5 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
 
     private static int NormalizeUsageWarningThresholdPercentage(int usageWarningThresholdPercentage) => Math.Clamp(usageWarningThresholdPercentage, 0, 100);
 
-    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 
-    private static string GetFormattedString(string resourceName, params object[] arguments) => App.LocalizationService.GetFormattedString(resourceName, arguments);
 }

@@ -30,7 +30,7 @@ public sealed partial class AccountsPage : Page
 
     private CliProviderKind SelectedProviderKind => ViewModel.SelectedProviderKind;
 
-    private async void OnRefreshAllAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments) => await RunWithLoadingAsync(GetLocalizedString("AccountsPage_RefreshAllAccountsLoadingMessage"), async () => await App.AccountServiceManager.RefreshAllAccountsAsync(SelectedProviderKind));
+    private async void OnRefreshAllAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments) => await RunWithLoadingAsync(App.LocalizationService.GetLocalizedString("AccountsPage_RefreshAllAccountsLoadingMessage"), async () => await App.AccountServiceManager.RefreshAllAccountsAsync(SelectedProviderKind));
 
     private async void OnAddAccountButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
@@ -47,7 +47,7 @@ public sealed partial class AccountsPage : Page
         var selectedAccountIdentifiers = ViewModel.SelectedAccountIdentifiers;
         if (selectedAccountIdentifiers.Count == 0) return;
 
-        await RunWithLoadingAsync(GetLocalizedString("AccountsPage_RefreshSelectedAccountsLoadingMessage"), async () => await App.AccountServiceManager.RefreshAccountsAsync(SelectedProviderKind, selectedAccountIdentifiers));
+        await RunWithLoadingAsync(App.LocalizationService.GetLocalizedString("AccountsPage_RefreshSelectedAccountsLoadingMessage"), async () => await App.AccountServiceManager.RefreshAccountsAsync(SelectedProviderKind, selectedAccountIdentifiers));
     }
 
     private async void OnDeleteSelectedAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
@@ -55,7 +55,7 @@ public sealed partial class AccountsPage : Page
         var selectedAccountIdentifiers = ViewModel.SelectedAccountIdentifiers;
         if (selectedAccountIdentifiers.Count == 0) return;
 
-        var contentDialogResult = await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteSelectedAccountsDialogTitle"), GetFormattedString("AccountsPage_DeleteSelectedAccountsDialogMessage", selectedAccountIdentifiers.Count), GetLocalizedString("AccountsPage_DeleteButtonText"), GetLocalizedString("DialogHelper_CancelButtonText"));
+        var contentDialogResult = await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("AccountsPage_DeleteSelectedAccountsDialogTitle"), App.LocalizationService.GetFormattedString("AccountsPage_DeleteSelectedAccountsDialogMessage", selectedAccountIdentifiers.Count), App.LocalizationService.GetLocalizedString("AccountsPage_DeleteButtonText"), App.LocalizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
         if (contentDialogResult != ContentDialogResult.Primary) return;
 
         await App.AccountServiceManager.DeleteAccountsAsync(SelectedProviderKind, selectedAccountIdentifiers);
@@ -70,7 +70,7 @@ public sealed partial class AccountsPage : Page
         if (storageFile is null) return;
 
         await App.AccountServiceManager.ExportBackupAsync(selectedProviderKind, storageFile.Path);
-        await this.ShowDialogAsync(GetLocalizedString("AccountsPage_ExportBackupDialogTitle"), GetLocalizedString("AccountsPage_ExportBackupDialogMessage"));
+        await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("AccountsPage_ExportBackupDialogTitle"), App.LocalizationService.GetLocalizedString("AccountsPage_ExportBackupDialogMessage"));
     }
 
     private async void OnImportBackupButtonClicked(object sender, RoutedEventArgs routedEventArguments)
@@ -80,7 +80,7 @@ public sealed partial class AccountsPage : Page
         var storageFile = await fileOpenPicker.PickSingleFileAsync();
         if (storageFile is null) return;
 
-        MainWindow.ShowLoading(GetLocalizedString("AccountsPage_ImportBackupLoadingMessage"));
+        MainWindow.ShowLoading(App.LocalizationService.GetLocalizedString("AccountsPage_ImportBackupLoadingMessage"));
         var providerAccountBackupImportResult = default(ProviderAccountBackupImportResult);
         try
         {
@@ -90,17 +90,17 @@ public sealed partial class AccountsPage : Page
         catch { providerAccountBackupImportResult = new ProviderAccountBackupImportResult { FailureCount = 1 }; }
         finally { MainWindow.HideLoading(); }
 
-        await this.ShowDialogAsync(GetLocalizedString("AccountsPage_ImportBackupDialogTitle"), BuildBackupImportResultText(providerAccountBackupImportResult.SuccessCount, providerAccountBackupImportResult.FailureCount, providerAccountBackupImportResult.DuplicateCount));
+        await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("AccountsPage_ImportBackupDialogTitle"), BuildBackupImportResultText(providerAccountBackupImportResult.SuccessCount, providerAccountBackupImportResult.FailureCount, providerAccountBackupImportResult.DuplicateCount));
     }
 
     private async void OnDeleteExpiredAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
-        var contentDialogResult = await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogMessage"), GetLocalizedString("AccountsPage_DeleteButtonText"), GetLocalizedString("DialogHelper_CancelButtonText"));
+        var contentDialogResult = await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), App.LocalizationService.GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogMessage"), App.LocalizationService.GetLocalizedString("AccountsPage_DeleteButtonText"), App.LocalizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
         if (contentDialogResult != ContentDialogResult.Primary) return;
 
         var deletedCount = await App.AccountServiceManager.DeleteExpiredAccountsAsync(SelectedProviderKind);
         await ViewModel.ReloadAccountsAsync();
-        await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), deletedCount == 0 ? GetLocalizedString("AccountsPage_DeleteExpiredAccountsNoAccountsMessage") : GetFormattedString("AccountsPage_DeleteExpiredAccountsDeletedMessageFormat", deletedCount));
+        await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), deletedCount == 0 ? App.LocalizationService.GetLocalizedString("AccountsPage_DeleteExpiredAccountsNoAccountsMessage") : App.LocalizationService.GetFormattedString("AccountsPage_DeleteExpiredAccountsDeletedMessageFormat", deletedCount));
     }
 
     private async void OnSwitchAccountButtonClicked(object sender, RoutedEventArgs routedEventArguments)
@@ -122,7 +122,7 @@ public sealed partial class AccountsPage : Page
         var currentAccountViewModel = ViewModel.Accounts.FirstOrDefault(accountViewModel => string.Equals(accountViewModel.AccountIdentifier, accountIdentifier, StringComparison.Ordinal));
         if (currentAccountViewModel is null) return;
 
-        var customAlias = await this.ShowInputDialogAsync(GetLocalizedString("AccountsPage_RenameAccountDialogTitle"), GetLocalizedString("AccountsPage_RenameAccountPlaceholderText"), true, defaultText: currentAccountViewModel.CustomAlias);
+        var customAlias = await this.ShowInputDialogAsync(App.LocalizationService.GetLocalizedString("AccountsPage_RenameAccountDialogTitle"), App.LocalizationService.GetLocalizedString("AccountsPage_RenameAccountPlaceholderText"), true, defaultText: currentAccountViewModel.CustomAlias);
         if (customAlias is null) return;
         await App.AccountServiceManager.RenameAccountAsync(SelectedProviderKind, accountIdentifier, customAlias);
         ViewModel.ReloadAccounts();
@@ -133,7 +133,7 @@ public sealed partial class AccountsPage : Page
         var accountIdentifier = ReadCommandParameter(sender);
         if (string.IsNullOrWhiteSpace(accountIdentifier)) return;
 
-        await RunWithLoadingAsync(GetLocalizedString("AccountsPage_RefreshAccountLoadingMessage"), async () => await App.AccountServiceManager.RefreshAccountAsync(SelectedProviderKind, accountIdentifier));
+        await RunWithLoadingAsync(App.LocalizationService.GetLocalizedString("AccountsPage_RefreshAccountLoadingMessage"), async () => await App.AccountServiceManager.RefreshAccountAsync(SelectedProviderKind, accountIdentifier));
     }
 
     private async void OnDeleteAccountButtonClicked(object sender, RoutedEventArgs routedEventArguments)
@@ -141,7 +141,7 @@ public sealed partial class AccountsPage : Page
         var accountIdentifier = ReadCommandParameter(sender);
         if (string.IsNullOrWhiteSpace(accountIdentifier)) return;
 
-        var contentDialogResult = await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteAccountDialogTitle"), GetLocalizedString("AccountsPage_DeleteAccountDialogMessage"), GetLocalizedString("AccountsPage_DeleteButtonText"), GetLocalizedString("DialogHelper_CancelButtonText"));
+        var contentDialogResult = await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("AccountsPage_DeleteAccountDialogTitle"), App.LocalizationService.GetLocalizedString("AccountsPage_DeleteAccountDialogMessage"), App.LocalizationService.GetLocalizedString("AccountsPage_DeleteButtonText"), App.LocalizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
         if (contentDialogResult != ContentDialogResult.Primary) return;
 
         await App.AccountServiceManager.DeleteAccountsAsync(SelectedProviderKind, [accountIdentifier]);
@@ -227,28 +227,28 @@ public sealed partial class AccountsPage : Page
 
     private async Task AskToRestartCodexApplicationAsync()
     {
-        var contentDialogResult = await this.ShowDialogAsync(GetLocalizedString("AccountsPage_RestartCodexApplicationDialogTitle"), GetLocalizedString("AccountsPage_RestartCodexApplicationDialogMessage"), GetLocalizedString("AccountsPage_RestartCodexApplicationButtonText"), GetLocalizedString("DialogHelper_CancelButtonText"));
+        var contentDialogResult = await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("AccountsPage_RestartCodexApplicationDialogTitle"), App.LocalizationService.GetLocalizedString("AccountsPage_RestartCodexApplicationDialogMessage"), App.LocalizationService.GetLocalizedString("AccountsPage_RestartCodexApplicationButtonText"), App.LocalizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
         if (contentDialogResult != ContentDialogResult.Primary) return;
 
-        MainWindow.ShowLoading(GetLocalizedString("AccountsPage_RestartCodexApplicationLoadingMessage"));
+        MainWindow.ShowLoading(App.LocalizationService.GetLocalizedString("AccountsPage_RestartCodexApplicationLoadingMessage"));
         var wasCodexApplicationRestarted = false;
         try { wasCodexApplicationRestarted = await App.CodexApplicationRestartService.RestartCodexApplicationAsync(); }
         finally { MainWindow.HideLoading(); }
 
-        if (!wasCodexApplicationRestarted) await this.ShowDialogAsync(GetLocalizedString("AccountsPage_RestartCodexApplicationFailedDialogTitle"), GetLocalizedString("AccountsPage_RestartCodexApplicationFailedDialogMessage"));
+        if (!wasCodexApplicationRestarted) await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("AccountsPage_RestartCodexApplicationFailedDialogTitle"), App.LocalizationService.GetLocalizedString("AccountsPage_RestartCodexApplicationFailedDialogMessage"));
     }
 
     private async Task AskToRestartClaudeCodeAsync()
     {
-        var contentDialogResult = await this.ShowDialogAsync(GetLocalizedString("AccountsPage_RestartClaudeCodeSessionDialogTitle"), GetLocalizedString("AccountsPage_RestartClaudeCodeSessionDialogMessage"), GetLocalizedString("AccountsPage_RestartClaudeCodeSessionButtonText"), GetLocalizedString("DialogHelper_CancelButtonText"));
+        var contentDialogResult = await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("AccountsPage_RestartClaudeCodeSessionDialogTitle"), App.LocalizationService.GetLocalizedString("AccountsPage_RestartClaudeCodeSessionDialogMessage"), App.LocalizationService.GetLocalizedString("AccountsPage_RestartClaudeCodeSessionButtonText"), App.LocalizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
         if (contentDialogResult != ContentDialogResult.Primary) return;
 
-        MainWindow.ShowLoading(GetLocalizedString("AccountsPage_RestartClaudeCodeSessionLoadingMessage"));
+        MainWindow.ShowLoading(App.LocalizationService.GetLocalizedString("AccountsPage_RestartClaudeCodeSessionLoadingMessage"));
         var wasClaudeCodeRestarted = false;
         try { wasClaudeCodeRestarted = await App.ClaudeCodeApplicationRestartService.RestartClaudeCodeAsync(); }
         finally { MainWindow.HideLoading(); }
 
-        if (!wasClaudeCodeRestarted) await this.ShowDialogAsync(GetLocalizedString("AccountsPage_RestartClaudeCodeSessionFailedDialogTitle"), GetLocalizedString("AccountsPage_RestartClaudeCodeSessionFailedDialogMessage"));
+        if (!wasClaudeCodeRestarted) await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("AccountsPage_RestartClaudeCodeSessionFailedDialogTitle"), App.LocalizationService.GetLocalizedString("AccountsPage_RestartClaudeCodeSessionFailedDialogMessage"));
     }
 
     private static FileOpenPicker CreateBackupFileOpenPicker(CliProviderKind providerKind)
@@ -273,7 +273,7 @@ public sealed partial class AccountsPage : Page
             DefaultFileExtension = backupFileExtension
         };
         InitializeWithWindow.Initialize(fileSavePicker, WindowNative.GetWindowHandle(MainWindow.Instance));
-        fileSavePicker.FileTypeChoices.Add(GetLocalizedString(GetBackupFileTypeChoiceResourceName(providerKind)), [backupFileExtension]);
+        fileSavePicker.FileTypeChoices.Add(App.LocalizationService.GetLocalizedString(GetBackupFileTypeChoiceResourceName(providerKind)), [backupFileExtension]);
         return fileSavePicker;
     }
 
@@ -287,15 +287,13 @@ public sealed partial class AccountsPage : Page
     {
         var resultLines = new[]
         {
-            successCount > 0 ? GetFormattedString("AccountsPage_ImportBackupSuccessCountFormat", successCount) : "",
-            failureCount > 0 ? GetFormattedString("AccountsPage_ImportBackupFailureCountFormat", failureCount) : "",
-            duplicateCount > 0 ? GetFormattedString("AccountsPage_ImportBackupDuplicateCountFormat", duplicateCount) : ""
+            successCount > 0 ? App.LocalizationService.GetFormattedString("AccountsPage_ImportBackupSuccessCountFormat", successCount) : "",
+            failureCount > 0 ? App.LocalizationService.GetFormattedString("AccountsPage_ImportBackupFailureCountFormat", failureCount) : "",
+            duplicateCount > 0 ? App.LocalizationService.GetFormattedString("AccountsPage_ImportBackupDuplicateCountFormat", duplicateCount) : ""
         }.Where(resultLine => !string.IsNullOrWhiteSpace(resultLine)).ToArray();
 
-        return resultLines.Length == 0 ? GetLocalizedString("AccountsPage_ImportBackupEmptyResultMessage") : string.Join(Environment.NewLine, resultLines);
+        return resultLines.Length == 0 ? App.LocalizationService.GetLocalizedString("AccountsPage_ImportBackupEmptyResultMessage") : string.Join(Environment.NewLine, resultLines);
     }
 
-    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 
-    private static string GetFormattedString(string resourceName, params object[] arguments) => App.LocalizationService.GetFormattedString(resourceName, arguments);
 }

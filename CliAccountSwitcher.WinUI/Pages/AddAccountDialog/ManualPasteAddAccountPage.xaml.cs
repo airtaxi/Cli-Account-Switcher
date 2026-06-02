@@ -80,7 +80,7 @@ public sealed partial class ManualPasteAddAccountPage : Page
                 return;
             }
 
-            ManualErrorInfoBar.Message = successCount == 0 && failureCount == 0 ? GetLocalizedString("ManualPasteAddAccountPage_NoInputMessage") : GetLocalizedString("ManualPasteAddAccountPage_PartialFailureMessage");
+            ManualErrorInfoBar.Message = successCount == 0 && failureCount == 0 ? App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_NoInputMessage") : App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_PartialFailureMessage");
             ManualErrorInfoBar.IsOpen = true;
         }
         finally
@@ -106,7 +106,7 @@ public sealed partial class ManualPasteAddAccountPage : Page
         }
         catch
         {
-            ManualErrorInfoBar.Message = GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeValidationErrorMessage");
+            ManualErrorInfoBar.Message = App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeValidationErrorMessage");
             ManualErrorInfoBar.IsOpen = true;
         }
         finally
@@ -126,17 +126,16 @@ public sealed partial class ManualPasteAddAccountPage : Page
 
         if (isClaudeCodeProviderSelected)
         {
-            ManualTitleTextBlock.Text = GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeTitle");
-            ManualDescriptionTextBlock.Text = GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeDescription");
-            ManualLoadInputsTextBlock.Text = GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeLoadInputsButtonText");
-            ManualErrorInfoBar.Message = GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeValidationErrorMessage");
+            ManualTitleTextBlock.Text = App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeTitle");
+            ManualDescriptionTextBlock.Text = App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeDescription");
+            ManualLoadInputsTextBlock.Text = App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeLoadInputsButtonText");
+            ManualErrorInfoBar.Message = App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeValidationErrorMessage");
             return;
         }
 
-        ManualTitleTextBlock.Text = GetLocalizedString("ManualPasteAddAccountPage_TitleTextBlock/Text");
-        ManualDescriptionTextBlock.Text = GetLocalizedString("ManualPasteAddAccountPage_DescriptionTextBlock/Text");
-        ManualLoadInputsTextBlock.Text = GetLocalizedString("ManualPasteAddAccountPage_LoadInputsTextBlock/Text");
+        ManualTitleTextBlock.Text = App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_TitleTextBlock/Text");
+        ManualDescriptionTextBlock.Text = App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_DescriptionTextBlock/Text");
+        ManualLoadInputsTextBlock.Text = App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_LoadInputsTextBlock/Text");
     }
 
-    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 }

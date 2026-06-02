@@ -21,7 +21,7 @@ public sealed partial class DashboardPage : Page
 
     private async void OnRefreshAllAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
-        await RunWithLoadingAsync(GetLocalizedString("AccountsPage_RefreshAllAccountsLoadingMessage"), async () => await App.AccountServiceManager.RefreshAllAccountsAsync(App.ApplicationSettings.SelectedProviderKind));
+        await RunWithLoadingAsync(App.LocalizationService.GetLocalizedString("AccountsPage_RefreshAllAccountsLoadingMessage"), async () => await App.AccountServiceManager.RefreshAllAccountsAsync(App.ApplicationSettings.SelectedProviderKind));
     }
 
     private async void OnAddAccountButtonClicked(object sender, RoutedEventArgs routedEventArguments)
@@ -36,12 +36,12 @@ public sealed partial class DashboardPage : Page
 
     private async void OnDeleteExpiredAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
-        var contentDialogResult = await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogMessage"), GetLocalizedString("AccountsPage_DeleteButtonText"), GetLocalizedString("DialogHelper_CancelButtonText"));
+        var contentDialogResult = await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), App.LocalizationService.GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogMessage"), App.LocalizationService.GetLocalizedString("AccountsPage_DeleteButtonText"), App.LocalizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
         if (contentDialogResult != ContentDialogResult.Primary) return;
 
         var deletedAccountCount = await App.AccountServiceManager.DeleteExpiredAccountsAsync(App.ApplicationSettings.SelectedProviderKind);
         await ViewModel.ReloadDashboardAsync();
-        await this.ShowDialogAsync(GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), deletedAccountCount == 0 ? GetLocalizedString("AccountsPage_DeleteExpiredAccountsNoAccountsMessage") : GetFormattedString("AccountsPage_DeleteExpiredAccountsDeletedMessageFormat", deletedAccountCount));
+        await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), deletedAccountCount == 0 ? App.LocalizationService.GetLocalizedString("AccountsPage_DeleteExpiredAccountsNoAccountsMessage") : App.LocalizationService.GetFormattedString("AccountsPage_DeleteExpiredAccountsDeletedMessageFormat", deletedAccountCount));
     }
 
     private void OnDashboardPageUnloaded(object sender, RoutedEventArgs routedEventArguments) => ViewModel.Dispose();
@@ -57,7 +57,5 @@ public sealed partial class DashboardPage : Page
         finally { MainWindow.HideLoading(); }
     }
 
-    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 
-    private static string GetFormattedString(string resourceName, params object[] arguments) => App.LocalizationService.GetFormattedString(resourceName, arguments);
 }

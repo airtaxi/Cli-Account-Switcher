@@ -22,7 +22,7 @@ public sealed partial class SettingsPage : Page
     private bool _isSynchronizingControls;
     private readonly DispatcherTimer _refreshCountdownDispatcherTimer = new() { Interval = TimeSpan.FromSeconds(1) };
 
-    public string ApplicationVersionText { get; } = GetFormattedString("SettingsPage_ApplicationVersionFormat", AboutPage.GetCurrentApplicationVersion());
+    public string ApplicationVersionText { get; } = App.LocalizationService.GetFormattedString("SettingsPage_ApplicationVersionFormat", AboutPage.GetCurrentApplicationVersion());
 
     public SettingsPage()
     {
@@ -81,9 +81,9 @@ public sealed partial class SettingsPage : Page
         try
         {
             await App.ApplicationSettingsService.ExportSettingsAsync(storageFile.Path);
-            await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ExportApplicationSettingsDialogTitle"), GetLocalizedString("SettingsPage_ExportApplicationSettingsDialogMessage"));
+            await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_ExportApplicationSettingsDialogTitle"), App.LocalizationService.GetLocalizedString("SettingsPage_ExportApplicationSettingsDialogMessage"));
         }
-        catch { await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ExportApplicationSettingsFailedDialogTitle"), GetLocalizedString("SettingsPage_ExportApplicationSettingsFailedDialogMessage")); }
+        catch { await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_ExportApplicationSettingsFailedDialogTitle"), App.LocalizationService.GetLocalizedString("SettingsPage_ExportApplicationSettingsFailedDialogMessage")); }
         finally { ExportApplicationSettingsButton.IsEnabled = true; }
     }
 
@@ -97,7 +97,7 @@ public sealed partial class SettingsPage : Page
         var wasApplicationSettingsImported = false;
 
         ImportApplicationSettingsButton.IsEnabled = false;
-        MainWindow.ShowLoading(GetLocalizedString("SettingsPage_ImportApplicationSettingsLoadingMessage"));
+        MainWindow.ShowLoading(App.LocalizationService.GetLocalizedString("SettingsPage_ImportApplicationSettingsLoadingMessage"));
         try
         {
             await App.ApplicationSettingsService.ImportSettingsAsync(storageFile.Path);
@@ -116,14 +116,14 @@ public sealed partial class SettingsPage : Page
 
         if (!wasApplicationSettingsImported)
         {
-            await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ImportApplicationSettingsFailedDialogTitle"), GetLocalizedString("SettingsPage_ImportApplicationSettingsFailedDialogMessage"));
+            await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_ImportApplicationSettingsFailedDialogTitle"), App.LocalizationService.GetLocalizedString("SettingsPage_ImportApplicationSettingsFailedDialogMessage"));
             return;
         }
 
         var didLanguageOverrideChange = !string.Equals(previousLanguageOverride, App.ApplicationSettings.LanguageOverride, StringComparison.Ordinal);
         SynchronizeControlsFromSettings();
         RefreshUsageRefreshCountdownTexts();
-        await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ImportApplicationSettingsDialogTitle"), GetLocalizedString(didLanguageOverrideChange ? "SettingsPage_ImportApplicationSettingsLanguageChangedDialogMessage" : "SettingsPage_ImportApplicationSettingsDialogMessage"));
+        await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_ImportApplicationSettingsDialogTitle"), App.LocalizationService.GetLocalizedString(didLanguageOverrideChange ? "SettingsPage_ImportApplicationSettingsLanguageChangedDialogMessage" : "SettingsPage_ImportApplicationSettingsDialogMessage"));
         if (didLanguageOverrideChange) WeakReferenceMessenger.Default.Send(new ValueChangedMessage<MainPageNavigationSection>(MainPageNavigationSection.Settings));
     }
 
@@ -134,7 +134,7 @@ public sealed partial class SettingsPage : Page
         {
             if (!App.FileLogService.HasLogs())
             {
-                await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ExportIntegratedLogEmptyDialogTitle"), GetLocalizedString("SettingsPage_ExportIntegratedLogEmptyDialogMessage"));
+                await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogEmptyDialogTitle"), App.LocalizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogEmptyDialogMessage"));
                 return;
             }
 
@@ -143,9 +143,9 @@ public sealed partial class SettingsPage : Page
             if (storageFile is null) return;
 
             await App.FileLogService.ExportAsync(storageFile.Path);
-            await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ExportIntegratedLogDialogTitle"), GetLocalizedString("SettingsPage_ExportIntegratedLogDialogMessage"));
+            await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogDialogTitle"), App.LocalizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogDialogMessage"));
         }
-        catch { await this.ShowDialogAsync(GetLocalizedString("SettingsPage_ExportIntegratedLogFailedDialogTitle"), GetLocalizedString("SettingsPage_ExportIntegratedLogFailedDialogMessage")); }
+        catch { await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogFailedDialogTitle"), App.LocalizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogFailedDialogMessage")); }
         finally { ExportIntegratedLogButton.IsEnabled = true; }
     }
 
@@ -159,7 +159,7 @@ public sealed partial class SettingsPage : Page
         App.ApplicationSettings.LanguageOverride = languageOverride;
         App.LocalizationService.ApplyLanguageTag(languageOverride);
         await SaveSettingsAsync();
-        await this.ShowDialogAsync(GetLocalizedString("SettingsPage_LanguageRestartDialogTitle"), GetLocalizedString("SettingsPage_LanguageRestartDialogMessage"));
+        await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_LanguageRestartDialogTitle"), App.LocalizationService.GetLocalizedString("SettingsPage_LanguageRestartDialogMessage"));
         WeakReferenceMessenger.Default.Send(new ValueChangedMessage<MainPageNavigationSection>(MainPageNavigationSection.Settings));
     }
 
@@ -185,28 +185,28 @@ public sealed partial class SettingsPage : Page
         var secondaryButtonText = default(string);
         var shouldOpenStoreAfterDialog = false;
 
-        MainWindow.ShowLoading(GetLocalizedString("SettingsPage_CheckForUpdatesLoadingMessage"));
+        MainWindow.ShowLoading(App.LocalizationService.GetLocalizedString("SettingsPage_CheckForUpdatesLoadingMessage"));
         try
         {
             var availableUpdateCount = await App.StoreUpdateService.GetAvailableUpdateCountAsync();
             if (availableUpdateCount > 0)
             {
-                dialogTitle = GetLocalizedString("SettingsPage_UpdateAvailableDialogTitle");
-                dialogMessage = GetFormattedString("SettingsPage_UpdateAvailableDialogMessageFormat", availableUpdateCount, ApplicationVersionText);
-                primaryButtonText = GetLocalizedString("SettingsPage_OpenStoreButtonText");
-                secondaryButtonText = GetLocalizedString("DialogHelper_CancelButtonText");
+                dialogTitle = App.LocalizationService.GetLocalizedString("SettingsPage_UpdateAvailableDialogTitle");
+                dialogMessage = App.LocalizationService.GetFormattedString("SettingsPage_UpdateAvailableDialogMessageFormat", availableUpdateCount, ApplicationVersionText);
+                primaryButtonText = App.LocalizationService.GetLocalizedString("SettingsPage_OpenStoreButtonText");
+                secondaryButtonText = App.LocalizationService.GetLocalizedString("DialogHelper_CancelButtonText");
                 shouldOpenStoreAfterDialog = true;
             }
             else
             {
-                dialogTitle = GetLocalizedString("SettingsPage_NoUpdateDialogTitle");
-                dialogMessage = GetFormattedString("SettingsPage_NoUpdateDialogMessageFormat", ApplicationVersionText);
+                dialogTitle = App.LocalizationService.GetLocalizedString("SettingsPage_NoUpdateDialogTitle");
+                dialogMessage = App.LocalizationService.GetFormattedString("SettingsPage_NoUpdateDialogMessageFormat", ApplicationVersionText);
             }
         }
         catch
         {
-            dialogTitle = GetLocalizedString("SettingsPage_UpdateCheckFailedDialogTitle");
-            dialogMessage = GetLocalizedString("SettingsPage_UpdateCheckFailedDialogMessage");
+            dialogTitle = App.LocalizationService.GetLocalizedString("SettingsPage_UpdateCheckFailedDialogTitle");
+            dialogMessage = App.LocalizationService.GetLocalizedString("SettingsPage_UpdateCheckFailedDialogMessage");
         }
         finally
         {
@@ -234,7 +234,7 @@ public sealed partial class SettingsPage : Page
         var isStartupLaunchApplied = await App.StartupRegistrationService.SetStartupLaunchEnabledAsync(StartupLaunchToggleSwitch.IsOn);
         if (!isStartupLaunchApplied)
         {
-            await this.ShowDialogAsync(GetLocalizedString("SettingsPage_StartupRegistrationFailedDialogTitle"), GetLocalizedString("SettingsPage_StartupRegistrationFailedDialogMessage"));
+            await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_StartupRegistrationFailedDialogTitle"), App.LocalizationService.GetLocalizedString("SettingsPage_StartupRegistrationFailedDialogMessage"));
             await RefreshStartupLaunchStateFromSystemAsync();
         }
     }
@@ -341,12 +341,12 @@ public sealed partial class SettingsPage : Page
         InactiveAccountNextUsageRefreshTextBlock.Text = FormatNextUsageRefreshText(App.AccountServiceManager.GetInactiveUsageRefreshRemainingTime());
     }
 
-    private static string FormatNextUsageRefreshText(TimeSpan? remainingTime) => remainingTime is null ? GetLocalizedString("SettingsPage_RefreshRemainingDisabledText") : FormatRemainingTime(remainingTime.Value);
+    private static string FormatNextUsageRefreshText(TimeSpan? remainingTime) => remainingTime is null ? App.LocalizationService.GetLocalizedString("SettingsPage_RefreshRemainingDisabledText") : FormatRemainingTime(remainingTime.Value);
 
     private static string FormatRemainingTime(TimeSpan remainingTime)
     {
         var normalizedRemainingTime = remainingTime < TimeSpan.Zero ? TimeSpan.Zero : remainingTime;
-        return GetFormattedString("SettingsPage_RefreshRemainingFormat", (int)normalizedRemainingTime.TotalHours, normalizedRemainingTime.Minutes, normalizedRemainingTime.Seconds);
+        return App.LocalizationService.GetFormattedString("SettingsPage_RefreshRemainingFormat", (int)normalizedRemainingTime.TotalHours, normalizedRemainingTime.Minutes, normalizedRemainingTime.Seconds);
     }
 
     private static FileOpenPicker CreateApplicationSettingsFileOpenPicker()
@@ -368,7 +368,7 @@ public sealed partial class SettingsPage : Page
             SuggestedFileName = $"codex-account-switch-settings-{DateTimeOffset.Now.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture)}"
         };
         InitializeWithWindow.Initialize(fileSavePicker, WindowNative.GetWindowHandle(MainWindow.Instance));
-        fileSavePicker.FileTypeChoices.Add(GetLocalizedString("SettingsPage_ApplicationSettingsFileTypeChoice"), [ApplicationSettingsFileExtension]);
+        fileSavePicker.FileTypeChoices.Add(App.LocalizationService.GetLocalizedString("SettingsPage_ApplicationSettingsFileTypeChoice"), [ApplicationSettingsFileExtension]);
         return fileSavePicker;
     }
 
@@ -381,7 +381,7 @@ public sealed partial class SettingsPage : Page
             SuggestedFileName = $"codex-account-switch-logs-{DateTimeOffset.Now.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture)}"
         };
         InitializeWithWindow.Initialize(fileSavePicker, WindowNative.GetWindowHandle(MainWindow.Instance));
-        fileSavePicker.FileTypeChoices.Add(GetLocalizedString("SettingsPage_IntegratedLogFileTypeChoice"), [LogFileExtension]);
+        fileSavePicker.FileTypeChoices.Add(App.LocalizationService.GetLocalizedString("SettingsPage_IntegratedLogFileTypeChoice"), [LogFileExtension]);
         return fileSavePicker;
     }
 
@@ -415,7 +415,5 @@ public sealed partial class SettingsPage : Page
 
     private static async Task SaveSettingsAsync() => await App.ApplicationSettingsService.SaveSettingsAsync();
 
-    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 
-    private static string GetFormattedString(string resourceName, params object[] arguments) => App.LocalizationService.GetFormattedString(resourceName, arguments);
 }

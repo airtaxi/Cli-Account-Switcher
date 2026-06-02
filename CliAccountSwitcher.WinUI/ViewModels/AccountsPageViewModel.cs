@@ -77,15 +77,15 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     public bool HasSelectedAccounts => SelectedAccountIdentifiers.Count > 0;
 
-    public string SelectedAccountCountText => SelectedAccountIdentifiers.Count == 0 ? GetLocalizedString("AccountsPageViewModel_NoSelectedAccounts") : GetFormattedString("AccountsPageViewModel_SelectedAccountCountFormat", SelectedAccountIdentifiers.Count);
+    public string SelectedAccountCountText => SelectedAccountIdentifiers.Count == 0 ? App.LocalizationService.GetLocalizedString("AccountsPageViewModel_NoSelectedAccounts") : App.LocalizationService.GetFormattedString("AccountsPageViewModel_SelectedAccountCountFormat", SelectedAccountIdentifiers.Count);
 
     public bool IsCodexProviderSelected => SelectedProviderKind == CliProviderKind.Codex;
 
     public bool IsClaudeCodeProviderSelected => SelectedProviderKind == CliProviderKind.ClaudeCode;
 
-    public string DescriptionText => GetFormattedString("AccountsPageViewModel_DescriptionFormat", GetProviderDisplayName(SelectedProviderKind));
+    public string DescriptionText => App.LocalizationService.GetFormattedString("AccountsPageViewModel_DescriptionFormat", GetProviderDisplayName(SelectedProviderKind));
 
-    public string PlanHeaderText => GetLocalizedString("AccountsPage_PlanHeaderTextBlock/Text");
+    public string PlanHeaderText => App.LocalizationService.GetLocalizedString("AccountsPage_PlanHeaderTextBlock/Text");
 
     public void ReloadAccounts()
     {
@@ -289,9 +289,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     partial void OnSelectedPlanFilterChanged(string value) => ApplyFilter();
 
-    private static string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => GetLocalizedString("Provider_CodexDisplayName") };
+    private static string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => App.LocalizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => App.LocalizationService.GetLocalizedString("Provider_CodexDisplayName") };
 
-    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 
-    private static string GetFormattedString(string resourceName, params object[] arguments) => App.LocalizationService.GetFormattedString(resourceName, arguments);
 }

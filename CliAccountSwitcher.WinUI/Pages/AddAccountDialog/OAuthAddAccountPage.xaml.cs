@@ -106,7 +106,7 @@ public sealed partial class OAuthAddAccountPage : Page
         }
         catch
         {
-            OAuthErrorInfoBar.Message = GetLocalizedString("OAuthAddAccountPage_ClaudeCodeErrorMessage");
+            OAuthErrorInfoBar.Message = App.LocalizationService.GetLocalizedString("OAuthAddAccountPage_ClaudeCodeErrorMessage");
             OAuthErrorInfoBar.IsOpen = true;
         }
         finally
@@ -121,16 +121,16 @@ public sealed partial class OAuthAddAccountPage : Page
     {
         if (_addAccountDialogContext?.SelectedProviderKind == CliProviderKind.ClaudeCode)
         {
-            OAuthTitleTextBlock.Text = GetLocalizedString("OAuthAddAccountPage_ClaudeCodeTitle");
-            OAuthDescriptionTextBlock.Text = GetLocalizedString("OAuthAddAccountPage_ClaudeCodeDescription");
-            OAuthOpenBrowserTextBlock.Text = GetLocalizedString("OAuthAddAccountPage_ClaudeCodeRunLoginButtonText");
-            OAuthErrorInfoBar.Message = GetLocalizedString("OAuthAddAccountPage_ClaudeCodeErrorMessage");
+            OAuthTitleTextBlock.Text = App.LocalizationService.GetLocalizedString("OAuthAddAccountPage_ClaudeCodeTitle");
+            OAuthDescriptionTextBlock.Text = App.LocalizationService.GetLocalizedString("OAuthAddAccountPage_ClaudeCodeDescription");
+            OAuthOpenBrowserTextBlock.Text = App.LocalizationService.GetLocalizedString("OAuthAddAccountPage_ClaudeCodeRunLoginButtonText");
+            OAuthErrorInfoBar.Message = App.LocalizationService.GetLocalizedString("OAuthAddAccountPage_ClaudeCodeErrorMessage");
             return;
         }
 
-        OAuthTitleTextBlock.Text = GetLocalizedString("OAuthAddAccountPage_TitleTextBlock/Text");
-        OAuthDescriptionTextBlock.Text = GetLocalizedString("OAuthAddAccountPage_DescriptionTextBlock/Text");
-        OAuthOpenBrowserTextBlock.Text = GetLocalizedString("OAuthAddAccountPage_OpenBrowserTextBlock/Text");
+        OAuthTitleTextBlock.Text = App.LocalizationService.GetLocalizedString("OAuthAddAccountPage_TitleTextBlock/Text");
+        OAuthDescriptionTextBlock.Text = App.LocalizationService.GetLocalizedString("OAuthAddAccountPage_DescriptionTextBlock/Text");
+        OAuthOpenBrowserTextBlock.Text = App.LocalizationService.GetLocalizedString("OAuthAddAccountPage_OpenBrowserTextBlock/Text");
     }
 
     private static bool TryOpenBrowser(Uri authorizationAddress)
@@ -149,5 +149,4 @@ public sealed partial class OAuthAddAccountPage : Page
         catch { return false; }
     }
 
-    private static string GetLocalizedString(string resourceName) => App.LocalizationService.GetLocalizedString(resourceName);
 }
