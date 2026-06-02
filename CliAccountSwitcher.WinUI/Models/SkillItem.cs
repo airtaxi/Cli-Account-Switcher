@@ -1,20 +1,35 @@
+using CliAccountSwitcher.Api.Providers.Abstractions;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CliAccountSwitcher.WinUI.Models;
 
 public sealed partial class SkillItem : ObservableObject
 {
-    public required string Name { get; init; }
+    [ObservableProperty]
+    public partial CliProviderKind ProviderKind { get; set; } = CliProviderKind.Codex;
 
-    public required string DirectoryName { get; init; }
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SearchText))]
+    public partial string Name { get; set; } = "";
 
-    public required string FullPath { get; init; }
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SearchText))]
+    public partial string DirectoryName { get; set; } = "";
 
-    public required string Description { get; init; }
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SearchText))]
+    public partial string FullPath { get; set; } = "";
 
-    public required int FileCount { get; init; }
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SearchText))]
+    public partial string Description { get; set; } = "";
 
-    public required DateTime LastModified { get; init; }
+    [ObservableProperty]
+    public partial int FileCount { get; set; }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(LastModifiedText))]
+    public partial DateTime LastModified { get; set; }
 
     public string LastModifiedText => LastModified.ToString("g");
 
@@ -22,4 +37,15 @@ public sealed partial class SkillItem : ObservableObject
 
     [ObservableProperty]
     public partial bool IsSelected { get; set; }
+
+    public void Update(SkillItem skillItem)
+    {
+        ProviderKind = skillItem.ProviderKind;
+        Name = skillItem.Name;
+        DirectoryName = skillItem.DirectoryName;
+        FullPath = skillItem.FullPath;
+        Description = skillItem.Description;
+        FileCount = skillItem.FileCount;
+        LastModified = skillItem.LastModified;
+    }
 }

@@ -32,31 +32,33 @@ public sealed partial class SkillsPage : Page
 
     private async void OnDeleteSelectedSkillsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
-        var selectedSkillItems = ViewModel.Skills.Where(skillItem => skillItem.IsSelected).ToArray();
+        var selectedProviderKind = SelectedProviderKind;
+        var selectedSkillItems = ViewModel.Skills.Where(skillItem => skillItem.ProviderKind == selectedProviderKind && skillItem.IsSelected).ToArray();
         if (selectedSkillItems.Length == 0) return;
 
         var contentDialogResult = await this.ShowDialogAsync(_localizationService.GetLocalizedString("SkillsPage_DeleteSelectedSkillsDialogTitle"), _localizationService.GetFormattedString("SkillsPage_DeleteSelectedSkillsDialogMessage", selectedSkillItems.Length), _localizationService.GetLocalizedString("SkillsPage_DeleteButtonText"), _localizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
         if (contentDialogResult != ContentDialogResult.Primary) return;
 
-        _skillService.DeleteSkills(selectedSkillItems);
+        _skillService.DeleteSkills(selectedProviderKind, selectedSkillItems);
         await ViewModel.ReloadSkillsAsync();
     }
 
     private async void OnExportSkillsBackupButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
-        var selectedSkillItems = ViewModel.Skills.Where(skillItem => skillItem.IsSelected).ToArray();
+        var selectedProviderKind = SelectedProviderKind;
+        var selectedSkillItems = ViewModel.Skills.Where(skillItem => skillItem.ProviderKind == selectedProviderKind && skillItem.IsSelected).ToArray();
         if (selectedSkillItems.Length == 0)
         {
             await this.ShowDialogAsync(_localizationService.GetLocalizedString("SkillsPage_ExportBackupNoSelectionDialogTitle"), _localizationService.GetLocalizedString("SkillsPage_ExportBackupNoSelectionDialogMessage"));
             return;
         }
 
-        var fileSavePicker = CreateBackupFileSavePicker(SelectedProviderKind);
+        var fileSavePicker = CreateBackupFileSavePicker(selectedProviderKind);
         var storageFile = await fileSavePicker.PickSaveFileAsync();
         if (storageFile is null) return;
 
         MainWindow.ShowLoading(_localizationService.GetLocalizedString("SkillsPage_ExportBackupLoadingMessage"));
-        try { await _skillService.ExportSkillsAsync(SelectedProviderKind, selectedSkillItems, storageFile.Path); }
+        try { await _skillService.ExportSkillsAsync(selectedProviderKind, selectedSkillItems, storageFile.Path); }
         finally { MainWindow.HideLoading(); }
 
         await this.ShowDialogAsync(_localizationService.GetLocalizedString("SkillsPage_ExportBackupDialogTitle"), _localizationService.GetLocalizedString("SkillsPage_ExportBackupDialogMessage"));
@@ -64,6 +66,7 @@ public sealed partial class SkillsPage : Page
 
     private async void OnImportSkillsBackupButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
+        var selectedProviderKind = SelectedProviderKind;
         var fileOpenPicker = CreateBackupFileOpenPicker();
         var storageFile = await fileOpenPicker.PickSingleFileAsync();
         if (storageFile is null) return;
@@ -72,7 +75,7 @@ public sealed partial class SkillsPage : Page
         var importedCount = 0;
         try
         {
-            importedCount = await _skillService.ImportSkillsAsync(SelectedProviderKind, storageFile.Path);
+            importedCount = await _skillService.ImportSkillsAsync(selectedProviderKind, storageFile.Path);
             await ViewModel.ReloadSkillsAsync();
         }
         finally { MainWindow.HideLoading(); }

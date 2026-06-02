@@ -81,13 +81,7 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
 
     public string DescriptionText => _localizationService.GetFormattedString("SkillsPageViewModel_DescriptionFormat", GetProviderDisplayName(SelectedProviderKind));
 
-    public void ReloadSkills()
-    {
-        SelectedProviderKind = _applicationSettings.SelectedProviderKind;
-        SynchronizeSkills(_skillService.ScanSkills(SelectedProviderKind));
-        ApplyFilter();
-        RefreshSkillStateProperties();
-    }
+    public void ReloadSkills() => ReloadSkills(_applicationSettings.SelectedProviderKind);
 
     public Task ReloadSkillsAsync()
     {
@@ -102,7 +96,7 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
         _isSynchronizingSkillSelection = true;
         try
         {
-            foreach (var skillItem in Skills) skillItem.IsSelected = _selectedSkillDirectoryNames.Contains(skillItem.DirectoryName);
+            foreach (var skillItem in Skills) skillItem.IsSelected = skillItem.ProviderKind == SelectedProviderKind && _selectedSkillDirectoryNames.Contains(skillItem.DirectoryName);
         }
         finally { _isSynchronizingSkillSelection = false; }
         SelectedSkillDirectoryNames = [.. _selectedSkillDirectoryNames];
@@ -127,12 +121,23 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
         _disposed = true;
 
         _applicationSettings.PropertyChanged -= OnApplicationSettingsPropertyChanged;
+        foreach (var skillItem in Skills) skillItem.PropertyChanged -= OnSkillItemPropertyChanged;
         WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CliProviderKind>>(this);
+    }
+
+    private void ReloadSkills(CliProviderKind providerKind)
+    {
+        SelectedProviderKind = providerKind;
+        SynchronizeSkills(_skillService.ScanSkills(providerKind));
+        ApplyFilter();
+        RefreshSkillStateProperties();
     }
 
     private void OnApplicationSettingsPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs propertyChangedEventArguments)
     {
         if (propertyChangedEventArguments.PropertyName is not nameof(ApplicationSettings.SelectedProviderKind)) return;
+        if (_dispatcherQueue.HasThreadAccess) ApplyProviderKindChange(_applicationSettings.SelectedProviderKind);
+        else _dispatcherQueue.TryEnqueue(() => ApplyProviderKindChange(_applicationSettings.SelectedProviderKind));
     }
 
     private void OnProviderKindChangedMessageReceived(object recipient, ValueChangedMessage<CliProviderKind> valueChangedMessage)
@@ -151,22 +156,36 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
 
     private void SynchronizeSkills(IReadOnlyList<SkillItem> skillItems)
     {
-        var skillDirectoryNames = skillItems.Select(skillItem => skillItem.DirectoryName).ToHashSet(StringComparer.Ordinal);
-        for (var skillIndex = Skills.Count - 1; skillIndex >= 0; skillIndex--)
+        var skillKeys = skillItems.Select(CreateSkillKey).ToHashSet();
+        _isSynchronizingSkillSelection = true;
+        try
         {
-            var skillItem = Skills[skillIndex];
-            if (skillDirectoryNames.Contains(skillItem.DirectoryName)) continue;
-            skillItem.PropertyChanged -= OnSkillItemPropertyChanged;
-            _selectedSkillDirectoryNames.Remove(skillItem.DirectoryName);
-            Skills.RemoveAt(skillIndex);
-        }
+            for (var skillIndex = Skills.Count - 1; skillIndex >= 0; skillIndex--)
+            {
+                var skillItem = Skills[skillIndex];
+                if (skillKeys.Contains(CreateSkillKey(skillItem))) continue;
+                skillItem.PropertyChanged -= OnSkillItemPropertyChanged;
+                _selectedSkillDirectoryNames.Remove(skillItem.DirectoryName);
+                Skills.RemoveAt(skillIndex);
+            }
 
-        foreach (var skillItem in skillItems)
-        {
-            var existingSkillItem = Skills.FirstOrDefault(candidateSkillItem => string.Equals(candidateSkillItem.DirectoryName, skillItem.DirectoryName, StringComparison.Ordinal));
-            if (existingSkillItem is null) Skills.Add(CreateSkillItemViewModel(skillItem));
-            else existingSkillItem.IsSelected = _selectedSkillDirectoryNames.Contains(skillItem.DirectoryName);
+            for (var skillIndex = 0; skillIndex < skillItems.Count; skillIndex++)
+            {
+                var skillItem = skillItems[skillIndex];
+                var existingSkillItem = Skills.FirstOrDefault(candidateSkillItem => IsSameSkill(candidateSkillItem, skillItem));
+                if (existingSkillItem is null)
+                {
+                    Skills.Insert(skillIndex, CreateSkillItemViewModel(skillItem));
+                    continue;
+                }
+
+                existingSkillItem.Update(skillItem);
+                existingSkillItem.IsSelected = _selectedSkillDirectoryNames.Contains(skillItem.DirectoryName);
+                var currentSkillIndex = Skills.IndexOf(existingSkillItem);
+                if (currentSkillIndex != skillIndex) Skills.Move(currentSkillIndex, skillIndex);
+            }
         }
+        finally { _isSynchronizingSkillSelection = false; }
 
         RefreshSelectedSkillDirectoryNamesFromSkillItems();
     }
@@ -175,6 +194,7 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
     {
         var viewModel = new SkillItem
         {
+            ProviderKind = skillItem.ProviderKind,
             Name = skillItem.Name,
             DirectoryName = skillItem.DirectoryName,
             FullPath = skillItem.FullPath,
@@ -190,7 +210,7 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
     private void ApplyFilter()
     {
         var normalizedSearchText = (SearchText ?? "").Trim();
-        var filteredSkillItems = Skills.Where(skillItem => IsSkillVisible(skillItem, normalizedSearchText)).ToList();
+        var filteredSkillItems = Skills.Where(skillItem => skillItem.ProviderKind == SelectedProviderKind && IsSkillVisible(skillItem, normalizedSearchText)).ToList();
         var filteredSkillItemSet = filteredSkillItems.ToHashSet();
 
         for (var skillIndex = FilteredSkills.Count - 1; skillIndex >= 0; skillIndex--)
@@ -218,7 +238,7 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
     private void RefreshSelectedSkillDirectoryNamesFromSkillItems()
     {
         _selectedSkillDirectoryNames.Clear();
-        foreach (var skillItem in Skills.Where(skillItem => skillItem.IsSelected)) _selectedSkillDirectoryNames.Add(skillItem.DirectoryName);
+        foreach (var skillItem in Skills.Where(skillItem => skillItem.ProviderKind == SelectedProviderKind && skillItem.IsSelected)) _selectedSkillDirectoryNames.Add(skillItem.DirectoryName);
 
         SelectedSkillDirectoryNames = [.. _selectedSkillDirectoryNames];
         RefreshFilteredSkillsSelectionState();
@@ -244,14 +264,18 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
 
     private void ApplyProviderKindChange(CliProviderKind providerKind)
     {
-        SelectedProviderKind = providerKind;
+        if (SelectedProviderKind == providerKind) return;
+
         SetSelectedSkillDirectoryNames([]);
-        ReloadSkills();
+        ReloadSkills(providerKind);
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
 
     private string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => _localizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => _localizationService.GetLocalizedString("Provider_CodexDisplayName") };
 
+    private static (CliProviderKind providerKind, string directoryName) CreateSkillKey(SkillItem skillItem) => (skillItem.ProviderKind, skillItem.DirectoryName);
+
+    private static bool IsSameSkill(SkillItem firstSkillItem, SkillItem secondSkillItem) => firstSkillItem.ProviderKind == secondSkillItem.ProviderKind && string.Equals(firstSkillItem.DirectoryName, secondSkillItem.DirectoryName, StringComparison.Ordinal);
 
 }
