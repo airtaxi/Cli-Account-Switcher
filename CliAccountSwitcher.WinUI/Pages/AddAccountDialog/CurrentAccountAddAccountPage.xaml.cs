@@ -1,6 +1,8 @@
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.Api.Providers.ClaudeCode.Infrastructure;
 using CliAccountSwitcher.WinUI.Dialogs;
+using CliAccountSwitcher.WinUI.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
@@ -9,6 +11,8 @@ namespace CliAccountSwitcher.WinUI.Pages.AddAccountDialog;
 
 public sealed partial class CurrentAccountAddAccountPage : Page
 {
+    private static readonly Lazy<LocalizationService> s_localizationServiceLazy = new(() => App.Services.GetRequiredService<LocalizationService>());
+    private static LocalizationService s_localizationService => s_localizationServiceLazy.Value;
     private AddAccountDialogContext _addAccountDialogContext;
     private bool _isCompletingSuccessfully;
 
@@ -63,18 +67,18 @@ public sealed partial class CurrentAccountAddAccountPage : Page
     {
         if (_addAccountDialogContext?.SelectedProviderKind == CliProviderKind.ClaudeCode)
         {
-            CurrentAccountTitleTextBlock.Text = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeTitle");
-            CurrentAccountDescriptionTextBlock.Text = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeDescription");
-            CurrentAccountImportButtonTextBlock.Text = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeImportButtonText");
-            CurrentAccountFilePathHeaderTextBlock.Text = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeFilePathHeader");
-            CurrentAccountErrorInfoBar.Message = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeErrorMessage");
+            CurrentAccountTitleTextBlock.Text = s_localizationService.GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeTitle");
+            CurrentAccountDescriptionTextBlock.Text = s_localizationService.GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeDescription");
+            CurrentAccountImportButtonTextBlock.Text = s_localizationService.GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeImportButtonText");
+            CurrentAccountFilePathHeaderTextBlock.Text = s_localizationService.GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeFilePathHeader");
+            CurrentAccountErrorInfoBar.Message = s_localizationService.GetLocalizedString("CurrentAccountAddAccountPage_ClaudeCodeErrorMessage");
             return;
         }
 
-        CurrentAccountTitleTextBlock.Text = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_TitleTextBlock/Text");
-        CurrentAccountDescriptionTextBlock.Text = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_DescriptionTextBlock/Text");
-        CurrentAccountImportButtonTextBlock.Text = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_ImportButtonTextBlock/Text");
-        CurrentAccountFilePathHeaderTextBlock.Text = App.LocalizationService.GetLocalizedString("CurrentAccountAddAccountPage_FilePathHeaderTextBlock/Text");
+        CurrentAccountTitleTextBlock.Text = s_localizationService.GetLocalizedString("CurrentAccountAddAccountPage_TitleTextBlock/Text");
+        CurrentAccountDescriptionTextBlock.Text = s_localizationService.GetLocalizedString("CurrentAccountAddAccountPage_DescriptionTextBlock/Text");
+        CurrentAccountImportButtonTextBlock.Text = s_localizationService.GetLocalizedString("CurrentAccountAddAccountPage_ImportButtonTextBlock/Text");
+        CurrentAccountFilePathHeaderTextBlock.Text = s_localizationService.GetLocalizedString("CurrentAccountAddAccountPage_FilePathHeaderTextBlock/Text");
     }
 
 }

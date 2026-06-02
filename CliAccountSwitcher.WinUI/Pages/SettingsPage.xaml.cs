@@ -1,8 +1,11 @@
 using CliAccountSwitcher.WinUI.Helpers;
+using CliAccountSwitcher.WinUI.Managers;
 using CliAccountSwitcher.WinUI.Models;
+using CliAccountSwitcher.WinUI.Services;
 using CliAccountSwitcher.WinUI.Views;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
@@ -22,16 +25,26 @@ public sealed partial class SettingsPage : Page
     private bool _isSynchronizingControls;
     private readonly DispatcherTimer _refreshCountdownDispatcherTimer = new() { Interval = TimeSpan.FromSeconds(1) };
 
-    public string ApplicationVersionText { get; } = App.LocalizationService.GetFormattedString("SettingsPage_ApplicationVersionFormat", AboutPage.GetCurrentApplicationVersion());
+    private readonly LocalizationService _localizationService = App.Services.GetRequiredService<LocalizationService>();
+    private readonly ApplicationSettings _applicationSettings = App.Services.GetRequiredService<ApplicationSettings>();
+    private readonly ApplicationSettingsService _applicationSettingsService = App.Services.GetRequiredService<ApplicationSettingsService>();
+    private readonly ApplicationThemeService _applicationThemeService = App.Services.GetRequiredService<ApplicationThemeService>();
+    private readonly StartupRegistrationService _startupRegistrationService = App.Services.GetRequiredService<StartupRegistrationService>();
+    private readonly StoreUpdateService _storeUpdateService = App.Services.GetRequiredService<StoreUpdateService>();
+    private readonly FileLogService _fileLogService = App.Services.GetRequiredService<FileLogService>();
+    private readonly AccountServiceManager _accountServiceManager = App.Services.GetRequiredService<AccountServiceManager>();
+
+    public string ApplicationVersionText { get; }
 
     public SettingsPage()
     {
+        ApplicationVersionText = _localizationService.GetFormattedString("SettingsPage_ApplicationVersionFormat", AboutPage.GetCurrentApplicationVersion());
         InitializeComponent();
     }
 
     private void OnSettingsPageLoaded(object sender, RoutedEventArgs routedEventArguments)
     {
-        App.ApplicationThemeService.RegisterThemeTarget(this);
+        _applicationThemeService.RegisterThemeTarget(this);
         _refreshCountdownDispatcherTimer.Tick -= OnRefreshCountdownDispatcherTimerTick;
         _refreshCountdownDispatcherTimer.Tick += OnRefreshCountdownDispatcherTimerTick;
         SynchronizeControlsFromSettings();
@@ -50,7 +63,7 @@ public sealed partial class SettingsPage : Page
         _isSynchronizingControls = true;
         try
         {
-            var applicationSettings = App.ApplicationSettings;
+            var applicationSettings = _applicationSettings;
             LanguageComboBox.SelectedIndex = GetLanguageSelectedIndex(applicationSettings.LanguageOverride);
             ThemeComboBox.SelectedIndex = GetThemeSelectedIndex(applicationSettings.Theme);
             AutomaticUpdateToggleSwitch.IsOn = applicationSettings.IsAutomaticUpdateCheckEnabled;
@@ -80,10 +93,10 @@ public sealed partial class SettingsPage : Page
         ExportApplicationSettingsButton.IsEnabled = false;
         try
         {
-            await App.ApplicationSettingsService.ExportSettingsAsync(storageFile.Path);
-            await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_ExportApplicationSettingsDialogTitle"), App.LocalizationService.GetLocalizedString("SettingsPage_ExportApplicationSettingsDialogMessage"));
+            await _applicationSettingsService.ExportSettingsAsync(storageFile.Path);
+            await this.ShowDialogAsync(_localizationService.GetLocalizedString("SettingsPage_ExportApplicationSettingsDialogTitle"), _localizationService.GetLocalizedString("SettingsPage_ExportApplicationSettingsDialogMessage"));
         }
-        catch { await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_ExportApplicationSettingsFailedDialogTitle"), App.LocalizationService.GetLocalizedString("SettingsPage_ExportApplicationSettingsFailedDialogMessage")); }
+        catch { await this.ShowDialogAsync(_localizationService.GetLocalizedString("SettingsPage_ExportApplicationSettingsFailedDialogTitle"), _localizationService.GetLocalizedString("SettingsPage_ExportApplicationSettingsFailedDialogMessage")); }
         finally { ExportApplicationSettingsButton.IsEnabled = true; }
     }
 
@@ -93,17 +106,17 @@ public sealed partial class SettingsPage : Page
         var storageFile = await fileOpenPicker.PickSingleFileAsync();
         if (storageFile is null) return;
 
-        var previousLanguageOverride = App.ApplicationSettings.LanguageOverride;
+        var previousLanguageOverride = _applicationSettings.LanguageOverride;
         var wasApplicationSettingsImported = false;
 
         ImportApplicationSettingsButton.IsEnabled = false;
-        MainWindow.ShowLoading(App.LocalizationService.GetLocalizedString("SettingsPage_ImportApplicationSettingsLoadingMessage"));
+        MainWindow.ShowLoading(_localizationService.GetLocalizedString("SettingsPage_ImportApplicationSettingsLoadingMessage"));
         try
         {
-            await App.ApplicationSettingsService.ImportSettingsAsync(storageFile.Path);
-            App.ApplicationThemeService.ApplyTheme(App.ApplicationSettings.Theme);
-            App.LocalizationService.ApplyLanguageTag(App.ApplicationSettings.LanguageOverride);
-            var isStartupLaunchApplied = await App.StartupRegistrationService.SetStartupLaunchEnabledAsync(App.ApplicationSettings.IsStartupLaunchEnabled);
+            await _applicationSettingsService.ImportSettingsAsync(storageFile.Path);
+            _applicationThemeService.ApplyTheme(_applicationSettings.Theme);
+            _localizationService.ApplyLanguageTag(_applicationSettings.LanguageOverride);
+            var isStartupLaunchApplied = await _startupRegistrationService.SetStartupLaunchEnabledAsync(_applicationSettings.IsStartupLaunchEnabled);
             if (!isStartupLaunchApplied) await RefreshStartupLaunchStateFromSystemAsync();
             wasApplicationSettingsImported = true;
         }
@@ -116,14 +129,14 @@ public sealed partial class SettingsPage : Page
 
         if (!wasApplicationSettingsImported)
         {
-            await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_ImportApplicationSettingsFailedDialogTitle"), App.LocalizationService.GetLocalizedString("SettingsPage_ImportApplicationSettingsFailedDialogMessage"));
+            await this.ShowDialogAsync(_localizationService.GetLocalizedString("SettingsPage_ImportApplicationSettingsFailedDialogTitle"), _localizationService.GetLocalizedString("SettingsPage_ImportApplicationSettingsFailedDialogMessage"));
             return;
         }
 
-        var didLanguageOverrideChange = !string.Equals(previousLanguageOverride, App.ApplicationSettings.LanguageOverride, StringComparison.Ordinal);
+        var didLanguageOverrideChange = !string.Equals(previousLanguageOverride, _applicationSettings.LanguageOverride, StringComparison.Ordinal);
         SynchronizeControlsFromSettings();
         RefreshUsageRefreshCountdownTexts();
-        await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_ImportApplicationSettingsDialogTitle"), App.LocalizationService.GetLocalizedString(didLanguageOverrideChange ? "SettingsPage_ImportApplicationSettingsLanguageChangedDialogMessage" : "SettingsPage_ImportApplicationSettingsDialogMessage"));
+        await this.ShowDialogAsync(_localizationService.GetLocalizedString("SettingsPage_ImportApplicationSettingsDialogTitle"), _localizationService.GetLocalizedString(didLanguageOverrideChange ? "SettingsPage_ImportApplicationSettingsLanguageChangedDialogMessage" : "SettingsPage_ImportApplicationSettingsDialogMessage"));
         if (didLanguageOverrideChange) WeakReferenceMessenger.Default.Send(new ValueChangedMessage<MainPageNavigationSection>(MainPageNavigationSection.Settings));
     }
 
@@ -132,9 +145,9 @@ public sealed partial class SettingsPage : Page
         ExportIntegratedLogButton.IsEnabled = false;
         try
         {
-            if (!App.FileLogService.HasLogs())
+            if (!_fileLogService.HasLogs())
             {
-                await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogEmptyDialogTitle"), App.LocalizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogEmptyDialogMessage"));
+                await this.ShowDialogAsync(_localizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogEmptyDialogTitle"), _localizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogEmptyDialogMessage"));
                 return;
             }
 
@@ -142,10 +155,10 @@ public sealed partial class SettingsPage : Page
             var storageFile = await fileSavePicker.PickSaveFileAsync();
             if (storageFile is null) return;
 
-            await App.FileLogService.ExportAsync(storageFile.Path);
-            await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogDialogTitle"), App.LocalizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogDialogMessage"));
+            await _fileLogService.ExportAsync(storageFile.Path);
+            await this.ShowDialogAsync(_localizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogDialogTitle"), _localizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogDialogMessage"));
         }
-        catch { await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogFailedDialogTitle"), App.LocalizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogFailedDialogMessage")); }
+        catch { await this.ShowDialogAsync(_localizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogFailedDialogTitle"), _localizationService.GetLocalizedString("SettingsPage_ExportIntegratedLogFailedDialogMessage")); }
         finally { ExportIntegratedLogButton.IsEnabled = true; }
     }
 
@@ -154,12 +167,12 @@ public sealed partial class SettingsPage : Page
         if (_isSynchronizingControls) return;
 
         var languageOverride = GetLanguageOverrideFromSelectedIndex(LanguageComboBox.SelectedIndex);
-        if (App.ApplicationSettings.LanguageOverride == languageOverride) return;
+        if (_applicationSettings.LanguageOverride == languageOverride) return;
 
-        App.ApplicationSettings.LanguageOverride = languageOverride;
-        App.LocalizationService.ApplyLanguageTag(languageOverride);
+        _applicationSettings.LanguageOverride = languageOverride;
+        _localizationService.ApplyLanguageTag(languageOverride);
         await SaveSettingsAsync();
-        await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_LanguageRestartDialogTitle"), App.LocalizationService.GetLocalizedString("SettingsPage_LanguageRestartDialogMessage"));
+        await this.ShowDialogAsync(_localizationService.GetLocalizedString("SettingsPage_LanguageRestartDialogTitle"), _localizationService.GetLocalizedString("SettingsPage_LanguageRestartDialogMessage"));
         WeakReferenceMessenger.Default.Send(new ValueChangedMessage<MainPageNavigationSection>(MainPageNavigationSection.Settings));
     }
 
@@ -169,10 +182,10 @@ public sealed partial class SettingsPage : Page
 
         var theme = GetThemeFromSelectedIndex(ThemeComboBox.SelectedIndex);
 
-        if (App.ApplicationSettings.Theme == theme) return;
+        if (_applicationSettings.Theme == theme) return;
 
-        App.ApplicationSettings.Theme = theme;
-        App.ApplicationThemeService.ApplyTheme(theme);
+        _applicationSettings.Theme = theme;
+        _applicationThemeService.ApplyTheme(theme);
         await SaveSettingsAsync();
     }
 
@@ -185,28 +198,28 @@ public sealed partial class SettingsPage : Page
         var secondaryButtonText = default(string);
         var shouldOpenStoreAfterDialog = false;
 
-        MainWindow.ShowLoading(App.LocalizationService.GetLocalizedString("SettingsPage_CheckForUpdatesLoadingMessage"));
+        MainWindow.ShowLoading(_localizationService.GetLocalizedString("SettingsPage_CheckForUpdatesLoadingMessage"));
         try
         {
-            var availableUpdateCount = await App.StoreUpdateService.GetAvailableUpdateCountAsync();
+            var availableUpdateCount = await _storeUpdateService.GetAvailableUpdateCountAsync();
             if (availableUpdateCount > 0)
             {
-                dialogTitle = App.LocalizationService.GetLocalizedString("SettingsPage_UpdateAvailableDialogTitle");
-                dialogMessage = App.LocalizationService.GetFormattedString("SettingsPage_UpdateAvailableDialogMessageFormat", availableUpdateCount, ApplicationVersionText);
-                primaryButtonText = App.LocalizationService.GetLocalizedString("SettingsPage_OpenStoreButtonText");
-                secondaryButtonText = App.LocalizationService.GetLocalizedString("DialogHelper_CancelButtonText");
+                dialogTitle = _localizationService.GetLocalizedString("SettingsPage_UpdateAvailableDialogTitle");
+                dialogMessage = _localizationService.GetFormattedString("SettingsPage_UpdateAvailableDialogMessageFormat", availableUpdateCount, ApplicationVersionText);
+                primaryButtonText = _localizationService.GetLocalizedString("SettingsPage_OpenStoreButtonText");
+                secondaryButtonText = _localizationService.GetLocalizedString("DialogHelper_CancelButtonText");
                 shouldOpenStoreAfterDialog = true;
             }
             else
             {
-                dialogTitle = App.LocalizationService.GetLocalizedString("SettingsPage_NoUpdateDialogTitle");
-                dialogMessage = App.LocalizationService.GetFormattedString("SettingsPage_NoUpdateDialogMessageFormat", ApplicationVersionText);
+                dialogTitle = _localizationService.GetLocalizedString("SettingsPage_NoUpdateDialogTitle");
+                dialogMessage = _localizationService.GetFormattedString("SettingsPage_NoUpdateDialogMessageFormat", ApplicationVersionText);
             }
         }
         catch
         {
-            dialogTitle = App.LocalizationService.GetLocalizedString("SettingsPage_UpdateCheckFailedDialogTitle");
-            dialogMessage = App.LocalizationService.GetLocalizedString("SettingsPage_UpdateCheckFailedDialogMessage");
+            dialogTitle = _localizationService.GetLocalizedString("SettingsPage_UpdateCheckFailedDialogTitle");
+            dialogMessage = _localizationService.GetLocalizedString("SettingsPage_UpdateCheckFailedDialogMessage");
         }
         finally
         {
@@ -215,13 +228,13 @@ public sealed partial class SettingsPage : Page
         }
 
         var contentDialogResult = await this.ShowDialogAsync(dialogTitle, dialogMessage, primaryButtonText, secondaryButtonText);
-        if (shouldOpenStoreAfterDialog && contentDialogResult == ContentDialogResult.Primary) await App.StoreUpdateService.OpenStoreProductPageAsync();
+        if (shouldOpenStoreAfterDialog && contentDialogResult == ContentDialogResult.Primary) await _storeUpdateService.OpenStoreProductPageAsync();
     }
 
     private async void OnAutomaticUpdateToggleSwitchToggled(object sender, RoutedEventArgs routedEventArguments)
     {
         if (_isSynchronizingControls) return;
-        App.ApplicationSettings.IsAutomaticUpdateCheckEnabled = AutomaticUpdateToggleSwitch.IsOn;
+        _applicationSettings.IsAutomaticUpdateCheckEnabled = AutomaticUpdateToggleSwitch.IsOn;
         await SaveSettingsAsync();
     }
 
@@ -229,12 +242,12 @@ public sealed partial class SettingsPage : Page
     {
         if (_isSynchronizingControls) return;
 
-        App.ApplicationSettings.IsStartupLaunchEnabled = StartupLaunchToggleSwitch.IsOn;
+        _applicationSettings.IsStartupLaunchEnabled = StartupLaunchToggleSwitch.IsOn;
         await SaveSettingsAsync();
-        var isStartupLaunchApplied = await App.StartupRegistrationService.SetStartupLaunchEnabledAsync(StartupLaunchToggleSwitch.IsOn);
+        var isStartupLaunchApplied = await _startupRegistrationService.SetStartupLaunchEnabledAsync(StartupLaunchToggleSwitch.IsOn);
         if (!isStartupLaunchApplied)
         {
-            await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SettingsPage_StartupRegistrationFailedDialogTitle"), App.LocalizationService.GetLocalizedString("SettingsPage_StartupRegistrationFailedDialogMessage"));
+            await this.ShowDialogAsync(_localizationService.GetLocalizedString("SettingsPage_StartupRegistrationFailedDialogTitle"), _localizationService.GetLocalizedString("SettingsPage_StartupRegistrationFailedDialogMessage"));
             await RefreshStartupLaunchStateFromSystemAsync();
         }
     }
@@ -242,21 +255,21 @@ public sealed partial class SettingsPage : Page
     private async void OnExpiredAccountAutomaticDeletionToggleSwitchToggled(object sender, RoutedEventArgs routedEventArguments)
     {
         if (_isSynchronizingControls) return;
-        App.ApplicationSettings.IsExpiredAccountAutomaticDeletionEnabled = ExpiredAccountAutomaticDeletionToggleSwitch.IsOn;
+        _applicationSettings.IsExpiredAccountAutomaticDeletionEnabled = ExpiredAccountAutomaticDeletionToggleSwitch.IsOn;
         await SaveSettingsAsync();
     }
 
     private async void OnExpiredAccountNotificationToggleSwitchToggled(object sender, RoutedEventArgs routedEventArguments)
     {
         if (_isSynchronizingControls) return;
-        App.ApplicationSettings.IsExpiredAccountNotificationEnabled = ExpiredAccountNotificationToggleSwitch.IsOn;
+        _applicationSettings.IsExpiredAccountNotificationEnabled = ExpiredAccountNotificationToggleSwitch.IsOn;
         await SaveSettingsAsync();
     }
 
     private async void OnActiveAccountUsageAutomaticRefreshToggleSwitchToggled(object sender, RoutedEventArgs routedEventArguments)
     {
         if (_isSynchronizingControls) return;
-        App.ApplicationSettings.IsActiveAccountUsageAutomaticRefreshEnabled = ActiveAccountUsageAutomaticRefreshToggleSwitch.IsOn;
+        _applicationSettings.IsActiveAccountUsageAutomaticRefreshEnabled = ActiveAccountUsageAutomaticRefreshToggleSwitch.IsOn;
         ActiveAccountUsageRefreshIntervalNumberBox.IsEnabled = ActiveAccountUsageAutomaticRefreshToggleSwitch.IsOn;
         await SaveSettingsAsync();
         RefreshUsageRefreshCountdownTexts();
@@ -265,8 +278,8 @@ public sealed partial class SettingsPage : Page
     private async void OnActiveAccountUsageRefreshIntervalNumberBoxValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs numberBoxValueChangedEventArguments)
     {
         if (_isSynchronizingControls) return;
-        var refreshIntervalSeconds = NormalizeUsageRefreshIntervalSeconds(numberBoxValueChangedEventArguments.NewValue, App.ApplicationSettings.ActiveAccountUsageRefreshIntervalSeconds);
-        App.ApplicationSettings.ActiveAccountUsageRefreshIntervalSeconds = refreshIntervalSeconds;
+        var refreshIntervalSeconds = NormalizeUsageRefreshIntervalSeconds(numberBoxValueChangedEventArguments.NewValue, _applicationSettings.ActiveAccountUsageRefreshIntervalSeconds);
+        _applicationSettings.ActiveAccountUsageRefreshIntervalSeconds = refreshIntervalSeconds;
         SetNumberBoxValue(sender, ConvertSecondsToWholeMinutes(refreshIntervalSeconds));
         await SaveSettingsAsync();
         RefreshUsageRefreshCountdownTexts();
@@ -275,7 +288,7 @@ public sealed partial class SettingsPage : Page
     private async void OnInactiveAccountUsageAutomaticRefreshToggleSwitchToggled(object sender, RoutedEventArgs routedEventArguments)
     {
         if (_isSynchronizingControls) return;
-        App.ApplicationSettings.IsInactiveAccountUsageAutomaticRefreshEnabled = InactiveAccountUsageAutomaticRefreshToggleSwitch.IsOn;
+        _applicationSettings.IsInactiveAccountUsageAutomaticRefreshEnabled = InactiveAccountUsageAutomaticRefreshToggleSwitch.IsOn;
         InactiveAccountUsageRefreshIntervalNumberBox.IsEnabled = InactiveAccountUsageAutomaticRefreshToggleSwitch.IsOn;
         await SaveSettingsAsync();
         RefreshUsageRefreshCountdownTexts();
@@ -284,8 +297,8 @@ public sealed partial class SettingsPage : Page
     private async void OnInactiveAccountUsageRefreshIntervalNumberBoxValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs numberBoxValueChangedEventArguments)
     {
         if (_isSynchronizingControls) return;
-        var refreshIntervalSeconds = NormalizeUsageRefreshIntervalSeconds(numberBoxValueChangedEventArguments.NewValue, App.ApplicationSettings.InactiveAccountUsageRefreshIntervalSeconds);
-        App.ApplicationSettings.InactiveAccountUsageRefreshIntervalSeconds = refreshIntervalSeconds;
+        var refreshIntervalSeconds = NormalizeUsageRefreshIntervalSeconds(numberBoxValueChangedEventArguments.NewValue, _applicationSettings.InactiveAccountUsageRefreshIntervalSeconds);
+        _applicationSettings.InactiveAccountUsageRefreshIntervalSeconds = refreshIntervalSeconds;
         SetNumberBoxValue(sender, ConvertSecondsToWholeMinutes(refreshIntervalSeconds));
         await SaveSettingsAsync();
         RefreshUsageRefreshCountdownTexts();
@@ -294,8 +307,8 @@ public sealed partial class SettingsPage : Page
     private async void OnPrimaryUsageWarningThresholdNumberBoxValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs numberBoxValueChangedEventArguments)
     {
         if (_isSynchronizingControls) return;
-        var warningThresholdPercentage = NormalizePercentage(numberBoxValueChangedEventArguments.NewValue, App.ApplicationSettings.PrimaryUsageWarningThresholdPercentage);
-        App.ApplicationSettings.PrimaryUsageWarningThresholdPercentage = warningThresholdPercentage;
+        var warningThresholdPercentage = NormalizePercentage(numberBoxValueChangedEventArguments.NewValue, _applicationSettings.PrimaryUsageWarningThresholdPercentage);
+        _applicationSettings.PrimaryUsageWarningThresholdPercentage = warningThresholdPercentage;
         SetNumberBoxValue(sender, warningThresholdPercentage);
         await SaveSettingsAsync();
     }
@@ -303,8 +316,8 @@ public sealed partial class SettingsPage : Page
     private async void OnSecondaryUsageWarningThresholdNumberBoxValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs numberBoxValueChangedEventArguments)
     {
         if (_isSynchronizingControls) return;
-        var warningThresholdPercentage = NormalizePercentage(numberBoxValueChangedEventArguments.NewValue, App.ApplicationSettings.SecondaryUsageWarningThresholdPercentage);
-        App.ApplicationSettings.SecondaryUsageWarningThresholdPercentage = warningThresholdPercentage;
+        var warningThresholdPercentage = NormalizePercentage(numberBoxValueChangedEventArguments.NewValue, _applicationSettings.SecondaryUsageWarningThresholdPercentage);
+        _applicationSettings.SecondaryUsageWarningThresholdPercentage = warningThresholdPercentage;
         SetNumberBoxValue(sender, warningThresholdPercentage);
         await SaveSettingsAsync();
     }
@@ -312,14 +325,14 @@ public sealed partial class SettingsPage : Page
     private async void OnPrimaryUsageLowQuotaNotificationToggleSwitchToggled(object sender, RoutedEventArgs routedEventArguments)
     {
         if (_isSynchronizingControls) return;
-        App.ApplicationSettings.IsPrimaryUsageLowQuotaNotificationEnabled = PrimaryUsageLowQuotaNotificationToggleSwitch.IsOn;
+        _applicationSettings.IsPrimaryUsageLowQuotaNotificationEnabled = PrimaryUsageLowQuotaNotificationToggleSwitch.IsOn;
         await SaveSettingsAsync();
     }
 
     private async void OnSecondaryUsageLowQuotaNotificationToggleSwitchToggled(object sender, RoutedEventArgs routedEventArguments)
     {
         if (_isSynchronizingControls) return;
-        App.ApplicationSettings.IsSecondaryUsageLowQuotaNotificationEnabled = SecondaryUsageLowQuotaNotificationToggleSwitch.IsOn;
+        _applicationSettings.IsSecondaryUsageLowQuotaNotificationEnabled = SecondaryUsageLowQuotaNotificationToggleSwitch.IsOn;
         await SaveSettingsAsync();
     }
 
@@ -327,8 +340,8 @@ public sealed partial class SettingsPage : Page
 
     private async Task RefreshStartupLaunchStateFromSystemAsync()
     {
-        var isStartupLaunchEnabled = await App.StartupRegistrationService.GetIsStartupLaunchEnabledAsync();
-        App.ApplicationSettings.IsStartupLaunchEnabled = isStartupLaunchEnabled;
+        var isStartupLaunchEnabled = await _startupRegistrationService.GetIsStartupLaunchEnabledAsync();
+        _applicationSettings.IsStartupLaunchEnabled = isStartupLaunchEnabled;
         _isSynchronizingControls = true;
         try { StartupLaunchToggleSwitch.IsOn = isStartupLaunchEnabled; }
         finally { _isSynchronizingControls = false; }
@@ -337,16 +350,16 @@ public sealed partial class SettingsPage : Page
 
     private void RefreshUsageRefreshCountdownTexts()
     {
-        ActiveAccountNextUsageRefreshTextBlock.Text = FormatNextUsageRefreshText(App.AccountServiceManager.GetActiveUsageRefreshRemainingTime());
-        InactiveAccountNextUsageRefreshTextBlock.Text = FormatNextUsageRefreshText(App.AccountServiceManager.GetInactiveUsageRefreshRemainingTime());
+        ActiveAccountNextUsageRefreshTextBlock.Text = FormatNextUsageRefreshText(_accountServiceManager.GetActiveUsageRefreshRemainingTime());
+        InactiveAccountNextUsageRefreshTextBlock.Text = FormatNextUsageRefreshText(_accountServiceManager.GetInactiveUsageRefreshRemainingTime());
     }
 
-    private static string FormatNextUsageRefreshText(TimeSpan? remainingTime) => remainingTime is null ? App.LocalizationService.GetLocalizedString("SettingsPage_RefreshRemainingDisabledText") : FormatRemainingTime(remainingTime.Value);
+    private string FormatNextUsageRefreshText(TimeSpan? remainingTime) => remainingTime is null ? _localizationService.GetLocalizedString("SettingsPage_RefreshRemainingDisabledText") : FormatRemainingTime(remainingTime.Value);
 
-    private static string FormatRemainingTime(TimeSpan remainingTime)
+    private string FormatRemainingTime(TimeSpan remainingTime)
     {
         var normalizedRemainingTime = remainingTime < TimeSpan.Zero ? TimeSpan.Zero : remainingTime;
-        return App.LocalizationService.GetFormattedString("SettingsPage_RefreshRemainingFormat", (int)normalizedRemainingTime.TotalHours, normalizedRemainingTime.Minutes, normalizedRemainingTime.Seconds);
+        return _localizationService.GetFormattedString("SettingsPage_RefreshRemainingFormat", (int)normalizedRemainingTime.TotalHours, normalizedRemainingTime.Minutes, normalizedRemainingTime.Seconds);
     }
 
     private static FileOpenPicker CreateApplicationSettingsFileOpenPicker()
@@ -360,7 +373,7 @@ public sealed partial class SettingsPage : Page
         return fileOpenPicker;
     }
 
-    private static FileSavePicker CreateApplicationSettingsFileSavePicker()
+    private FileSavePicker CreateApplicationSettingsFileSavePicker()
     {
         var fileSavePicker = new FileSavePicker
         {
@@ -368,11 +381,11 @@ public sealed partial class SettingsPage : Page
             SuggestedFileName = $"codex-account-switch-settings-{DateTimeOffset.Now.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture)}"
         };
         InitializeWithWindow.Initialize(fileSavePicker, WindowNative.GetWindowHandle(MainWindow.Instance));
-        fileSavePicker.FileTypeChoices.Add(App.LocalizationService.GetLocalizedString("SettingsPage_ApplicationSettingsFileTypeChoice"), [ApplicationSettingsFileExtension]);
+        fileSavePicker.FileTypeChoices.Add(_localizationService.GetLocalizedString("SettingsPage_ApplicationSettingsFileTypeChoice"), [ApplicationSettingsFileExtension]);
         return fileSavePicker;
     }
 
-    private static FileSavePicker CreateIntegratedLogFileSavePicker()
+    private FileSavePicker CreateIntegratedLogFileSavePicker()
     {
         var fileSavePicker = new FileSavePicker
         {
@@ -381,7 +394,7 @@ public sealed partial class SettingsPage : Page
             SuggestedFileName = $"codex-account-switch-logs-{DateTimeOffset.Now.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture)}"
         };
         InitializeWithWindow.Initialize(fileSavePicker, WindowNative.GetWindowHandle(MainWindow.Instance));
-        fileSavePicker.FileTypeChoices.Add(App.LocalizationService.GetLocalizedString("SettingsPage_IntegratedLogFileTypeChoice"), [LogFileExtension]);
+        fileSavePicker.FileTypeChoices.Add(_localizationService.GetLocalizedString("SettingsPage_IntegratedLogFileTypeChoice"), [LogFileExtension]);
         return fileSavePicker;
     }
 
@@ -413,7 +426,7 @@ public sealed partial class SettingsPage : Page
 
     private static int NormalizePercentage(double percentage, int fallbackPercentage) => double.IsNaN(percentage) ? fallbackPercentage : Math.Clamp((int)Math.Round(percentage, MidpointRounding.AwayFromZero), 0, 100);
 
-    private static async Task SaveSettingsAsync() => await App.ApplicationSettingsService.SaveSettingsAsync();
+    private async Task SaveSettingsAsync() => await _applicationSettingsService.SaveSettingsAsync();
 
 
 }

@@ -1,6 +1,7 @@
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Managers;
 using CliAccountSwitcher.WinUI.Models;
+using CliAccountSwitcher.WinUI.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
@@ -14,15 +15,17 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 {
     private readonly AccountServiceManager _accountServiceManager;
     private readonly ApplicationSettings _applicationSettings;
+    private readonly LocalizationService _localizationService;
     private readonly DispatcherQueue _dispatcherQueue;
     private readonly HashSet<string> _selectedAccountIdentifiers = new(StringComparer.Ordinal);
     private bool _isSynchronizingAccountSelection;
     private bool _disposed;
 
-    public AccountsPageViewModel(AccountServiceManager accountServiceManager, ApplicationSettings applicationSettings, DispatcherQueue dispatcherQueue)
+    public AccountsPageViewModel(AccountServiceManager accountServiceManager, ApplicationSettings applicationSettings, LocalizationService localizationService, DispatcherQueue dispatcherQueue)
     {
         _accountServiceManager = accountServiceManager;
         _applicationSettings = applicationSettings;
+        _localizationService = localizationService;
         _dispatcherQueue = dispatcherQueue;
         SelectedProviderKind = _applicationSettings.SelectedProviderKind;
         _applicationSettings.PropertyChanged += OnApplicationSettingsPropertyChanged;
@@ -77,15 +80,15 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     public bool HasSelectedAccounts => SelectedAccountIdentifiers.Count > 0;
 
-    public string SelectedAccountCountText => SelectedAccountIdentifiers.Count == 0 ? App.LocalizationService.GetLocalizedString("AccountsPageViewModel_NoSelectedAccounts") : App.LocalizationService.GetFormattedString("AccountsPageViewModel_SelectedAccountCountFormat", SelectedAccountIdentifiers.Count);
+    public string SelectedAccountCountText => SelectedAccountIdentifiers.Count == 0 ? _localizationService.GetLocalizedString("AccountsPageViewModel_NoSelectedAccounts") : _localizationService.GetFormattedString("AccountsPageViewModel_SelectedAccountCountFormat", SelectedAccountIdentifiers.Count);
 
     public bool IsCodexProviderSelected => SelectedProviderKind == CliProviderKind.Codex;
 
     public bool IsClaudeCodeProviderSelected => SelectedProviderKind == CliProviderKind.ClaudeCode;
 
-    public string DescriptionText => App.LocalizationService.GetFormattedString("AccountsPageViewModel_DescriptionFormat", GetProviderDisplayName(SelectedProviderKind));
+    public string DescriptionText => _localizationService.GetFormattedString("AccountsPageViewModel_DescriptionFormat", GetProviderDisplayName(SelectedProviderKind));
 
-    public string PlanHeaderText => App.LocalizationService.GetLocalizedString("AccountsPage_PlanHeaderTextBlock/Text");
+    public string PlanHeaderText => _localizationService.GetLocalizedString("AccountsPage_PlanHeaderTextBlock/Text");
 
     public void ReloadAccounts()
     {
@@ -194,7 +197,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     private ProviderAccountViewModel CreateAccountViewModel(ProviderAccount providerAccount)
     {
-        var accountViewModel = new ProviderAccountViewModel(providerAccount, _applicationSettings)
+        var accountViewModel = new ProviderAccountViewModel(providerAccount, _applicationSettings, _localizationService)
         {
             IsSelected = _selectedAccountIdentifiers.Contains(providerAccount.AccountIdentifier)
         };
@@ -289,7 +292,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     partial void OnSelectedPlanFilterChanged(string value) => ApplyFilter();
 
-    private static string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => App.LocalizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => App.LocalizationService.GetLocalizedString("Provider_CodexDisplayName") };
+    private string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => _localizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => _localizationService.GetLocalizedString("Provider_CodexDisplayName") };
 
 
 }

@@ -1,9 +1,11 @@
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Dialogs;
+using CliAccountSwitcher.WinUI.Services;
 using CliAccountSwitcher.WinUI.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -11,6 +13,8 @@ namespace CliAccountSwitcher.WinUI.Pages.AddAccountDialog;
 
 public sealed partial class ManualPasteAddAccountPage : Page
 {
+    private static readonly Lazy<LocalizationService> s_localizationServiceLazy = new(() => App.Services.GetRequiredService<LocalizationService>());
+    private static LocalizationService s_localizationService => s_localizationServiceLazy.Value;
     private AddAccountDialogContext _addAccountDialogContext;
     private bool _isCompletingSuccessfully;
 
@@ -80,7 +84,7 @@ public sealed partial class ManualPasteAddAccountPage : Page
                 return;
             }
 
-            ManualErrorInfoBar.Message = successCount == 0 && failureCount == 0 ? App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_NoInputMessage") : App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_PartialFailureMessage");
+            ManualErrorInfoBar.Message = successCount == 0 && failureCount == 0 ? s_localizationService.GetLocalizedString("ManualPasteAddAccountPage_NoInputMessage") : s_localizationService.GetLocalizedString("ManualPasteAddAccountPage_PartialFailureMessage");
             ManualErrorInfoBar.IsOpen = true;
         }
         finally
@@ -106,7 +110,7 @@ public sealed partial class ManualPasteAddAccountPage : Page
         }
         catch
         {
-            ManualErrorInfoBar.Message = App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeValidationErrorMessage");
+            ManualErrorInfoBar.Message = s_localizationService.GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeValidationErrorMessage");
             ManualErrorInfoBar.IsOpen = true;
         }
         finally
@@ -126,16 +130,16 @@ public sealed partial class ManualPasteAddAccountPage : Page
 
         if (isClaudeCodeProviderSelected)
         {
-            ManualTitleTextBlock.Text = App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeTitle");
-            ManualDescriptionTextBlock.Text = App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeDescription");
-            ManualLoadInputsTextBlock.Text = App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeLoadInputsButtonText");
-            ManualErrorInfoBar.Message = App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeValidationErrorMessage");
+            ManualTitleTextBlock.Text = s_localizationService.GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeTitle");
+            ManualDescriptionTextBlock.Text = s_localizationService.GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeDescription");
+            ManualLoadInputsTextBlock.Text = s_localizationService.GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeLoadInputsButtonText");
+            ManualErrorInfoBar.Message = s_localizationService.GetLocalizedString("ManualPasteAddAccountPage_ClaudeCodeValidationErrorMessage");
             return;
         }
 
-        ManualTitleTextBlock.Text = App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_TitleTextBlock/Text");
-        ManualDescriptionTextBlock.Text = App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_DescriptionTextBlock/Text");
-        ManualLoadInputsTextBlock.Text = App.LocalizationService.GetLocalizedString("ManualPasteAddAccountPage_LoadInputsTextBlock/Text");
+        ManualTitleTextBlock.Text = s_localizationService.GetLocalizedString("ManualPasteAddAccountPage_TitleTextBlock/Text");
+        ManualDescriptionTextBlock.Text = s_localizationService.GetLocalizedString("ManualPasteAddAccountPage_DescriptionTextBlock/Text");
+        ManualLoadInputsTextBlock.Text = s_localizationService.GetLocalizedString("ManualPasteAddAccountPage_LoadInputsTextBlock/Text");
     }
 
 }

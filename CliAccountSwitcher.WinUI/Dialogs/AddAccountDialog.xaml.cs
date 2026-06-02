@@ -1,7 +1,10 @@
 using CliAccountSwitcher.Api.Providers.Abstractions;
+using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.Pages.AddAccountDialog;
+using CliAccountSwitcher.WinUI.Services;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -9,14 +12,18 @@ namespace CliAccountSwitcher.WinUI.Dialogs;
 
 public sealed partial class AddAccountDialog : ContentDialog
 {
+    private readonly ApplicationThemeService _applicationThemeService = App.Services.GetRequiredService<ApplicationThemeService>();
+    private readonly CodexAccountService _codexAccountService = App.Services.GetRequiredService<CodexAccountService>();
+    private readonly ClaudeAccountService _claudeAccountService = App.Services.GetRequiredService<ClaudeAccountService>();
+    private readonly ApplicationSettings _applicationSettings = App.Services.GetRequiredService<ApplicationSettings>();
     private readonly AddAccountDialogContext _addAccountDialogContext;
 
     public AddAccountDialog()
     {
         InitializeComponent();
-        App.ApplicationThemeService.ApplyThemeToElement(this);
-        App.ApplicationThemeService.ThemeChanged += OnApplicationThemeServiceThemeChanged;
-        _addAccountDialogContext = new AddAccountDialogContext(App.CodexAccountService, App.ClaudeAccountService, this);
+        _applicationThemeService.ApplyThemeToElement(this);
+        _applicationThemeService.ThemeChanged += OnApplicationThemeServiceThemeChanged;
+        _addAccountDialogContext = new AddAccountDialogContext(_codexAccountService, _claudeAccountService, _applicationSettings, this);
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<CliProviderKind>>(this, OnProviderKindChangedMessageReceived);
         NavigateToSelectedPage();
     }
@@ -45,11 +52,11 @@ public sealed partial class AddAccountDialog : ContentDialog
         else DispatcherQueue.TryEnqueue(() => NavigateToSelectedPage(true));
     }
 
-    private void OnApplicationThemeServiceThemeChanged(ElementTheme theme) => App.ApplicationThemeService.ApplyThemeToElement(this);
+    private void OnApplicationThemeServiceThemeChanged(ElementTheme theme) => _applicationThemeService.ApplyThemeToElement(this);
 
     private async void OnAddAccountDialogClosing(ContentDialog sender, ContentDialogClosingEventArgs contentDialogClosingEventArguments)
     {
-        App.ApplicationThemeService.ThemeChanged -= OnApplicationThemeServiceThemeChanged;
+        _applicationThemeService.ThemeChanged -= OnApplicationThemeServiceThemeChanged;
         WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CliProviderKind>>(this);
         var contentDialogClosingDeferral = contentDialogClosingEventArguments.GetDeferral();
         try { await _addAccountDialogContext.DisposeOAuthSessionAsync(); }

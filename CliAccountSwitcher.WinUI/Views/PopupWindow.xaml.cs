@@ -1,9 +1,11 @@
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Helpers;
 using CliAccountSwitcher.WinUI.Models;
+using CliAccountSwitcher.WinUI.Services;
 using CliAccountSwitcher.WinUI.ViewModels;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
@@ -36,6 +38,11 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
     private bool _hasQueuedWindowContentResize;
     private bool _disposed;
 
+    private readonly ApplicationSettings _applicationSettings = App.Services.GetRequiredService<ApplicationSettings>();
+    private readonly ApplicationSettingsService _applicationSettingsService = App.Services.GetRequiredService<ApplicationSettingsService>();
+    private readonly LocalizationService _localizationService = App.Services.GetRequiredService<LocalizationService>();
+    private readonly ApplicationThemeService _applicationThemeService = App.Services.GetRequiredService<ApplicationThemeService>();
+
     public PopupWindow()
     {
         InitializeComponent();
@@ -46,17 +53,17 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
         ExtendsContentIntoTitleBar = true;
         if (AppWindow.Presenter is OverlappedPresenter overlappedPresenter) overlappedPresenter.SetBorderAndTitleBar(true, false);
 
-        ViewModel = new DashboardPageViewModel(App.AccountServiceManager, App.ApplicationSettings, DispatcherQueue);
+        ViewModel = App.Services.GetRequiredService<DashboardPageViewModel>();
         ViewModel.PropertyChanged += OnDashboardPageViewModelPropertyChanged;
 
-        App.ApplicationThemeService.ApplyThemeToWindow(this);
+        _applicationThemeService.ApplyThemeToWindow(this);
         WindowInteractionHelper.DisableWindowAnimations(this);
         if (Content is FrameworkElement { RequestedTheme: ElementTheme.Dark }) WindowInteractionHelper.SetDarkModeWindow(this);
 
-        App.ApplicationThemeService.ThemeChanged += OnApplicationThemeServiceThemeChanged;
-        App.LocalizationService.LanguageChanged += RefreshLocalizedText;
+        _applicationThemeService.ThemeChanged += OnApplicationThemeServiceThemeChanged;
+        _localizationService.LanguageChanged += RefreshLocalizedText;
         WeakReferenceMessenger.Default.Register<ActiveAccountQuotaRefreshRequestedMessage>(this, OnActiveAccountQuotaRefreshRequestedMessageReceived);
-        ApplyProviderSelection(App.ApplicationSettings.SelectedProviderKind);
+        ApplyProviderSelection(_applicationSettings.SelectedProviderKind);
         RefreshLocalizedText();
     }
 
@@ -96,8 +103,8 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
 
         Activated -= OnPopupWindowActivated;
         Closed -= OnPopupWindowClosed;
-        App.ApplicationThemeService.ThemeChanged -= OnApplicationThemeServiceThemeChanged;
-        App.LocalizationService.LanguageChanged -= RefreshLocalizedText;
+        _applicationThemeService.ThemeChanged -= OnApplicationThemeServiceThemeChanged;
+        _localizationService.LanguageChanged -= RefreshLocalizedText;
         WeakReferenceMessenger.Default.Unregister<ActiveAccountQuotaRefreshRequestedMessage>(this);
         ViewModel.PropertyChanged -= OnDashboardPageViewModelPropertyChanged;
         ViewModel.Dispose();
@@ -210,28 +217,28 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
         if (windowActivatedEventArguments.WindowActivationState == WindowActivationState.Deactivated) Close();
     }
 
-    private void OnApplicationThemeServiceThemeChanged(ElementTheme theme) => App.ApplicationThemeService.ApplyThemeToWindow(this);
+    private void OnApplicationThemeServiceThemeChanged(ElementTheme theme) => _applicationThemeService.ApplyThemeToWindow(this);
 
     private void OnDashboardPageViewModelPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArguments) => QueueWindowContentResize();
 
-    private async void OnActiveAccountQuotaRefreshRequestedMessageReceived(object messageRecipient, ActiveAccountQuotaRefreshRequestedMessage activeAccountQuotaRefreshRequestedMessage) => await RunWithLoadingAsync(App.LocalizationService.GetLocalizedString("AccountsPage_RefreshAccountLoadingMessage"), async () => await ViewModel.RefreshActiveProviderAccountAsync());
+    private async void OnActiveAccountQuotaRefreshRequestedMessageReceived(object messageRecipient, ActiveAccountQuotaRefreshRequestedMessage activeAccountQuotaRefreshRequestedMessage) => await RunWithLoadingAsync(_localizationService.GetLocalizedString("AccountsPage_RefreshAccountLoadingMessage"), async () => await ViewModel.RefreshActiveProviderAccountAsync());
 
     private async void OnProviderComboBoxSelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArguments)
     {
         if (_isApplyingProviderSelection) return;
 
         var selectedProviderKind = GetProviderKindFromSelectedIndex(ProviderComboBox.SelectedIndex);
-        if (App.ApplicationSettings.SelectedProviderKind == selectedProviderKind) return;
+        if (_applicationSettings.SelectedProviderKind == selectedProviderKind) return;
 
-        App.ApplicationSettings.SelectedProviderKind = selectedProviderKind;
+        _applicationSettings.SelectedProviderKind = selectedProviderKind;
         ApplyProviderSelection(selectedProviderKind);
-        await App.ApplicationSettingsService.SaveSettingsAsync();
+        await _applicationSettingsService.SaveSettingsAsync();
         WeakReferenceMessenger.Default.Send(new ValueChangedMessage<CliProviderKind>(selectedProviderKind));
     }
 
     private void RefreshLocalizedText()
     {
-        AutomationProperties.SetName(ProviderComboBox, App.LocalizationService.GetLocalizedString("ProviderComboBox_AutomationName"));
+        AutomationProperties.SetName(ProviderComboBox, _localizationService.GetLocalizedString("ProviderComboBox_AutomationName"));
     }
 
     private void ApplyProviderSelection(CliProviderKind selectedProviderKind)

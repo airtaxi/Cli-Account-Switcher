@@ -1,12 +1,13 @@
 using CliAccountSwitcher.Api.Providers.Codex.Authentication;
 using CliAccountSwitcher.Api.Providers.Abstractions;
+using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.Services;
 using Microsoft.UI.Xaml.Controls;
 using System.Threading.Tasks;
 
 namespace CliAccountSwitcher.WinUI.Dialogs;
 
-public sealed class AddAccountDialogContext(CodexAccountService codexAccountService, ClaudeAccountService claudeAccountService, ContentDialog contentDialog)
+public sealed class AddAccountDialogContext(CodexAccountService codexAccountService, ClaudeAccountService claudeAccountService, ApplicationSettings applicationSettings, ContentDialog contentDialog)
 {
     private CodexOAuthSession _codexOAuthSession;
 
@@ -14,9 +15,11 @@ public sealed class AddAccountDialogContext(CodexAccountService codexAccountServ
 
     public ClaudeAccountService ClaudeAccountService { get; } = claudeAccountService;
 
+    public ApplicationSettings ApplicationSettings { get; } = applicationSettings;
+
     public ContentDialog ContentDialog { get; } = contentDialog;
 
-    public CliProviderKind SelectedProviderKind => App.ApplicationSettings.SelectedProviderKind;
+    public CliProviderKind SelectedProviderKind => ApplicationSettings.SelectedProviderKind;
 
     public void SetInteractionEnabled(bool isInteractionEnabled) => ContentDialog.IsEnabled = isInteractionEnabled;
 

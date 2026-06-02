@@ -1,4 +1,6 @@
 using CliAccountSwitcher.WinUI.Models;
+using CliAccountSwitcher.WinUI.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
@@ -9,6 +11,8 @@ namespace CliAccountSwitcher.WinUI.Dialogs;
 
 public sealed partial class ThirdPartyLicensesDialog : ContentDialog
 {
+    private readonly ApplicationThemeService _applicationThemeService = App.Services.GetRequiredService<ApplicationThemeService>();
+
     public ThirdPartyLicensesDialog This => this;
     public List<ThirdPartyLicensePackage> ThirdPartyLicensePackages { get; }
 
@@ -17,8 +21,8 @@ public sealed partial class ThirdPartyLicensesDialog : ContentDialog
         ThirdPartyLicensePackages = thirdPartyLicensePackages;
 
         InitializeComponent();
-        App.ApplicationThemeService.ApplyThemeToElement(this);
-        App.ApplicationThemeService.ThemeChanged += OnApplicationThemeServiceThemeChanged;
+        _applicationThemeService.ApplyThemeToElement(this);
+        _applicationThemeService.ThemeChanged += OnApplicationThemeServiceThemeChanged;
     }
 
     private async void OnPackageProjectButtonClicked(object sender, RoutedEventArgs routedEventArguments)
@@ -28,7 +32,7 @@ public sealed partial class ThirdPartyLicensesDialog : ContentDialog
         await Launcher.LaunchUriAsync(new Uri(projectAddress));
     }
 
-    private void OnApplicationThemeServiceThemeChanged(ElementTheme theme) => App.ApplicationThemeService.ApplyThemeToElement(this);
+    private void OnApplicationThemeServiceThemeChanged(ElementTheme theme) => _applicationThemeService.ApplyThemeToElement(this);
 
-    private void OnThirdPartyLicensesDialogClosed(ContentDialog sender, ContentDialogClosedEventArgs contentDialogClosedEventArguments) => App.ApplicationThemeService.ThemeChanged -= OnApplicationThemeServiceThemeChanged;
+    private void OnThirdPartyLicensesDialogClosed(ContentDialog sender, ContentDialogClosedEventArgs contentDialogClosedEventArguments) => _applicationThemeService.ThemeChanged -= OnApplicationThemeServiceThemeChanged;
 }

@@ -1,7 +1,10 @@
 using CliAccountSwitcher.WinUI.Managers;
 using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.Services;
+using CliAccountSwitcher.WinUI.ViewModels;
 using CliAccountSwitcher.WinUI.Views;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.Windows.AppLifecycle;
 using Microsoft.Windows.AppNotifications;
@@ -19,66 +22,80 @@ public partial class App : Application
     private static AppActivationArguments s_pendingApplicationActivationArguments;
     private MainPageNavigationSection? _pendingNotificationNavigationSection;
 
-    // Services
-    public static ApplicationSettingsService ApplicationSettingsService { get; private set; }
-
-    public static ApplicationSettings ApplicationSettings => ApplicationSettingsService.Settings;
-
-    public static LocalizationService LocalizationService { get; private set; }
-
-    public static ApplicationThemeService ApplicationThemeService { get; private set; }
-
-    public static ApplicationNotificationService ApplicationNotificationService { get; private set; }
-
-    public static StartupRegistrationService StartupRegistrationService { get; private set; }
-
-    public static StoreUpdateService StoreUpdateService { get; private set; }
-
-    public static CodexAccountService CodexAccountService { get; private set; }
-
-    public static ClaudeAccountService ClaudeAccountService { get; private set; }
-
-    public static AccountServiceManager AccountServiceManager { get; private set; }
-
-    public static CodexApplicationRestartService CodexApplicationRestartService { get; private set; }
-
-    public static ClaudeCodeApplicationRestartService ClaudeCodeApplicationRestartService { get; private set; }
-
-    public static SkillService SkillService { get; private set; }
-
-    public static FileLogService FileLogService { get; private set; }
+    // Services — resolved from the DI container
+    public static IServiceProvider Services { get; private set; }
 
     public App()
     {
         s_currentApplication = this;
 
+        // Configure the DI container FIRST — before InitializeComponent triggers any XAML type loading
+        var serviceCollection = new ServiceCollection();
+        ConfigureServices(serviceCollection);
+        Services = serviceCollection.BuildServiceProvider();
+
         InitializeComponent();
 
-        // Initialize services
-        FileLogService = new FileLogService();
+        // Register unhandled exception handlers
         UnhandledException += OnApplicationUnhandledException;
         AppDomain.CurrentDomain.UnhandledException += OnCurrentDomainUnhandledException;
         TaskScheduler.UnobservedTaskException += OnTaskSchedulerUnobservedTaskException;
-        ApplicationSettingsService = new ApplicationSettingsService();
-        LocalizationService = new LocalizationService(ApplicationSettings.LanguageOverride);
-        ApplicationThemeService = new ApplicationThemeService(ApplicationSettings.Theme);
-        ApplicationNotificationService = new ApplicationNotificationService();
-        StartupRegistrationService = new StartupRegistrationService();
-        StoreUpdateService = new StoreUpdateService(ApplicationSettings, ApplicationNotificationService);
-        CodexAccountService = new CodexAccountService(ApplicationSettingsService, ApplicationNotificationService);
-        ClaudeAccountService = new ClaudeAccountService(ApplicationSettingsService, ApplicationNotificationService);
-        AccountServiceManager = new AccountServiceManager(ApplicationSettingsService, [CodexAccountService, ClaudeAccountService]);
-        CodexApplicationRestartService = new CodexApplicationRestartService();
-        ClaudeCodeApplicationRestartService = new ClaudeCodeApplicationRestartService();
-        SkillService = new SkillService();
+
         RegisterAppNotificationManager();
-        StoreUpdateService.Start();
-        AccountServiceManager.Start();
+        Services.GetRequiredService<StoreUpdateService>().Start();
+        Services.GetRequiredService<AccountServiceManager>().Start();
+    }
+
+    private static void ConfigureServices(IServiceCollection serviceCollection)
+    {
+        // DispatcherQueue singleton — resolved on UI thread for NativeAOT-safe ViewModel injection
+        serviceCollection.AddSingleton(_ => DispatcherQueue.GetForCurrentThread());
+
+        // Services with no dependencies
+        serviceCollection.AddSingleton<FileLogService>();
+        serviceCollection.AddSingleton<ApplicationSettingsService>();
+        serviceCollection.AddSingleton<StartupRegistrationService>();
+        serviceCollection.AddSingleton<CodexApplicationRestartService>();
+        serviceCollection.AddSingleton<ClaudeCodeApplicationRestartService>();
+        serviceCollection.AddSingleton<SkillService>();
+
+        // LocalizationService — needs language tag from settings
+        serviceCollection.AddSingleton(sp => new LocalizationService(sp.GetRequiredService<ApplicationSettingsService>().Settings.LanguageOverride));
+
+        // ApplicationThemeService — needs initial theme from settings
+        serviceCollection.AddSingleton(sp => new ApplicationThemeService(sp.GetRequiredService<ApplicationSettingsService>().Settings.Theme));
+
+        // ApplicationNotificationService — depends on LocalizationService
+        serviceCollection.AddSingleton(sp => new ApplicationNotificationService(sp.GetRequiredService<LocalizationService>()));
+
+        // ApplicationSettings model as a forwarded singleton
+        serviceCollection.AddSingleton(sp => sp.GetRequiredService<ApplicationSettingsService>().Settings);
+
+        // StoreUpdateService — needs ApplicationSettings model + ApplicationNotificationService
+        serviceCollection.AddSingleton(sp => new StoreUpdateService(sp.GetRequiredService<ApplicationSettings>(), sp.GetRequiredService<ApplicationNotificationService>()));
+
+        // Account services — concrete singletons first, then forwarded as IAccountService.
+        // DO NOT add AddSingleton<IAccountService, T>() — it would create separate instances.
+        // DO NOT use AddSingleton<T>() for types with parameterized constructors — use explicit factory lambdas for NativeAOT safety.
+        serviceCollection.AddSingleton(sp => new CodexAccountService(sp.GetRequiredService<ApplicationSettingsService>(), sp.GetRequiredService<ApplicationNotificationService>()));
+        serviceCollection.AddSingleton(sp => new ClaudeAccountService(sp.GetRequiredService<ApplicationSettingsService>(), sp.GetRequiredService<ApplicationNotificationService>()));
+        serviceCollection.AddSingleton<IAccountService>(sp => sp.GetRequiredService<CodexAccountService>());
+        serviceCollection.AddSingleton<IAccountService>(sp => sp.GetRequiredService<ClaudeAccountService>());
+
+        // AccountServiceManager — needs ApplicationSettingsService + all IAccountService implementations
+        serviceCollection.AddSingleton(sp => new AccountServiceManager(sp.GetRequiredService<ApplicationSettingsService>(), sp.GetServices<IAccountService>()));
+
+        // ViewModels — transient; explicit factory lambdas for NativeAOT compatibility
+        serviceCollection.AddTransient(sp => new DashboardPageViewModel(sp.GetRequiredService<AccountServiceManager>(), sp.GetRequiredService<ApplicationSettings>(), sp.GetRequiredService<LocalizationService>(), sp.GetRequiredService<DispatcherQueue>()));
+
+        serviceCollection.AddTransient(sp => new AccountsPageViewModel(sp.GetRequiredService<AccountServiceManager>(), sp.GetRequiredService<ApplicationSettings>(), sp.GetRequiredService<LocalizationService>(), sp.GetRequiredService<DispatcherQueue>()));
+
+        serviceCollection.AddTransient(sp => new SkillsPageViewModel(sp.GetRequiredService<SkillService>(), sp.GetRequiredService<ApplicationSettings>(), sp.GetRequiredService<LocalizationService>(), sp.GetRequiredService<DispatcherQueue>()));
     }
 
     protected override async void OnLaunched(LaunchActivatedEventArgs launchActivatedEventArguments)
     {
-        await AccountServiceManager.InitializeAsync();
+        await Services.GetRequiredService<AccountServiceManager>().InitializeAsync();
 
         var applicationActivationArguments = AppInstance.GetCurrent().GetActivatedEventArgs();
 
@@ -88,7 +105,8 @@ public partial class App : Application
 
         ApplyPendingNotificationNavigationSection();
         ApplyPendingApplicationActivationArguments();
-        _ = StartupRegistrationService.SetStartupLaunchEnabledAsync(ApplicationSettings.IsStartupLaunchEnabled);
+        var applicationSettings = Services.GetRequiredService<ApplicationSettings>();
+        _ = Services.GetRequiredService<StartupRegistrationService>().SetStartupLaunchEnabledAsync(applicationSettings.IsStartupLaunchEnabled);
     }
 
     public static void ShowMainWindow()
@@ -223,7 +241,7 @@ public partial class App : Application
     private static void WriteException(string source, Exception exception)
     {
         Debug.WriteLine(CreateExceptionMessage(source, exception));
-        FileLogService?.WriteError(nameof(App), $"Unhandled exception reported by {source}.", exception);
+        Services?.GetService<FileLogService>()?.WriteError(nameof(App), $"Unhandled exception reported by {source}.", exception);
     }
 
     private static string CreateExceptionMessage(string source, Exception exception)

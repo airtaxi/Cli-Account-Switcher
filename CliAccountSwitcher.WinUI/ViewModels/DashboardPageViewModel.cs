@@ -1,6 +1,7 @@
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Managers;
 using CliAccountSwitcher.WinUI.Models;
+using CliAccountSwitcher.WinUI.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
@@ -15,13 +16,15 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
 {
     private readonly AccountServiceManager _accountServiceManager;
     private readonly ApplicationSettings _applicationSettings;
+    private readonly LocalizationService _localizationService;
     private readonly DispatcherQueue _dispatcherQueue;
     private bool _disposed;
 
-    public DashboardPageViewModel(AccountServiceManager accountServiceManager, ApplicationSettings applicationSettings, DispatcherQueue dispatcherQueue)
+    public DashboardPageViewModel(AccountServiceManager accountServiceManager, ApplicationSettings applicationSettings, LocalizationService localizationService, DispatcherQueue dispatcherQueue)
     {
         _accountServiceManager = accountServiceManager;
         _applicationSettings = applicationSettings;
+        _localizationService = localizationService;
         _dispatcherQueue = dispatcherQueue;
         _applicationSettings.PropertyChanged += OnApplicationSettingsPropertyChanged;
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<ProviderAccountsChangedMessage>>(this, OnProviderAccountsChangedMessageReceived);
@@ -124,10 +127,10 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
     public void ReloadDashboard()
     {
         var providerAccounts = _accountServiceManager.GetAccounts(_applicationSettings.SelectedProviderKind);
-        var accountViewModels = providerAccounts.Select(providerAccount => new ProviderAccountViewModel(providerAccount, _applicationSettings)).ToList();
+        var accountViewModels = providerAccounts.Select(providerAccount => new ProviderAccountViewModel(providerAccount, _applicationSettings, _localizationService)).ToList();
 
-        AccountCountText = App.LocalizationService.GetFormattedString("DashboardPageViewModel_AccountCountFormat", accountViewModels.Count);
-        TotalAccountDescriptionText = App.LocalizationService.GetFormattedString("DashboardPageViewModel_TotalAccountDescriptionFormat", GetProviderDisplayName(_applicationSettings.SelectedProviderKind));
+        AccountCountText = _localizationService.GetFormattedString("DashboardPageViewModel_AccountCountFormat", accountViewModels.Count);
+        TotalAccountDescriptionText = _localizationService.GetFormattedString("DashboardPageViewModel_TotalAccountDescriptionFormat", GetProviderDisplayName(_applicationSettings.SelectedProviderKind));
         SetAverageUsageProperties(accountViewModels);
         SetLowUsageSummaryProperties(accountViewModels);
         SetActiveAccountProperties(accountViewModels.FirstOrDefault(accountViewModel => accountViewModel.IsActive));
@@ -205,8 +208,8 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
         ActiveAccountDisplayNameText = activeAccountViewModel?.DisplayName ?? "";
         ActiveAccountEmailAddressText = activeAccountViewModel?.EmailAddress ?? "";
         ActiveAccountPlanText = activeAccountViewModel?.PlanText ?? "";
-        ActiveAccountPrimaryUsageRemainingText = activeAccountViewModel?.PrimaryUsageRemainingText ?? App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_UnknownUsage");
-        ActiveAccountSecondaryUsageRemainingText = activeAccountViewModel?.SecondaryUsageRemainingText ?? App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_UnknownUsage");
+        ActiveAccountPrimaryUsageRemainingText = activeAccountViewModel?.PrimaryUsageRemainingText ?? _localizationService.GetLocalizedString("ProviderAccountViewModel_UnknownUsage");
+        ActiveAccountSecondaryUsageRemainingText = activeAccountViewModel?.SecondaryUsageRemainingText ?? _localizationService.GetLocalizedString("ProviderAccountViewModel_UnknownUsage");
         ActiveAccountPrimaryUsageRemainingPercentage = activeAccountViewModel?.PrimaryUsageRemainingPercentage ?? 0;
         ActiveAccountSecondaryUsageRemainingPercentage = activeAccountViewModel?.SecondaryUsageRemainingPercentage ?? 0;
         ActiveAccountPrimaryUsageResetAt = activeAccountViewModel is null ? null : GetUsageResetAt(activeAccountViewModel.ProviderUsageSnapshot.FiveHour);
@@ -228,7 +231,7 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
             .Where(IsLowUsageAccount)
             .OrderBy(accountViewModel => GetLowestKnownUsageRemainingPercentage(accountViewModel))
             .ThenBy(accountViewModel => accountViewModel.DisplayName, StringComparer.CurrentCultureIgnoreCase)
-            .Select(accountViewModel => new DashboardLowUsageAccountViewModel(accountViewModel))
+            .Select(accountViewModel => new DashboardLowUsageAccountViewModel(accountViewModel, _localizationService))
             .ToList();
 
         LowUsageAccounts.Clear();
@@ -256,7 +259,7 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
 
     private static int ClampUsageRemainingPercentage(int usageRemainingPercentage) => usageRemainingPercentage < 0 ? 0 : Math.Clamp(usageRemainingPercentage, 0, 100);
 
-    private static string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => App.LocalizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => App.LocalizationService.GetLocalizedString("Provider_CodexDisplayName") };
+    private string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => _localizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => _localizationService.GetLocalizedString("Provider_CodexDisplayName") };
 
     private static DateTimeOffset? GetUsageResetAt(ProviderUsageWindow providerUsageWindow)
     {
@@ -265,14 +268,14 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
         return DateTimeOffset.UtcNow.AddSeconds(providerUsageWindow.ResetAfterSeconds);
     }
 
-    private static string FormatUsageRemainingPercentage(int usageRemainingPercentage) => usageRemainingPercentage < 0 ? App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_UnknownUsage") : App.LocalizationService.GetFormattedString("ProviderAccountViewModel_UsageRemainingOnlyFormat", usageRemainingPercentage);
+    private string FormatUsageRemainingPercentage(int usageRemainingPercentage) => usageRemainingPercentage < 0 ? _localizationService.GetLocalizedString("ProviderAccountViewModel_UnknownUsage") : _localizationService.GetFormattedString("ProviderAccountViewModel_UsageRemainingOnlyFormat", usageRemainingPercentage);
 
-    private static string FormatLowUsageAccountCount(int lowUsageAccountCount) => lowUsageAccountCount == 0 ? App.LocalizationService.GetLocalizedString("DashboardPageViewModel_NoLowUsageAccounts") : App.LocalizationService.GetFormattedString("DashboardPageViewModel_LowUsageAccountCountFormat", lowUsageAccountCount);
+    private string FormatLowUsageAccountCount(int lowUsageAccountCount) => lowUsageAccountCount == 0 ? _localizationService.GetLocalizedString("DashboardPageViewModel_NoLowUsageAccounts") : _localizationService.GetFormattedString("DashboardPageViewModel_LowUsageAccountCountFormat", lowUsageAccountCount);
 
 
 }
 
-public sealed class DashboardLowUsageAccountViewModel(ProviderAccountViewModel accountViewModel)
+public sealed class DashboardLowUsageAccountViewModel(ProviderAccountViewModel accountViewModel, LocalizationService localizationService)
 {
     public string DisplayName { get; } = accountViewModel.DisplayName;
 
@@ -286,13 +289,11 @@ public sealed class DashboardLowUsageAccountViewModel(ProviderAccountViewModel a
 
     public bool IsSecondaryUsageWarningVisible { get; } = accountViewModel.IsSecondaryUsageUnderWarningThreshold;
 
-    public string PrimaryUsageWarningText { get; } = FormatLowUsageText(accountViewModel.PrimaryUsageWindowLabelText, accountViewModel.PrimaryUsageRemainingText);
+    public string PrimaryUsageWarningText { get; } = localizationService.GetFormattedString("DashboardLowUsageAccountViewModel_LowUsageFormat", accountViewModel.PrimaryUsageWindowLabelText, accountViewModel.PrimaryUsageRemainingText);
 
-    public string SecondaryUsageWarningText { get; } = FormatLowUsageText(accountViewModel.SecondaryUsageWindowLabelText, accountViewModel.SecondaryUsageRemainingText);
+    public string SecondaryUsageWarningText { get; } = localizationService.GetFormattedString("DashboardLowUsageAccountViewModel_LowUsageFormat", accountViewModel.SecondaryUsageWindowLabelText, accountViewModel.SecondaryUsageRemainingText);
 
     public int PrimaryUsageRemainingPercentage { get; } = accountViewModel.PrimaryUsageRemainingPercentage;
 
     public int SecondaryUsageRemainingPercentage { get; } = accountViewModel.SecondaryUsageRemainingPercentage;
-
-    private static string FormatLowUsageText(string usageWindowLabelText, string usageRemainingText) => App.LocalizationService.GetFormattedString("DashboardLowUsageAccountViewModel_LowUsageFormat", usageWindowLabelText, usageRemainingText);
 }

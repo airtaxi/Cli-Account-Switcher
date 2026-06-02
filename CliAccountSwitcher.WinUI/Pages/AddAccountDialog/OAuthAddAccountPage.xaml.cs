@@ -1,10 +1,12 @@
 using CliAccountSwitcher.Api.Providers.Codex.Authentication;
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Dialogs;
+using CliAccountSwitcher.WinUI.Services;
 using CliAccountSwitcher.WinUI.Views;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -14,6 +16,8 @@ namespace CliAccountSwitcher.WinUI.Pages.AddAccountDialog;
 
 public sealed partial class OAuthAddAccountPage : Page
 {
+    private static readonly Lazy<LocalizationService> s_localizationServiceLazy = new(() => App.Services.GetRequiredService<LocalizationService>());
+    private static LocalizationService s_localizationService => s_localizationServiceLazy.Value;
     private AddAccountDialogContext _addAccountDialogContext;
     private CancellationTokenSource _callbackCancellationTokenSource;
     private bool _isCompletingSuccessfully;
@@ -106,7 +110,7 @@ public sealed partial class OAuthAddAccountPage : Page
         }
         catch
         {
-            OAuthErrorInfoBar.Message = App.LocalizationService.GetLocalizedString("OAuthAddAccountPage_ClaudeCodeErrorMessage");
+            OAuthErrorInfoBar.Message = s_localizationService.GetLocalizedString("OAuthAddAccountPage_ClaudeCodeErrorMessage");
             OAuthErrorInfoBar.IsOpen = true;
         }
         finally
@@ -121,16 +125,16 @@ public sealed partial class OAuthAddAccountPage : Page
     {
         if (_addAccountDialogContext?.SelectedProviderKind == CliProviderKind.ClaudeCode)
         {
-            OAuthTitleTextBlock.Text = App.LocalizationService.GetLocalizedString("OAuthAddAccountPage_ClaudeCodeTitle");
-            OAuthDescriptionTextBlock.Text = App.LocalizationService.GetLocalizedString("OAuthAddAccountPage_ClaudeCodeDescription");
-            OAuthOpenBrowserTextBlock.Text = App.LocalizationService.GetLocalizedString("OAuthAddAccountPage_ClaudeCodeRunLoginButtonText");
-            OAuthErrorInfoBar.Message = App.LocalizationService.GetLocalizedString("OAuthAddAccountPage_ClaudeCodeErrorMessage");
+            OAuthTitleTextBlock.Text = s_localizationService.GetLocalizedString("OAuthAddAccountPage_ClaudeCodeTitle");
+            OAuthDescriptionTextBlock.Text = s_localizationService.GetLocalizedString("OAuthAddAccountPage_ClaudeCodeDescription");
+            OAuthOpenBrowserTextBlock.Text = s_localizationService.GetLocalizedString("OAuthAddAccountPage_ClaudeCodeRunLoginButtonText");
+            OAuthErrorInfoBar.Message = s_localizationService.GetLocalizedString("OAuthAddAccountPage_ClaudeCodeErrorMessage");
             return;
         }
 
-        OAuthTitleTextBlock.Text = App.LocalizationService.GetLocalizedString("OAuthAddAccountPage_TitleTextBlock/Text");
-        OAuthDescriptionTextBlock.Text = App.LocalizationService.GetLocalizedString("OAuthAddAccountPage_DescriptionTextBlock/Text");
-        OAuthOpenBrowserTextBlock.Text = App.LocalizationService.GetLocalizedString("OAuthAddAccountPage_OpenBrowserTextBlock/Text");
+        OAuthTitleTextBlock.Text = s_localizationService.GetLocalizedString("OAuthAddAccountPage_TitleTextBlock/Text");
+        OAuthDescriptionTextBlock.Text = s_localizationService.GetLocalizedString("OAuthAddAccountPage_DescriptionTextBlock/Text");
+        OAuthOpenBrowserTextBlock.Text = s_localizationService.GetLocalizedString("OAuthAddAccountPage_OpenBrowserTextBlock/Text");
     }
 
     private static bool TryOpenBrowser(Uri authorizationAddress)

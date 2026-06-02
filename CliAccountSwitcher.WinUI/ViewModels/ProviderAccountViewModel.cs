@@ -1,12 +1,13 @@
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Models;
+using CliAccountSwitcher.WinUI.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Globalization;
 
 namespace CliAccountSwitcher.WinUI.ViewModels;
 
-public sealed partial class ProviderAccountViewModel(ProviderAccount providerAccount, ApplicationSettings applicationSettings) : ObservableObject
+public sealed partial class ProviderAccountViewModel(ProviderAccount providerAccount, ApplicationSettings applicationSettings, LocalizationService localizationService) : ObservableObject
 {
     private static readonly TimeSpan s_primaryUsageWindowDuration = TimeSpan.FromHours(5);
     private static readonly TimeSpan s_primaryUsageAverageUnitDuration = TimeSpan.FromHours(1);
@@ -14,6 +15,7 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
     private static readonly TimeSpan s_secondaryUsageAverageUnitDuration = TimeSpan.FromDays(1);
 
     private readonly ApplicationSettings _applicationSettings = applicationSettings;
+    private readonly LocalizationService _localizationService = localizationService;
     private DateTimeOffset? _primaryUsageResetTime = GetUsageResetTime(GetProviderUsageSnapshot(providerAccount).FiveHour, providerAccount.LastUsageRefreshTime);
     private DateTimeOffset? _secondaryUsageResetTime = GetUsageResetTime(GetProviderUsageSnapshot(providerAccount).SevenDay, providerAccount.LastUsageRefreshTime);
 
@@ -44,17 +46,17 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
 
     public bool IsTokenExpired => ProviderAccount.IsTokenExpired;
 
-    public string StatusText => IsTokenExpired ? App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_TokenExpiredStatus") : IsActive ? App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_ActiveStatus") : App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_WaitingStatus");
+    public string StatusText => IsTokenExpired ? _localizationService.GetLocalizedString("ProviderAccountViewModel_TokenExpiredStatus") : IsActive ? _localizationService.GetLocalizedString("ProviderAccountViewModel_ActiveStatus") : _localizationService.GetLocalizedString("ProviderAccountViewModel_WaitingStatus");
 
-    public string AccessTokenPreview => ProviderKind == CliProviderKind.Codex && string.IsNullOrWhiteSpace(ProviderAccount.AccountDetailText) ? App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_NoAccessToken") : ProviderAccount.AccountDetailText;
+    public string AccessTokenPreview => ProviderKind == CliProviderKind.Codex && string.IsNullOrWhiteSpace(ProviderAccount.AccountDetailText) ? _localizationService.GetLocalizedString("ProviderAccountViewModel_NoAccessToken") : ProviderAccount.AccountDetailText;
 
     public string PrimaryUsageText => FormatUsageWindow(ProviderUsageSnapshot.FiveHour, _primaryUsageResetTime);
 
     public string SecondaryUsageText => FormatUsageWindow(ProviderUsageSnapshot.SevenDay, _secondaryUsageResetTime);
 
-    public string PrimaryUsageWindowLabelText => App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_PrimaryUsageWindowLabel");
+    public string PrimaryUsageWindowLabelText => _localizationService.GetLocalizedString("ProviderAccountViewModel_PrimaryUsageWindowLabel");
 
-    public string SecondaryUsageWindowLabelText => App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_SecondaryUsageWindowLabel");
+    public string SecondaryUsageWindowLabelText => _localizationService.GetLocalizedString("ProviderAccountViewModel_SecondaryUsageWindowLabel");
 
     public string PrimaryUsageRemainingText => FormatUsageRemaining(ProviderUsageSnapshot.FiveHour);
 
@@ -96,7 +98,7 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
 
     public string SecondaryUsageAverageRateStatusText => FormatUsageAverageRateStatus(SecondaryUsageAverageRateLimitExceededPercentage, SecondaryUsageAverageRateLimitHeadroomPercentage);
 
-    public string LastUsageRefreshText => App.LocalizationService.GetFormattedString("ProviderAccountViewModel_LastUsageRefreshFormat", ProviderAccount.LastUsageRefreshTime is null ? App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_NotRefreshed") : ProviderAccount.LastUsageRefreshTime.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.CurrentCulture));
+    public string LastUsageRefreshText => _localizationService.GetFormattedString("ProviderAccountViewModel_LastUsageRefreshFormat", ProviderAccount.LastUsageRefreshTime is null ? _localizationService.GetLocalizedString("ProviderAccountViewModel_NotRefreshed") : ProviderAccount.LastUsageRefreshTime.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.CurrentCulture));
 
     public string SearchText => $"{DisplayName} {EmailAddress} {PlanText} {AccountIdentifier} {ProviderAccount.ProviderAccountIdentifier}";
 
@@ -171,31 +173,31 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
 
     private static string FormatClaudeCodePlanText(string planType) => string.IsNullOrWhiteSpace(planType) ? "Unknown" : planType;
 
-    private static string FormatCodexPlanText(string planType) => string.IsNullOrWhiteSpace(planType) ? App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_UnknownPlan") : string.Equals(planType, "prolite", StringComparison.OrdinalIgnoreCase) ? App.LocalizationService.GetLocalizedString("AccountsPage_ProLitePlanFilterSelectorBarItem/Text") : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(planType.ToLowerInvariant());
+    private string FormatCodexPlanText(string planType) => string.IsNullOrWhiteSpace(planType) ? _localizationService.GetLocalizedString("ProviderAccountViewModel_UnknownPlan") : string.Equals(planType, "prolite", StringComparison.OrdinalIgnoreCase) ? _localizationService.GetLocalizedString("AccountsPage_ProLitePlanFilterSelectorBarItem/Text") : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(planType.ToLowerInvariant());
 
-    private static string FormatUsageWindow(ProviderUsageWindow providerUsageWindow, DateTimeOffset? usageResetTime)
+    private string FormatUsageWindow(ProviderUsageWindow providerUsageWindow, DateTimeOffset? usageResetTime)
     {
-        if (providerUsageWindow.RemainingPercentage < 0) return App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_UnknownUsage");
+        if (providerUsageWindow.RemainingPercentage < 0) return _localizationService.GetLocalizedString("ProviderAccountViewModel_UnknownUsage");
 
         var resetText = FormatUsageReset(usageResetTime);
-        return App.LocalizationService.GetFormattedString("ProviderAccountViewModel_UsageRemainingFormat", providerUsageWindow.RemainingPercentage, resetText);
+        return _localizationService.GetFormattedString("ProviderAccountViewModel_UsageRemainingFormat", providerUsageWindow.RemainingPercentage, resetText);
     }
 
-    private static string FormatUsageRemaining(ProviderUsageWindow providerUsageWindow) => providerUsageWindow.RemainingPercentage < 0 ? App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_UnknownUsage") : App.LocalizationService.GetFormattedString("ProviderAccountViewModel_UsageRemainingOnlyFormat", providerUsageWindow.RemainingPercentage);
+    private string FormatUsageRemaining(ProviderUsageWindow providerUsageWindow) => providerUsageWindow.RemainingPercentage < 0 ? _localizationService.GetLocalizedString("ProviderAccountViewModel_UnknownUsage") : _localizationService.GetFormattedString("ProviderAccountViewModel_UsageRemainingOnlyFormat", providerUsageWindow.RemainingPercentage);
 
-    private static string FormatUsageReset(DateTimeOffset? usageResetTime)
+    private string FormatUsageReset(DateTimeOffset? usageResetTime)
     {
-        if (usageResetTime is null) return App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_UnknownResetTime");
+        if (usageResetTime is null) return _localizationService.GetLocalizedString("ProviderAccountViewModel_UnknownResetTime");
 
         var resetAfterSeconds = Math.Max(0, Convert.ToInt64(Math.Ceiling((usageResetTime.Value - DateTimeOffset.UtcNow).TotalSeconds)));
         var resetAfterTimeSpan = TimeSpan.FromSeconds(resetAfterSeconds);
         var wholeDayCount = resetAfterTimeSpan.Days;
-        if (wholeDayCount == 1) return App.LocalizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterWithSingleDayFormat", resetAfterTimeSpan);
-        if (wholeDayCount > 1) return App.LocalizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterWithMultipleDaysFormat", wholeDayCount, resetAfterTimeSpan);
-        return App.LocalizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterFormat", resetAfterTimeSpan);
+        if (wholeDayCount == 1) return _localizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterWithSingleDayFormat", resetAfterTimeSpan);
+        if (wholeDayCount > 1) return _localizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterWithMultipleDaysFormat", wholeDayCount, resetAfterTimeSpan);
+        return _localizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterFormat", resetAfterTimeSpan);
     }
 
-    private static string FormatUsageAverageRateStatus(int exceededPercentage, int headroomPercentage) => exceededPercentage > 0 ? App.LocalizationService.GetFormattedString("UsageAverageRateWarningFormat", exceededPercentage) : headroomPercentage > 0 ? App.LocalizationService.GetFormattedString("UsageAverageRateHeadroomFormat", headroomPercentage) : App.LocalizationService.GetLocalizedString("UsageAverageRateAtLimitText");
+    private string FormatUsageAverageRateStatus(int exceededPercentage, int headroomPercentage) => exceededPercentage > 0 ? _localizationService.GetFormattedString("UsageAverageRateWarningFormat", exceededPercentage) : headroomPercentage > 0 ? _localizationService.GetFormattedString("UsageAverageRateHeadroomFormat", headroomPercentage) : _localizationService.GetLocalizedString("UsageAverageRateAtLimitText");
 
     private static DateTimeOffset? GetUsageResetTime(ProviderUsageWindow providerUsageWindow, DateTimeOffset? usageRefreshTime)
     {

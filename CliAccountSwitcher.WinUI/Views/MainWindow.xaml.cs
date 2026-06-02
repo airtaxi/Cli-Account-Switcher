@@ -6,6 +6,7 @@ using CliAccountSwitcher.WinUI.Services;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
@@ -41,6 +42,11 @@ public sealed partial class MainWindow : WindowEx
     private bool _isApplyingProviderSelection;
     private bool _isSystemShutdownInProgress;
 
+    private readonly ApplicationSettingsService _applicationSettingsService = App.Services.GetRequiredService<ApplicationSettingsService>();
+    private readonly ApplicationSettings _applicationSettings = App.Services.GetRequiredService<ApplicationSettings>();
+    private readonly LocalizationService _localizationService = App.Services.GetRequiredService<LocalizationService>();
+    private readonly ApplicationThemeService _applicationThemeService = App.Services.GetRequiredService<ApplicationThemeService>();
+
     public static MainWindow Instance { get; private set; }
 
     public MainWindow()
@@ -65,16 +71,16 @@ public sealed partial class MainWindow : WindowEx
 
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<MainPageNavigationSection>>(this, OnMainPageNavigationSectionChangedMessageReceived);
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<CliProviderKind>>(this, OnProviderKindChangedMessageReceived);
-        ApplyProviderSelection(App.ApplicationSettings.SelectedProviderKind);
+        ApplyProviderSelection(_applicationSettings.SelectedProviderKind);
 
-        App.ApplicationThemeService.ApplyThemeToWindow(this);
-        App.ApplicationThemeService.ThemeChanged += OnApplicationThemeServiceThemeChanged;
+        _applicationThemeService.ApplyThemeToWindow(this);
+        _applicationThemeService.ThemeChanged += OnApplicationThemeServiceThemeChanged;
 
         this.CenterOnScreen();
         AppFrame.Navigate(typeof(MainPage));
 
         RefreshLocalizedText();
-        App.LocalizationService.LanguageChanged += RefreshLocalizedText;
+        _localizationService.LanguageChanged += RefreshLocalizedText;
     }
 
     public static void ShowLoading(string message = null)
@@ -118,22 +124,22 @@ public sealed partial class MainWindow : WindowEx
 
     private void RefreshLocalizedText()
     {
-        var localizedWindowTitle = App.LocalizationService.GetLocalizedString("MainWindow_AppTitleBar/Title");
+        var localizedWindowTitle = _localizationService.GetLocalizedString("MainWindow_AppTitleBar/Title");
         Title = localizedWindowTitle;
         AppTitleBar.Title = localizedWindowTitle;
 
-        DashboardSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_DashboardSelectorBarItem/Text");
-        SkillsSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_SkillsSelectorBarItem/Text");
-        AccountsSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_AccountsSelectorBarItem/Text");
-        AboutSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_AboutSelectorBarItem/Text");
-        SettingsSelectorBarItem.Text = App.LocalizationService.GetLocalizedString("MainPage_SettingsSelectorBarItem/Text");
-        TaskbarIcon.ToolTipText = App.LocalizationService.GetLocalizedString("AppDisplayName");
-        TrayAuthorMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_TrayAuthorMenuFlyoutItem/Text");
-        OpenDashboardPageMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_OpenDashboardPageMenuFlyoutItem/Text");
-        OpenAccountsPageMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_OpenAccountsPageMenuFlyoutItem/Text");
-        OpenSkillsPageMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_OpenSkillsPageMenuFlyoutItem/Text");
-        CloseProgramMenuFlyoutItem.Text = App.LocalizationService.GetLocalizedString("MainWindow_CloseProgramMenuFlyoutItem/Text");
-        AutomationProperties.SetName(ProviderComboBox, App.LocalizationService.GetLocalizedString("ProviderComboBox_AutomationName"));
+        DashboardSelectorBarItem.Text = _localizationService.GetLocalizedString("MainPage_DashboardSelectorBarItem/Text");
+        SkillsSelectorBarItem.Text = _localizationService.GetLocalizedString("MainPage_SkillsSelectorBarItem/Text");
+        AccountsSelectorBarItem.Text = _localizationService.GetLocalizedString("MainPage_AccountsSelectorBarItem/Text");
+        AboutSelectorBarItem.Text = _localizationService.GetLocalizedString("MainPage_AboutSelectorBarItem/Text");
+        SettingsSelectorBarItem.Text = _localizationService.GetLocalizedString("MainPage_SettingsSelectorBarItem/Text");
+        TaskbarIcon.ToolTipText = _localizationService.GetLocalizedString("AppDisplayName");
+        TrayAuthorMenuFlyoutItem.Text = _localizationService.GetLocalizedString("MainWindow_TrayAuthorMenuFlyoutItem/Text");
+        OpenDashboardPageMenuFlyoutItem.Text = _localizationService.GetLocalizedString("MainWindow_OpenDashboardPageMenuFlyoutItem/Text");
+        OpenAccountsPageMenuFlyoutItem.Text = _localizationService.GetLocalizedString("MainWindow_OpenAccountsPageMenuFlyoutItem/Text");
+        OpenSkillsPageMenuFlyoutItem.Text = _localizationService.GetLocalizedString("MainWindow_OpenSkillsPageMenuFlyoutItem/Text");
+        CloseProgramMenuFlyoutItem.Text = _localizationService.GetLocalizedString("MainWindow_CloseProgramMenuFlyoutItem/Text");
+        AutomationProperties.SetName(ProviderComboBox, _localizationService.GetLocalizedString("ProviderComboBox_AutomationName"));
     }
 
     private void OnAppFrameNavigated(object sender, NavigationEventArgs navigationEventArguments)
@@ -162,17 +168,17 @@ public sealed partial class MainWindow : WindowEx
         else DispatcherQueue.TryEnqueue(() => ApplyProviderSelection(valueChangedMessage.Value));
     }
 
-    private void OnApplicationThemeServiceThemeChanged(ElementTheme theme) => App.ApplicationThemeService.ApplyThemeToWindow(this);
+    private void OnApplicationThemeServiceThemeChanged(ElementTheme theme) => _applicationThemeService.ApplyThemeToWindow(this);
 
     private async void OnProviderComboBoxSelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArguments)
     {
         if (_isApplyingProviderSelection) return;
 
         var selectedProviderKind = GetProviderKindFromSelectedIndex(ProviderComboBox.SelectedIndex);
-        if (App.ApplicationSettings.SelectedProviderKind == selectedProviderKind) return;
+        if (_applicationSettings.SelectedProviderKind == selectedProviderKind) return;
 
-        App.ApplicationSettings.SelectedProviderKind = selectedProviderKind;
-        await App.ApplicationSettingsService.SaveSettingsAsync();
+        _applicationSettings.SelectedProviderKind = selectedProviderKind;
+        await _applicationSettingsService.SaveSettingsAsync();
         WeakReferenceMessenger.Default.Send(new ValueChangedMessage<CliProviderKind>(selectedProviderKind));
     }
 
@@ -272,16 +278,13 @@ public sealed partial class MainWindow : WindowEx
         _ => MainPageNavigationSection.Dashboard
     };
 
-    private void OnMainWindowClosed(object sender, WindowEventArgs windowEventArguments)
+    private async void OnMainWindowClosed(object sender, WindowEventArgs windowEventArguments)
     {
         WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<MainPageNavigationSection>>(this);
         WeakReferenceMessenger.Default.Unregister<ValueChangedMessage<CliProviderKind>>(this);
-        App.ApplicationThemeService.ThemeChanged -= OnApplicationThemeServiceThemeChanged;
-        App.LocalizationService.LanguageChanged -= RefreshLocalizedText;
+        _applicationThemeService.ThemeChanged -= OnApplicationThemeServiceThemeChanged;
+        _localizationService.LanguageChanged -= RefreshLocalizedText;
         _activeAccountQuotaPopupWindow?.Close();
-        App.StoreUpdateService.Dispose();
-        App.AccountServiceManager.Dispose();
-        App.CodexAccountService.Dispose();
-        App.ClaudeAccountService.Dispose();
+        if (App.Services is IAsyncDisposable asyncDisposable) await asyncDisposable.DisposeAsync();
     }
 }

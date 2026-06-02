@@ -1,9 +1,9 @@
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Helpers;
-using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.Services;
 using CliAccountSwitcher.WinUI.ViewModels;
 using CliAccountSwitcher.WinUI.Views;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
@@ -17,11 +17,14 @@ namespace CliAccountSwitcher.WinUI.Pages;
 
 public sealed partial class SkillsPage : Page
 {
+    private readonly LocalizationService _localizationService = App.Services.GetRequiredService<LocalizationService>();
+    private readonly SkillService _skillService = App.Services.GetRequiredService<SkillService>();
+
     public SkillsPageViewModel ViewModel { get; }
 
     public SkillsPage()
     {
-        ViewModel = new SkillsPageViewModel(App.SkillService, App.ApplicationSettings, DispatcherQueue);
+        ViewModel = App.Services.GetRequiredService<SkillsPageViewModel>();
         InitializeComponent();
     }
 
@@ -32,10 +35,10 @@ public sealed partial class SkillsPage : Page
         var selectedSkillItems = ViewModel.FilteredSkills.Where(skillItem => skillItem.IsSelected).ToArray();
         if (selectedSkillItems.Length == 0) return;
 
-        var contentDialogResult = await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SkillsPage_DeleteSelectedSkillsDialogTitle"), App.LocalizationService.GetFormattedString("SkillsPage_DeleteSelectedSkillsDialogMessage", selectedSkillItems.Length), App.LocalizationService.GetLocalizedString("SkillsPage_DeleteButtonText"), App.LocalizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
+        var contentDialogResult = await this.ShowDialogAsync(_localizationService.GetLocalizedString("SkillsPage_DeleteSelectedSkillsDialogTitle"), _localizationService.GetFormattedString("SkillsPage_DeleteSelectedSkillsDialogMessage", selectedSkillItems.Length), _localizationService.GetLocalizedString("SkillsPage_DeleteButtonText"), _localizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
         if (contentDialogResult != ContentDialogResult.Primary) return;
 
-        App.SkillService.DeleteSkills(selectedSkillItems);
+        _skillService.DeleteSkills(selectedSkillItems);
         await ViewModel.ReloadSkillsAsync();
     }
 
@@ -44,7 +47,7 @@ public sealed partial class SkillsPage : Page
         var selectedSkillItems = ViewModel.FilteredSkills.Where(skillItem => skillItem.IsSelected).ToArray();
         if (selectedSkillItems.Length == 0)
         {
-            await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SkillsPage_ExportBackupNoSelectionDialogTitle"), App.LocalizationService.GetLocalizedString("SkillsPage_ExportBackupNoSelectionDialogMessage"));
+            await this.ShowDialogAsync(_localizationService.GetLocalizedString("SkillsPage_ExportBackupNoSelectionDialogTitle"), _localizationService.GetLocalizedString("SkillsPage_ExportBackupNoSelectionDialogMessage"));
             return;
         }
 
@@ -52,11 +55,11 @@ public sealed partial class SkillsPage : Page
         var storageFile = await fileSavePicker.PickSaveFileAsync();
         if (storageFile is null) return;
 
-        MainWindow.ShowLoading(App.LocalizationService.GetLocalizedString("SkillsPage_ExportBackupLoadingMessage"));
-        try { await App.SkillService.ExportSkillsAsync(SelectedProviderKind, selectedSkillItems, storageFile.Path); }
+        MainWindow.ShowLoading(_localizationService.GetLocalizedString("SkillsPage_ExportBackupLoadingMessage"));
+        try { await _skillService.ExportSkillsAsync(SelectedProviderKind, selectedSkillItems, storageFile.Path); }
         finally { MainWindow.HideLoading(); }
 
-        await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SkillsPage_ExportBackupDialogTitle"), App.LocalizationService.GetLocalizedString("SkillsPage_ExportBackupDialogMessage"));
+        await this.ShowDialogAsync(_localizationService.GetLocalizedString("SkillsPage_ExportBackupDialogTitle"), _localizationService.GetLocalizedString("SkillsPage_ExportBackupDialogMessage"));
     }
 
     private async void OnImportSkillsBackupButtonClicked(object sender, RoutedEventArgs routedEventArguments)
@@ -65,16 +68,16 @@ public sealed partial class SkillsPage : Page
         var storageFile = await fileOpenPicker.PickSingleFileAsync();
         if (storageFile is null) return;
 
-        MainWindow.ShowLoading(App.LocalizationService.GetLocalizedString("SkillsPage_ImportBackupLoadingMessage"));
+        MainWindow.ShowLoading(_localizationService.GetLocalizedString("SkillsPage_ImportBackupLoadingMessage"));
         var importedCount = 0;
         try
         {
-            importedCount = await App.SkillService.ImportSkillsAsync(SelectedProviderKind, storageFile.Path);
+            importedCount = await _skillService.ImportSkillsAsync(SelectedProviderKind, storageFile.Path);
             await ViewModel.ReloadSkillsAsync();
         }
         finally { MainWindow.HideLoading(); }
 
-        await this.ShowDialogAsync(App.LocalizationService.GetLocalizedString("SkillsPage_ImportBackupDialogTitle"), App.LocalizationService.GetFormattedString("SkillsPage_ImportBackupResultMessageFormat", importedCount));
+        await this.ShowDialogAsync(_localizationService.GetLocalizedString("SkillsPage_ImportBackupDialogTitle"), _localizationService.GetFormattedString("SkillsPage_ImportBackupResultMessageFormat", importedCount));
     }
 
     private void OnRefreshSkillsButtonClicked(object sender, RoutedEventArgs routedEventArguments) => ViewModel.ReloadSkills();
@@ -97,7 +100,7 @@ public sealed partial class SkillsPage : Page
         return fileOpenPicker;
     }
 
-    private static FileSavePicker CreateBackupFileSavePicker(CliProviderKind providerKind)
+    private FileSavePicker CreateBackupFileSavePicker(CliProviderKind providerKind)
     {
         var backupFileNamePrefix = SkillService.GetBackupFileNamePrefix(providerKind);
         var fileSavePicker = new FileSavePicker
@@ -107,7 +110,7 @@ public sealed partial class SkillsPage : Page
             DefaultFileExtension = ".caskills"
         };
         InitializeWithWindow.Initialize(fileSavePicker, WindowNative.GetWindowHandle(MainWindow.Instance));
-        fileSavePicker.FileTypeChoices.Add(App.LocalizationService.GetLocalizedString("SkillsPage_CaskillsBackupFileTypeChoice"), [".caskills"]);
+        fileSavePicker.FileTypeChoices.Add(_localizationService.GetLocalizedString("SkillsPage_CaskillsBackupFileTypeChoice"), [".caskills"]);
         return fileSavePicker;
     }
 

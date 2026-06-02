@@ -1,3 +1,5 @@
+using CliAccountSwitcher.WinUI.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
@@ -9,25 +11,29 @@ namespace CliAccountSwitcher.WinUI.Helpers;
 
 public static class DialogHelper
 {
+    private static readonly Lazy<LocalizationService> s_localizationServiceLazy = new(() => App.Services.GetRequiredService<LocalizationService>());
+    private static readonly Lazy<ApplicationThemeService> s_applicationThemeServiceLazy = new(() => App.Services.GetRequiredService<ApplicationThemeService>());
+    private static LocalizationService s_localizationService => s_localizationServiceLazy.Value;
+    private static ApplicationThemeService s_applicationThemeService => s_applicationThemeServiceLazy.Value;
     public static async Task<string> ShowInputDialogAsync(this UIElement element, string title = null, string placeholderText = "", bool showCancel = false, bool numberOnly = false, string defaultText = "")
     {
         HideOpenContentDialogs(element);
 
         var dialog = new ContentDialog
         {
-            Title = title ?? App.LocalizationService.GetLocalizedString("DialogHelper_DefaultInputTitle"),
-            PrimaryButtonText = App.LocalizationService.GetLocalizedString("DialogHelper_ConfirmButtonText"),
+            Title = title ?? s_localizationService.GetLocalizedString("DialogHelper_DefaultInputTitle"),
+            PrimaryButtonText = s_localizationService.GetLocalizedString("DialogHelper_ConfirmButtonText"),
             DefaultButton = ContentDialogButton.Primary,
             XamlRoot = element.XamlRoot
         };
-        App.ApplicationThemeService.RegisterThemeTarget(dialog);
+        s_applicationThemeService.RegisterThemeTarget(dialog);
         var textBox = new TextBox();
         if (numberOnly) textBox.BeforeTextChanging += (textBoxSender, textBoxBeforeTextChangingEventArguments) => textBoxBeforeTextChangingEventArguments.Cancel = textBoxBeforeTextChangingEventArguments.NewText.Any(character => !char.IsDigit(character));
         textBox.HorizontalAlignment = HorizontalAlignment.Stretch;
         textBox.PlaceholderText = placeholderText;
         if (!string.IsNullOrEmpty(defaultText)) textBox.Text = defaultText;
         dialog.Content = textBox;
-        if (showCancel) dialog.SecondaryButtonText = App.LocalizationService.GetLocalizedString("DialogHelper_CancelButtonText");
+        if (showCancel) dialog.SecondaryButtonText = s_localizationService.GetLocalizedString("DialogHelper_CancelButtonText");
         TaskCompletionSource<string> taskCompletionSource = new();
         dialog.Closing += (contentDialogSender, contentDialogClosingEventArguments) =>
         {
@@ -46,11 +52,11 @@ public static class DialogHelper
         {
             Title = title,
             Content = description,
-            PrimaryButtonText = primaryButtonText ?? App.LocalizationService.GetLocalizedString("DialogHelper_ConfirmButtonText"),
+            PrimaryButtonText = primaryButtonText ?? s_localizationService.GetLocalizedString("DialogHelper_ConfirmButtonText"),
             XamlRoot = xamlRoot,
             DefaultButton = ContentDialogButton.Primary
         };
-        App.ApplicationThemeService.RegisterThemeTarget(dialog);
+        s_applicationThemeService.RegisterThemeTarget(dialog);
 
         if (!string.IsNullOrEmpty(secondaryButtonText)) dialog.SecondaryButtonText = secondaryButtonText;
         return dialog;

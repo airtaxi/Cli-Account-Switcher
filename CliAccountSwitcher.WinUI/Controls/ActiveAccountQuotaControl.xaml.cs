@@ -1,8 +1,10 @@
 using CliAccountSwitcher.WinUI.Models;
+using CliAccountSwitcher.WinUI.Services;
 using CliAccountSwitcher.WinUI.Views;
 using CliAccountSwitcher.WinUI.ViewModels;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
@@ -12,6 +14,8 @@ namespace CliAccountSwitcher.WinUI.Controls;
 
 public sealed partial class ActiveAccountQuotaControl : UserControl
 {
+    private static readonly Lazy<LocalizationService> s_localizationServiceLazy = new(() => App.Services.GetRequiredService<LocalizationService>());
+    private static LocalizationService s_localizationService => s_localizationServiceLazy.Value;
     public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(nameof(ViewModel), typeof(DashboardPageViewModel), typeof(ActiveAccountQuotaControl), new PropertyMetadata(null, OnViewModelPropertyChanged));
 
     public static readonly DependencyProperty ShouldUseMainWindowNavigationProperty = DependencyProperty.Register(nameof(ShouldUseMainWindowNavigation), typeof(bool), typeof(ActiveAccountQuotaControl), new PropertyMetadata(false));
@@ -223,17 +227,17 @@ public sealed partial class ActiveAccountQuotaControl : UserControl
 
     private static string FormatUsageReset(DateTimeOffset? usageResetTime)
     {
-        if (usageResetTime is null) return App.LocalizationService.GetLocalizedString("ProviderAccountViewModel_UnknownResetTime");
+        if (usageResetTime is null) return s_localizationService.GetLocalizedString("ProviderAccountViewModel_UnknownResetTime");
 
         var resetAfterSeconds = Math.Max(0, Convert.ToInt64(Math.Ceiling((usageResetTime.Value - DateTimeOffset.UtcNow).TotalSeconds)));
         var resetAfterTimeSpan = TimeSpan.FromSeconds(resetAfterSeconds);
         var wholeDayCount = resetAfterTimeSpan.Days;
-        if (wholeDayCount == 1) return App.LocalizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterWithSingleDayFormat", resetAfterTimeSpan);
-        if (wholeDayCount > 1) return App.LocalizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterWithMultipleDaysFormat", wholeDayCount, resetAfterTimeSpan);
-        return App.LocalizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterFormat", resetAfterTimeSpan);
+        if (wholeDayCount == 1) return s_localizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterWithSingleDayFormat", resetAfterTimeSpan);
+        if (wholeDayCount > 1) return s_localizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterWithMultipleDaysFormat", wholeDayCount, resetAfterTimeSpan);
+        return s_localizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterFormat", resetAfterTimeSpan);
     }
 
-    private static string FormatUsageAverageRateStatus(int exceededPercentage, int headroomPercentage) => exceededPercentage > 0 ? App.LocalizationService.GetFormattedString("UsageAverageRateWarningFormat", exceededPercentage) : headroomPercentage > 0 ? App.LocalizationService.GetFormattedString("UsageAverageRateHeadroomFormat", headroomPercentage) : App.LocalizationService.GetLocalizedString("UsageAverageRateAtLimitText");
+    private static string FormatUsageAverageRateStatus(int exceededPercentage, int headroomPercentage) => exceededPercentage > 0 ? s_localizationService.GetFormattedString("UsageAverageRateWarningFormat", exceededPercentage) : headroomPercentage > 0 ? s_localizationService.GetFormattedString("UsageAverageRateHeadroomFormat", headroomPercentage) : s_localizationService.GetLocalizedString("UsageAverageRateAtLimitText");
 
 
 }

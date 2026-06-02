@@ -12,16 +12,18 @@ namespace CliAccountSwitcher.WinUI.ViewModels;
 public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
 {
     private readonly ApplicationSettings _applicationSettings;
+    private readonly LocalizationService _localizationService;
     private readonly DispatcherQueue _dispatcherQueue;
     private readonly SkillService _skillService;
     private readonly HashSet<string> _selectedSkillDirectoryNames = new(StringComparer.Ordinal);
     private bool _isSynchronizingSkillSelection;
     private bool _disposed;
 
-    public SkillsPageViewModel(SkillService skillService, ApplicationSettings applicationSettings, DispatcherQueue dispatcherQueue)
+    public SkillsPageViewModel(SkillService skillService, ApplicationSettings applicationSettings, LocalizationService localizationService, DispatcherQueue dispatcherQueue)
     {
         _skillService = skillService;
         _applicationSettings = applicationSettings;
+        _localizationService = localizationService;
         _dispatcherQueue = dispatcherQueue;
         SelectedProviderKind = _applicationSettings.SelectedProviderKind;
         _applicationSettings.PropertyChanged += OnApplicationSettingsPropertyChanged;
@@ -68,13 +70,13 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
 
     public bool HasSelectedSkills => SelectedSkillDirectoryNames.Count > 0;
 
-    public string SelectedSkillCountText => SelectedSkillDirectoryNames.Count == 0 ? App.LocalizationService.GetLocalizedString("SkillsPageViewModel_NoSelectedSkills") : App.LocalizationService.GetFormattedString("SkillsPageViewModel_SelectedSkillCountFormat", SelectedSkillDirectoryNames.Count);
+    public string SelectedSkillCountText => SelectedSkillDirectoryNames.Count == 0 ? _localizationService.GetLocalizedString("SkillsPageViewModel_NoSelectedSkills") : _localizationService.GetFormattedString("SkillsPageViewModel_SelectedSkillCountFormat", SelectedSkillDirectoryNames.Count);
 
     public bool IsCodexProviderSelected => SelectedProviderKind == CliProviderKind.Codex;
 
     public bool IsClaudeCodeProviderSelected => SelectedProviderKind == CliProviderKind.ClaudeCode;
 
-    public string DescriptionText => App.LocalizationService.GetFormattedString("SkillsPageViewModel_DescriptionFormat", GetProviderDisplayName(SelectedProviderKind));
+    public string DescriptionText => _localizationService.GetFormattedString("SkillsPageViewModel_DescriptionFormat", GetProviderDisplayName(SelectedProviderKind));
 
     public void ReloadSkills()
     {
@@ -247,7 +249,7 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
         ReloadSkills();
     }
 
-    private static string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => App.LocalizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => App.LocalizationService.GetLocalizedString("Provider_CodexDisplayName") };
+    private string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => _localizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => _localizationService.GetLocalizedString("Provider_CodexDisplayName") };
 
 
 }
