@@ -16,12 +16,7 @@ public sealed class SkillService
         if (!Directory.Exists(skillsDirectoryPath)) return [];
 
         var skillItems = new List<SkillItem>();
-
-        foreach (var skillDirectoryPath in Directory.EnumerateDirectories(skillsDirectoryPath))
-        {
-            if (TryCreateSkillItem(providerKind, skillDirectoryPath, out var skillItem)) skillItems.Add(skillItem);
-        }
-
+        ScanSkillDirectoriesRecursive(providerKind, skillsDirectoryPath, skillsDirectoryPath, skillItems);
         return skillItems.OrderBy(skillItem => skillItem.Name, StringComparer.CurrentCultureIgnoreCase).ToArray();
     }
 
@@ -65,14 +60,15 @@ public sealed class SkillService
             if (isDirectoryEntry)
             {
                 Directory.CreateDirectory(targetFilePath);
-                importedSkillDirectoryNames.Add(zipEntrySegments[0]);
                 continue;
             }
 
             Directory.CreateDirectory(Path.GetDirectoryName(targetFilePath)!);
             ClearReadOnlyAttributeIfExists(targetFilePath);
             zipArchiveEntry.ExtractToFile(targetFilePath, overwrite: true);
-            importedSkillDirectoryNames.Add(zipEntrySegments[0]);
+
+            var skillDirectoryName = string.Join("/", zipEntrySegments, 0, zipEntrySegments.Length - 1);
+            if (!string.IsNullOrEmpty(skillDirectoryName)) importedSkillDirectoryNames.Add(skillDirectoryName);
         }
 
         return Task.FromResult(importedSkillDirectoryNames.Count);
@@ -91,25 +87,41 @@ public sealed class SkillService
         }
     }
 
-    private static bool TryCreateSkillItem(CliProviderKind providerKind, string skillDirectoryPath, out SkillItem skillItem)
+    private static void ScanSkillDirectoriesRecursive(CliProviderKind providerKind, string skillsRootPath, string currentDirectoryPath, List<SkillItem> skillItems)
+    {
+        foreach (var childDirectoryPath in Directory.EnumerateDirectories(currentDirectoryPath))
+        {
+            var candidateSkillFilePath = Path.Combine(childDirectoryPath, "SKILL.md");
+            if (File.Exists(candidateSkillFilePath))
+            {
+                if (TryCreateSkillItem(providerKind, skillsRootPath, childDirectoryPath, out var skillItem))
+                {
+                    skillItems.Add(skillItem);
+                }
+            }
+            else ScanSkillDirectoriesRecursive(providerKind, skillsRootPath, childDirectoryPath, skillItems);
+        }
+    }
+
+    private static bool TryCreateSkillItem(CliProviderKind providerKind, string skillsRootPath, string skillDirectoryPath, out SkillItem skillItem)
     {
         skillItem = null;
 
         try
         {
             var fullSkillDirectoryPath = Path.GetFullPath(skillDirectoryPath);
-            var skillDirectoryName = Path.GetFileName(fullSkillDirectoryPath);
-            if (!IsSafePathSegment(skillDirectoryName)) return false;
+            var relativePath = NormalizeRelativePath(Path.GetRelativePath(skillsRootPath, fullSkillDirectoryPath));
+            if (!IsSafeRelativePath(relativePath)) return false;
 
             var skillFilePath = Path.Combine(fullSkillDirectoryPath, "SKILL.md");
-            var (name, description) = ReadSkillFrontMatter(skillFilePath, skillDirectoryName);
+            var (name, description) = ReadSkillFrontMatter(skillFilePath, Path.GetFileName(fullSkillDirectoryPath));
             var filePaths = Directory.EnumerateFiles(fullSkillDirectoryPath, "*", SearchOption.AllDirectories).ToArray();
 
             skillItem = new SkillItem
             {
                 ProviderKind = providerKind,
                 Name = name,
-                DirectoryName = skillDirectoryName,
+                DirectoryName = relativePath,
                 FullPath = fullSkillDirectoryPath,
                 Description = description,
                 FileCount = filePaths.Length,
@@ -174,7 +186,7 @@ public sealed class SkillService
         var skillDirectoryNames = new HashSet<string>(StringComparer.Ordinal);
         foreach (var skillItem in skillItems)
         {
-            if (!IsSafePathSegment(skillItem.DirectoryName)) continue;
+            if (!IsSafeRelativePath(skillItem.DirectoryName)) continue;
             if (skillDirectoryNames.Add(skillItem.DirectoryName)) yield return skillItem.DirectoryName;
         }
     }
@@ -236,6 +248,21 @@ public sealed class SkillService
 
     private static string NormalizeZipEntryPath(string zipEntryPath) => zipEntryPath.Replace('\\', '/');
 
+    private static string NormalizeRelativePath(string relativePath) => relativePath.Replace('\\', '/');
+
+    private static bool IsSafeRelativePath(string relativePath)
+    {
+        if (string.IsNullOrWhiteSpace(relativePath)) return false;
+
+        foreach (var segment in relativePath.Split('/', StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (segment is "." or "..") return false;
+            if (segment.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0) return false;
+        }
+
+        return true;
+    }
+
     private static bool IsSafePathSegment(string pathSegment) => !string.IsNullOrWhiteSpace(pathSegment) && pathSegment is not "." and not ".." && pathSegment.IndexOfAny(Path.GetInvalidFileNameChars()) < 0;
 
     private static string ResolveSkillDirectoryPath(string skillsDirectoryPath, string skillDirectoryName)
@@ -252,7 +279,7 @@ public sealed class SkillService
             if (IsPathWithinDirectory(skillsDirectoryPath, skillDirectoryPath)) return skillDirectoryPath;
         }
 
-        if (!IsSafePathSegment(skillItem.DirectoryName)) return null;
+        if (!IsSafeRelativePath(skillItem.DirectoryName)) return null;
         return ResolveSkillDirectoryPath(skillsDirectoryPath, skillItem.DirectoryName);
     }
 
