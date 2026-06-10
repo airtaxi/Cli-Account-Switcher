@@ -378,7 +378,7 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
         {
             using var jsonDocument = JsonDocument.Parse(authenticationDocumentText);
             if (jsonDocument.RootElement.ValueKind == JsonValueKind.Array) return JsonSerializer.Deserialize(authenticationDocumentText, CodexAccountJsonSerializerContext.Default.ListCodexAccount) ?? [];
-            if (jsonDocument.RootElement.ValueKind != JsonValueKind.Object) return [];
+            if (jsonDocument.RootElement.ValueKind != JsonValueKind.Object) return[];
 
             if (jsonDocument.RootElement.TryGetProperty(nameof(CodexAccountStoreDocument.Accounts), out _))
             {
@@ -402,7 +402,7 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
     {
         try
         {
-            if (!File.Exists(Constants.AccountsFilePath)) return [];
+            if (!File.Exists(Constants.AccountsFilePath)) return[];
 
             using var fileStream = File.OpenRead(Constants.AccountsFilePath);
             var codexAccountStoreDocument = JsonSerializer.Deserialize(fileStream, CodexAccountJsonSerializerContext.Default.CodexAccountStoreDocument);

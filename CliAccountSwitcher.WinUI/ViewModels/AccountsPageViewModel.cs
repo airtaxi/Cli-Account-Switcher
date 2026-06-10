@@ -111,7 +111,10 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         _isSynchronizingAccountSelection = true;
         try
         {
-            foreach (var accountViewModel in Accounts) accountViewModel.IsSelected = _selectedAccountIdentifiers.Contains(accountViewModel.AccountIdentifier);
+            foreach (var accountViewModel in Accounts)
+            {
+                accountViewModel.IsSelected = _selectedAccountIdentifiers.Contains(accountViewModel.AccountIdentifier);
+            }
         }
         finally { _isSynchronizingAccountSelection = false; }
         SelectedAccountIdentifiers = [.. _selectedAccountIdentifiers];
@@ -123,7 +126,10 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         _isSynchronizingAccountSelection = true;
         try
         {
-            foreach (var accountViewModel in FilteredAccounts) accountViewModel.IsSelected = isSelected;
+            foreach (var accountViewModel in FilteredAccounts)
+            {
+                accountViewModel.IsSelected = isSelected;
+            }
         }
         finally { _isSynchronizingAccountSelection = false; }
 
@@ -225,7 +231,10 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
         for (var accountIndex = FilteredAccounts.Count - 1; accountIndex >= 0; accountIndex--)
         {
-            if (!filteredAccountViewModelSet.Contains(FilteredAccounts[accountIndex])) FilteredAccounts.RemoveAt(accountIndex);
+            if (!filteredAccountViewModelSet.Contains(FilteredAccounts[accountIndex]))
+            {
+                FilteredAccounts.RemoveAt(accountIndex);
+            }
         }
 
         for (var accountIndex = 0; accountIndex < filteredAccountViewModels.Count; accountIndex++)

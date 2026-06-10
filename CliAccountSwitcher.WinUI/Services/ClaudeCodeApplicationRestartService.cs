@@ -75,7 +75,10 @@ public sealed class ClaudeCodeApplicationRestartService
         {
             try
             {
-                if (!visualStudioCodeProcess.HasExited) visualStudioCodeProcess.WaitForExit(ProcessExitTimeoutMilliseconds);
+                if (!visualStudioCodeProcess.HasExited)
+                {
+                    visualStudioCodeProcess.WaitForExit(ProcessExitTimeoutMilliseconds);
+                }
             }
             catch { }
             finally { visualStudioCodeProcess.Dispose(); }
@@ -93,7 +96,10 @@ public sealed class ClaudeCodeApplicationRestartService
         var wasAnyExecutableFilePathStarted = false;
         foreach (var executableFilePath in executableFilePaths)
         {
-            if (TryStartExecutableFilePath(executableFilePath)) wasAnyExecutableFilePathStarted = true;
+            if (TryStartExecutableFilePath(executableFilePath))
+            {
+                wasAnyExecutableFilePathStarted = true;
+            }
         }
 
         return wasAnyExecutableFilePathStarted;

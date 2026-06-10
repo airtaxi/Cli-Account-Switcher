@@ -24,10 +24,7 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
 
     public IReadOnlyList<ProviderAccount> GetAccounts()
     {
-        lock (_accountsLock)
-        {
-            return _accounts.Select(CreateProviderAccount).ToArray();
-        }
+        lock (_accountsLock) return _accounts.Select(CreateProviderAccount).ToArray();
     }
 
     public virtual async Task InitializeAsync(CancellationToken cancellationToken = default)
@@ -169,7 +166,7 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
 
     protected IReadOnlyList<TAccountState> GetAccountStatesSnapshot()
     {
-        lock (_accountsLock) return [.. _accounts];
+        lock (_accountsLock) return[.._accounts];
     }
 
     protected TAccountState FindAccountState(string accountIdentifier)

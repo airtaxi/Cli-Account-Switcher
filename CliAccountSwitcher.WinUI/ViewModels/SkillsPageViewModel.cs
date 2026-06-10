@@ -96,7 +96,10 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
         _isSynchronizingSkillSelection = true;
         try
         {
-            foreach (var skillItem in Skills) skillItem.IsSelected = skillItem.ProviderKind == SelectedProviderKind && _selectedSkillDirectoryNames.Contains(skillItem.DirectoryName);
+            foreach (var skillItem in Skills)
+            {
+                skillItem.IsSelected = skillItem.ProviderKind == SelectedProviderKind && _selectedSkillDirectoryNames.Contains(skillItem.DirectoryName);
+            }
         }
         finally { _isSynchronizingSkillSelection = false; }
         SelectedSkillDirectoryNames = [.. _selectedSkillDirectoryNames];
@@ -108,7 +111,10 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
         _isSynchronizingSkillSelection = true;
         try
         {
-            foreach (var skillItem in FilteredSkills) skillItem.IsSelected = isSelected;
+            foreach (var skillItem in FilteredSkills)
+            {
+                skillItem.IsSelected = isSelected;
+            }
         }
         finally { _isSynchronizingSkillSelection = false; }
 
@@ -215,7 +221,10 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
 
         for (var skillIndex = FilteredSkills.Count - 1; skillIndex >= 0; skillIndex--)
         {
-            if (!filteredSkillItemSet.Contains(FilteredSkills[skillIndex])) FilteredSkills.RemoveAt(skillIndex);
+            if (!filteredSkillItemSet.Contains(FilteredSkills[skillIndex]))
+            {
+                FilteredSkills.RemoveAt(skillIndex);
+            }
         }
 
         for (var skillIndex = 0; skillIndex < filteredSkillItems.Count; skillIndex++)

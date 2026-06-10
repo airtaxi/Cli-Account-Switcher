@@ -15,8 +15,7 @@ public sealed class FileLogService
 
     public bool HasLogs()
     {
-        lock (_logEntriesLock)
-            return _logEntries.Count > 0;
+        lock (_logEntriesLock) return _logEntries.Count > 0;
     }
 
     public async Task ExportAsync(string destinationFilePath)

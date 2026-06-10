@@ -41,7 +41,10 @@ public static partial class WindowInteractionHelper
         try { SetForegroundWindow(windowHandle); }
         finally
         {
-            if (shouldDetachThreadInput) AttachThreadInput(foregroundThreadIdentifier, currentThreadIdentifier, false);
+            if (shouldDetachThreadInput)
+            {
+                AttachThreadInput(foregroundThreadIdentifier, currentThreadIdentifier, false);
+            }
         }
     }
 

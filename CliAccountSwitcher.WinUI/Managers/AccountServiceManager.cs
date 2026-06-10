@@ -121,7 +121,10 @@ public sealed class AccountServiceManager : IDisposable
         using var periodicTimer = new PeriodicTimer(ActiveStatusRefreshInterval);
         try
         {
-            while (await periodicTimer.WaitForNextTickAsync(_backgroundCancellationTokenSource.Token)) await SynchronizeActiveStatusesSilentlyAsync();
+            while (await periodicTimer.WaitForNextTickAsync(_backgroundCancellationTokenSource.Token))
+            {
+                await SynchronizeActiveStatusesSilentlyAsync();
+            }
         }
         catch (OperationCanceledException) { }
     }

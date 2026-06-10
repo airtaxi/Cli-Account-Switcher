@@ -63,7 +63,10 @@ public sealed partial class OAuthAddAccountPage : Page
         }
         catch (OperationCanceledException)
         {
-            if (_callbackCancellationTokenSource?.IsCancellationRequested != true) ShowError();
+            if (_callbackCancellationTokenSource?.IsCancellationRequested != true)
+            {
+                ShowError();
+            }
         }
         catch { ShowError(); }
         finally

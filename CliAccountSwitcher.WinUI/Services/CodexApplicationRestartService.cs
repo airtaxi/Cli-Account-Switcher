@@ -125,7 +125,10 @@ public sealed partial class CodexApplicationRestartService
         {
             try
             {
-                if (!codexApplicationProcess.HasExited) codexApplicationProcess.WaitForExit(ProcessExitTimeoutMilliseconds);
+                if (!codexApplicationProcess.HasExited)
+                {
+                    codexApplicationProcess.WaitForExit(ProcessExitTimeoutMilliseconds);
+                }
             }
             catch { }
             finally { codexApplicationProcess.Dispose(); }
@@ -148,7 +151,10 @@ public sealed partial class CodexApplicationRestartService
         {
             try
             {
-                if (!visualStudioCodeProcess.HasExited) visualStudioCodeProcess.WaitForExit(ProcessExitTimeoutMilliseconds);
+                if (!visualStudioCodeProcess.HasExited)
+                {
+                    visualStudioCodeProcess.WaitForExit(ProcessExitTimeoutMilliseconds);
+                }
             }
             catch { }
             finally { visualStudioCodeProcess.Dispose(); }
@@ -203,7 +209,10 @@ public sealed partial class CodexApplicationRestartService
         var wasAnyExecutableFilePathStarted = false;
         foreach (var executableFilePath in executableFilePaths)
         {
-            if (TryStartExecutableFilePath(executableFilePath)) wasAnyExecutableFilePathStarted = true;
+            if (TryStartExecutableFilePath(executableFilePath))
+            {
+                wasAnyExecutableFilePathStarted = true;
+            }
         }
 
         return wasAnyExecutableFilePathStarted;
