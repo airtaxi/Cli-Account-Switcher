@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.UI.Dispatching;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace CliAccountSwitcher.WinUI.ViewModels;
 
@@ -86,9 +87,18 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     public bool IsClaudeCodeProviderSelected => SelectedProviderKind == CliProviderKind.ClaudeCode;
 
+    // Localizations
     public string DescriptionText => _localizationService.GetFormattedString("AccountsPageViewModel_DescriptionFormat", GetProviderDisplayName(SelectedProviderKind));
-
     public string PlanHeaderText => _localizationService.GetLocalizedString("AccountsPage_PlanHeaderTextBlock/Text");
+    public string RefreshAllAccountsLoadingMessage => _localizationService.GetLocalizedString("AccountsPage_RefreshAllAccountsLoadingMessage");
+    public string RefreshSelectedAccountsLoadingMessage => _localizationService.GetLocalizedString("AccountsPage_RefreshSelectedAccountsLoadingMessage");
+    public string RefreshAccountLoadingMessage => _localizationService.GetLocalizedString("AccountsPage_RefreshAccountLoadingMessage");
+    public string ImportBackupLoadingMessage => _localizationService.GetLocalizedString("AccountsPage_ImportBackupLoadingMessage");
+    public string BackupFileExtension => GetBackupFileExtension(SelectedProviderKind);
+    public string BackupFileTypeChoiceText => GetBackupFileTypeChoiceText(SelectedProviderKind);
+    public string BackupSuggestedFileName => GetBackupSuggestedFileName(SelectedProviderKind);
+    public string RenameAccountDialogTitle => _localizationService.GetLocalizedString("AccountsPage_RenameAccountDialogTitle");
+    public string RenameAccountPlaceholderText => _localizationService.GetLocalizedString("AccountsPage_RenameAccountPlaceholderText");
 
     public void ReloadAccounts()
     {
@@ -103,6 +113,122 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
         ReloadAccounts();
         return Task.CompletedTask;
     }
+
+    public async Task RefreshAllAccountsAsync()
+    {
+        var selectedProviderKind = SelectedProviderKind;
+        await _accountServiceManager.RefreshAllAccountsAsync(selectedProviderKind);
+        ReloadAccounts();
+    }
+
+    public async Task RefreshSelectedAccountsAsync()
+    {
+        var selectedProviderKind = SelectedProviderKind;
+        var selectedAccountIdentifiers = SelectedAccountIdentifiers.Where(accountIdentifier => !string.IsNullOrWhiteSpace(accountIdentifier)).ToArray();
+        if (selectedAccountIdentifiers.Length == 0) return;
+
+        await _accountServiceManager.RefreshAccountsAsync(selectedProviderKind, selectedAccountIdentifiers);
+        ReloadAccounts();
+    }
+
+    public async Task RefreshAccountAsync(string accountIdentifier)
+    {
+        if (string.IsNullOrWhiteSpace(accountIdentifier)) return;
+
+        var selectedProviderKind = SelectedProviderKind;
+        await _accountServiceManager.RefreshAccountAsync(selectedProviderKind, accountIdentifier);
+        ReloadAccounts();
+    }
+
+    public async Task DeleteSelectedAccountsAsync()
+    {
+        var selectedProviderKind = SelectedProviderKind;
+        var selectedAccountIdentifiers = SelectedAccountIdentifiers.Where(accountIdentifier => !string.IsNullOrWhiteSpace(accountIdentifier)).ToArray();
+        if (selectedAccountIdentifiers.Length == 0) return;
+
+        await _accountServiceManager.DeleteAccountsAsync(selectedProviderKind, selectedAccountIdentifiers);
+        ReloadAccounts();
+    }
+
+    public async Task DeleteAccountAsync(string accountIdentifier)
+    {
+        if (string.IsNullOrWhiteSpace(accountIdentifier)) return;
+
+        var selectedProviderKind = SelectedProviderKind;
+        await _accountServiceManager.DeleteAccountsAsync(selectedProviderKind, [accountIdentifier]);
+        ReloadAccounts();
+    }
+
+    public async Task<ProviderActivationFollowUp> ActivateAccountAsync(string accountIdentifier)
+    {
+        if (string.IsNullOrWhiteSpace(accountIdentifier)) return ProviderActivationFollowUp.None;
+
+        var selectedProviderKind = SelectedProviderKind;
+        var providerActivationFollowUp = await _accountServiceManager.ActivateAccountAsync(selectedProviderKind, accountIdentifier);
+        ReloadAccounts();
+        return providerActivationFollowUp;
+    }
+
+    public bool TryGetAccountCustomAlias(string accountIdentifier, out string customAlias)
+    {
+        customAlias = "";
+        if (string.IsNullOrWhiteSpace(accountIdentifier)) return false;
+        if (!_accountServiceManager.GetIsRenameSupported(SelectedProviderKind)) return false;
+
+        var accountViewModel = Accounts.FirstOrDefault(accountViewModel => string.Equals(accountViewModel.AccountIdentifier, accountIdentifier, StringComparison.Ordinal));
+        if (accountViewModel is null) return false;
+
+        customAlias = accountViewModel.CustomAlias;
+        return true;
+    }
+
+    public async Task RenameAccountAsync(string accountIdentifier, string customAlias)
+    {
+        if (string.IsNullOrWhiteSpace(accountIdentifier)) return;
+        if (!_accountServiceManager.GetIsRenameSupported(SelectedProviderKind)) return;
+
+        var selectedProviderKind = SelectedProviderKind;
+        await _accountServiceManager.RenameAccountAsync(selectedProviderKind, accountIdentifier, customAlias);
+        ReloadAccounts();
+    }
+
+    public string GetBackupFileTypeChoiceText(CliProviderKind providerKind) => _localizationService.GetLocalizedString(GetBackupFileTypeChoiceResourceName(providerKind));
+
+    public string GetBackupSuggestedFileName(CliProviderKind providerKind) => $"{_accountServiceManager.GetBackupFileNamePrefix(providerKind)}-{DateTimeOffset.Now.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture)}";
+
+    public async Task<BasicDialogData> ExportBackupAsync(CliProviderKind providerKind, string backupFilePath)
+    {
+        await _accountServiceManager.ExportBackupAsync(providerKind, backupFilePath);
+        return new BasicDialogData(_localizationService.GetLocalizedString("AccountsPage_ExportBackupDialogTitle"), _localizationService.GetLocalizedString("AccountsPage_ExportBackupDialogMessage"));
+    }
+
+    public async Task<BasicDialogData> ImportBackupAsync(CliProviderKind providerKind, string backupFilePath)
+    {
+        var providerAccountBackupImportResult = default(ProviderAccountBackupImportResult);
+        try
+        {
+            providerAccountBackupImportResult = await _accountServiceManager.ImportBackupAsync(providerKind, backupFilePath);
+            ReloadAccounts();
+        }
+        catch { providerAccountBackupImportResult = new ProviderAccountBackupImportResult { FailureCount = 1 }; }
+
+        return new BasicDialogData(_localizationService.GetLocalizedString("AccountsPage_ImportBackupDialogTitle"), BuildBackupImportResultText(providerAccountBackupImportResult.SuccessCount, providerAccountBackupImportResult.FailureCount, providerAccountBackupImportResult.DuplicateCount));
+    }
+
+    public async Task<BasicDialogData> DeleteExpiredAccountsAsync()
+    {
+        var selectedProviderKind = SelectedProviderKind;
+        var deletedCount = await _accountServiceManager.DeleteExpiredAccountsAsync(selectedProviderKind);
+        ReloadAccounts();
+        var dialogMessage = deletedCount == 0 ? _localizationService.GetLocalizedString("AccountsPage_DeleteExpiredAccountsNoAccountsMessage") : _localizationService.GetFormattedString("AccountsPage_DeleteExpiredAccountsDeletedMessageFormat", deletedCount);
+        return new BasicDialogData(_localizationService.GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), dialogMessage);
+    }
+
+    public BasicDialogData CreateDeleteSelectedAccountsConfirmationDialogData() => new(_localizationService.GetLocalizedString("AccountsPage_DeleteSelectedAccountsDialogTitle"), _localizationService.GetFormattedString("AccountsPage_DeleteSelectedAccountsDialogMessage", SelectedAccountIdentifiers.Count), _localizationService.GetLocalizedString("AccountsPage_DeleteButtonText"), _localizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
+
+    public BasicDialogData CreateDeleteAccountConfirmationDialogData() => new(_localizationService.GetLocalizedString("AccountsPage_DeleteAccountDialogTitle"), _localizationService.GetLocalizedString("AccountsPage_DeleteAccountDialogMessage"), _localizationService.GetLocalizedString("AccountsPage_DeleteButtonText"), _localizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
+
+    public BasicDialogData CreateDeleteExpiredAccountsConfirmationDialogData() => new(_localizationService.GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), _localizationService.GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogMessage"), _localizationService.GetLocalizedString("AccountsPage_DeleteButtonText"), _localizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
 
     public void SetSelectedAccountIdentifiers(IEnumerable<string> accountIdentifiers)
     {
@@ -138,7 +264,10 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     public void RefreshUsageResetTextProperties()
     {
-        foreach (var accountViewModel in Accounts) accountViewModel.RefreshUsageResetTextProperties();
+        foreach (var accountViewModel in Accounts)
+        {
+            accountViewModel.RefreshUsageResetTextProperties();
+        }
     }
 
     public void Dispose()
@@ -280,13 +409,28 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     private void RefreshUsageWarningThresholdProperties()
     {
-        foreach (var accountViewModel in Accounts) accountViewModel.RefreshUsageWarningThresholdProperties();
+        foreach (var accountViewModel in Accounts)
+        {
+            accountViewModel.RefreshUsageWarningThresholdProperties();
+        }
     }
 
     private void RefreshAccountCounts()
     {
         AccountCount = Accounts.Count;
         FilteredAccountCount = FilteredAccounts.Count;
+    }
+
+    private string BuildBackupImportResultText(int successCount, int failureCount, int duplicateCount)
+    {
+        var resultLines = new[]
+        {
+            successCount > 0 ? _localizationService.GetFormattedString("AccountsPage_ImportBackupSuccessCountFormat", successCount) : "",
+            failureCount > 0 ? _localizationService.GetFormattedString("AccountsPage_ImportBackupFailureCountFormat", failureCount) : "",
+            duplicateCount > 0 ? _localizationService.GetFormattedString("AccountsPage_ImportBackupDuplicateCountFormat", duplicateCount) : ""
+        }.Where(resultLine => !string.IsNullOrWhiteSpace(resultLine)).ToArray();
+
+        return resultLines.Length == 0 ? _localizationService.GetLocalizedString("AccountsPage_ImportBackupEmptyResultMessage") : string.Join(Environment.NewLine, resultLines);
     }
 
     private void ApplyProviderKindChange(CliProviderKind providerKind)
@@ -302,6 +446,10 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     partial void OnSelectedPlanFilterChanged(string value) => ApplyFilter();
 
     private string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => _localizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => _localizationService.GetLocalizedString("Provider_CodexDisplayName") };
+
+    public static string GetBackupFileExtension(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => ".ccb", _ => ".zip" };
+
+    private static string GetBackupFileTypeChoiceResourceName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => "AccountsPage_ClaudeCodeBackupFileTypeChoice", _ => "AccountsPage_ZipBackupFileTypeChoice" };
 
 
 }

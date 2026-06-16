@@ -13,7 +13,7 @@ public sealed class SkillService
     public IReadOnlyList<SkillItem> ScanSkills(CliProviderKind providerKind)
     {
         var skillsDirectoryPath = Path.GetFullPath(GetSkillsDirectoryPath(providerKind));
-        if (!Directory.Exists(skillsDirectoryPath)) return[];
+        if (!Directory.Exists(skillsDirectoryPath)) return [];
 
         var skillItems = new List<SkillItem>();
         ScanSkillDirectoriesRecursive(providerKind, skillsDirectoryPath, skillsDirectoryPath, skillItems);

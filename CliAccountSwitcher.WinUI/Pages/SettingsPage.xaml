@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <Page
     x:Class="CliAccountSwitcher.WinUI.Pages.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dev="using:DevWinUI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    DataContext="{x:Bind ViewModel}"
     Loaded="OnSettingsPageLoaded"
     Unloaded="OnSettingsPageUnloaded"
     mc:Ignorable="d">
@@ -29,6 +30,7 @@
                         <ComboBox
                             x:Name="LanguageComboBox"
                             MinWidth="220"
+                            SelectedIndex="{x:Bind ViewModel.LanguageSelectedIndex, Mode=TwoWay}"
                             SelectionChanged="OnLanguageComboBoxSelectionChanged">
                             <ComboBoxItem x:Uid="SettingsPage_SystemDefaultLanguageComboBoxItem" />
                             <ComboBoxItem x:Uid="SettingsPage_KoreanLanguageComboBoxItem" />
@@ -46,6 +48,7 @@
                         <ComboBox
                             x:Name="ThemeComboBox"
                             MinWidth="220"
+                            SelectedIndex="{x:Bind ViewModel.ThemeSelectedIndex, Mode=TwoWay}"
                             SelectionChanged="OnThemeComboBoxSelectionChanged">
                             <ComboBoxItem x:Uid="SettingsPage_SystemDefaultThemeComboBoxItem" />
                             <ComboBoxItem x:Uid="SettingsPage_LightThemeComboBoxItem" />
@@ -61,8 +64,11 @@
                             <TextBlock
                                 VerticalAlignment="Center"
                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                Text="{x:Bind ApplicationVersionText}" />
-                            <Button x:Name="CheckForUpdatesButton" Click="OnCheckForUpdatesButtonClicked">
+                                Text="{x:Bind ViewModel.ApplicationVersionText}" />
+                            <Button
+                                x:Name="CheckForUpdatesButton"
+                                Click="OnCheckForUpdatesButtonClicked"
+                                IsEnabled="{x:Bind ViewModel.IsCheckForUpdatesButtonEnabled, Mode=OneWay}">
                                 <StackPanel Orientation="Horizontal" Spacing="6">
                                     <FontIcon FontSize="14" Glyph="&#xE72C;" />
                                     <TextBlock x:Uid="SettingsPage_CheckForUpdatesButtonTextBlock" />
@@ -75,14 +81,20 @@
                         <dev:SettingsCard.HeaderIcon>
                             <FontIcon Glyph="&#xE9F5;" />
                         </dev:SettingsCard.HeaderIcon>
-                        <ToggleSwitch x:Name="AutomaticUpdateToggleSwitch" Toggled="OnAutomaticUpdateToggleSwitchToggled" />
+                        <ToggleSwitch
+                            x:Name="AutomaticUpdateToggleSwitch"
+                            IsOn="{x:Bind ViewModel.IsAutomaticUpdateCheckEnabled, Mode=TwoWay}"
+                            Toggled="OnAutomaticUpdateToggleSwitchToggled" />
                     </dev:SettingsCard>
 
                     <dev:SettingsCard x:Uid="SettingsPage_StartupLaunchSettingsCard">
                         <dev:SettingsCard.HeaderIcon>
                             <FontIcon Glyph="&#xE945;" />
                         </dev:SettingsCard.HeaderIcon>
-                        <ToggleSwitch x:Name="StartupLaunchToggleSwitch" Toggled="OnStartupLaunchToggleSwitchToggled" />
+                        <ToggleSwitch
+                            x:Name="StartupLaunchToggleSwitch"
+                            IsOn="{x:Bind ViewModel.IsStartupLaunchEnabled, Mode=TwoWay}"
+                            Toggled="OnStartupLaunchToggleSwitchToggled" />
                     </dev:SettingsCard>
 
                     <dev:SettingsExpander x:Uid="SettingsPage_ApplicationSettingsTransferSettingsExpander">
@@ -91,7 +103,10 @@
                         </dev:SettingsExpander.HeaderIcon>
                         <dev:SettingsExpander.Items>
                             <dev:SettingsCard x:Uid="SettingsPage_ExportApplicationSettingsSettingsCard">
-                                <Button x:Name="ExportApplicationSettingsButton" Click="OnExportApplicationSettingsButtonClicked">
+                                <Button
+                                    x:Name="ExportApplicationSettingsButton"
+                                    Click="OnExportApplicationSettingsButtonClicked"
+                                    IsEnabled="{x:Bind ViewModel.IsExportApplicationSettingsButtonEnabled, Mode=OneWay}">
                                     <StackPanel Orientation="Horizontal" Spacing="6">
                                         <FontIcon FontSize="14" Glyph="&#xEDE1;" />
                                         <TextBlock x:Uid="SettingsPage_ExportApplicationSettingsButtonTextBlock" />
@@ -99,7 +114,10 @@
                                 </Button>
                             </dev:SettingsCard>
                             <dev:SettingsCard x:Uid="SettingsPage_ImportApplicationSettingsSettingsCard">
-                                <Button x:Name="ImportApplicationSettingsButton" Click="OnImportApplicationSettingsButtonClicked">
+                                <Button
+                                    x:Name="ImportApplicationSettingsButton"
+                                    Click="OnImportApplicationSettingsButtonClicked"
+                                    IsEnabled="{x:Bind ViewModel.IsImportApplicationSettingsButtonEnabled, Mode=OneWay}">
                                     <StackPanel Orientation="Horizontal" Spacing="6">
                                         <FontIcon FontSize="14" Glyph="&#xE8B5;" />
                                         <TextBlock x:Uid="SettingsPage_ImportApplicationSettingsButtonTextBlock" />
@@ -113,7 +131,10 @@
                         <dev:SettingsCard.HeaderIcon>
                             <FontIcon Glyph="&#xE7BA;" />
                         </dev:SettingsCard.HeaderIcon>
-                        <Button x:Name="ExportIntegratedLogButton" Click="OnExportIntegratedLogButtonClicked">
+                        <Button
+                            x:Name="ExportIntegratedLogButton"
+                            Click="OnExportIntegratedLogButtonClicked"
+                            IsEnabled="{x:Bind ViewModel.IsExportIntegratedLogButtonEnabled, Mode=OneWay}">
                             <StackPanel Orientation="Horizontal" Spacing="6">
                                 <FontIcon FontSize="14" Glyph="&#xEDE1;" />
                                 <TextBlock x:Uid="SettingsPage_ExportIntegratedLogButtonTextBlock" />
@@ -127,14 +148,20 @@
                         <dev:SettingsCard.HeaderIcon>
                             <FontIcon Glyph="&#xE74D;" />
                         </dev:SettingsCard.HeaderIcon>
-                        <ToggleSwitch x:Name="ExpiredAccountAutomaticDeletionToggleSwitch" Toggled="OnExpiredAccountAutomaticDeletionToggleSwitchToggled" />
+                        <ToggleSwitch
+                            x:Name="ExpiredAccountAutomaticDeletionToggleSwitch"
+                            IsOn="{x:Bind ViewModel.IsExpiredAccountAutomaticDeletionEnabled, Mode=TwoWay}"
+                            Toggled="OnExpiredAccountAutomaticDeletionToggleSwitchToggled" />
                     </dev:SettingsCard>
 
                     <dev:SettingsCard x:Uid="SettingsPage_ExpiredAccountNotificationSettingsCard">
                         <dev:SettingsCard.HeaderIcon>
                             <FontIcon Glyph="&#xE7F4;" />
                         </dev:SettingsCard.HeaderIcon>
-                        <ToggleSwitch x:Name="ExpiredAccountNotificationToggleSwitch" Toggled="OnExpiredAccountNotificationToggleSwitchToggled" />
+                        <ToggleSwitch
+                            x:Name="ExpiredAccountNotificationToggleSwitch"
+                            IsOn="{x:Bind ViewModel.IsExpiredAccountNotificationEnabled, Mode=TwoWay}"
+                            Toggled="OnExpiredAccountNotificationToggleSwitchToggled" />
                     </dev:SettingsCard>
 
                     <dev:SettingsExpander x:Uid="SettingsPage_ActiveAccountUsageRefreshSettingsCard">
@@ -142,22 +169,30 @@
                             <FontIcon Glyph="&#xE7C1;" />
                         </dev:SettingsExpander.HeaderIcon>
                         <dev:SettingsExpander.Content>
-                            <ToggleSwitch x:Name="ActiveAccountUsageAutomaticRefreshToggleSwitch" Toggled="OnActiveAccountUsageAutomaticRefreshToggleSwitchToggled" />
+                            <ToggleSwitch
+                                x:Name="ActiveAccountUsageAutomaticRefreshToggleSwitch"
+                                IsOn="{x:Bind ViewModel.IsActiveAccountUsageAutomaticRefreshEnabled, Mode=TwoWay}"
+                                Toggled="OnActiveAccountUsageAutomaticRefreshToggleSwitchToggled" />
                         </dev:SettingsExpander.Content>
                         <dev:SettingsExpander.Items>
                             <dev:SettingsCard x:Uid="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard">
                                 <NumberBox
                                     x:Name="ActiveAccountUsageRefreshIntervalNumberBox"
                                     MinWidth="140"
+                                    IsEnabled="{x:Bind ViewModel.IsActiveAccountUsageRefreshIntervalEnabled, Mode=OneWay}"
                                     LargeChange="5"
                                     Maximum="1440"
                                     Minimum="1"
                                     SmallChange="1"
                                     SpinButtonPlacementMode="Inline"
-                                    ValueChanged="OnActiveAccountUsageRefreshIntervalNumberBoxValueChanged" />
+                                    ValueChanged="OnActiveAccountUsageRefreshIntervalNumberBoxValueChanged"
+                                    Value="{x:Bind ViewModel.ActiveAccountUsageRefreshIntervalMinutes, Mode=TwoWay}" />
                             </dev:SettingsCard>
                             <dev:SettingsCard x:Uid="SettingsPage_ActiveAccountNextUsageRefreshSettingsCard">
-                                <TextBlock x:Name="ActiveAccountNextUsageRefreshTextBlock" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                <TextBlock
+                                    x:Name="ActiveAccountNextUsageRefreshTextBlock"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Text="{x:Bind ViewModel.ActiveAccountNextUsageRefreshText, Mode=OneWay}" />
                             </dev:SettingsCard>
                         </dev:SettingsExpander.Items>
                     </dev:SettingsExpander>
@@ -167,22 +202,30 @@
                             <FontIcon Glyph="&#xE823;" />
                         </dev:SettingsExpander.HeaderIcon>
                         <dev:SettingsExpander.Content>
-                            <ToggleSwitch x:Name="InactiveAccountUsageAutomaticRefreshToggleSwitch" Toggled="OnInactiveAccountUsageAutomaticRefreshToggleSwitchToggled" />
+                            <ToggleSwitch
+                                x:Name="InactiveAccountUsageAutomaticRefreshToggleSwitch"
+                                IsOn="{x:Bind ViewModel.IsInactiveAccountUsageAutomaticRefreshEnabled, Mode=TwoWay}"
+                                Toggled="OnInactiveAccountUsageAutomaticRefreshToggleSwitchToggled" />
                         </dev:SettingsExpander.Content>
                         <dev:SettingsExpander.Items>
                             <dev:SettingsCard x:Uid="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard">
                                 <NumberBox
                                     x:Name="InactiveAccountUsageRefreshIntervalNumberBox"
                                     MinWidth="140"
+                                    IsEnabled="{x:Bind ViewModel.IsInactiveAccountUsageRefreshIntervalEnabled, Mode=OneWay}"
                                     LargeChange="5"
                                     Maximum="1440"
                                     Minimum="1"
                                     SmallChange="1"
                                     SpinButtonPlacementMode="Inline"
-                                    ValueChanged="OnInactiveAccountUsageRefreshIntervalNumberBoxValueChanged" />
+                                    ValueChanged="OnInactiveAccountUsageRefreshIntervalNumberBoxValueChanged"
+                                    Value="{x:Bind ViewModel.InactiveAccountUsageRefreshIntervalMinutes, Mode=TwoWay}" />
                             </dev:SettingsCard>
                             <dev:SettingsCard x:Uid="SettingsPage_InactiveAccountNextUsageRefreshSettingsCard">
-                                <TextBlock x:Name="InactiveAccountNextUsageRefreshTextBlock" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                <TextBlock
+                                    x:Name="InactiveAccountNextUsageRefreshTextBlock"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Text="{x:Bind ViewModel.InactiveAccountNextUsageRefreshText, Mode=OneWay}" />
                             </dev:SettingsCard>
                         </dev:SettingsExpander.Items>
                     </dev:SettingsExpander>
@@ -199,7 +242,8 @@
                                 Minimum="0"
                                 SmallChange="1"
                                 SpinButtonPlacementMode="Inline"
-                                ValueChanged="OnPrimaryUsageWarningThresholdNumberBoxValueChanged" />
+                                ValueChanged="OnPrimaryUsageWarningThresholdNumberBoxValueChanged"
+                                Value="{x:Bind ViewModel.PrimaryUsageWarningThresholdPercentage, Mode=TwoWay}" />
                             <TextBlock
                                 VerticalAlignment="Center"
                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
@@ -219,7 +263,8 @@
                                 Minimum="0"
                                 SmallChange="1"
                                 SpinButtonPlacementMode="Inline"
-                                ValueChanged="OnSecondaryUsageWarningThresholdNumberBoxValueChanged" />
+                                ValueChanged="OnSecondaryUsageWarningThresholdNumberBoxValueChanged"
+                                Value="{x:Bind ViewModel.SecondaryUsageWarningThresholdPercentage, Mode=TwoWay}" />
                             <TextBlock
                                 VerticalAlignment="Center"
                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
@@ -231,14 +276,20 @@
                         <dev:SettingsCard.HeaderIcon>
                             <FontIcon Glyph="&#xE7F4;" />
                         </dev:SettingsCard.HeaderIcon>
-                        <ToggleSwitch x:Name="PrimaryUsageLowQuotaNotificationToggleSwitch" Toggled="OnPrimaryUsageLowQuotaNotificationToggleSwitchToggled" />
+                        <ToggleSwitch
+                            x:Name="PrimaryUsageLowQuotaNotificationToggleSwitch"
+                            IsOn="{x:Bind ViewModel.IsPrimaryUsageLowQuotaNotificationEnabled, Mode=TwoWay}"
+                            Toggled="OnPrimaryUsageLowQuotaNotificationToggleSwitchToggled" />
                     </dev:SettingsCard>
 
                     <dev:SettingsCard x:Uid="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard">
                         <dev:SettingsCard.HeaderIcon>
                             <FontIcon Glyph="&#xE7F4;" />
                         </dev:SettingsCard.HeaderIcon>
-                        <ToggleSwitch x:Name="SecondaryUsageLowQuotaNotificationToggleSwitch" Toggled="OnSecondaryUsageLowQuotaNotificationToggleSwitchToggled" />
+                        <ToggleSwitch
+                            x:Name="SecondaryUsageLowQuotaNotificationToggleSwitch"
+                            IsOn="{x:Bind ViewModel.IsSecondaryUsageLowQuotaNotificationEnabled, Mode=TwoWay}"
+                            Toggled="OnSecondaryUsageLowQuotaNotificationToggleSwitchToggled" />
                     </dev:SettingsCard>
                 </dev:SimpleSettingsGroup>
             </StackPanel>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <Page
     x:Class="CliAccountSwitcher.WinUI.Pages.DashboardPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -234,8 +234,8 @@
 
                     <controls:ActiveAccountQuotaControl
                         Grid.Column="0"
-                        ShouldUseMainWindowNavigation="False"
-                        ViewModel="{x:Bind ViewModel}" />
+                        DashboardViewModel="{x:Bind ViewModel}"
+                        ShouldUseMainWindowNavigation="False" />
 
                     <Border Grid.Column="1" Style="{StaticResource DashboardCardBorderStyle}">
                         <Grid RowSpacing="14">

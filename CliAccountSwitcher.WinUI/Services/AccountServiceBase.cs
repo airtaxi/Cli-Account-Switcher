@@ -24,7 +24,10 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
 
     public IReadOnlyList<ProviderAccount> GetAccounts()
     {
-        lock (_accountsLock) return _accounts.Select(CreateProviderAccount).ToArray();
+        lock (_accountsLock)
+        {
+            return _accounts.Select(CreateProviderAccount).ToArray();
+        }
     }
 
     public virtual async Task InitializeAsync(CancellationToken cancellationToken = default)
@@ -166,17 +169,26 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
 
     protected IReadOnlyList<TAccountState> GetAccountStatesSnapshot()
     {
-        lock (_accountsLock) return[.._accounts];
+        lock (_accountsLock)
+        {
+            return [.._accounts];
+        }
     }
 
     protected TAccountState FindAccountState(string accountIdentifier)
     {
-        lock (_accountsLock) return _accounts.FirstOrDefault(accountState => string.Equals(GetAccountIdentifier(accountState), accountIdentifier, StringComparison.Ordinal));
+        lock (_accountsLock)
+        {
+            return _accounts.FirstOrDefault(accountState => string.Equals(GetAccountIdentifier(accountState), accountIdentifier, StringComparison.Ordinal));
+        }
     }
 
     protected bool ContainsAccountState(string accountIdentifier)
     {
-        lock (_accountsLock) return _accounts.Any(accountState => string.Equals(GetAccountIdentifier(accountState), accountIdentifier, StringComparison.Ordinal));
+        lock (_accountsLock)
+        {
+            return _accounts.Any(accountState => string.Equals(GetAccountIdentifier(accountState), accountIdentifier, StringComparison.Ordinal));
+        }
     }
 
     protected void UpsertAccountState(TAccountState accountState)
@@ -301,12 +313,18 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
 
     private void RemoveAccountStates(IReadOnlySet<string> accountIdentifierSet)
     {
-        lock (_accountsLock) _accounts.RemoveAll(accountState => accountIdentifierSet.Contains(GetAccountIdentifier(accountState)));
+        lock (_accountsLock)
+        {
+            _accounts.RemoveAll(accountState => accountIdentifierSet.Contains(GetAccountIdentifier(accountState)));
+        }
     }
 
     private void RemoveAccountState(string accountIdentifier)
     {
-        lock (_accountsLock) _accounts.RemoveAll(accountState => string.Equals(GetAccountIdentifier(accountState), accountIdentifier, StringComparison.Ordinal));
+        lock (_accountsLock)
+        {
+            _accounts.RemoveAll(accountState => string.Equals(GetAccountIdentifier(accountState), accountIdentifier, StringComparison.Ordinal));
+        }
     }
 
     private void SortAccountStates() => _accounts.Sort((firstAccountState, secondAccountState) => CompareAccountStates(firstAccountState, secondAccountState));

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <Page
     x:Class="CliAccountSwitcher.WinUI.Pages.AddAccountDialog.FileAddAccountPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -39,9 +39,7 @@
                 Style="{StaticResource AccentButtonStyle}">
                 <StackPanel Orientation="Horizontal" Spacing="6">
                     <FontIcon FontSize="14" Glyph="&#xE8E5;" />
-                    <TextBlock
-                        x:Name="FileImportButtonTextBlock"
-                        x:Uid="FileAddAccountPage_ImportButtonTextBlock" />
+                    <TextBlock x:Name="FileImportButtonTextBlock" x:Uid="FileAddAccountPage_ImportButtonTextBlock" />
                 </StackPanel>
             </Button>
             <ProgressRing

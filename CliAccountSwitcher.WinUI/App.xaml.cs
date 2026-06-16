@@ -88,7 +88,11 @@ public partial class App : Application
         // ViewModels — transient; explicit factory lambdas for NativeAOT compatibility
         serviceCollection.AddTransient(sp => new DashboardPageViewModel(sp.GetRequiredService<AccountServiceManager>(), sp.GetRequiredService<ApplicationSettings>(), sp.GetRequiredService<LocalizationService>(), sp.GetRequiredService<DispatcherQueue>()));
 
+        serviceCollection.AddTransient(sp => new ActiveAccountQuotaControlViewModel(sp.GetRequiredService<LocalizationService>(), sp.GetRequiredService<DispatcherQueue>()));
+
         serviceCollection.AddTransient(sp => new AccountsPageViewModel(sp.GetRequiredService<AccountServiceManager>(), sp.GetRequiredService<ApplicationSettings>(), sp.GetRequiredService<LocalizationService>(), sp.GetRequiredService<DispatcherQueue>()));
+
+        serviceCollection.AddTransient(sp => new SettingsPageViewModel(sp.GetRequiredService<ApplicationSettings>(), sp.GetRequiredService<ApplicationSettingsService>(), sp.GetRequiredService<ApplicationThemeService>(), sp.GetRequiredService<StartupRegistrationService>(), sp.GetRequiredService<StoreUpdateService>(), sp.GetRequiredService<FileLogService>(), sp.GetRequiredService<AccountServiceManager>(), sp.GetRequiredService<LocalizationService>()));
 
         serviceCollection.AddTransient(sp => new SkillsPageViewModel(sp.GetRequiredService<SkillService>(), sp.GetRequiredService<ApplicationSettings>(), sp.GetRequiredService<LocalizationService>(), sp.GetRequiredService<DispatcherQueue>()));
     }

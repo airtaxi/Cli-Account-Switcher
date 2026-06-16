@@ -124,6 +124,8 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
     [ObservableProperty]
     public partial bool HasNoLowUsageAccounts { get; set; } = true;
 
+    public string RefreshAllAccountsLoadingMessage => _localizationService.GetLocalizedString("AccountsPage_RefreshAllAccountsLoadingMessage");
+
     public void ReloadDashboard()
     {
         var providerAccounts = _accountServiceManager.GetAccounts(_applicationSettings.SelectedProviderKind);
@@ -142,6 +144,22 @@ public sealed partial class DashboardPageViewModel : ObservableObject, IDisposab
         ReloadDashboard();
         return Task.CompletedTask;
     }
+
+    public async Task RefreshAllAccountsAsync()
+    {
+        await _accountServiceManager.RefreshAllAccountsAsync(_applicationSettings.SelectedProviderKind);
+        ReloadDashboard();
+    }
+
+    public async Task<BasicDialogData> DeleteExpiredAccountsAsync()
+    {
+        var deletedAccountCount = await _accountServiceManager.DeleteExpiredAccountsAsync(_applicationSettings.SelectedProviderKind);
+        ReloadDashboard();
+        var dialogMessage = deletedAccountCount == 0 ? _localizationService.GetLocalizedString("AccountsPage_DeleteExpiredAccountsNoAccountsMessage") : _localizationService.GetFormattedString("AccountsPage_DeleteExpiredAccountsDeletedMessageFormat", deletedAccountCount);
+        return new BasicDialogData(_localizationService.GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), dialogMessage);
+    }
+
+    public BasicDialogData CreateDeleteExpiredAccountsConfirmationDialogData() => new(_localizationService.GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogTitle"), _localizationService.GetLocalizedString("AccountsPage_DeleteExpiredAccountsDialogMessage"), _localizationService.GetLocalizedString("AccountsPage_DeleteButtonText"), _localizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
 
     public async Task RefreshActiveProviderAccountAsync()
     {

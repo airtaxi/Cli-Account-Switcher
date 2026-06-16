@@ -1006,6 +1006,12 @@ Microsoft Store에서 사용 가능한 업데이트 {0}개를 찾았습니다.</
   <data name="SettingsPage_StartupRegistrationFailedDialogMessage" xml:space="preserve">
     <value>Windows 시작 작업 설정을 적용하지 못했습니다. 패키지 매니페스트 등록 상태 또는 Windows 시작 앱 권한을 확인해 주세요.</value>
   </data>
+  <data name="SettingsPage_SaveSettingsFailedDialogTitle" xml:space="preserve">
+    <value>설정 저장 실패</value>
+  </data>
+  <data name="SettingsPage_SaveSettingsFailedDialogMessage" xml:space="preserve">
+    <value>앱 설정을 저장하지 못했습니다. 파일 접근 권한을 확인한 뒤 다시 시도해 주세요.</value>
+  </data>
   <data name="Notification_ExpiredAccountDetectedTitle" xml:space="preserve">
     <value>비정상 계정 발견</value>
   </data>

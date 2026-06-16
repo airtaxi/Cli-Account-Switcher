@@ -1006,6 +1006,12 @@ Microsoft Store に {0} 件の更新があります。</value>
   <data name="SettingsPage_StartupRegistrationFailedDialogMessage" xml:space="preserve">
     <value>Windows スタートアップタスク設定を適用できませんでした。パッケージマニフェスト登録または Windows のスタートアップアプリ権限を確認してください。</value>
   </data>
+  <data name="SettingsPage_SaveSettingsFailedDialogTitle" xml:space="preserve">
+    <value>設定の保存に失敗しました</value>
+  </data>
+  <data name="SettingsPage_SaveSettingsFailedDialogMessage" xml:space="preserve">
+    <value>アプリ設定を保存できませんでした。ファイルアクセス権限を確認して、もう一度お試しください。</value>
+  </data>
   <data name="Notification_ExpiredAccountDetectedTitle" xml:space="preserve">
     <value>無効なアカウントが見つかりました</value>
   </data>

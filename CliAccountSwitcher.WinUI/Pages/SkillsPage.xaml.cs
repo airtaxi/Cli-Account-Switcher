@@ -1,25 +1,19 @@
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Helpers;
-using CliAccountSwitcher.WinUI.Services;
+using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.ViewModels;
 using CliAccountSwitcher.WinUI.Views;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.Windows.Storage.Pickers;
 using System;
-using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
-using Windows.Storage.Pickers;
-using WinRT.Interop;
 
 namespace CliAccountSwitcher.WinUI.Pages;
 
 public sealed partial class SkillsPage : Page
 {
-    private readonly LocalizationService _localizationService = App.Services.GetRequiredService<LocalizationService>();
-    private readonly SkillService _skillService = App.Services.GetRequiredService<SkillService>();
-
     public SkillsPageViewModel ViewModel { get; }
 
     public SkillsPage()
@@ -28,28 +22,23 @@ public sealed partial class SkillsPage : Page
         InitializeComponent();
     }
 
-    private CliProviderKind SelectedProviderKind => ViewModel.SelectedProviderKind;
-
     private async void OnDeleteSelectedSkillsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
-        var selectedProviderKind = SelectedProviderKind;
-        var selectedSkillItems = ViewModel.Skills.Where(skillItem => skillItem.ProviderKind == selectedProviderKind && skillItem.IsSelected).ToArray();
-        if (selectedSkillItems.Length == 0) return;
+        if (!ViewModel.HasSelectedSkills) return;
 
-        var contentDialogResult = await this.ShowDialogAsync(_localizationService.GetLocalizedString("SkillsPage_DeleteSelectedSkillsDialogTitle"), _localizationService.GetFormattedString("SkillsPage_DeleteSelectedSkillsDialogMessage", selectedSkillItems.Length), _localizationService.GetLocalizedString("SkillsPage_DeleteButtonText"), _localizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
+        var contentDialogResult = await ShowDialogAsync(ViewModel.CreateDeleteSelectedSkillsConfirmationDialogData());
         if (contentDialogResult != ContentDialogResult.Primary) return;
 
-        _skillService.DeleteSkills(selectedProviderKind, selectedSkillItems);
-        await ViewModel.ReloadSkillsAsync();
+        ViewModel.DeleteSelectedSkills();
     }
 
     private async void OnExportSkillsBackupButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
-        var selectedProviderKind = SelectedProviderKind;
-        var selectedSkillItems = ViewModel.Skills.Where(skillItem => skillItem.ProviderKind == selectedProviderKind && skillItem.IsSelected).ToArray();
+        var selectedProviderKind = ViewModel.SelectedProviderKind;
+        var selectedSkillItems = ViewModel.CreateSelectedSkillItemsSnapshot(selectedProviderKind);
         if (selectedSkillItems.Length == 0)
         {
-            await this.ShowDialogAsync(_localizationService.GetLocalizedString("SkillsPage_ExportBackupNoSelectionDialogTitle"), _localizationService.GetLocalizedString("SkillsPage_ExportBackupNoSelectionDialogMessage"));
+            await ShowDialogAsync(ViewModel.CreateExportBackupNoSelectionDialogData());
             return;
         }
 
@@ -57,35 +46,30 @@ public sealed partial class SkillsPage : Page
         var storageFile = await fileSavePicker.PickSaveFileAsync();
         if (storageFile is null) return;
 
-        MainWindow.ShowLoading(_localizationService.GetLocalizedString("SkillsPage_ExportBackupLoadingMessage"));
-        try { await _skillService.ExportSkillsAsync(selectedProviderKind, selectedSkillItems, storageFile.Path); }
+        MainWindow.ShowLoading(ViewModel.ExportBackupLoadingMessage);
+        BasicDialogData dialogData;
+        try { dialogData = await ViewModel.ExportSelectedSkillsAsync(selectedProviderKind, selectedSkillItems, storageFile.Path); }
         finally { MainWindow.HideLoading(); }
 
-        await this.ShowDialogAsync(_localizationService.GetLocalizedString("SkillsPage_ExportBackupDialogTitle"), _localizationService.GetLocalizedString("SkillsPage_ExportBackupDialogMessage"));
+        await ShowDialogAsync(dialogData);
     }
 
     private async void OnImportSkillsBackupButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
-        var selectedProviderKind = SelectedProviderKind;
+        var selectedProviderKind = ViewModel.SelectedProviderKind;
         var fileOpenPicker = CreateBackupFileOpenPicker();
         var storageFile = await fileOpenPicker.PickSingleFileAsync();
         if (storageFile is null) return;
 
-        MainWindow.ShowLoading(_localizationService.GetLocalizedString("SkillsPage_ImportBackupLoadingMessage"));
-        var importedCount = 0;
-        try
-        {
-            importedCount = await _skillService.ImportSkillsAsync(selectedProviderKind, storageFile.Path);
-            await ViewModel.ReloadSkillsAsync();
-        }
+        MainWindow.ShowLoading(ViewModel.ImportBackupLoadingMessage);
+        BasicDialogData dialogData;
+        try { dialogData = await ViewModel.ImportSkillsBackupAsync(selectedProviderKind, storageFile.Path); }
         finally { MainWindow.HideLoading(); }
 
-        await this.ShowDialogAsync(_localizationService.GetLocalizedString("SkillsPage_ImportBackupDialogTitle"), _localizationService.GetFormattedString("SkillsPage_ImportBackupResultMessageFormat", importedCount));
+        await ShowDialogAsync(dialogData);
     }
 
     private void OnRefreshSkillsButtonClicked(object sender, RoutedEventArgs routedEventArguments) => ViewModel.ReloadSkills();
-
-    private void OnSkillSearchAutoSuggestBoxTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs autoSuggestBoxTextChangedEventArguments) => ViewModel.SearchText = sender.Text;
 
     private void OnSelectAllSkillsCheckBoxChecked(object sender, RoutedEventArgs routedEventArguments) => ViewModel.SetFilteredSkillsSelection(true);
 
@@ -95,27 +79,24 @@ public sealed partial class SkillsPage : Page
 
     private void OnSkillsPageUnloaded(object sender, RoutedEventArgs routedEventArguments) => ViewModel.Dispose();
 
-    private static FileOpenPicker CreateBackupFileOpenPicker()
-    {
-        var fileOpenPicker = new FileOpenPicker();
-        fileOpenPicker.FileTypeFilter.Add(".caskills");
-        fileOpenPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+    private async Task<ContentDialogResult> ShowDialogAsync(BasicDialogData dialogData) => await this.ShowDialogAsync(dialogData.Title, dialogData.Message, dialogData.PrimaryButtonText, dialogData.SecondaryButtonText);
 
-        InitializeWithWindow.Initialize(fileOpenPicker, WindowNative.GetWindowHandle(MainWindow.Instance));
+    private FileOpenPicker CreateBackupFileOpenPicker()
+    {
+        var fileOpenPicker = new FileOpenPicker(XamlRoot.ContentIslandEnvironment.AppWindowId);
+        fileOpenPicker.FileTypeFilter.Add(ViewModel.BackupFileExtension);
+        fileOpenPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
         return fileOpenPicker;
     }
 
     private FileSavePicker CreateBackupFileSavePicker(CliProviderKind providerKind)
     {
-        var backupFileNamePrefix = SkillService.GetBackupFileNamePrefix(providerKind);
-        var fileSavePicker = new FileSavePicker
-        {
-            SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
-            SuggestedFileName = $"{backupFileNamePrefix}-{DateTimeOffset.Now.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture)}",
-            DefaultFileExtension = ".caskills"
-        };
-        InitializeWithWindow.Initialize(fileSavePicker, WindowNative.GetWindowHandle(MainWindow.Instance));
-        fileSavePicker.FileTypeChoices.Add(_localizationService.GetLocalizedString("SkillsPage_CaskillsBackupFileTypeChoice"), [".caskills"]);
+        var backupFileExtension = ViewModel.BackupFileExtension;
+        var fileSavePicker = new FileSavePicker(XamlRoot.ContentIslandEnvironment.AppWindowId);
+        fileSavePicker.FileTypeChoices.Add(ViewModel.BackupFileTypeChoiceText, [backupFileExtension]);
+        fileSavePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+        fileSavePicker.SuggestedFileName = ViewModel.GetBackupSuggestedFileName(providerKind);
+        fileSavePicker.DefaultFileExtension = backupFileExtension;
         return fileSavePicker;
     }
 

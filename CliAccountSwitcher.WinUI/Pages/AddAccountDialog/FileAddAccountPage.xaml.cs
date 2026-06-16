@@ -1,14 +1,12 @@
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Dialogs;
 using CliAccountSwitcher.WinUI.Services;
-using CliAccountSwitcher.WinUI.Views;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
-using Microsoft.Extensions.DependencyInjection;
-using Windows.Storage;
-using Windows.Storage.Pickers;
-using WinRT.Interop;
+using Microsoft.Windows.Storage.Pickers;
+using System.IO;
 
 namespace CliAccountSwitcher.WinUI.Pages.AddAccountDialog;
 
@@ -47,7 +45,7 @@ public sealed partial class FileAddAccountPage : Page
 
         try
         {
-            var authenticationDocumentText = await FileIO.ReadTextAsync(storageFile);
+            var authenticationDocumentText = await File.ReadAllTextAsync(storageFile.Path);
             await _addAccountDialogContext.CodexAccountService.AddValidatedAuthenticationDocumentTextAsync(authenticationDocumentText);
             _isCompletingSuccessfully = true;
             _addAccountDialogContext.CompleteSuccessfully();
@@ -78,8 +76,8 @@ public sealed partial class FileAddAccountPage : Page
 
         try
         {
-            var credentialsJson = await FileIO.ReadTextAsync(credentialsStorageFile);
-            var globalConfigJson = await FileIO.ReadTextAsync(globalConfigStorageFile);
+            var credentialsJson = await File.ReadAllTextAsync(credentialsStorageFile.Path);
+            var globalConfigJson = await File.ReadAllTextAsync(globalConfigStorageFile.Path);
             await _addAccountDialogContext.SaveClaudeCodeAccountAsync(credentialsJson, globalConfigJson);
             _isCompletingSuccessfully = true;
             _addAccountDialogContext.CompleteSuccessfully();
@@ -117,14 +115,11 @@ public sealed partial class FileAddAccountPage : Page
         FileSupportedFormatDescriptionTextBlock.Text = s_localizationService.GetLocalizedString("FileAddAccountPage_SupportedFormatDescriptionTextBlock/Text");
     }
 
-    private static FileOpenPicker CreateAuthenticationFileOpenPicker()
+    private FileOpenPicker CreateAuthenticationFileOpenPicker()
     {
-        var fileOpenPicker = new FileOpenPicker
-        {
-            SuggestedStartLocation = PickerLocationId.DocumentsLibrary
-        };
-        InitializeWithWindow.Initialize(fileOpenPicker, WindowNative.GetWindowHandle(MainWindow.Instance));
+        var fileOpenPicker = new FileOpenPicker(XamlRoot.ContentIslandEnvironment.AppWindowId);
         fileOpenPicker.FileTypeFilter.Add(".json");
+        fileOpenPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
         return fileOpenPicker;
     }
 

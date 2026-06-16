@@ -66,12 +66,18 @@ public sealed class AccountServiceManager : IDisposable
 
     public TimeSpan? GetActiveUsageRefreshRemainingTime()
     {
-        lock (_refreshScheduleLock) return GetUsageRefreshRemainingTime(_nextActiveUsageRefreshTime, IsActiveUsageRefreshEnabled);
+        lock (_refreshScheduleLock)
+        {
+            return GetUsageRefreshRemainingTime(_nextActiveUsageRefreshTime, IsActiveUsageRefreshEnabled);
+        }
     }
 
     public TimeSpan? GetInactiveUsageRefreshRemainingTime()
     {
-        lock (_refreshScheduleLock) return GetUsageRefreshRemainingTime(_nextInactiveUsageRefreshTime, IsInactiveUsageRefreshEnabled);
+        lock (_refreshScheduleLock)
+        {
+            return GetUsageRefreshRemainingTime(_nextInactiveUsageRefreshTime, IsInactiveUsageRefreshEnabled);
+        }
     }
 
     public async Task RefreshAllAccountsAsync(CliProviderKind providerKind, CancellationToken cancellationToken = default) => await GetAccountService(providerKind).RefreshAllAccountsAsync(cancellationToken);
@@ -235,7 +241,10 @@ public sealed class AccountServiceManager : IDisposable
 
     private DateTimeOffset? GetNextUsageRefreshTime(bool isActiveAccountRefresh)
     {
-        lock (_refreshScheduleLock) return isActiveAccountRefresh ? _nextActiveUsageRefreshTime : _nextInactiveUsageRefreshTime;
+        lock (_refreshScheduleLock)
+        {
+            return isActiveAccountRefresh ? _nextActiveUsageRefreshTime : _nextInactiveUsageRefreshTime;
+        }
     }
 
     private void SetNextUsageRefreshTime(bool isActiveAccountRefresh, DateTimeOffset? nextRefreshTime)
@@ -246,12 +255,18 @@ public sealed class AccountServiceManager : IDisposable
 
     private void SetNextActiveUsageRefreshTime(DateTimeOffset? nextRefreshTime)
     {
-        lock (_refreshScheduleLock) _nextActiveUsageRefreshTime = nextRefreshTime;
+        lock (_refreshScheduleLock)
+        {
+            _nextActiveUsageRefreshTime = nextRefreshTime;
+        }
     }
 
     private void SetNextInactiveUsageRefreshTime(DateTimeOffset? nextRefreshTime)
     {
-        lock (_refreshScheduleLock) _nextInactiveUsageRefreshTime = nextRefreshTime;
+        lock (_refreshScheduleLock)
+        {
+            _nextInactiveUsageRefreshTime = nextRefreshTime;
+        }
     }
 
     private TimeSpan? GetUsageRefreshRemainingTime(DateTimeOffset? nextRefreshTime, bool isUsageRefreshEnabled)

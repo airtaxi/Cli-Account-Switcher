@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <Page
     x:Class="CliAccountSwitcher.WinUI.Pages.SkillsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -92,7 +92,7 @@
             x:Uid="SkillsPage_SkillSearchAutoSuggestBox"
             Grid.Row="1"
             QueryIcon="Find"
-            TextChanged="OnSkillSearchAutoSuggestBoxTextChanged" />
+            Text="{x:Bind ViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <Grid Grid.Row="2" ColumnSpacing="8">
             <Grid.ColumnDefinitions>

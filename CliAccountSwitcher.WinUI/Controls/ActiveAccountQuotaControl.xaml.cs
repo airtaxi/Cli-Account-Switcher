@@ -1,47 +1,28 @@
-using CliAccountSwitcher.WinUI.Models;
-using CliAccountSwitcher.WinUI.Services;
-using CliAccountSwitcher.WinUI.Views;
-using CliAccountSwitcher.WinUI.ViewModels;
-using CommunityToolkit.Mvvm.Messaging;
-using CommunityToolkit.Mvvm.Messaging.Messages;
+﻿using CliAccountSwitcher.WinUI.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
-using System.ComponentModel;
 
 namespace CliAccountSwitcher.WinUI.Controls;
 
 public sealed partial class ActiveAccountQuotaControl : UserControl
 {
-    private static readonly Lazy<LocalizationService> s_localizationServiceLazy = new(() => App.Services.GetRequiredService<LocalizationService>());
-    private static LocalizationService s_localizationService => s_localizationServiceLazy.Value;
-    public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(nameof(ViewModel), typeof(DashboardPageViewModel), typeof(ActiveAccountQuotaControl), new PropertyMetadata(null, OnViewModelPropertyChanged));
-
-    public static readonly DependencyProperty ShouldUseMainWindowNavigationProperty = DependencyProperty.Register(nameof(ShouldUseMainWindowNavigation), typeof(bool), typeof(ActiveAccountQuotaControl), new PropertyMetadata(false));
-
+    public static readonly DependencyProperty DashboardViewModelProperty = DependencyProperty.Register(nameof(DashboardViewModel), typeof(DashboardPageViewModel), typeof(ActiveAccountQuotaControl), new PropertyMetadata(null, OnDashboardViewModelPropertyChanged));
+    public static readonly DependencyProperty ShouldUseMainWindowNavigationProperty = DependencyProperty.Register(nameof(ShouldUseMainWindowNavigation), typeof(bool), typeof(ActiveAccountQuotaControl), new PropertyMetadata(false, OnShouldUseMainWindowNavigationPropertyChanged));
     public static readonly DependencyProperty ShouldShowCardChromeProperty = DependencyProperty.Register(nameof(ShouldShowCardChrome), typeof(bool), typeof(ActiveAccountQuotaControl), new PropertyMetadata(true, OnShouldShowCardChromePropertyChanged));
-
     public static readonly DependencyProperty ShouldShowRefreshButtonProperty = DependencyProperty.Register(nameof(ShouldShowRefreshButton), typeof(bool), typeof(ActiveAccountQuotaControl), new PropertyMetadata(false, OnShouldShowRefreshButtonPropertyChanged));
 
     private DispatcherTimer _remainingTimeRefreshTimer;
     private bool _hasInitializedComponent;
     private bool _isLoaded;
-    private bool _isSubscribedToViewModelPropertyChanged;
 
-    public ActiveAccountQuotaControl()
-    {
-        InitializeComponent();
-        _hasInitializedComponent = true;
-        UpdateCardChrome();
-        Loaded += OnActiveAccountQuotaControlLoaded;
-        Unloaded += OnActiveAccountQuotaControlUnloaded;
-    }
+    public ActiveAccountQuotaControlViewModel ViewModel { get; }
 
-    public DashboardPageViewModel ViewModel
+    public DashboardPageViewModel DashboardViewModel
     {
-        get => (DashboardPageViewModel)GetValue(ViewModelProperty);
-        set => SetValue(ViewModelProperty, value);
+        get => (DashboardPageViewModel)GetValue(DashboardViewModelProperty);
+        set => SetValue(DashboardViewModelProperty, value);
     }
 
     public bool ShouldUseMainWindowNavigation
@@ -62,114 +43,56 @@ public sealed partial class ActiveAccountQuotaControl : UserControl
         set => SetValue(ShouldShowRefreshButtonProperty, value);
     }
 
-    public int ManageAccountsButtonColumnSpan => ShouldShowRefreshButton ? 1 : 2;
-
-    public bool HasActiveAccount => ViewModel?.HasActiveAccount == true;
-
-    public bool HasNoActiveAccount => ViewModel?.HasNoActiveAccount != false;
-
-    public string ActiveAccountDisplayNameText => ViewModel?.ActiveAccountDisplayNameText ?? "";
-
-    public string ActiveAccountEmailAddressText => ViewModel?.ActiveAccountEmailAddressText ?? "";
-
-    public string ActiveAccountPlanText => ViewModel?.ActiveAccountPlanText ?? "";
-
-    public string ActiveAccountPrimaryUsageRemainingText => ViewModel?.ActiveAccountPrimaryUsageRemainingText ?? "";
-
-    public string ActiveAccountSecondaryUsageRemainingText => ViewModel?.ActiveAccountSecondaryUsageRemainingText ?? "";
-
-    public int ActiveAccountPrimaryUsageRemainingPercentage => ViewModel?.ActiveAccountPrimaryUsageRemainingPercentage ?? 0;
-
-    public int ActiveAccountSecondaryUsageRemainingPercentage => ViewModel?.ActiveAccountSecondaryUsageRemainingPercentage ?? 0;
-
-    public string ActiveAccountPrimaryUsageResetText => FormatUsageReset(ViewModel?.ActiveAccountPrimaryUsageResetAt);
-
-    public string ActiveAccountSecondaryUsageResetText => FormatUsageReset(ViewModel?.ActiveAccountSecondaryUsageResetAt);
-
-    public string ActiveAccountLastUsageRefreshText => ViewModel?.ActiveAccountLastUsageRefreshText ?? "";
-
-    public bool IsActiveAccountPrimaryUsageUnderWarningThreshold => ViewModel?.IsActiveAccountPrimaryUsageUnderWarningThreshold == true;
-
-    public bool IsActiveAccountSecondaryUsageUnderWarningThreshold => ViewModel?.IsActiveAccountSecondaryUsageUnderWarningThreshold == true;
-
-    public bool IsActiveAccountPrimaryUsageOverAverageRateLimit => ViewModel?.IsActiveAccountPrimaryUsageOverAverageRateLimit == true;
-
-    public bool IsActiveAccountSecondaryUsageOverAverageRateLimit => ViewModel?.IsActiveAccountSecondaryUsageOverAverageRateLimit == true;
-
-    public bool IsActiveAccountPrimaryUsageAtAverageRateLimit => !IsActiveAccountPrimaryUsageOverAverageRateLimit && (ViewModel?.ActiveAccountPrimaryUsageAverageRateLimitHeadroomPercentage ?? 0) == 0;
-
-    public bool IsActiveAccountSecondaryUsageAtAverageRateLimit => !IsActiveAccountSecondaryUsageOverAverageRateLimit && (ViewModel?.ActiveAccountSecondaryUsageAverageRateLimitHeadroomPercentage ?? 0) == 0;
-
-    public bool HasActiveAccountPrimaryUsageAverageRateLimitHeadroom => (ViewModel?.ActiveAccountPrimaryUsageAverageRateLimitHeadroomPercentage ?? 0) > 0;
-
-    public bool HasActiveAccountSecondaryUsageAverageRateLimitHeadroom => (ViewModel?.ActiveAccountSecondaryUsageAverageRateLimitHeadroomPercentage ?? 0) > 0;
-
-    public string ActiveAccountPrimaryUsageAverageRateStatusText => FormatUsageAverageRateStatus(ViewModel?.ActiveAccountPrimaryUsageAverageRateLimitExceededPercentage ?? 0, ViewModel?.ActiveAccountPrimaryUsageAverageRateLimitHeadroomPercentage ?? 0);
-
-    public string ActiveAccountSecondaryUsageAverageRateStatusText => FormatUsageAverageRateStatus(ViewModel?.ActiveAccountSecondaryUsageAverageRateLimitExceededPercentage ?? 0, ViewModel?.ActiveAccountSecondaryUsageAverageRateLimitHeadroomPercentage ?? 0);
-
-    private static void OnViewModelPropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArguments)
+    public ActiveAccountQuotaControl()
     {
-        var activeAccountQuotaControl = (ActiveAccountQuotaControl)dependencyObject;
+        ViewModel = App.Services.GetRequiredService<ActiveAccountQuotaControlViewModel>();
 
-        if (dependencyPropertyChangedEventArguments.OldValue is DashboardPageViewModel oldDashboardPageViewModel) activeAccountQuotaControl.UnsubscribeFromViewModelPropertyChanged(oldDashboardPageViewModel);
-        if (activeAccountQuotaControl._isLoaded && dependencyPropertyChangedEventArguments.NewValue is DashboardPageViewModel newDashboardPageViewModel) activeAccountQuotaControl.SubscribeToViewModelPropertyChanged(newDashboardPageViewModel);
+        InitializeComponent();
+        _hasInitializedComponent = true;
 
-        activeAccountQuotaControl.RefreshBindings();
+        SyncViewModelOptions();
+        UpdateCardChrome();
     }
 
-    private static void OnShouldShowCardChromePropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArguments)
+    private static void OnDashboardViewModelPropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArguments)
+    {
+        var activeAccountQuotaControl = (ActiveAccountQuotaControl)dependencyObject;
+        if (activeAccountQuotaControl._isLoaded) activeAccountQuotaControl.ViewModel.DashboardViewModel = dependencyPropertyChangedEventArguments.NewValue as DashboardPageViewModel;
+    }
+
+    private static void OnShouldUseMainWindowNavigationPropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs _)
+    {
+        var activeAccountQuotaControl = (ActiveAccountQuotaControl)dependencyObject;
+        activeAccountQuotaControl.ViewModel.ShouldUseMainWindowNavigation = activeAccountQuotaControl.ShouldUseMainWindowNavigation;
+    }
+
+    private static void OnShouldShowCardChromePropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs _)
     {
         var activeAccountQuotaControl = (ActiveAccountQuotaControl)dependencyObject;
         activeAccountQuotaControl.UpdateCardChrome();
     }
 
-    private static void OnShouldShowRefreshButtonPropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArguments)
+    private static void OnShouldShowRefreshButtonPropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs _)
     {
         var activeAccountQuotaControl = (ActiveAccountQuotaControl)dependencyObject;
-        activeAccountQuotaControl.RefreshBindings();
+        activeAccountQuotaControl.ViewModel.ShouldShowRefreshButton = activeAccountQuotaControl.ShouldShowRefreshButton;
     }
 
-    private void OnDashboardPageViewModelPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArguments)
-    {
-        if (DispatcherQueue.HasThreadAccess) RefreshBindings();
-        else DispatcherQueue.TryEnqueue(RefreshBindings);
-    }
-
-    private void OnManageAccountsButtonClicked(object sender, RoutedEventArgs routedEventArguments)
-    {
-        if (ShouldUseMainWindowNavigation)
-        {
-            MainWindow.NavigateToMainPageSection(MainPageNavigationSection.Accounts);
-            return;
-        }
-
-        WeakReferenceMessenger.Default.Send(new ValueChangedMessage<MainPageNavigationSection>(MainPageNavigationSection.Accounts));
-    }
-
-    private void OnRefreshActiveAccountButtonClicked(object sender, RoutedEventArgs routedEventArguments) => WeakReferenceMessenger.Default.Send(new ActiveAccountQuotaRefreshRequestedMessage());
-
-    private void OnActiveAccountQuotaControlLoaded(object sender, RoutedEventArgs routedEventArguments)
+    private void OnActiveAccountQuotaControlLoaded(object sender, RoutedEventArgs e)
     {
         _isLoaded = true;
-        if (ViewModel is not null) SubscribeToViewModelPropertyChanged(ViewModel);
+        ViewModel.DashboardViewModel = DashboardViewModel;
         StartRemainingTimeRefreshTimer();
     }
 
-    private void OnActiveAccountQuotaControlUnloaded(object sender, RoutedEventArgs routedEventArguments)
+    private void OnActiveAccountQuotaControlUnloaded(object sender, RoutedEventArgs e)
     {
         _isLoaded = false;
-        if (ViewModel is not null) UnsubscribeFromViewModelPropertyChanged(ViewModel);
+        ViewModel.DashboardViewModel = null;
         StopRemainingTimeRefreshTimer();
     }
 
-    private void OnRemainingTimeRefreshTimerTick(object sender, object eventArguments) => RefreshBindings();
-
-    private void RefreshBindings()
-    {
-        if (!_hasInitializedComponent) return;
-        Bindings.Update();
-    }
+    private void OnRemainingTimeRefreshTimerTick(object _, object __) => ViewModel.RefreshTimeSensitiveProperties();
 
     private void StartRemainingTimeRefreshTimer()
     {
@@ -178,7 +101,7 @@ public sealed partial class ActiveAccountQuotaControl : UserControl
         _remainingTimeRefreshTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         _remainingTimeRefreshTimer.Tick += OnRemainingTimeRefreshTimerTick;
         _remainingTimeRefreshTimer.Start();
-        RefreshBindings();
+        ViewModel.RefreshTimeSensitiveProperties();
     }
 
     private void StopRemainingTimeRefreshTimer()
@@ -188,22 +111,6 @@ public sealed partial class ActiveAccountQuotaControl : UserControl
         _remainingTimeRefreshTimer.Stop();
         _remainingTimeRefreshTimer.Tick -= OnRemainingTimeRefreshTimerTick;
         _remainingTimeRefreshTimer = null;
-    }
-
-    private void SubscribeToViewModelPropertyChanged(DashboardPageViewModel dashboardPageViewModel)
-    {
-        if (_isSubscribedToViewModelPropertyChanged) return;
-
-        dashboardPageViewModel.PropertyChanged += OnDashboardPageViewModelPropertyChanged;
-        _isSubscribedToViewModelPropertyChanged = true;
-    }
-
-    private void UnsubscribeFromViewModelPropertyChanged(DashboardPageViewModel dashboardPageViewModel)
-    {
-        if (!_isSubscribedToViewModelPropertyChanged) return;
-
-        dashboardPageViewModel.PropertyChanged -= OnDashboardPageViewModelPropertyChanged;
-        _isSubscribedToViewModelPropertyChanged = false;
     }
 
     private void UpdateCardChrome()
@@ -225,19 +132,9 @@ public sealed partial class ActiveAccountQuotaControl : UserControl
         ActiveAccountQuotaCardBorder.BorderThickness = new Thickness(0);
     }
 
-    private static string FormatUsageReset(DateTimeOffset? usageResetTime)
+    private void SyncViewModelOptions()
     {
-        if (usageResetTime is null) return s_localizationService.GetLocalizedString("ProviderAccountViewModel_UnknownResetTime");
-
-        var resetAfterSeconds = Math.Max(0, Convert.ToInt64(Math.Ceiling((usageResetTime.Value - DateTimeOffset.UtcNow).TotalSeconds)));
-        var resetAfterTimeSpan = TimeSpan.FromSeconds(resetAfterSeconds);
-        var wholeDayCount = resetAfterTimeSpan.Days;
-        if (wholeDayCount == 1) return s_localizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterWithSingleDayFormat", resetAfterTimeSpan);
-        if (wholeDayCount > 1) return s_localizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterWithMultipleDaysFormat", wholeDayCount, resetAfterTimeSpan);
-        return s_localizationService.GetFormattedString("ProviderAccountViewModel_ResetAfterFormat", resetAfterTimeSpan);
+        ViewModel.ShouldShowRefreshButton = ShouldShowRefreshButton;
+        ViewModel.ShouldUseMainWindowNavigation = ShouldUseMainWindowNavigation;
     }
-
-    private static string FormatUsageAverageRateStatus(int exceededPercentage, int headroomPercentage) => exceededPercentage > 0 ? s_localizationService.GetFormattedString("UsageAverageRateWarningFormat", exceededPercentage) : headroomPercentage > 0 ? s_localizationService.GetFormattedString("UsageAverageRateHeadroomFormat", headroomPercentage) : s_localizationService.GetLocalizedString("UsageAverageRateAtLimitText");
-
-
 }

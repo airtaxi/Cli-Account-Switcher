@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <UserControl
     x:Class="CliAccountSwitcher.WinUI.Controls.ActiveAccountQuotaControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="using:CliAccountSwitcher.WinUI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Loaded="OnActiveAccountQuotaControlLoaded"
+    Unloaded="OnActiveAccountQuotaControlUnloaded"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -54,7 +55,7 @@
             <StackPanel
                 Grid.Row="1"
                 Spacing="12"
-                Visibility="{x:Bind HasActiveAccount, Converter={StaticResource BoolToVisibilityConverter}}">
+                Visibility="{x:Bind ViewModel.HasActiveAccount, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
                 <Grid ColumnSpacing="12">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -77,22 +78,22 @@
                         <TextBlock
                             FontSize="22"
                             FontWeight="SemiBold"
-                            Text="{x:Bind ActiveAccountDisplayNameText, Mode=OneWay}"
+                            Text="{x:Bind ViewModel.ActiveAccountDisplayNameText, Mode=OneWay}"
                             TextTrimming="WordEllipsis" />
                         <TextBlock
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Text="{x:Bind ActiveAccountEmailAddressText, Mode=OneWay}"
+                            Text="{x:Bind ViewModel.ActiveAccountEmailAddressText, Mode=OneWay}"
                             TextTrimming="WordEllipsis" />
                         <TextBlock
                             Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                            Text="{x:Bind ActiveAccountPlanText, Mode=OneWay}"
+                            Text="{x:Bind ViewModel.ActiveAccountPlanText, Mode=OneWay}"
                             TextTrimming="WordEllipsis" />
                     </StackPanel>
                 </Grid>
 
                 <TextBlock
                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                    Text="{x:Bind ActiveAccountLastUsageRefreshText, Mode=OneWay}"
+                    Text="{x:Bind ViewModel.ActiveAccountLastUsageRefreshText, Mode=OneWay}"
                     TextTrimming="WordEllipsis" />
 
                 <Grid ColumnSpacing="12" RowSpacing="12">
@@ -117,7 +118,7 @@
                                 Grid.Column="1"
                                 FontWeight="SemiBold"
                                 MaxLines="1"
-                                Text="{x:Bind ActiveAccountPrimaryUsageRemainingText, Mode=OneWay}"
+                                Text="{x:Bind ViewModel.ActiveAccountPrimaryUsageRemainingText, Mode=OneWay}"
                                 TextTrimming="WordEllipsis" />
                         </Grid>
                         <TextBlock
@@ -125,40 +126,40 @@
                             FontSize="12"
                             Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                             MaxLines="1"
-                            Text="{x:Bind ActiveAccountPrimaryUsageResetText, Mode=OneWay}"
+                            Text="{x:Bind ViewModel.ActiveAccountPrimaryUsageResetText, Mode=OneWay}"
                             TextTrimming="WordEllipsis" />
                         <Grid>
                             <ProgressBar
-                                Foreground="{x:Bind IsActiveAccountPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
+                                Foreground="{x:Bind ViewModel.IsActiveAccountPrimaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
                                 Maximum="100"
-                                Value="{x:Bind ActiveAccountPrimaryUsageRemainingPercentage, Mode=OneWay}" />
+                                Value="{x:Bind ViewModel.ActiveAccountPrimaryUsageRemainingPercentage, Mode=OneWay}" />
                             <ProgressBar
                                 Foreground="{ThemeResource UsageAverageRateWarningProgressBarForegroundBrush}"
                                 Maximum="100"
-                                Visibility="{x:Bind IsActiveAccountPrimaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                                Value="{x:Bind ActiveAccountPrimaryUsageRemainingPercentage, Mode=OneWay}" />
+                                Visibility="{x:Bind ViewModel.IsActiveAccountPrimaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Value="{x:Bind ViewModel.ActiveAccountPrimaryUsageRemainingPercentage, Mode=OneWay}" />
                         </Grid>
                         <TextBlock
                             FontSize="12"
                             FontWeight="SemiBold"
                             Foreground="{ThemeResource UsageAverageRateWarningTextBrush}"
-                            Text="{x:Bind ActiveAccountPrimaryUsageAverageRateStatusText, Mode=OneWay}"
+                            Text="{x:Bind ViewModel.ActiveAccountPrimaryUsageAverageRateStatusText, Mode=OneWay}"
                             TextTrimming="WordEllipsis"
-                            Visibility="{x:Bind IsActiveAccountPrimaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            Visibility="{x:Bind ViewModel.IsActiveAccountPrimaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <TextBlock
                             FontSize="12"
                             FontWeight="SemiBold"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Text="{x:Bind ActiveAccountPrimaryUsageAverageRateStatusText, Mode=OneWay}"
+                            Text="{x:Bind ViewModel.ActiveAccountPrimaryUsageAverageRateStatusText, Mode=OneWay}"
                             TextTrimming="WordEllipsis"
-                            Visibility="{x:Bind IsActiveAccountPrimaryUsageAtAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            Visibility="{x:Bind ViewModel.IsActiveAccountPrimaryUsageAtAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <TextBlock
                             FontSize="12"
                             FontWeight="SemiBold"
                             Foreground="{ThemeResource UsageAverageRateNormalTextBrush}"
-                            Text="{x:Bind ActiveAccountPrimaryUsageAverageRateStatusText, Mode=OneWay}"
+                            Text="{x:Bind ViewModel.ActiveAccountPrimaryUsageAverageRateStatusText, Mode=OneWay}"
                             TextTrimming="WordEllipsis"
-                            Visibility="{x:Bind HasActiveAccountPrimaryUsageAverageRateLimitHeadroom, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            Visibility="{x:Bind ViewModel.HasActiveAccountPrimaryUsageAverageRateLimitHeadroom, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Spacing="4">
@@ -177,7 +178,7 @@
                                 Grid.Column="1"
                                 FontWeight="SemiBold"
                                 MaxLines="1"
-                                Text="{x:Bind ActiveAccountSecondaryUsageRemainingText, Mode=OneWay}"
+                                Text="{x:Bind ViewModel.ActiveAccountSecondaryUsageRemainingText, Mode=OneWay}"
                                 TextTrimming="WordEllipsis" />
                         </Grid>
                         <TextBlock
@@ -185,40 +186,40 @@
                             FontSize="12"
                             Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                             MaxLines="1"
-                            Text="{x:Bind ActiveAccountSecondaryUsageResetText, Mode=OneWay}"
+                            Text="{x:Bind ViewModel.ActiveAccountSecondaryUsageResetText, Mode=OneWay}"
                             TextTrimming="WordEllipsis" />
                         <Grid>
                             <ProgressBar
-                                Foreground="{x:Bind IsActiveAccountSecondaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
+                                Foreground="{x:Bind ViewModel.IsActiveAccountSecondaryUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
                                 Maximum="100"
-                                Value="{x:Bind ActiveAccountSecondaryUsageRemainingPercentage, Mode=OneWay}" />
+                                Value="{x:Bind ViewModel.ActiveAccountSecondaryUsageRemainingPercentage, Mode=OneWay}" />
                             <ProgressBar
                                 Foreground="{ThemeResource UsageAverageRateWarningProgressBarForegroundBrush}"
                                 Maximum="100"
-                                Visibility="{x:Bind IsActiveAccountSecondaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                                Value="{x:Bind ActiveAccountSecondaryUsageRemainingPercentage, Mode=OneWay}" />
+                                Visibility="{x:Bind ViewModel.IsActiveAccountSecondaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Value="{x:Bind ViewModel.ActiveAccountSecondaryUsageRemainingPercentage, Mode=OneWay}" />
                         </Grid>
                         <TextBlock
                             FontSize="12"
                             FontWeight="SemiBold"
                             Foreground="{ThemeResource UsageAverageRateWarningTextBrush}"
-                            Text="{x:Bind ActiveAccountSecondaryUsageAverageRateStatusText, Mode=OneWay}"
+                            Text="{x:Bind ViewModel.ActiveAccountSecondaryUsageAverageRateStatusText, Mode=OneWay}"
                             TextTrimming="WordEllipsis"
-                            Visibility="{x:Bind IsActiveAccountSecondaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            Visibility="{x:Bind ViewModel.IsActiveAccountSecondaryUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <TextBlock
                             FontSize="12"
                             FontWeight="SemiBold"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Text="{x:Bind ActiveAccountSecondaryUsageAverageRateStatusText, Mode=OneWay}"
+                            Text="{x:Bind ViewModel.ActiveAccountSecondaryUsageAverageRateStatusText, Mode=OneWay}"
                             TextTrimming="WordEllipsis"
-                            Visibility="{x:Bind IsActiveAccountSecondaryUsageAtAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            Visibility="{x:Bind ViewModel.IsActiveAccountSecondaryUsageAtAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <TextBlock
                             FontSize="12"
                             FontWeight="SemiBold"
                             Foreground="{ThemeResource UsageAverageRateNormalTextBrush}"
-                            Text="{x:Bind ActiveAccountSecondaryUsageAverageRateStatusText, Mode=OneWay}"
+                            Text="{x:Bind ViewModel.ActiveAccountSecondaryUsageAverageRateStatusText, Mode=OneWay}"
                             TextTrimming="WordEllipsis"
-                            Visibility="{x:Bind HasActiveAccountSecondaryUsageAverageRateLimitHeadroom, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            Visibility="{x:Bind ViewModel.HasActiveAccountSecondaryUsageAverageRateLimitHeadroom, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                     </StackPanel>
                 </Grid>
             </StackPanel>
@@ -228,7 +229,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Spacing="8"
-                Visibility="{x:Bind HasNoActiveAccount, Converter={StaticResource BoolToVisibilityConverter}}">
+                Visibility="{x:Bind ViewModel.HasNoActiveAccount, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
                 <FontIcon
                     HorizontalAlignment="Center"
                     FontSize="38"
@@ -260,9 +261,9 @@
                 <Button
                     x:Name="ManageAccountsButton"
                     Grid.Column="0"
-                    Grid.ColumnSpan="{x:Bind ManageAccountsButtonColumnSpan}"
+                    Grid.ColumnSpan="{x:Bind ViewModel.ManageAccountsButtonColumnSpan, Mode=OneWay}"
                     HorizontalAlignment="Stretch"
-                    Click="OnManageAccountsButtonClicked">
+                    Command="{x:Bind ViewModel.ManageAccountsCommand}">
                     <StackPanel
                         HorizontalAlignment="Center"
                         Orientation="Horizontal"
@@ -276,8 +277,8 @@
                     x:Name="RefreshActiveAccountButton"
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
-                    Click="OnRefreshActiveAccountButtonClicked"
-                    Visibility="{x:Bind ShouldShowRefreshButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                    Command="{x:Bind ViewModel.RefreshActiveAccountCommand}"
+                    Visibility="{x:Bind ViewModel.ShouldShowRefreshButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
                     <StackPanel
                         HorizontalAlignment="Center"
                         Orientation="Horizontal"

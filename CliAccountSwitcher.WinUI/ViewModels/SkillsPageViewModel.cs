@@ -1,4 +1,4 @@
-using CliAccountSwitcher.Api.Providers.Abstractions;
+﻿using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -6,11 +6,14 @@ using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.UI.Dispatching;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace CliAccountSwitcher.WinUI.ViewModels;
 
 public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
 {
+    private const string SkillsBackupFileExtension = ".caskills";
+
     private readonly ApplicationSettings _applicationSettings;
     private readonly LocalizationService _localizationService;
     private readonly DispatcherQueue _dispatcherQueue;
@@ -79,7 +82,14 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
 
     public bool IsClaudeCodeProviderSelected => SelectedProviderKind == CliProviderKind.ClaudeCode;
 
+    public string BackupSuggestedFileName => $"{SkillService.GetBackupFileNamePrefix(SelectedProviderKind)}-{DateTimeOffset.Now.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture)}";
+    public string BackupFileExtension => SkillsBackupFileExtension;
+
     public string DescriptionText => _localizationService.GetFormattedString("SkillsPageViewModel_DescriptionFormat", GetProviderDisplayName(SelectedProviderKind));
+    public string BackupFileTypeChoiceText => _localizationService.GetLocalizedString("SkillsPage_CaskillsBackupFileTypeChoice");
+
+    public string ExportBackupLoadingMessage => _localizationService.GetLocalizedString("SkillsPage_ExportBackupLoadingMessage");
+    public string ImportBackupLoadingMessage => _localizationService.GetLocalizedString("SkillsPage_ImportBackupLoadingMessage");
 
     public void ReloadSkills() => ReloadSkills(_applicationSettings.SelectedProviderKind);
 
@@ -88,6 +98,39 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
         ReloadSkills();
         return Task.CompletedTask;
     }
+
+    public void DeleteSelectedSkills()
+    {
+        var selectedProviderKind = SelectedProviderKind;
+        var selectedSkillItems = GetSelectedSkillItems(selectedProviderKind);
+        if (selectedSkillItems.Length == 0) return;
+
+        _skillService.DeleteSkills(selectedProviderKind, selectedSkillItems);
+        ReloadSkills();
+    }
+
+    public SkillItem[] CreateSelectedSkillItemsSnapshot(CliProviderKind providerKind) => GetSelectedSkillItems(providerKind);
+
+    public string GetBackupSuggestedFileName(CliProviderKind providerKind) => $"{SkillService.GetBackupFileNamePrefix(providerKind)}-{DateTimeOffset.Now.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture)}";
+
+    public async Task<BasicDialogData> ExportSelectedSkillsAsync(CliProviderKind providerKind, IReadOnlyList<SkillItem> selectedSkillItems, string backupFilePath)
+    {
+        if (selectedSkillItems.Count == 0) return CreateExportBackupNoSelectionDialogData();
+
+        await _skillService.ExportSkillsAsync(providerKind, selectedSkillItems, backupFilePath);
+        return new BasicDialogData(_localizationService.GetLocalizedString("SkillsPage_ExportBackupDialogTitle"), _localizationService.GetLocalizedString("SkillsPage_ExportBackupDialogMessage"));
+    }
+
+    public async Task<BasicDialogData> ImportSkillsBackupAsync(CliProviderKind providerKind, string backupFilePath)
+    {
+        var importedCount = await _skillService.ImportSkillsAsync(providerKind, backupFilePath);
+        ReloadSkills();
+        return new BasicDialogData(_localizationService.GetLocalizedString("SkillsPage_ImportBackupDialogTitle"), _localizationService.GetFormattedString("SkillsPage_ImportBackupResultMessageFormat", importedCount));
+    }
+
+    public BasicDialogData CreateDeleteSelectedSkillsConfirmationDialogData() => new(_localizationService.GetLocalizedString("SkillsPage_DeleteSelectedSkillsDialogTitle"), _localizationService.GetFormattedString("SkillsPage_DeleteSelectedSkillsDialogMessage", SelectedSkillDirectoryNames.Count), _localizationService.GetLocalizedString("SkillsPage_DeleteButtonText"), _localizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
+
+    public BasicDialogData CreateExportBackupNoSelectionDialogData() => new(_localizationService.GetLocalizedString("SkillsPage_ExportBackupNoSelectionDialogTitle"), _localizationService.GetLocalizedString("SkillsPage_ExportBackupNoSelectionDialogMessage"));
 
     public void SetSelectedSkillDirectoryNames(IEnumerable<string> skillDirectoryNames)
     {
@@ -270,6 +313,8 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
         SkillCount = Skills.Count;
         FilteredSkillCount = FilteredSkills.Count;
     }
+
+    private SkillItem[] GetSelectedSkillItems(CliProviderKind providerKind) => Skills.Where(skillItem => skillItem.ProviderKind == providerKind && skillItem.IsSelected).ToArray();
 
     private void ApplyProviderKindChange(CliProviderKind providerKind)
     {

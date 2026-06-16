@@ -227,7 +227,10 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
 
     protected override async Task DeleteAccountStatesCoreAsync(IReadOnlyList<StoredProviderAccount> accountStates, CancellationToken cancellationToken)
     {
-        foreach (var storedProviderAccount in accountStates) await _claudeCodeProviderAdapter.DeleteStoredAccountAsync(_providerSnapshotStore, storedProviderAccount.StoredAccountIdentifier, cancellationToken);
+        foreach (var storedProviderAccount in accountStates)
+        {
+            await _claudeCodeProviderAdapter.DeleteStoredAccountAsync(_providerSnapshotStore, storedProviderAccount.StoredAccountIdentifier, cancellationToken);
+        }
     }
 
     protected override bool IsAccountExpiredException(Exception exception) => exception is ProviderAuthenticationExpiredException;

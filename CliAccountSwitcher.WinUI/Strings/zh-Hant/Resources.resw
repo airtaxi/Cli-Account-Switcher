@@ -1006,6 +1006,12 @@ Microsoft Store 中有 {0} 個可用更新。</value>
   <data name="SettingsPage_StartupRegistrationFailedDialogMessage" xml:space="preserve">
     <value>無法應用程式 Windows 啟動任务設定。請檢查套件資訊清單註冊或 Windows 啟動應用程式權限。</value>
   </data>
+  <data name="SettingsPage_SaveSettingsFailedDialogTitle" xml:space="preserve">
+    <value>設定儲存失敗</value>
+  </data>
+  <data name="SettingsPage_SaveSettingsFailedDialogMessage" xml:space="preserve">
+    <value>無法儲存應用程式設定。請檢查檔案存取權限後再試一次。</value>
+  </data>
   <data name="Notification_ExpiredAccountDetectedTitle" xml:space="preserve">
     <value>發現無效帳號</value>
   </data>
