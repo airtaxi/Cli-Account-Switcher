@@ -10,11 +10,18 @@ CLI Account Switcher is a Windows desktop utility for managing CLI authenticatio
 
 The app stores saved account records in its own local application data folder and switches the active Codex or Claude Code account by writing the selected authentication document to the relevant local authentication file.
 
+## Highlights
+
+- **Live taskbar usage**: keep the selected service's active account usage visible directly on the Windows taskbar, including both 5-hour and 7-day windows.
+- **Pacemaker view**: see at a glance whether your current usage pace is ahead of or behind the ideal reset-window pace, so you can choose when to slow down or switch accounts.
+
 ## Features
 
 - Add Codex and Claude Code accounts with the supported sign-in and import flows.
 - Switch the active Codex or Claude Code account from the Accounts screen.
 - View plan information and remaining usage for supported accounts.
+- Monitor active account usage from the Windows taskbar with real-time refresh support.
+- Compare usage against the pacemaker indicator to understand whether the current pace is comfortably within the reset window or running too fast.
 - Manage Codex and Claude Code accounts in one Windows app.
 - Click the tray icon to open a quick active account usage popup without opening the full window.
 - Refresh account usage and detect expired accounts.
@@ -24,6 +31,7 @@ The app stores saved account records in its own local application data folder an
 
 - **Dashboard**: active account summary, average remaining usage, and low-usage account list.
 - **Accounts**: searchable and filterable account list with switch, refresh, rename, delete, backup, and restore actions.
+- **Taskbar usage**: always-on active account usage display with 5-hour and 7-day remaining usage, pacemaker comparison, and manual refresh.
 - **Tray icon popup**: quick active account quota view with refresh support from the tray icon.
 - **Settings**: language, theme, startup launch, update checks, refresh intervals, warning thresholds, notifications, and settings import/export.
 - **About**: app version and third-party license information.
