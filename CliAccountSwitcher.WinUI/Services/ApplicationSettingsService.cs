@@ -80,6 +80,7 @@ public sealed class ApplicationSettingsService
         destinationApplicationSettings.SelectedProviderKind = sourceApplicationSettings.SelectedProviderKind;
         destinationApplicationSettings.IsAutomaticUpdateCheckEnabled = sourceApplicationSettings.IsAutomaticUpdateCheckEnabled;
         destinationApplicationSettings.IsStartupLaunchEnabled = sourceApplicationSettings.IsStartupLaunchEnabled;
+        destinationApplicationSettings.HideTaskbarUsage = sourceApplicationSettings.HideTaskbarUsage;
         destinationApplicationSettings.IsExpiredAccountAutomaticDeletionEnabled = sourceApplicationSettings.IsExpiredAccountAutomaticDeletionEnabled;
         destinationApplicationSettings.IsExpiredAccountNotificationEnabled = sourceApplicationSettings.IsExpiredAccountNotificationEnabled;
         destinationApplicationSettings.IsActiveAccountUsageAutomaticRefreshEnabled = sourceApplicationSettings.IsActiveAccountUsageAutomaticRefreshEnabled;

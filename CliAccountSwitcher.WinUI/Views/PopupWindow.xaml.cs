@@ -69,8 +69,10 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
 
     private void OnRootFrameLoaded(object sender, RoutedEventArgs routedEventArguments)
     {
+        ViewModel.ReloadDashboard();
         MoveAndResizeAboveTaskbarIcon();
         MoveAndResizeAboveTaskbarIcon(); // Call twice to ensure usage control to fit the window content size after the first call
+        DispatcherQueue.TryEnqueue(MoveAndResizeAboveTaskbarIcon);
 
         Activate();
     }

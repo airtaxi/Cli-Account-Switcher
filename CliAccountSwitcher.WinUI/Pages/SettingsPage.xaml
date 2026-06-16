@@ -97,6 +97,16 @@
                             Toggled="OnStartupLaunchToggleSwitchToggled" />
                     </dev:SettingsCard>
 
+                    <dev:SettingsCard x:Uid="SettingsPage_TaskbarUsageSettingsCard">
+                        <dev:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE9D2;" />
+                        </dev:SettingsCard.HeaderIcon>
+                        <ToggleSwitch
+                            x:Name="TaskbarUsageToggleSwitch"
+                            IsOn="{x:Bind ViewModel.IsTaskbarUsageVisible, Mode=TwoWay}"
+                            Toggled="OnTaskbarUsageToggleSwitchToggled" />
+                    </dev:SettingsCard>
+
                     <dev:SettingsExpander x:Uid="SettingsPage_ApplicationSettingsTransferSettingsExpander">
                         <dev:SettingsExpander.HeaderIcon>
                             <FontIcon Glyph="&#xE8A5;" />

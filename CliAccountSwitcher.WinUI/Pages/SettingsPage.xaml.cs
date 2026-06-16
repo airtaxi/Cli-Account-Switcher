@@ -131,6 +131,12 @@ public sealed partial class SettingsPage : Page
         await ShowDialogIfNeededAsync(await StartWithControlSynchronization(() => ViewModel.ApplyStartupLaunchEnabledAsync(StartupLaunchToggleSwitch.IsOn)));
     }
 
+    private async void OnTaskbarUsageToggleSwitchToggled(object sender, RoutedEventArgs routedEventArguments)
+    {
+        if (_isSynchronizingControls) return;
+        await ShowDialogIfNeededAsync(await StartWithControlSynchronization(() => ViewModel.ApplyTaskbarUsageVisibleAsync(TaskbarUsageToggleSwitch.IsOn)));
+    }
+
     private async void OnExpiredAccountAutomaticDeletionToggleSwitchToggled(object sender, RoutedEventArgs routedEventArguments)
     {
         if (_isSynchronizingControls) return;

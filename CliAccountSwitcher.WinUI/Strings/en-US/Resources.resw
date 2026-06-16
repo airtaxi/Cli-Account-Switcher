@@ -1,64 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -112,118 +53,91 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AppDisplayName" xml:space="preserve">
-    <value>CLI Account Switcher</value>
+  <data name="AboutPage_AppLicenseContentTextBlock.Text" xml:space="preserve">
+    <value>MIT License</value>
   </data>
-  <data name="AppDescription" xml:space="preserve">
+  <data name="AboutPage_AppLicenseSettingsCard.Description" xml:space="preserve">
+    <value>This app is distributed under the MIT License.</value>
+  </data>
+  <data name="AboutPage_AppLicenseSettingsCard.Header" xml:space="preserve">
+    <value>App license</value>
+  </data>
+  <data name="AboutPage_ClaudeSwapRepositoryButtonTextBlock.Text" xml:space="preserve">
+    <value>Open repository</value>
+  </data>
+  <data name="AboutPage_ClaudeSwapSettingsCard.Description" xml:space="preserve">
+    <value>Inspired by realiti4/claude-swap. Thank you for sharing the original idea.</value>
+  </data>
+  <data name="AboutPage_ClaudeSwapSettingsCard.Header" xml:space="preserve">
+    <value>Special thanks</value>
+  </data>
+  <data name="AboutPage_CopyrightHeaderTextBlock.Text" xml:space="preserve">
+    <value>Copyright</value>
+  </data>
+  <data name="AboutPage_CreatorGitHubButtonTextBlock.Text" xml:space="preserve">
+    <value>Open GitHub profile</value>
+  </data>
+  <data name="AboutPage_CreatorSettingsCard.Description" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="AboutPage_CreatorSettingsCard.Header" xml:space="preserve">
+    <value>Howon Lee (airtaxi)</value>
+  </data>
+  <data name="AboutPage_DescriptionTextBlock.Text" xml:space="preserve">
     <value>CLI account switcher for AI services. Supports Codex and Claude Code.</value>
   </data>
-  <data name="MainWindow_AppTitleBar.Title" xml:space="preserve">
+  <data name="AboutPage_GitHubRepositoryButtonTextBlock.Text" xml:space="preserve">
+    <value>Open repository</value>
+  </data>
+  <data name="AboutPage_GitHubRepositorySettingsCard.Description" xml:space="preserve">
+    <value>View the source code and issues.</value>
+  </data>
+  <data name="AboutPage_GitHubRepositorySettingsCard.Header" xml:space="preserve">
+    <value>GitHub repository</value>
+  </data>
+  <data name="AboutPage_InspirationRepositoryButtonTextBlock.Text" xml:space="preserve">
+    <value>Open repository</value>
+  </data>
+  <data name="AboutPage_InspirationSettingsCard.Description" xml:space="preserve">
+    <value>Inspired by isxlan0/Codex_AccountSwitch. Thank you for sharing the original idea.</value>
+  </data>
+  <data name="AboutPage_InspirationSettingsCard.Header" xml:space="preserve">
+    <value>Special thanks</value>
+  </data>
+  <data name="AboutPage_LicenseSettingsGroup.Description" xml:space="preserve">
+    <value>Review the app license and NuGet package license information.</value>
+  </data>
+  <data name="AboutPage_LicenseSettingsGroup.Header" xml:space="preserve">
+    <value>Licenses</value>
+  </data>
+  <data name="AboutPage_ProjectSettingsGroup.Description" xml:space="preserve">
+    <value>GitHub repository, author, and the original project that inspired this app.</value>
+  </data>
+  <data name="AboutPage_ProjectSettingsGroup.Header" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="AboutPage_ThirdPartyLicensesButtonTextBlock.Text" xml:space="preserve">
+    <value>View NuGet packages</value>
+  </data>
+  <data name="AboutPage_ThirdPartyLicensesSettingsCard.Description" xml:space="preserve">
+    <value>View the NuGet packages directly referenced by the app.</value>
+  </data>
+  <data name="AboutPage_ThirdPartyLicensesSettingsCard.Header" xml:space="preserve">
+    <value>Third-party licenses</value>
+  </data>
+  <data name="AboutPage_TitleTextBlock.Text" xml:space="preserve">
     <value>CLI Account Switcher</value>
   </data>
-  <data name="MainWindow_TrayAuthorMenuFlyoutItem.Text" xml:space="preserve">
-    <value>Author: Howon Lee (airtaxi)</value>
+  <data name="AboutPage_VersionHeaderTextBlock.Text" xml:space="preserve">
+    <value>Version</value>
   </data>
-  <data name="MainWindow_OpenDashboardPageMenuFlyoutItem.Text" xml:space="preserve">
-    <value>Open Dashboard</value>
-  </data>
-  <data name="MainWindow_OpenAccountsPageMenuFlyoutItem.Text" xml:space="preserve">
-    <value>Open Accounts page</value>
-  </data>
-  <data name="MainWindow_CloseProgramMenuFlyoutItem.Text" xml:space="preserve">
-    <value>Exit</value>
-  </data>
-  <data name="MainPage_DashboardSelectorBarItem.Text" xml:space="preserve">
-    <value>Dashboard</value>
-  </data>
-  <data name="MainPage_AccountsSelectorBarItem.Text" xml:space="preserve">
-    <value>Accounts</value>
-  </data>
-  <data name="MainPage_AboutSelectorBarItem.Text" xml:space="preserve">
-    <value>About</value>
-  </data>
-  <data name="MainPage_SettingsSelectorBarItem.Text" xml:space="preserve">
-    <value>Settings</value>
-  </data>
-  <data name="DialogHelper_DefaultInputTitle" xml:space="preserve">
-    <value>Input</value>
-  </data>
-  <data name="DialogHelper_ConfirmButtonText" xml:space="preserve">
-    <value>OK</value>
-  </data>
-  <data name="DialogHelper_CancelButtonText" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="AddAccountDialog.Title" xml:space="preserve">
-    <value>Add Account</value>
-  </data>
-  <data name="AddAccountDialog.CloseButtonText" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="AddAccountDialog_OAuthSelectorBarItem.Text" xml:space="preserve">
-    <value>OAuth</value>
-  </data>
-  <data name="AddAccountDialog_ManualPasteSelectorBarItem.Text" xml:space="preserve">
-    <value>Manual Paste</value>
-  </data>
-  <data name="AddAccountDialog_CurrentAccountSelectorBarItem.Text" xml:space="preserve">
-    <value>Signed-in Account</value>
-  </data>
-  <data name="AddAccountDialog_FileSelectorBarItem.Text" xml:space="preserve">
-    <value>Load File</value>
-  </data>
-  <data name="ProviderAccountViewModel_UnknownPlan" xml:space="preserve">
-    <value>Unknown</value>
-  </data>
-  <data name="ProviderAccountViewModel_TokenExpiredStatus" xml:space="preserve">
-    <value>Token Expired</value>
-  </data>
-  <data name="ProviderAccountViewModel_ActiveStatus" xml:space="preserve">
-    <value>Active</value>
-  </data>
-  <data name="ProviderAccountViewModel_WaitingStatus" xml:space="preserve">
-    <value>Waiting</value>
-  </data>
-  <data name="ProviderAccountViewModel_NotRefreshed" xml:space="preserve">
-    <value>Not refreshed yet</value>
-  </data>
-  <data name="ProviderAccountViewModel_LastUsageRefreshFormat" xml:space="preserve">
-    <value>Last refreshed: {0}</value>
-  </data>
-  <data name="ProviderAccountViewModel_NoAccessToken" xml:space="preserve">
-    <value>None</value>
-  </data>
-  <data name="ProviderAccountViewModel_UnknownUsage" xml:space="preserve">
-    <value>Usage unavailable</value>
-  </data>
-  <data name="ProviderAccountViewModel_UnknownResetTime" xml:space="preserve">
-    <value>Reset time unavailable</value>
-  </data>
-  <data name="ProviderAccountViewModel_PrimaryUsageWindowLabel" xml:space="preserve">
-    <value>5-hour limit</value>
-  </data>
-  <data name="ProviderAccountViewModel_SecondaryUsageWindowLabel" xml:space="preserve">
-    <value>7-day limit</value>
-  </data>
-  <data name="ProviderAccountViewModel_ResetAfterFormat" xml:space="preserve">
-    <value>resets in {0:hh\:mm\:ss}</value>
-  </data>
-  <data name="ProviderAccountViewModel_ResetAfterWithSingleDayFormat" xml:space="preserve">
-    <value>resets in 1 day {0:hh\:mm\:ss}</value>
-  </data>
-  <data name="ProviderAccountViewModel_ResetAfterWithMultipleDaysFormat" xml:space="preserve">
-    <value>resets in {0} days {1:hh\:mm\:ss}</value>
-  </data>
-  <data name="ProviderAccountViewModel_UsageRemainingOnlyFormat" xml:space="preserve">
-    <value>{0}% remaining</value>
-  </data>
-  <data name="ProviderAccountViewModel_UsageRemainingFormat" xml:space="preserve">
-    <value>{0}% remaining · {1}</value>
+  <data name="AccountsPageViewModel_DescriptionFormat" xml:space="preserve">
+    <value>Store {0} accounts and manage usage and active status.</value>
   </data>
   <data name="AccountsPageViewModel_NoSelectedAccounts" xml:space="preserve">
     <value>No selection</value>
@@ -231,194 +145,92 @@
   <data name="AccountsPageViewModel_SelectedAccountCountFormat" xml:space="preserve">
     <value>{0} selected</value>
   </data>
-  <data name="AccountsPage_TitleTextBlock.Text" xml:space="preserve">
-    <value>Account Management</value>
-  </data>
-  <data name="AccountsPageViewModel_DescriptionFormat" xml:space="preserve">
-    <value>Store {0} accounts and manage usage and active status.</value>
-  </data>
-  <data name="AccountsPage_RefreshAllAccountsTextBlock.Text" xml:space="preserve">
-    <value>Refresh</value>
-  </data>
-  <data name="AccountsPage_AddAccountTextBlock.Text" xml:space="preserve">
-    <value>Add Account</value>
+  <data name="AccountsPage_AccountHeaderTextBlock.Text" xml:space="preserve">
+    <value>Account</value>
   </data>
   <data name="AccountsPage_AccountSearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
     <value>Search account name, email, or plan</value>
   </data>
+  <data name="AccountsPage_ActionsHeaderTextBlock.Text" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="AccountsPage_AddAccountTextBlock.Text" xml:space="preserve">
+    <value>Add Account</value>
+  </data>
   <data name="AccountsPage_AllPlanFilterSelectorBarItem.Text" xml:space="preserve">
     <value>All</value>
-  </data>
-  <data name="AccountsPage_FreePlanFilterSelectorBarItem.Text" xml:space="preserve">
-    <value>Free</value>
-  </data>
-  <data name="AccountsPage_PlusPlanFilterSelectorBarItem.Text" xml:space="preserve">
-    <value>Plus</value>
-  </data>
-  <data name="AccountsPage_TeamPlanFilterSelectorBarItem.Text" xml:space="preserve">
-    <value>Team</value>
-  </data>
-  <data name="AccountsPage_ProLitePlanFilterSelectorBarItem.Text" xml:space="preserve">
-    <value>Pro Lite</value>
-  </data>
-  <data name="AccountsPage_ProPlanFilterSelectorBarItem.Text" xml:space="preserve">
-    <value>Pro</value>
   </data>
   <data name="AccountsPage_ClaudeCodeAllPlanFilterSelectorBarItem.Text" xml:space="preserve">
     <value>All</value>
   </data>
-  <data name="AccountsPage_ClaudeCodeProPlanFilterSelectorBarItem.Text" xml:space="preserve">
-    <value>Pro</value>
-  </data>
-  <data name="AccountsPage_ClaudeCodeMax5xPlanFilterSelectorBarItem.Text" xml:space="preserve">
-    <value>Max 5x</value>
-  </data>
-  <data name="AccountsPage_ClaudeCodeMax20xPlanFilterSelectorBarItem.Text" xml:space="preserve">
-    <value>Max 20x</value>
-  </data>
-  <data name="AccountsPage_ClaudeCodeTeamPlanFilterSelectorBarItem.Text" xml:space="preserve">
-    <value>Team</value>
+  <data name="AccountsPage_ClaudeCodeBackupFileTypeChoice" xml:space="preserve">
+    <value>Claude Code Backup</value>
   </data>
   <data name="AccountsPage_ClaudeCodeEnterprisePlanFilterSelectorBarItem.Text" xml:space="preserve">
     <value>Enterprise</value>
   </data>
-  <data name="AccountsPage_RefreshSelectedAccountsTextBlock.Text" xml:space="preserve">
-    <value>Refresh Selected</value>
+  <data name="AccountsPage_ClaudeCodeMax20xPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Max 20x</value>
   </data>
-  <data name="AccountsPage_DeleteSelectedAccountsTextBlock.Text" xml:space="preserve">
-    <value>Delete Selected</value>
+  <data name="AccountsPage_ClaudeCodeMax5xPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Max 5x</value>
   </data>
-  <data name="AccountsPage_ExportBackupTextBlock.Text" xml:space="preserve">
-    <value>Export Backup</value>
+  <data name="AccountsPage_ClaudeCodeProPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Pro</value>
   </data>
-  <data name="AccountsPage_ImportBackupTextBlock.Text" xml:space="preserve">
-    <value>Import Backup</value>
-  </data>
-  <data name="AccountsPage_DeleteExpiredAccountsTextBlock.Text" xml:space="preserve">
-    <value>Clean Expired Accounts</value>
-  </data>
-  <data name="AccountsPage_AccountHeaderTextBlock.Text" xml:space="preserve">
-    <value>Account</value>
-  </data>
-  <data name="AccountsPage_PlanHeaderTextBlock.Text" xml:space="preserve">
-    <value>Plan</value>
-  </data>
-  <data name="AccountsPage_UsageHeaderTextBlock.Text" xml:space="preserve">
-    <value>Usage</value>
-  </data>
-  <data name="AccountsPage_StatusHeaderTextBlock.Text" xml:space="preserve">
-    <value>Status</value>
-  </data>
-  <data name="AccountsPage_ActionsHeaderTextBlock.Text" xml:space="preserve">
-    <value>Actions</value>
-  </data>
-  <data name="AccountsPage_SwitchAccountToolTip.Content" xml:space="preserve">
-    <value>Switch</value>
-  </data>
-  <data name="AccountsPage_RenameAccountToolTip.Content" xml:space="preserve">
-    <value>Rename</value>
-  </data>
-  <data name="AccountsPage_RefreshAccountToolTip.Content" xml:space="preserve">
-    <value>Refresh</value>
-  </data>
-  <data name="AccountsPage_DeleteAccountToolTip.Content" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="AccountsPage_NoAccountsTitleTextBlock.Text" xml:space="preserve">
-    <value>No accounts registered.</value>
-  </data>
-  <data name="AccountsPage_NoAccountsDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Use Add Account to import auth.json.</value>
-  </data>
-  <data name="AccountsPage_NoFilteredAccountsTitleTextBlock.Text" xml:space="preserve">
-    <value>No accounts match the filter.</value>
-  </data>
-  <data name="AccountsPage_NoFilteredAccountsDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Adjust the search text or plan filter.</value>
-  </data>
-  <data name="AccountsPage_RefreshAllAccountsLoadingMessage" xml:space="preserve">
-    <value>Refreshing usage for all accounts.</value>
-  </data>
-  <data name="AccountsPage_RefreshSelectedAccountsLoadingMessage" xml:space="preserve">
-    <value>Refreshing usage for selected accounts.</value>
-  </data>
-  <data name="AccountsPage_DeleteSelectedAccountsDialogTitle" xml:space="preserve">
-    <value>Delete Selected Accounts</value>
-  </data>
-  <data name="AccountsPage_DeleteSelectedAccountsDialogMessage" xml:space="preserve">
-    <value>Delete {0} accounts?</value>
-  </data>
-  <data name="AccountsPage_DeleteButtonText" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="AccountsPage_ExportBackupDialogTitle" xml:space="preserve">
-    <value>Export Backup</value>
-  </data>
-  <data name="AccountsPage_ExportBackupDialogMessage" xml:space="preserve">
-    <value>Account backup saved.</value>
-  </data>
-  <data name="AccountsPage_ImportBackupLoadingMessage" xml:space="preserve">
-    <value>Validating accounts from the backup file.</value>
-  </data>
-  <data name="AccountsPage_ImportBackupDialogTitle" xml:space="preserve">
-    <value>Import Backup</value>
-  </data>
-  <data name="AccountsPage_DeleteExpiredAccountsDialogTitle" xml:space="preserve">
-    <value>Clean Expired Accounts</value>
-  </data>
-  <data name="AccountsPage_DeleteExpiredAccountsDialogMessage" xml:space="preserve">
-    <value>Delete token-expired accounts from the account list?</value>
-  </data>
-  <data name="AccountsPage_DeleteExpiredAccountsNoAccountsMessage" xml:space="preserve">
-    <value>There are no expired accounts to delete.</value>
-  </data>
-  <data name="AccountsPage_DeleteExpiredAccountsDeletedMessageFormat" xml:space="preserve">
-    <value>Deleted {0} accounts.</value>
-  </data>
-  <data name="AccountsPage_RenameAccountDialogTitle" xml:space="preserve">
-    <value>Rename Account</value>
-  </data>
-  <data name="AccountsPage_RenameAccountPlaceholderText" xml:space="preserve">
-    <value>Leave blank to reset to email</value>
-  </data>
-  <data name="AccountsPage_RefreshAccountLoadingMessage" xml:space="preserve">
-    <value>Refreshing account usage.</value>
-  </data>
-  <data name="AccountsPage_DeleteAccountDialogTitle" xml:space="preserve">
-    <value>Delete Account</value>
+  <data name="AccountsPage_ClaudeCodeTeamPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Team</value>
   </data>
   <data name="AccountsPage_DeleteAccountDialogMessage" xml:space="preserve">
     <value>Delete this account?</value>
   </data>
-  <data name="AccountsPage_RestartCodexApplicationDialogTitle" xml:space="preserve">
-    <value>Restart Codex and VS Code</value>
+  <data name="AccountsPage_DeleteAccountDialogTitle" xml:space="preserve">
+    <value>Delete Account</value>
   </data>
-  <data name="AccountsPage_RestartCodexApplicationDialogMessage" xml:space="preserve">
-    <value>The account has been switched. Restart running Codex and VS Code windows to use the changed account immediately. Restart now?</value>
+  <data name="AccountsPage_DeleteAccountToolTip.Content" xml:space="preserve">
+    <value>Delete</value>
   </data>
-  <data name="AccountsPage_RestartCodexApplicationButtonText" xml:space="preserve">
-    <value>Restart</value>
+  <data name="AccountsPage_DeleteButtonText" xml:space="preserve">
+    <value>Delete</value>
   </data>
-  <data name="AccountsPage_RestartCodexApplicationLoadingMessage" xml:space="preserve">
-    <value>Restarting Codex and VS Code.</value>
+  <data name="AccountsPage_DeleteExpiredAccountsDeletedMessageFormat" xml:space="preserve">
+    <value>Deleted {0} accounts.</value>
   </data>
-  <data name="AccountsPage_RestartCodexApplicationFailedDialogTitle" xml:space="preserve">
-    <value>Restart failed</value>
+  <data name="AccountsPage_DeleteExpiredAccountsDialogMessage" xml:space="preserve">
+    <value>Delete token-expired accounts from the account list?</value>
   </data>
-  <data name="AccountsPage_RestartCodexApplicationFailedDialogMessage" xml:space="preserve">
-    <value>Codex or VS Code could not be restarted automatically. Close and reopen Codex and VS Code manually.</value>
+  <data name="AccountsPage_DeleteExpiredAccountsDialogTitle" xml:space="preserve">
+    <value>Clean Expired Accounts</value>
   </data>
-  <data name="AccountsPage_ZipBackupFileTypeChoice" xml:space="preserve">
-    <value>ZIP Backup</value>
+  <data name="AccountsPage_DeleteExpiredAccountsNoAccountsMessage" xml:space="preserve">
+    <value>There are no expired accounts to delete.</value>
   </data>
-  <data name="AccountsPage_ClaudeCodeBackupFileTypeChoice" xml:space="preserve">
-    <value>Claude Code Backup</value>
+  <data name="AccountsPage_DeleteExpiredAccountsTextBlock.Text" xml:space="preserve">
+    <value>Clean Expired Accounts</value>
   </data>
-  <data name="AccountsPage_ImportBackupSuccessCountFormat" xml:space="preserve">
-    <value>{0} succeeded</value>
+  <data name="AccountsPage_DeleteSelectedAccountsDialogMessage" xml:space="preserve">
+    <value>Delete {0} accounts?</value>
   </data>
-  <data name="AccountsPage_ImportBackupFailureCountFormat" xml:space="preserve">
-    <value>{0} failed</value>
+  <data name="AccountsPage_DeleteSelectedAccountsDialogTitle" xml:space="preserve">
+    <value>Delete Selected Accounts</value>
+  </data>
+  <data name="AccountsPage_DeleteSelectedAccountsTextBlock.Text" xml:space="preserve">
+    <value>Delete Selected</value>
+  </data>
+  <data name="AccountsPage_ExportBackupDialogMessage" xml:space="preserve">
+    <value>Account backup saved.</value>
+  </data>
+  <data name="AccountsPage_ExportBackupDialogTitle" xml:space="preserve">
+    <value>Export Backup</value>
+  </data>
+  <data name="AccountsPage_ExportBackupTextBlock.Text" xml:space="preserve">
+    <value>Export Backup</value>
+  </data>
+  <data name="AccountsPage_FreePlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Free</value>
+  </data>
+  <data name="AccountsPage_ImportBackupDialogTitle" xml:space="preserve">
+    <value>Import Backup</value>
   </data>
   <data name="AccountsPage_ImportBackupDuplicateCountFormat" xml:space="preserve">
     <value>{0} duplicates</value>
@@ -426,41 +238,164 @@
   <data name="AccountsPage_ImportBackupEmptyResultMessage" xml:space="preserve">
     <value>No accounts to import.</value>
   </data>
-  <data name="OAuthAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+  <data name="AccountsPage_ImportBackupFailureCountFormat" xml:space="preserve">
+    <value>{0} failed</value>
+  </data>
+  <data name="AccountsPage_ImportBackupLoadingMessage" xml:space="preserve">
+    <value>Validating accounts from the backup file.</value>
+  </data>
+  <data name="AccountsPage_ImportBackupSuccessCountFormat" xml:space="preserve">
+    <value>{0} succeeded</value>
+  </data>
+  <data name="AccountsPage_ImportBackupTextBlock.Text" xml:space="preserve">
+    <value>Import Backup</value>
+  </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Use Add Account to import auth.json.</value>
+  </data>
+  <data name="AccountsPage_NoAccountsTitleTextBlock.Text" xml:space="preserve">
+    <value>No accounts registered.</value>
+  </data>
+  <data name="AccountsPage_NoFilteredAccountsDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Adjust the search text or plan filter.</value>
+  </data>
+  <data name="AccountsPage_NoFilteredAccountsTitleTextBlock.Text" xml:space="preserve">
+    <value>No accounts match the filter.</value>
+  </data>
+  <data name="AccountsPage_PlanHeaderTextBlock.Text" xml:space="preserve">
+    <value>Plan</value>
+  </data>
+  <data name="AccountsPage_PlusPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Plus</value>
+  </data>
+  <data name="AccountsPage_ProLitePlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Pro Lite</value>
+  </data>
+  <data name="AccountsPage_ProPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Pro</value>
+  </data>
+  <data name="AccountsPage_RefreshAccountLoadingMessage" xml:space="preserve">
+    <value>Refreshing account usage.</value>
+  </data>
+  <data name="AccountsPage_RefreshAccountToolTip.Content" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="AccountsPage_RefreshAllAccountsLoadingMessage" xml:space="preserve">
+    <value>Refreshing usage for all accounts.</value>
+  </data>
+  <data name="AccountsPage_RefreshAllAccountsTextBlock.Text" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="AccountsPage_RefreshSelectedAccountsLoadingMessage" xml:space="preserve">
+    <value>Refreshing usage for selected accounts.</value>
+  </data>
+  <data name="AccountsPage_RefreshSelectedAccountsTextBlock.Text" xml:space="preserve">
+    <value>Refresh Selected</value>
+  </data>
+  <data name="AccountsPage_RenameAccountDialogTitle" xml:space="preserve">
+    <value>Rename Account</value>
+  </data>
+  <data name="AccountsPage_RenameAccountPlaceholderText" xml:space="preserve">
+    <value>Leave blank to reset to email</value>
+  </data>
+  <data name="AccountsPage_RenameAccountToolTip.Content" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionButtonText" xml:space="preserve">
+    <value>Restart</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionDialogMessage" xml:space="preserve">
+    <value>Account switching is complete. Restart running VS Code windows to use the changed account immediately. Restart now?</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionDialogTitle" xml:space="preserve">
+    <value>Restart VS Code</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogMessage" xml:space="preserve">
+    <value>VS Code could not be restarted automatically. Close and reopen VS Code manually.</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogTitle" xml:space="preserve">
+    <value>Restart failed</value>
+  </data>
+  <data name="AccountsPage_RestartClaudeCodeSessionLoadingMessage" xml:space="preserve">
+    <value>Restarting VS Code.</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationButtonText" xml:space="preserve">
+    <value>Restart</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationDialogMessage" xml:space="preserve">
+    <value>The account has been switched. Restart running Codex and VS Code windows to use the changed account immediately. Restart now?</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationDialogTitle" xml:space="preserve">
+    <value>Restart Codex and VS Code</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationFailedDialogMessage" xml:space="preserve">
+    <value>Codex or VS Code could not be restarted automatically. Close and reopen Codex and VS Code manually.</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationFailedDialogTitle" xml:space="preserve">
+    <value>Restart failed</value>
+  </data>
+  <data name="AccountsPage_RestartCodexApplicationLoadingMessage" xml:space="preserve">
+    <value>Restarting Codex and VS Code.</value>
+  </data>
+  <data name="AccountsPage_StatusHeaderTextBlock.Text" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="AccountsPage_SwitchAccountToolTip.Content" xml:space="preserve">
+    <value>Switch</value>
+  </data>
+  <data name="AccountsPage_TeamPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="AccountsPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Account Management</value>
+  </data>
+  <data name="AccountsPage_UsageHeaderTextBlock.Text" xml:space="preserve">
+    <value>Usage</value>
+  </data>
+  <data name="AccountsPage_ZipBackupFileTypeChoice" xml:space="preserve">
+    <value>ZIP Backup</value>
+  </data>
+  <data name="AddAccountDialog.CloseButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="AddAccountDialog.Title" xml:space="preserve">
+    <value>Add Account</value>
+  </data>
+  <data name="AddAccountDialog_CurrentAccountSelectorBarItem.Text" xml:space="preserve">
+    <value>Signed-in Account</value>
+  </data>
+  <data name="AddAccountDialog_FileSelectorBarItem.Text" xml:space="preserve">
+    <value>Load File</value>
+  </data>
+  <data name="AddAccountDialog_ManualPasteSelectorBarItem.Text" xml:space="preserve">
+    <value>Manual Paste</value>
+  </data>
+  <data name="AddAccountDialog_OAuthSelectorBarItem.Text" xml:space="preserve">
     <value>OAuth</value>
   </data>
-  <data name="OAuthAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>Complete Codex authentication in the browser, then the account will be added after usage validation.</value>
+  <data name="AppDescription" xml:space="preserve">
+    <value>CLI account switcher for AI services. Supports Codex and Claude Code.</value>
   </data>
-  <data name="OAuthAddAccountPage_OpenBrowserTextBlock.Text" xml:space="preserve">
-    <value>Start Authentication in Browser</value>
+  <data name="AppDisplayName" xml:space="preserve">
+    <value>CLI Account Switcher</value>
   </data>
-  <data name="OAuthAddAccountPage_WaitingTextBlock.Text" xml:space="preserve">
-    <value>Waiting for the authentication callback.</value>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>Read the current Claude Code credential and global config files, then save them as a managed account.</value>
   </data>
-  <data name="OAuthAddAccountPage_ManualAddressDescriptionTextBlock.Text" xml:space="preserve">
-    <value>The browser could not be opened automatically. Copy the address below, paste it into a browser, and continue authentication.</value>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
+    <value>Current Claude Code credentials could not be saved. Sign in with Claude Code first.</value>
   </data>
-  <data name="OAuthAddAccountPage_CopyAddressToolTip.Content" xml:space="preserve">
-    <value>Copy</value>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeFilePathHeader" xml:space="preserve">
+    <value>Claude Code files</value>
   </data>
-  <data name="OAuthAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
-    <value>An error occurred during OAuth authentication or account validation.</value>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeImportButtonText" xml:space="preserve">
+    <value>Save current Claude Code account</value>
   </data>
-  <data name="OAuthAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
-    <value>Failed to Add Account</value>
-  </data>
-  <data name="CurrentAccountAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
-    <value>Import Signed-in Account</value>
+  <data name="CurrentAccountAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>Save current Claude Code account</value>
   </data>
   <data name="CurrentAccountAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
     <value>Read the currently signed-in Codex .codex/auth.json and validate the account with a usage request.</value>
-  </data>
-  <data name="CurrentAccountAddAccountPage_ImportButtonTextBlock.Text" xml:space="preserve">
-    <value>Import Signed-in Account</value>
-  </data>
-  <data name="CurrentAccountAddAccountPage_FilePathHeaderTextBlock.Text" xml:space="preserve">
-    <value>File to Read</value>
   </data>
   <data name="CurrentAccountAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
     <value>An error occurred while importing the signed-in account.</value>
@@ -468,146 +403,20 @@
   <data name="CurrentAccountAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
     <value>Failed to Add Account</value>
   </data>
-  <data name="FileAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
-    <value>Load File</value>
+  <data name="CurrentAccountAddAccountPage_FilePathHeaderTextBlock.Text" xml:space="preserve">
+    <value>File to Read</value>
   </data>
-  <data name="FileAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>Select an auth.json file saved on this PC and validate the account with a usage request.</value>
+  <data name="CurrentAccountAddAccountPage_ImportButtonTextBlock.Text" xml:space="preserve">
+    <value>Import Signed-in Account</value>
   </data>
-  <data name="FileAddAccountPage_ImportButtonTextBlock.Text" xml:space="preserve">
-    <value>Select auth.json File</value>
+  <data name="CurrentAccountAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Import Signed-in Account</value>
   </data>
-  <data name="FileAddAccountPage_SupportedFormatHeaderTextBlock.Text" xml:space="preserve">
-    <value>Supported Format</value>
-  </data>
-  <data name="FileAddAccountPage_SupportedFormatDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Select one .json file. It must use the Codex auth.json format.</value>
-  </data>
-  <data name="FileAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
-    <value>An error occurred while importing the auth.json file.</value>
-  </data>
-  <data name="FileAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
-    <value>Failed to Add Account</value>
-  </data>
-  <data name="ManualPasteAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
-    <value>Manual Paste</value>
-  </data>
-  <data name="ManualPasteAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>Paste one or more auth.json documents and import them together.</value>
-  </data>
-  <data name="ManualPasteAddAccountPage_AddInputTextBlock.Text" xml:space="preserve">
-    <value>Add Input</value>
-  </data>
-  <data name="ManualPasteAddAccountPage_LoadInputsTextBlock.Text" xml:space="preserve">
-    <value>Import Pasted Accounts</value>
-  </data>
-  <data name="ManualPasteAddAccountPage_ManualAuthenticationTextBox.PlaceholderText" xml:space="preserve">
-    <value>Paste auth.json content</value>
-  </data>
-  <data name="ManualPasteAddAccountPage_RemoveInputToolTip.Content" xml:space="preserve">
-    <value>Remove input</value>
-  </data>
-  <data name="ManualPasteAddAccountPage_InputErrorInfoBar.Message" xml:space="preserve">
-    <value>This auth.json could not be imported.</value>
-  </data>
-  <data name="ManualPasteAddAccountPage_InputErrorInfoBar.Title" xml:space="preserve">
-    <value>Validation Failed</value>
-  </data>
-  <data name="ManualPasteAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
-    <value>Some auth.json documents could not be imported.</value>
-  </data>
-  <data name="ManualPasteAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
-    <value>Failed to Add Account</value>
-  </data>
-  <data name="ManualPasteAddAccountPage_NoInputMessage" xml:space="preserve">
-    <value>No auth.json content was pasted.</value>
-  </data>
-  <data name="ManualPasteAddAccountPage_PartialFailureMessage" xml:space="preserve">
-    <value>Some auth.json documents could not be imported.</value>
-  </data>
-  <data name="DashboardPage_TitleTextBlock.Text" xml:space="preserve">
-    <value>Dashboard</value>
-  </data>
-  <data name="DashboardPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>Check account quotas and the current active account at a glance.</value>
-  </data>
-  <data name="DashboardPage_TotalAccountLabelTextBlock.Text" xml:space="preserve">
-    <value>Total Accounts</value>
-  </data>
-  <data name="DashboardPage_PrimaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
-    <value>5-hour average quota</value>
-  </data>
-  <data name="DashboardPage_PrimaryLowUsageAccountLabelTextBlock.Text" xml:space="preserve">
-    <value>5-hour low-quota accounts</value>
-  </data>
-  <data name="DashboardPage_SecondaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
-    <value>7-day average quota</value>
-  </data>
-  <data name="DashboardPage_SecondaryLowUsageAccountLabelTextBlock.Text" xml:space="preserve">
-    <value>7-day low-quota accounts</value>
-  </data>
-  <data name="DashboardPage_LowUsageMetricDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Below the configured warning threshold</value>
-  </data>
-  <data name="DashboardPage_SecondaryLowUsageMetricDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Below the configured warning threshold</value>
-  </data>
-  <data name="DashboardPage_ActiveAccountSectionTitleTextBlock.Text" xml:space="preserve">
-    <value>Active account quota</value>
-  </data>
-  <data name="DashboardPage_ActiveAccountSectionDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Remaining quota for the current Active account.</value>
-  </data>
-  <data name="DashboardPage_ManageAccountsTextBlock.Text" xml:space="preserve">
-    <value>Go to Account Management</value>
-  </data>
-  <data name="DashboardPage_RefreshActiveAccountTextBlock.Text" xml:space="preserve">
-    <value>Refresh Active Account</value>
-  </data>
-  <data name="DashboardPage_CurrentActiveAccountLabelTextBlock.Text" xml:space="preserve">
-    <value>Current Active account</value>
-  </data>
-  <data name="DashboardPage_ActivePrimaryUsageLabelTextBlock.Text" xml:space="preserve">
-    <value>5-hour remaining</value>
-  </data>
-  <data name="DashboardPage_ActiveSecondaryUsageLabelTextBlock.Text" xml:space="preserve">
-    <value>7-day remaining</value>
-  </data>
-  <data name="PrimaryUsageAverageRateWarningTextBlock.Text" xml:space="preserve">
-    <value>Over average pace</value>
-  </data>
-  <data name="SecondaryUsageAverageRateWarningTextBlock.Text" xml:space="preserve">
-    <value>Over average pace</value>
-  </data>
-  <data name="UsageAverageRateWarningFormat" xml:space="preserve">
-    <value>Average pace {0}% over</value>
-  </data>
-  <data name="UsageAverageRateHeadroomFormat" xml:space="preserve">
-    <value>Average pace {0}% spare</value>
-  </data>
-  <data name="UsageAverageRateAtLimitText" xml:space="preserve">
-    <value>At average pace</value>
-  </data>
-  <data name="DashboardPage_NoActiveAccountTitleTextBlock.Text" xml:space="preserve">
-    <value>No active account.</value>
-  </data>
-  <data name="DashboardPage_NoActiveAccountDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Switch to an account in Account Management to show remaining quota here.</value>
-  </data>
-  <data name="DashboardPage_LowUsageAccountsSectionTitleTextBlock.Text" xml:space="preserve">
-    <value>Low-quota accounts</value>
-  </data>
-  <data name="DashboardPage_LowUsageAccountsSectionDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Only accounts whose 5-hour or 7-day remaining quota is below the warning threshold are shown.</value>
-  </data>
-  <data name="DashboardPage_NoLowUsageAccountsTitleTextBlock.Text" xml:space="preserve">
-    <value>No low-quota accounts.</value>
+  <data name="DashboardLowUsageAccountViewModel_LowUsageFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
   </data>
   <data name="DashboardPageViewModel_AccountCountFormat" xml:space="preserve">
     <value>{0}</value>
-  </data>
-  <data name="DashboardPageViewModel_TotalAccountDescriptionFormat" xml:space="preserve">
-    <value>Based on saved {0} accounts.</value>
   </data>
   <data name="DashboardPageViewModel_LowUsageAccountCountFormat" xml:space="preserve">
     <value>{0}</value>
@@ -615,520 +424,155 @@
   <data name="DashboardPageViewModel_NoLowUsageAccounts" xml:space="preserve">
     <value>None</value>
   </data>
-  <data name="DashboardLowUsageAccountViewModel_LowUsageFormat" xml:space="preserve">
-    <value>{0}: {1}</value>
+  <data name="DashboardPageViewModel_TotalAccountDescriptionFormat" xml:space="preserve">
+    <value>Based on saved {0} accounts.</value>
   </data>
-  <data name="AboutPage_TitleTextBlock.Text" xml:space="preserve">
-    <value>CLI Account Switcher</value>
+  <data name="DashboardPage_ActiveAccountSectionDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Remaining quota for the current Active account.</value>
   </data>
-  <data name="AboutPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>CLI account switcher for AI services. Supports Codex and Claude Code.</value>
+  <data name="DashboardPage_ActiveAccountSectionTitleTextBlock.Text" xml:space="preserve">
+    <value>Active account quota</value>
   </data>
-  <data name="AboutPage_VersionHeaderTextBlock.Text" xml:space="preserve">
-    <value>Version</value>
+  <data name="DashboardPage_ActivePrimaryUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>5-hour remaining</value>
   </data>
-  <data name="AboutPage_CopyrightHeaderTextBlock.Text" xml:space="preserve">
-    <value>Copyright</value>
+  <data name="DashboardPage_ActiveSecondaryUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>7-day remaining</value>
   </data>
-  <data name="AboutPage_ProjectSettingsGroup.Header" xml:space="preserve">
-    <value>Project</value>
+  <data name="DashboardPage_CurrentActiveAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>Current Active account</value>
   </data>
-  <data name="AboutPage_ProjectSettingsGroup.Description" xml:space="preserve">
-    <value>GitHub repository, author, and the original project that inspired this app.</value>
+  <data name="DashboardPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Check account quotas and the current active account at a glance.</value>
   </data>
-  <data name="AboutPage_GitHubRepositorySettingsCard.Header" xml:space="preserve">
-    <value>GitHub repository</value>
+  <data name="DashboardPage_LowUsageAccountsSectionDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Only accounts whose 5-hour or 7-day remaining quota is below the warning threshold are shown.</value>
   </data>
-  <data name="AboutPage_GitHubRepositorySettingsCard.Description" xml:space="preserve">
-    <value>View the source code and issues.</value>
+  <data name="DashboardPage_LowUsageAccountsSectionTitleTextBlock.Text" xml:space="preserve">
+    <value>Low-quota accounts</value>
   </data>
-  <data name="AboutPage_GitHubRepositoryButtonTextBlock.Text" xml:space="preserve">
-    <value>Open repository</value>
+  <data name="DashboardPage_LowUsageMetricDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Below the configured warning threshold</value>
   </data>
-  <data name="AboutPage_CreatorSettingsCard.Header" xml:space="preserve">
-    <value>Howon Lee (airtaxi)</value>
+  <data name="DashboardPage_ManageAccountsTextBlock.Text" xml:space="preserve">
+    <value>Go to Account Management</value>
   </data>
-  <data name="AboutPage_CreatorSettingsCard.Description" xml:space="preserve">
-    <value>Author</value>
+  <data name="DashboardPage_NoActiveAccountDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Switch to an account in Account Management to show remaining quota here.</value>
   </data>
-  <data name="AboutPage_CreatorGitHubButtonTextBlock.Text" xml:space="preserve">
-    <value>Open GitHub profile</value>
+  <data name="DashboardPage_NoActiveAccountTitleTextBlock.Text" xml:space="preserve">
+    <value>No active account.</value>
   </data>
-  <data name="AboutPage_InspirationSettingsCard.Header" xml:space="preserve">
-    <value>Special thanks</value>
+  <data name="DashboardPage_NoLowUsageAccountsTitleTextBlock.Text" xml:space="preserve">
+    <value>No low-quota accounts.</value>
   </data>
-  <data name="AboutPage_InspirationSettingsCard.Description" xml:space="preserve">
-    <value>Inspired by isxlan0/Codex_AccountSwitch. Thank you for sharing the original idea.</value>
+  <data name="DashboardPage_PrimaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>5-hour average quota</value>
   </data>
-  <data name="AboutPage_InspirationRepositoryButtonTextBlock.Text" xml:space="preserve">
-    <value>Open repository</value>
+  <data name="DashboardPage_PrimaryLowUsageAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>5-hour low-quota accounts</value>
   </data>
-  <data name="AboutPage_ClaudeSwapSettingsCard.Header" xml:space="preserve">
-    <value>Special thanks</value>
+  <data name="DashboardPage_RefreshActiveAccountTextBlock.Text" xml:space="preserve">
+    <value>Refresh Active Account</value>
   </data>
-  <data name="AboutPage_ClaudeSwapSettingsCard.Description" xml:space="preserve">
-    <value>Inspired by realiti4/claude-swap. Thank you for sharing the original idea.</value>
+  <data name="DashboardPage_SecondaryAverageUsageLabelTextBlock.Text" xml:space="preserve">
+    <value>7-day average quota</value>
   </data>
-  <data name="AboutPage_ClaudeSwapRepositoryButtonTextBlock.Text" xml:space="preserve">
-    <value>Open repository</value>
+  <data name="DashboardPage_SecondaryLowUsageAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>7-day low-quota accounts</value>
   </data>
-  <data name="AboutPage_LicenseSettingsGroup.Header" xml:space="preserve">
-    <value>Licenses</value>
+  <data name="DashboardPage_SecondaryLowUsageMetricDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Below the configured warning threshold</value>
   </data>
-  <data name="AboutPage_LicenseSettingsGroup.Description" xml:space="preserve">
-    <value>Review the app license and NuGet package license information.</value>
+  <data name="DashboardPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Dashboard</value>
   </data>
-  <data name="AboutPage_AppLicenseSettingsCard.Header" xml:space="preserve">
-    <value>App license</value>
+  <data name="DashboardPage_TotalAccountLabelTextBlock.Text" xml:space="preserve">
+    <value>Total Accounts</value>
   </data>
-  <data name="AboutPage_AppLicenseSettingsCard.Description" xml:space="preserve">
-    <value>This app is distributed under the MIT License.</value>
+  <data name="DialogHelper_CancelButtonText" xml:space="preserve">
+    <value>Cancel</value>
   </data>
-  <data name="AboutPage_AppLicenseContentTextBlock.Text" xml:space="preserve">
-    <value>MIT License</value>
+  <data name="DialogHelper_ConfirmButtonText" xml:space="preserve">
+    <value>OK</value>
   </data>
-  <data name="AboutPage_ThirdPartyLicensesSettingsCard.Header" xml:space="preserve">
-    <value>Third-party licenses</value>
+  <data name="DialogHelper_DefaultInputTitle" xml:space="preserve">
+    <value>Input</value>
   </data>
-  <data name="AboutPage_ThirdPartyLicensesSettingsCard.Description" xml:space="preserve">
-    <value>View the NuGet packages directly referenced by the app.</value>
+  <data name="FileAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>Select .credentials.json first, then select the Claude Code global config JSON file.</value>
   </data>
-  <data name="AboutPage_ThirdPartyLicensesButtonTextBlock.Text" xml:space="preserve">
-    <value>View NuGet packages</value>
+  <data name="FileAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
+    <value>Claude Code files could not be imported. Check the selected credentials and global config JSON files.</value>
   </data>
-  <data name="ThirdPartyLicensesDialog.Title" xml:space="preserve">
-    <value>Third-party licenses</value>
+  <data name="FileAddAccountPage_ClaudeCodeImportButtonText" xml:space="preserve">
+    <value>Select files</value>
   </data>
-  <data name="ThirdPartyLicensesDialog.CloseButtonText" xml:space="preserve">
-    <value>Close</value>
+  <data name="FileAddAccountPage_ClaudeCodeSupportedFormatDescription" xml:space="preserve">
+    <value>Use Claude Code .credentials.json and .claude.json or .config.json files that contain oauthAccount information.</value>
   </data>
-  <data name="ThirdPartyLicensesDialog_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>NuGet packages directly referenced by this app and their license information.</value>
+  <data name="FileAddAccountPage_ClaudeCodeSupportedFormatHeader" xml:space="preserve">
+    <value>Supported files</value>
   </data>
-  <data name="ThirdPartyLicensesDialog_NuGetPackageHeaderTextBlock.Text" xml:space="preserve">
-    <value>NuGet packages</value>
+  <data name="FileAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>Import Claude Code files</value>
   </data>
-  <data name="ThirdPartyLicensesDialog_NuGetPackageDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Review package identifier, version, license, and author information.</value>
+  <data name="FileAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Select an auth.json file saved on this PC and validate the account with a usage request.</value>
   </data>
-  <data name="ThirdPartyLicensesDialog_VersionHeaderTextBlock.Text" xml:space="preserve">
-    <value>Version</value>
+  <data name="FileAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>An error occurred while importing the auth.json file.</value>
   </data>
-  <data name="ThirdPartyLicensesDialog_LicenseHeaderTextBlock.Text" xml:space="preserve">
-    <value>License</value>
+  <data name="FileAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>Failed to Add Account</value>
   </data>
-  <data name="ThirdPartyLicensesDialog_ProjectButtonTextBlock.Text" xml:space="preserve">
-    <value>Project</value>
+  <data name="FileAddAccountPage_ImportButtonTextBlock.Text" xml:space="preserve">
+    <value>Select auth.json File</value>
   </data>
-  <data name="ThirdPartyLicensePackage_WindowsSoftwareDevelopmentKitLicense" xml:space="preserve">
-    <value>Windows SDK license</value>
+  <data name="FileAddAccountPage_SupportedFormatDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Select one .json file. It must use the Codex auth.json format.</value>
   </data>
-  <data name="SettingsPage_TitleTextBlock.Text" xml:space="preserve">
+  <data name="FileAddAccountPage_SupportedFormatHeaderTextBlock.Text" xml:space="preserve">
+    <value>Supported Format</value>
+  </data>
+  <data name="FileAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Load File</value>
+  </data>
+  <data name="MainPage_AboutSelectorBarItem.Text" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="MainPage_AccountsSelectorBarItem.Text" xml:space="preserve">
+    <value>Accounts</value>
+  </data>
+  <data name="MainPage_DashboardSelectorBarItem.Text" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="MainPage_SettingsSelectorBarItem.Text" xml:space="preserve">
     <value>Settings</value>
   </data>
-  <data name="SettingsPage_DescriptionTextBlock.Text" xml:space="preserve">
-    <value>Adjust app display, updates, startup behavior, and automatic account management.</value>
+  <data name="MainPage_SkillsSelectorBarItem.Text" xml:space="preserve">
+    <value>Skills</value>
   </data>
-  <data name="SettingsPage_GeneralSettingsGroup.Header" xml:space="preserve">
-    <value>General settings</value>
+  <data name="MainWindow_AppTitleBar.Title" xml:space="preserve">
+    <value>CLI Account Switcher</value>
   </data>
-  <data name="SettingsPage_GeneralSettingsGroup.Description" xml:space="preserve">
-    <value>Configure language, theme, update checks, and system startup behavior.</value>
+  <data name="MainWindow_CloseProgramMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Exit</value>
   </data>
-  <data name="SettingsPage_LanguageSettingsCard.Header" xml:space="preserve">
-    <value>Language</value>
+  <data name="MainWindow_OpenAccountsPageMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Open Accounts page</value>
   </data>
-  <data name="SettingsPage_LanguageSettingsCard.Description" xml:space="preserve">
-    <value>Select the display language for the app. Restarting after a change is recommended.</value>
+  <data name="MainWindow_OpenDashboardPageMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Open Dashboard</value>
   </data>
-  <data name="SettingsPage_SystemDefaultLanguageComboBoxItem.Content" xml:space="preserve">
-    <value>System default</value>
+  <data name="MainWindow_OpenSkillsPageMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Open Skills page</value>
   </data>
-  <data name="SettingsPage_KoreanLanguageComboBoxItem.Content" xml:space="preserve">
-    <value>Korean</value>
+  <data name="MainWindow_TrayAuthorMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Author: Howon Lee (airtaxi)</value>
   </data>
-  <data name="SettingsPage_EnglishLanguageComboBoxItem.Content" xml:space="preserve">
-    <value>English</value>
-  </data>
-  <data name="SettingsPage_JapaneseLanguageComboBoxItem.Content" xml:space="preserve">
-    <value>Japanese</value>
-  </data>
-  <data name="SettingsPage_SimplifiedChineseLanguageComboBoxItem.Content" xml:space="preserve">
-    <value>Simplified Chinese</value>
-  </data>
-  <data name="SettingsPage_TraditionalChineseLanguageComboBoxItem.Content" xml:space="preserve">
-    <value>Traditional Chinese</value>
-  </data>
-  <data name="SettingsPage_ThemeSettingsCard.Header" xml:space="preserve">
-    <value>Theme</value>
-  </data>
-  <data name="SettingsPage_ThemeSettingsCard.Description" xml:space="preserve">
-    <value>Change the color theme for the app and dialogs immediately.</value>
-  </data>
-  <data name="SettingsPage_SystemDefaultThemeComboBoxItem.Content" xml:space="preserve">
-    <value>System default</value>
-  </data>
-  <data name="SettingsPage_LightThemeComboBoxItem.Content" xml:space="preserve">
-    <value>Light</value>
-  </data>
-  <data name="SettingsPage_DarkThemeComboBoxItem.Content" xml:space="preserve">
-    <value>Dark</value>
-  </data>
-  <data name="SettingsPage_UpdateCheckSettingsCard.Header" xml:space="preserve">
-    <value>Check for updates</value>
-  </data>
-  <data name="SettingsPage_UpdateCheckSettingsCard.Description" xml:space="preserve">
-    <value>Review the current app version and Microsoft Store updates.</value>
-  </data>
-  <data name="SettingsPage_ApplicationVersionFormat" xml:space="preserve">
-    <value>Current version: {0}</value>
-  </data>
-  <data name="SettingsPage_CheckForUpdatesButtonTextBlock.Text" xml:space="preserve">
-    <value>Check</value>
-  </data>
-  <data name="SettingsPage_CheckForUpdatesLoadingMessage" xml:space="preserve">
-    <value>Checking Microsoft Store updates.</value>
-  </data>
-  <data name="SettingsPage_AutomaticUpdateCheckSettingsCard.Header" xml:space="preserve">
-    <value>Automatic update checks</value>
-  </data>
-  <data name="SettingsPage_AutomaticUpdateCheckSettingsCard.Description" xml:space="preserve">
-    <value>Check for Store updates every 8 hours and show a notification when one is found.</value>
-  </data>
-  <data name="SettingsPage_StartupLaunchSettingsCard.Header" xml:space="preserve">
-    <value>Launch at system startup</value>
-  </data>
-  <data name="SettingsPage_StartupLaunchSettingsCard.Description" xml:space="preserve">
-    <value>Run CLI Account Switcher automatically after Windows sign-in.</value>
-  </data>
-  <data name="SettingsPage_ApplicationSettingsTransferSettingsExpander.Header" xml:space="preserve">
-    <value>Import/export settings</value>
-  </data>
-  <data name="SettingsPage_ApplicationSettingsTransferSettingsExpander.Description" xml:space="preserve">
-    <value>Save or load app settings as a .casc file without including the account list.</value>
-  </data>
-  <data name="SettingsPage_ExportApplicationSettingsSettingsCard.Header" xml:space="preserve">
-    <value>Export settings</value>
-  </data>
-  <data name="SettingsPage_ExportApplicationSettingsSettingsCard.Description" xml:space="preserve">
-    <value>Save the current app settings to a .casc file.</value>
-  </data>
-  <data name="SettingsPage_ExportApplicationSettingsButtonTextBlock.Text" xml:space="preserve">
-    <value>Export</value>
-  </data>
-  <data name="SettingsPage_ImportApplicationSettingsSettingsCard.Header" xml:space="preserve">
-    <value>Import settings</value>
-  </data>
-  <data name="SettingsPage_ImportApplicationSettingsSettingsCard.Description" xml:space="preserve">
-    <value>Load app settings from a .casc file and apply them to the current settings.</value>
-  </data>
-  <data name="SettingsPage_ImportApplicationSettingsButtonTextBlock.Text" xml:space="preserve">
-    <value>Import</value>
-  </data>
-  <data name="SettingsPage_ApplicationSettingsFileTypeChoice" xml:space="preserve">
-    <value>CLI Account Switcher settings file</value>
-  </data>
-  <data name="SettingsPage_ExportApplicationSettingsDialogTitle" xml:space="preserve">
-    <value>Export settings</value>
-  </data>
-  <data name="SettingsPage_ExportApplicationSettingsDialogMessage" xml:space="preserve">
-    <value>The app settings have been exported.</value>
-  </data>
-  <data name="SettingsPage_ExportApplicationSettingsFailedDialogTitle" xml:space="preserve">
-    <value>Settings export failed</value>
-  </data>
-  <data name="SettingsPage_ExportApplicationSettingsFailedDialogMessage" xml:space="preserve">
-    <value>The app settings could not be exported. Please check file access permissions.</value>
-  </data>
-  <data name="SettingsPage_ImportApplicationSettingsLoadingMessage" xml:space="preserve">
-    <value>Importing app settings.</value>
-  </data>
-  <data name="SettingsPage_ImportApplicationSettingsDialogTitle" xml:space="preserve">
-    <value>Import settings</value>
-  </data>
-  <data name="SettingsPage_ImportApplicationSettingsDialogMessage" xml:space="preserve">
-    <value>The app settings have been imported and applied.</value>
-  </data>
-  <data name="SettingsPage_ImportApplicationSettingsLanguageChangedDialogMessage" xml:space="preserve">
-    <value>The app settings have been imported and applied. The settings page will reload because the language changed. Restart the app to apply it reliably to every screen.</value>
-  </data>
-  <data name="SettingsPage_ImportApplicationSettingsFailedDialogTitle" xml:space="preserve">
-    <value>Settings import failed</value>
-  </data>
-  <data name="SettingsPage_ImportApplicationSettingsFailedDialogMessage" xml:space="preserve">
-    <value>The app settings could not be imported from the selected .casc file. Please check the file format and access permissions.</value>
-  </data>
-  <data name="SettingsPage_IntegratedLogExportSettingsCard.Header" xml:space="preserve">
-    <value>Download integrated logs</value>
-  </data>
-  <data name="SettingsPage_IntegratedLogExportSettingsCard.Description" xml:space="preserve">
-    <value>Save the logs recorded during the current app session to a file. (Up to 1,000 entries)</value>
-  </data>
-  <data name="SettingsPage_ExportIntegratedLogButtonTextBlock.Text" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="SettingsPage_IntegratedLogFileTypeChoice" xml:space="preserve">
-    <value>Text file</value>
-  </data>
-  <data name="SettingsPage_ExportIntegratedLogEmptyDialogTitle" xml:space="preserve">
-    <value>No logs</value>
-  </data>
-  <data name="SettingsPage_ExportIntegratedLogEmptyDialogMessage" xml:space="preserve">
-    <value>There are no logs recorded in the current app session.</value>
-  </data>
-  <data name="SettingsPage_ExportIntegratedLogDialogTitle" xml:space="preserve">
-    <value>Log export completed</value>
-  </data>
-  <data name="SettingsPage_ExportIntegratedLogDialogMessage" xml:space="preserve">
-    <value>The log was saved.</value>
-  </data>
-  <data name="SettingsPage_ExportIntegratedLogFailedDialogTitle" xml:space="preserve">
-    <value>Log export failed</value>
-  </data>
-  <data name="SettingsPage_ExportIntegratedLogFailedDialogMessage" xml:space="preserve">
-    <value>The log could not be saved. Check file access permissions and try again.</value>
-  </data>
-  <data name="SettingsPage_AccountSettingsGroup.Header" xml:space="preserve">
-    <value>Account settings</value>
-  </data>
-  <data name="SettingsPage_AccountSettingsGroup.Description" xml:space="preserve">
-    <value>Configure account health checks, automatic refresh, low-quota thresholds, and saved notification flags.</value>
-  </data>
-  <data name="SettingsPage_ExpiredAccountAutomaticDeletionSettingsCard.Header" xml:space="preserve">
-    <value>Automatically delete invalid accounts</value>
-  </data>
-  <data name="SettingsPage_ExpiredAccountAutomaticDeletionSettingsCard.Description" xml:space="preserve">
-    <value>Remove accounts from the list automatically when authentication is rejected during refresh.</value>
-  </data>
-  <data name="SettingsPage_ExpiredAccountNotificationSettingsCard.Header" xml:space="preserve">
-    <value>Notify when invalid accounts are found</value>
-  </data>
-  <data name="SettingsPage_ExpiredAccountNotificationSettingsCard.Description" xml:space="preserve">
-    <value>Show a Windows notification when an expired or unusable account is detected.</value>
-  </data>
-  <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
-    <value>Active account automatic refresh</value>
-  </data>
-  <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>Refresh usage for the active account at the selected minute interval.</value>
-  </data>
-  <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
-    <value>Refresh interval</value>
-  </data>
-  <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
-    <value>Set how often active account usage refreshes, in minutes.</value>
-  </data>
-  <data name="SettingsPage_ActiveAccountNextUsageRefreshSettingsCard.Header" xml:space="preserve">
-    <value>Next refresh</value>
-  </data>
-  <data name="SettingsPage_ActiveAccountNextUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>Time remaining before active account usage refreshes again.</value>
-  </data>
-  <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
-    <value>Inactive account automatic refresh</value>
-  </data>
-  <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>Refresh usage for inactive accounts at the selected minute interval.</value>
-  </data>
-  <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
-    <value>Refresh interval</value>
-  </data>
-  <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
-    <value>Set how often inactive account usage refreshes, in minutes.</value>
-  </data>
-  <data name="SettingsPage_InactiveAccountNextUsageRefreshSettingsCard.Header" xml:space="preserve">
-    <value>Next refresh</value>
-  </data>
-  <data name="SettingsPage_InactiveAccountNextUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>Time remaining before inactive account usage refreshes again.</value>
-  </data>
-  <data name="SettingsPage_RefreshRemainingDisabledText" xml:space="preserve">
-    <value>Automatic refresh is off</value>
-  </data>
-  <data name="SettingsPage_RefreshRemainingFormat" xml:space="preserve">
-    <value>Next refresh in {0:00}:{1:00}:{2:00}</value>
-  </data>
-  <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Header" xml:space="preserve">
-    <value>5-hour low-quota threshold</value>
-  </data>
-  <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
-    <value>Mark the 5-hour limit as low quota when remaining usage is at or below this percentage.</value>
-  </data>
-  <data name="SettingsPage_SecondaryUsageWarningThresholdSettingsCard.Header" xml:space="preserve">
-    <value>7-day low-quota threshold</value>
-  </data>
-  <data name="SettingsPage_SecondaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
-    <value>Mark the 7-day limit as low quota when remaining usage is at or below this percentage.</value>
-  </data>
-  <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Header" xml:space="preserve">
-    <value>5-hour low-quota notification</value>
-  </data>
-  <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
-    <value>Save whether 5-hour low-quota notifications should be enabled.</value>
-  </data>
-  <data name="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard.Header" xml:space="preserve">
-    <value>7-day low-quota notification</value>
-  </data>
-  <data name="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
-    <value>Save whether 7-day low-quota notifications should be enabled.</value>
-  </data>
-  <data name="SettingsPage_LanguageRestartDialogTitle" xml:space="preserve">
-    <value>Restart recommended</value>
-  </data>
-  <data name="SettingsPage_LanguageRestartDialogMessage" xml:space="preserve">
-    <value>The language setting has been saved. Restart the app to apply it reliably to every screen.</value>
-  </data>
-  <data name="SettingsPage_UpdateAvailableDialogTitle" xml:space="preserve">
-    <value>Update available</value>
-  </data>
-  <data name="SettingsPage_UpdateAvailableDialogMessageFormat" xml:space="preserve">
-    <value>{1}
-{0} update(s) are available from Microsoft Store.</value>
-  </data>
-  <data name="SettingsPage_OpenStoreButtonText" xml:space="preserve">
-    <value>Open Store</value>
-  </data>
-  <data name="SettingsPage_NoUpdateDialogTitle" xml:space="preserve">
-    <value>You're up to date</value>
-  </data>
-  <data name="SettingsPage_NoUpdateDialogMessage" xml:space="preserve">
-    <value>The installed app is already up to date.</value>
-  </data>
-  <data name="SettingsPage_UpdateCheckFailedDialogTitle" xml:space="preserve">
-    <value>Update check failed</value>
-  </data>
-  <data name="SettingsPage_UpdateCheckFailedDialogMessage" xml:space="preserve">
-    <value>Microsoft Store update information could not be checked. Please verify the package installation state and network connection.</value>
-  </data>
-  <data name="SettingsPage_StartupRegistrationFailedDialogTitle" xml:space="preserve">
-    <value>Startup setting failed</value>
-  </data>
-  <data name="SettingsPage_StartupRegistrationFailedDialogMessage" xml:space="preserve">
-    <value>The Windows startup task setting could not be applied. Please check package manifest registration or Windows startup app permissions.</value>
-  </data>
-  <data name="SettingsPage_SaveSettingsFailedDialogTitle" xml:space="preserve">
-    <value>Settings save failed</value>
-  </data>
-  <data name="SettingsPage_SaveSettingsFailedDialogMessage" xml:space="preserve">
-    <value>The app settings could not be saved. Please check file access permissions and try again.</value>
-  </data>
-  <data name="Notification_ExpiredAccountDetectedTitle" xml:space="preserve">
-    <value>Invalid account found</value>
-  </data>
-  <data name="Notification_ExpiredAccountDetectedMessageFormat" xml:space="preserve">
-    <value>{0} cannot be used. The account state was updated based on your settings.</value>
-  </data>
-  <data name="Notification_UsageLowQuotaDetectedTitle" xml:space="preserve">
-    <value>Low quota detected</value>
-  </data>
-  <data name="Notification_UsageLowQuotaDetectedMessageFormat" xml:space="preserve">
-    <value>{0}'s {1} remaining quota is {2}%.</value>
-  </data>
-  <data name="Notification_UsageLowQuotaDetectedWithSwitchSuggestionMessageFormat" xml:space="preserve">
-    <value>{0}'s {1} remaining quota is {2}%. Another account has quota above the warning threshold. Select this notification to switch accounts from Account Management.</value>
-  </data>
-  <data name="Notification_PrimaryUsageLowQuotaWindowName" xml:space="preserve">
-    <value>5-hour</value>
-  </data>
-  <data name="Notification_SecondaryUsageLowQuotaWindowName" xml:space="preserve">
-    <value>7-day</value>
-  </data>
-  <data name="Notification_StoreUpdateAvailableTitle" xml:space="preserve">
-    <value>CLI Account Switcher update</value>
-  </data>
-  <data name="Notification_StoreUpdateAvailableMessageFormat" xml:space="preserve">
-    <value>{0} update(s) are available from Microsoft Store.</value>
-  </data>
-  <data name="Notification_OpenStoreButtonText" xml:space="preserve">
-    <value>Open Store</value>
-  </data>
-  <data name="SettingsPage_UpdateSettingsCard.Header" xml:space="preserve">
-    <value>Check for updates</value>
-  </data>
-  <data name="SettingsPage_UpdateSettingsCard.Description" xml:space="preserve">
-    <value>Review the current app version and Microsoft Store updates.</value>
-  </data>
-  <data name="SettingsPage_AutomaticUpdateSettingsCard.Header" xml:space="preserve">
-    <value>Automatic update checks</value>
-  </data>
-  <data name="SettingsPage_AutomaticUpdateSettingsCard.Description" xml:space="preserve">
-    <value>Check for Store updates every 8 hours and show a notification when one is found.</value>
-  </data>
-  <data name="SettingsPage_RestartRecommendedDialogTitle" xml:space="preserve">
-    <value>Restart recommended</value>
-  </data>
-  <data name="SettingsPage_RestartRecommendedDialogMessage" xml:space="preserve">
-    <value>The language setting has been saved. Restart the app to apply it reliably to every screen.</value>
-  </data>
-  <data name="SettingsPage_NoUpdateDialogMessageFormat" xml:space="preserve">
-    <value>{0}
-The installed app is already up to date.</value>
-  </data>
-  <data name="SettingsPage_AutomaticRefreshDisabledText" xml:space="preserve">
-    <value>Automatic refresh is off</value>
-  </data>
-  <data name="SettingsPage_NextUsageRefreshFormat" xml:space="preserve">
-    <value>Next refresh in {0}</value>
-  </data>
-  <data name="SettingsPage_RemainingTimeWithDaysFormat" xml:space="preserve">
-    <value>{0} day(s) {1}</value>
-  </data>
-  <data name="ProviderComboBox_AutomationName" xml:space="preserve">
-    <value>CLI provider</value>
-  </data>
-  <data name="Provider_CodexDisplayName" xml:space="preserve">
-    <value>Codex</value>
-  </data>
-  <data name="Provider_ClaudeCodeDisplayName" xml:space="preserve">
-    <value>Claude Code</value>
-  </data>
-  <data name="Provider_CodexComboBoxItem.Content" xml:space="preserve">
-    <value>Codex</value>
-  </data>
-  <data name="Provider_ClaudeCodeComboBoxItem.Content" xml:space="preserve">
-    <value>Claude Code</value>
-  </data>
-  <data name="AccountsPage_RestartClaudeCodeSessionDialogTitle" xml:space="preserve">
-    <value>Restart VS Code</value>
-  </data>
-  <data name="AccountsPage_RestartClaudeCodeSessionDialogMessage" xml:space="preserve">
-    <value>Account switching is complete. Restart running VS Code windows to use the changed account immediately. Restart now?</value>
-  </data>
-  <data name="AccountsPage_RestartClaudeCodeSessionButtonText" xml:space="preserve">
-    <value>Restart</value>
-  </data>
-  <data name="AccountsPage_RestartClaudeCodeSessionLoadingMessage" xml:space="preserve">
-    <value>Restarting VS Code.</value>
-  </data>
-  <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogTitle" xml:space="preserve">
-    <value>Restart failed</value>
-  </data>
-  <data name="AccountsPage_RestartClaudeCodeSessionFailedDialogMessage" xml:space="preserve">
-    <value>VS Code could not be restarted automatically. Close and reopen VS Code manually.</value>
-  </data>
-  <data name="OAuthAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
-    <value>Claude Code login</value>
-  </data>
-  <data name="OAuthAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
-    <value>Run Claude Code login, then save the current Claude Code credential and global config as a managed account.</value>
-  </data>
-  <data name="OAuthAddAccountPage_ClaudeCodeRunLoginButtonText" xml:space="preserve">
-    <value>Run Claude Code login</value>
-  </data>
-  <data name="OAuthAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
-    <value>Claude Code login or current account save failed. Make sure Claude Code is installed and logged in.</value>
-  </data>
-  <data name="ManualPasteAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
-    <value>Paste Claude Code credentials</value>
-  </data>
-  <data name="ManualPasteAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
-    <value>Paste .credentials.json and global config JSON. Required fields include claudeAiOauth tokens and oauthAccount identity/organization values.</value>
-  </data>
-  <data name="ManualPasteAddAccountPage_ClaudeCodeLoadInputsButtonText" xml:space="preserve">
-    <value>Save credentials</value>
-  </data>
-  <data name="ManualPasteAddAccountPage_ClaudeCodeValidationErrorMessage" xml:space="preserve">
-    <value>Claude Code credentials or global config are invalid. Check accessToken, refreshToken, expiresAt, emailAddress, accountUuid, organizationUuid, and organizationName.</value>
+  <data name="ManualPasteAddAccountPage_AddInputTextBlock.Text" xml:space="preserve">
+    <value>Add Input</value>
   </data>
   <data name="ManualPasteAddAccountPage_ClaudeCodeCredentialsJsonTextBox.Header" xml:space="preserve">
     <value>Credentials JSON</value>
@@ -1136,128 +580,520 @@ The installed app is already up to date.</value>
   <data name="ManualPasteAddAccountPage_ClaudeCodeCredentialsJsonTextBox.PlaceholderText" xml:space="preserve">
     <value>Paste .credentials.json</value>
   </data>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>Paste .credentials.json and global config JSON. Required fields include claudeAiOauth tokens and oauthAccount identity/organization values.</value>
+  </data>
   <data name="ManualPasteAddAccountPage_ClaudeCodeGlobalConfigJsonTextBox.Header" xml:space="preserve">
     <value>Global config JSON</value>
   </data>
   <data name="ManualPasteAddAccountPage_ClaudeCodeGlobalConfigJsonTextBox.PlaceholderText" xml:space="preserve">
     <value>Paste .claude.json or .config.json</value>
   </data>
-  <data name="CurrentAccountAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
-    <value>Save current Claude Code account</value>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeLoadInputsButtonText" xml:space="preserve">
+    <value>Save credentials</value>
   </data>
-  <data name="CurrentAccountAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
-    <value>Read the current Claude Code credential and global config files, then save them as a managed account.</value>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>Paste Claude Code credentials</value>
   </data>
-  <data name="CurrentAccountAddAccountPage_ClaudeCodeImportButtonText" xml:space="preserve">
-    <value>Save current Claude Code account</value>
+  <data name="ManualPasteAddAccountPage_ClaudeCodeValidationErrorMessage" xml:space="preserve">
+    <value>Claude Code credentials or global config are invalid. Check accessToken, refreshToken, expiresAt, emailAddress, accountUuid, organizationUuid, and organizationName.</value>
   </data>
-  <data name="CurrentAccountAddAccountPage_ClaudeCodeFilePathHeader" xml:space="preserve">
-    <value>Claude Code files</value>
+  <data name="ManualPasteAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Paste one or more auth.json documents and import them together.</value>
   </data>
-  <data name="CurrentAccountAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
-    <value>Current Claude Code credentials could not be saved. Sign in with Claude Code first.</value>
+  <data name="ManualPasteAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>Some auth.json documents could not be imported.</value>
   </data>
-  <data name="FileAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
-    <value>Import Claude Code files</value>
+  <data name="ManualPasteAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>Failed to Add Account</value>
   </data>
-  <data name="FileAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
-    <value>Select .credentials.json first, then select the Claude Code global config JSON file.</value>
+  <data name="ManualPasteAddAccountPage_InputErrorInfoBar.Message" xml:space="preserve">
+    <value>This auth.json could not be imported.</value>
   </data>
-  <data name="FileAddAccountPage_ClaudeCodeImportButtonText" xml:space="preserve">
-    <value>Select files</value>
+  <data name="ManualPasteAddAccountPage_InputErrorInfoBar.Title" xml:space="preserve">
+    <value>Validation Failed</value>
   </data>
-  <data name="FileAddAccountPage_ClaudeCodeSupportedFormatHeader" xml:space="preserve">
-    <value>Supported files</value>
+  <data name="ManualPasteAddAccountPage_LoadInputsTextBlock.Text" xml:space="preserve">
+    <value>Import Pasted Accounts</value>
   </data>
-  <data name="FileAddAccountPage_ClaudeCodeSupportedFormatDescription" xml:space="preserve">
-    <value>Use Claude Code .credentials.json and .claude.json or .config.json files that contain oauthAccount information.</value>
+  <data name="ManualPasteAddAccountPage_ManualAuthenticationTextBox.PlaceholderText" xml:space="preserve">
+    <value>Paste auth.json content</value>
   </data>
-  <data name="FileAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
-    <value>Claude Code files could not be imported. Check the selected credentials and global config JSON files.</value>
+  <data name="ManualPasteAddAccountPage_NoInputMessage" xml:space="preserve">
+    <value>No auth.json content was pasted.</value>
   </data>
-  <data name="MainPage_SkillsSelectorBarItem.Text" xml:space="preserve">
-    <value>Skills</value>
+  <data name="ManualPasteAddAccountPage_PartialFailureMessage" xml:space="preserve">
+    <value>Some auth.json documents could not be imported.</value>
   </data>
-  <data name="MainWindow_OpenSkillsPageMenuFlyoutItem.Text" xml:space="preserve">
-    <value>Open Skills page</value>
+  <data name="ManualPasteAddAccountPage_RemoveInputToolTip.Content" xml:space="preserve">
+    <value>Remove input</value>
   </data>
-  <data name="SkillsPage_TitleTextBlock.Text" xml:space="preserve">
-    <value>Skills</value>
+  <data name="ManualPasteAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Manual Paste</value>
   </data>
-  <data name="SkillsPage_DeleteSelectedSkillsTextBlock.Text" xml:space="preserve">
-    <value>Delete Selected</value>
+  <data name="Notification_ExpiredAccountDetectedMessageFormat" xml:space="preserve">
+    <value>{0} cannot be used. The account state was updated based on your settings.</value>
   </data>
-  <data name="SkillsPage_ExportBackupTextBlock.Text" xml:space="preserve">
-    <value>Export Backup</value>
+  <data name="Notification_ExpiredAccountDetectedTitle" xml:space="preserve">
+    <value>Invalid account found</value>
   </data>
-  <data name="SkillsPage_ImportBackupTextBlock.Text" xml:space="preserve">
-    <value>Import Backup</value>
+  <data name="Notification_OpenStoreButtonText" xml:space="preserve">
+    <value>Open Store</value>
   </data>
-  <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
-    <value>Refresh</value>
+  <data name="Notification_PrimaryUsageLowQuotaWindowName" xml:space="preserve">
+    <value>5-hour</value>
   </data>
-  <data name="SkillsPage_SkillSearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
-    <value>Search skill name, directory, or description</value>
+  <data name="Notification_SecondaryUsageLowQuotaWindowName" xml:space="preserve">
+    <value>7-day</value>
   </data>
-  <data name="SkillsPage_SkillNameHeaderTextBlock.Text" xml:space="preserve">
-    <value>Skill Name</value>
+  <data name="Notification_StoreUpdateAvailableMessageFormat" xml:space="preserve">
+    <value>{0} update(s) are available from Microsoft Store.</value>
   </data>
-  <data name="SkillsPage_DescriptionHeaderTextBlock.Text" xml:space="preserve">
-    <value>Description</value>
+  <data name="Notification_StoreUpdateAvailableTitle" xml:space="preserve">
+    <value>CLI Account Switcher update</value>
   </data>
-  <data name="SkillsPage_FilesHeaderTextBlock.Text" xml:space="preserve">
-    <value>Files</value>
+  <data name="Notification_UsageLowQuotaDetectedMessageFormat" xml:space="preserve">
+    <value>{0}'s {1} remaining quota is {2}%.</value>
   </data>
-  <data name="SkillsPage_ModifiedHeaderTextBlock.Text" xml:space="preserve">
-    <value>Modified</value>
+  <data name="Notification_UsageLowQuotaDetectedTitle" xml:space="preserve">
+    <value>Low quota detected</value>
   </data>
-  <data name="SkillsPage_NoSkillsTitleTextBlock.Text" xml:space="preserve">
-    <value>No skills available.</value>
+  <data name="Notification_UsageLowQuotaDetectedWithSwitchSuggestionMessageFormat" xml:space="preserve">
+    <value>{0}'s {1} remaining quota is {2}%. Another account has quota above the warning threshold. Select this notification to switch accounts from Account Management.</value>
   </data>
-  <data name="SkillsPage_NoSkillsDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Add skills that include SKILL.md files to the skills directory.</value>
+  <data name="OAuthAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
+    <value>Run Claude Code login, then save the current Claude Code credential and global config as a managed account.</value>
   </data>
-  <data name="SkillsPage_NoFilteredSkillsTitleTextBlock.Text" xml:space="preserve">
-    <value>No skills match the filter.</value>
+  <data name="OAuthAddAccountPage_ClaudeCodeErrorMessage" xml:space="preserve">
+    <value>Claude Code login or current account save failed. Make sure Claude Code is installed and logged in.</value>
   </data>
-  <data name="SkillsPage_NoFilteredSkillsDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Adjust the search text.</value>
+  <data name="OAuthAddAccountPage_ClaudeCodeRunLoginButtonText" xml:space="preserve">
+    <value>Run Claude Code login</value>
   </data>
-  <data name="SkillsPage_DeleteSelectedSkillsDialogTitle" xml:space="preserve">
-    <value>Delete selected skills</value>
+  <data name="OAuthAddAccountPage_ClaudeCodeTitle" xml:space="preserve">
+    <value>Claude Code login</value>
   </data>
-  <data name="SkillsPage_DeleteSelectedSkillsDialogMessage" xml:space="preserve">
-    <value>{0} skill(s) will be deleted permanently. Continue?</value>
+  <data name="OAuthAddAccountPage_CopyAddressToolTip.Content" xml:space="preserve">
+    <value>Copy</value>
   </data>
-  <data name="SkillsPage_DeleteButtonText" xml:space="preserve">
-    <value>Delete</value>
+  <data name="OAuthAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Complete Codex authentication in the browser, then the account will be added after usage validation.</value>
   </data>
-  <data name="SkillsPage_ExportBackupNoSelectionDialogTitle" xml:space="preserve">
-    <value>No skills selected</value>
+  <data name="OAuthAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>An error occurred during OAuth authentication or account validation.</value>
   </data>
-  <data name="SkillsPage_ExportBackupNoSelectionDialogMessage" xml:space="preserve">
-    <value>Select skills to export first.</value>
+  <data name="OAuthAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>Failed to Add Account</value>
   </data>
-  <data name="SkillsPage_ExportBackupLoadingMessage" xml:space="preserve">
-    <value>Exporting skills backup.</value>
+  <data name="OAuthAddAccountPage_ManualAddressDescriptionTextBlock.Text" xml:space="preserve">
+    <value>The browser could not be opened automatically. Copy the address below, paste it into a browser, and continue authentication.</value>
   </data>
-  <data name="SkillsPage_ExportBackupDialogTitle" xml:space="preserve">
-    <value>Backup export complete</value>
+  <data name="OAuthAddAccountPage_OpenBrowserTextBlock.Text" xml:space="preserve">
+    <value>Start Authentication in Browser</value>
   </data>
-  <data name="SkillsPage_ExportBackupDialogMessage" xml:space="preserve">
-    <value>Skills backup has been saved.</value>
+  <data name="OAuthAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>OAuth</value>
   </data>
-  <data name="SkillsPage_ImportBackupLoadingMessage" xml:space="preserve">
-    <value>Importing skills backup.</value>
+  <data name="OAuthAddAccountPage_WaitingTextBlock.Text" xml:space="preserve">
+    <value>Waiting for the authentication callback.</value>
   </data>
-  <data name="SkillsPage_ImportBackupDialogTitle" xml:space="preserve">
-    <value>Backup import complete</value>
+  <data name="PrimaryUsageAverageRateWarningTextBlock.Text" xml:space="preserve">
+    <value>Over average pace</value>
   </data>
-  <data name="SkillsPage_ImportBackupResultMessageFormat" xml:space="preserve">
-    <value>{0} skill(s) imported.</value>
+  <data name="ProviderAccountViewModel_ActiveStatus" xml:space="preserve">
+    <value>Active</value>
   </data>
-  <data name="SkillsPage_CaskillsBackupFileTypeChoice" xml:space="preserve">
-    <value>Codex Account Skills Backup (.caskills)</value>
+  <data name="ProviderAccountViewModel_LastUsageRefreshFormat" xml:space="preserve">
+    <value>Last refreshed: {0}</value>
+  </data>
+  <data name="ProviderAccountViewModel_NoAccessToken" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="ProviderAccountViewModel_NotRefreshed" xml:space="preserve">
+    <value>Not refreshed yet</value>
+  </data>
+  <data name="ProviderAccountViewModel_PrimaryUsageWindowLabel" xml:space="preserve">
+    <value>5-hour limit</value>
+  </data>
+  <data name="ProviderAccountViewModel_ResetAfterFormat" xml:space="preserve">
+    <value>resets in {0:hh\:mm\:ss}</value>
+  </data>
+  <data name="ProviderAccountViewModel_ResetAfterWithMultipleDaysFormat" xml:space="preserve">
+    <value>resets in {0} days {1:hh\:mm\:ss}</value>
+  </data>
+  <data name="ProviderAccountViewModel_ResetAfterWithSingleDayFormat" xml:space="preserve">
+    <value>resets in 1 day {0:hh\:mm\:ss}</value>
+  </data>
+  <data name="ProviderAccountViewModel_SecondaryUsageWindowLabel" xml:space="preserve">
+    <value>7-day limit</value>
+  </data>
+  <data name="ProviderAccountViewModel_TokenExpiredStatus" xml:space="preserve">
+    <value>Token Expired</value>
+  </data>
+  <data name="ProviderAccountViewModel_UnknownPlan" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="ProviderAccountViewModel_UnknownResetTime" xml:space="preserve">
+    <value>Reset time unavailable</value>
+  </data>
+  <data name="ProviderAccountViewModel_UnknownUsage" xml:space="preserve">
+    <value>Usage unavailable</value>
+  </data>
+  <data name="ProviderAccountViewModel_UsageRemainingFormat" xml:space="preserve">
+    <value>{0}% remaining · {1}</value>
+  </data>
+  <data name="ProviderAccountViewModel_UsageRemainingOnlyFormat" xml:space="preserve">
+    <value>{0}% remaining</value>
+  </data>
+  <data name="ProviderAccountViewModel_WaitingStatus" xml:space="preserve">
+    <value>Waiting</value>
+  </data>
+  <data name="ProviderComboBox_AutomationName" xml:space="preserve">
+    <value>CLI provider</value>
+  </data>
+  <data name="Provider_ClaudeCodeComboBoxItem.Content" xml:space="preserve">
+    <value>Claude Code</value>
+  </data>
+  <data name="Provider_ClaudeCodeDisplayName" xml:space="preserve">
+    <value>Claude Code</value>
+  </data>
+  <data name="Provider_CodexComboBoxItem.Content" xml:space="preserve">
+    <value>Codex</value>
+  </data>
+  <data name="Provider_CodexDisplayName" xml:space="preserve">
+    <value>Codex</value>
+  </data>
+  <data name="SecondaryUsageAverageRateWarningTextBlock.Text" xml:space="preserve">
+    <value>Over average pace</value>
+  </data>
+  <data name="SettingsPage_AccountSettingsGroup.Description" xml:space="preserve">
+    <value>Configure account health checks, automatic refresh, low-quota thresholds, and saved notification flags.</value>
+  </data>
+  <data name="SettingsPage_AccountSettingsGroup.Header" xml:space="preserve">
+    <value>Account settings</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountNextUsageRefreshSettingsCard.Description" xml:space="preserve">
+    <value>Time remaining before active account usage refreshes again.</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountNextUsageRefreshSettingsCard.Header" xml:space="preserve">
+    <value>Next refresh</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
+    <value>Set how often active account usage refreshes, in minutes.</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
+    <value>Refresh interval</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
+    <value>Refresh usage for the active account at the selected minute interval.</value>
+  </data>
+  <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
+    <value>Active account automatic refresh</value>
+  </data>
+  <data name="SettingsPage_ApplicationSettingsFileTypeChoice" xml:space="preserve">
+    <value>CLI Account Switcher settings file</value>
+  </data>
+  <data name="SettingsPage_ApplicationSettingsTransferSettingsExpander.Description" xml:space="preserve">
+    <value>Save or load app settings as a .casc file without including the account list.</value>
+  </data>
+  <data name="SettingsPage_ApplicationSettingsTransferSettingsExpander.Header" xml:space="preserve">
+    <value>Import/export settings</value>
+  </data>
+  <data name="SettingsPage_ApplicationVersionFormat" xml:space="preserve">
+    <value>Current version: {0}</value>
+  </data>
+  <data name="SettingsPage_AutomaticRefreshDisabledText" xml:space="preserve">
+    <value>Automatic refresh is off</value>
+  </data>
+  <data name="SettingsPage_AutomaticUpdateCheckSettingsCard.Description" xml:space="preserve">
+    <value>Check for Store updates every 8 hours and show a notification when one is found.</value>
+  </data>
+  <data name="SettingsPage_AutomaticUpdateCheckSettingsCard.Header" xml:space="preserve">
+    <value>Automatic update checks</value>
+  </data>
+  <data name="SettingsPage_AutomaticUpdateSettingsCard.Description" xml:space="preserve">
+    <value>Check for Store updates every 8 hours and show a notification when one is found.</value>
+  </data>
+  <data name="SettingsPage_AutomaticUpdateSettingsCard.Header" xml:space="preserve">
+    <value>Automatic update checks</value>
+  </data>
+  <data name="SettingsPage_CheckForUpdatesButtonTextBlock.Text" xml:space="preserve">
+    <value>Check</value>
+  </data>
+  <data name="SettingsPage_CheckForUpdatesLoadingMessage" xml:space="preserve">
+    <value>Checking Microsoft Store updates.</value>
+  </data>
+  <data name="SettingsPage_DarkThemeComboBoxItem.Content" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="SettingsPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Adjust app display, updates, startup behavior, and automatic account management.</value>
+  </data>
+  <data name="SettingsPage_EnglishLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="SettingsPage_ExpiredAccountAutomaticDeletionSettingsCard.Description" xml:space="preserve">
+    <value>Remove accounts from the list automatically when authentication is rejected during refresh.</value>
+  </data>
+  <data name="SettingsPage_ExpiredAccountAutomaticDeletionSettingsCard.Header" xml:space="preserve">
+    <value>Automatically delete invalid accounts</value>
+  </data>
+  <data name="SettingsPage_ExpiredAccountNotificationSettingsCard.Description" xml:space="preserve">
+    <value>Show a Windows notification when an expired or unusable account is detected.</value>
+  </data>
+  <data name="SettingsPage_ExpiredAccountNotificationSettingsCard.Header" xml:space="preserve">
+    <value>Notify when invalid accounts are found</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsButtonTextBlock.Text" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsDialogMessage" xml:space="preserve">
+    <value>The app settings have been exported.</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsDialogTitle" xml:space="preserve">
+    <value>Export settings</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsFailedDialogMessage" xml:space="preserve">
+    <value>The app settings could not be exported. Please check file access permissions.</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsFailedDialogTitle" xml:space="preserve">
+    <value>Settings export failed</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsSettingsCard.Description" xml:space="preserve">
+    <value>Save the current app settings to a .casc file.</value>
+  </data>
+  <data name="SettingsPage_ExportApplicationSettingsSettingsCard.Header" xml:space="preserve">
+    <value>Export settings</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogButtonTextBlock.Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogDialogMessage" xml:space="preserve">
+    <value>The log was saved.</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogDialogTitle" xml:space="preserve">
+    <value>Log export completed</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogEmptyDialogMessage" xml:space="preserve">
+    <value>There are no logs recorded in the current app session.</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogEmptyDialogTitle" xml:space="preserve">
+    <value>No logs</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogFailedDialogMessage" xml:space="preserve">
+    <value>The log could not be saved. Check file access permissions and try again.</value>
+  </data>
+  <data name="SettingsPage_ExportIntegratedLogFailedDialogTitle" xml:space="preserve">
+    <value>Log export failed</value>
+  </data>
+  <data name="SettingsPage_GeneralSettingsGroup.Description" xml:space="preserve">
+    <value>Configure language, theme, update checks, and system startup behavior.</value>
+  </data>
+  <data name="SettingsPage_GeneralSettingsGroup.Header" xml:space="preserve">
+    <value>General settings</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsButtonTextBlock.Text" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsDialogMessage" xml:space="preserve">
+    <value>The app settings have been imported and applied.</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsDialogTitle" xml:space="preserve">
+    <value>Import settings</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsFailedDialogMessage" xml:space="preserve">
+    <value>The app settings could not be imported from the selected .casc file. Please check the file format and access permissions.</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsFailedDialogTitle" xml:space="preserve">
+    <value>Settings import failed</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsLanguageChangedDialogMessage" xml:space="preserve">
+    <value>The app settings have been imported and applied. The settings page will reload because the language changed. Restart the app to apply it reliably to every screen.</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsLoadingMessage" xml:space="preserve">
+    <value>Importing app settings.</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsSettingsCard.Description" xml:space="preserve">
+    <value>Load app settings from a .casc file and apply them to the current settings.</value>
+  </data>
+  <data name="SettingsPage_ImportApplicationSettingsSettingsCard.Header" xml:space="preserve">
+    <value>Import settings</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountNextUsageRefreshSettingsCard.Description" xml:space="preserve">
+    <value>Time remaining before inactive account usage refreshes again.</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountNextUsageRefreshSettingsCard.Header" xml:space="preserve">
+    <value>Next refresh</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
+    <value>Set how often inactive account usage refreshes, in minutes.</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
+    <value>Refresh interval</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
+    <value>Refresh usage for inactive accounts at the selected minute interval.</value>
+  </data>
+  <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
+    <value>Inactive account automatic refresh</value>
+  </data>
+  <data name="SettingsPage_IntegratedLogExportSettingsCard.Description" xml:space="preserve">
+    <value>Save the logs recorded during the current app session to a file. (Up to 1,000 entries)</value>
+  </data>
+  <data name="SettingsPage_IntegratedLogExportSettingsCard.Header" xml:space="preserve">
+    <value>Download integrated logs</value>
+  </data>
+  <data name="SettingsPage_IntegratedLogFileTypeChoice" xml:space="preserve">
+    <value>Text file</value>
+  </data>
+  <data name="SettingsPage_JapaneseLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>Japanese</value>
+  </data>
+  <data name="SettingsPage_KoreanLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>Korean</value>
+  </data>
+  <data name="SettingsPage_LanguageRestartDialogMessage" xml:space="preserve">
+    <value>The language setting has been saved. Restart the app to apply it reliably to every screen.</value>
+  </data>
+  <data name="SettingsPage_LanguageRestartDialogTitle" xml:space="preserve">
+    <value>Restart recommended</value>
+  </data>
+  <data name="SettingsPage_LanguageSettingsCard.Description" xml:space="preserve">
+    <value>Select the display language for the app. Restarting after a change is recommended.</value>
+  </data>
+  <data name="SettingsPage_LanguageSettingsCard.Header" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="SettingsPage_LightThemeComboBoxItem.Content" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="SettingsPage_NextUsageRefreshFormat" xml:space="preserve">
+    <value>Next refresh in {0}</value>
+  </data>
+  <data name="SettingsPage_NoUpdateDialogMessage" xml:space="preserve">
+    <value>The installed app is already up to date.</value>
+  </data>
+  <data name="SettingsPage_NoUpdateDialogMessageFormat" xml:space="preserve">
+    <value>{0}
+The installed app is already up to date.</value>
+  </data>
+  <data name="SettingsPage_NoUpdateDialogTitle" xml:space="preserve">
+    <value>You're up to date</value>
+  </data>
+  <data name="SettingsPage_OpenStoreButtonText" xml:space="preserve">
+    <value>Open Store</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
+    <value>Save whether 5-hour low-quota notifications should be enabled.</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Header" xml:space="preserve">
+    <value>5-hour low-quota notification</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
+    <value>Mark the 5-hour limit as low quota when remaining usage is at or below this percentage.</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Header" xml:space="preserve">
+    <value>5-hour low-quota threshold</value>
+  </data>
+  <data name="SettingsPage_RefreshRemainingDisabledText" xml:space="preserve">
+    <value>Automatic refresh is off</value>
+  </data>
+  <data name="SettingsPage_RefreshRemainingFormat" xml:space="preserve">
+    <value>Next refresh in {0:00}:{1:00}:{2:00}</value>
+  </data>
+  <data name="SettingsPage_RemainingTimeWithDaysFormat" xml:space="preserve">
+    <value>{0} day(s) {1}</value>
+  </data>
+  <data name="SettingsPage_RestartRecommendedDialogMessage" xml:space="preserve">
+    <value>The language setting has been saved. Restart the app to apply it reliably to every screen.</value>
+  </data>
+  <data name="SettingsPage_RestartRecommendedDialogTitle" xml:space="preserve">
+    <value>Restart recommended</value>
+  </data>
+  <data name="SettingsPage_SaveSettingsFailedDialogMessage" xml:space="preserve">
+    <value>The app settings could not be saved. Please check file access permissions and try again.</value>
+  </data>
+  <data name="SettingsPage_SaveSettingsFailedDialogTitle" xml:space="preserve">
+    <value>Settings save failed</value>
+  </data>
+  <data name="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
+    <value>Save whether 7-day low-quota notifications should be enabled.</value>
+  </data>
+  <data name="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard.Header" xml:space="preserve">
+    <value>7-day low-quota notification</value>
+  </data>
+  <data name="SettingsPage_SecondaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
+    <value>Mark the 7-day limit as low quota when remaining usage is at or below this percentage.</value>
+  </data>
+  <data name="SettingsPage_SecondaryUsageWarningThresholdSettingsCard.Header" xml:space="preserve">
+    <value>7-day low-quota threshold</value>
+  </data>
+  <data name="SettingsPage_SimplifiedChineseLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>Simplified Chinese</value>
+  </data>
+  <data name="SettingsPage_StartupLaunchSettingsCard.Description" xml:space="preserve">
+    <value>Run CLI Account Switcher automatically after Windows sign-in.</value>
+  </data>
+  <data name="SettingsPage_StartupLaunchSettingsCard.Header" xml:space="preserve">
+    <value>Launch at system startup</value>
+  </data>
+  <data name="SettingsPage_StartupRegistrationFailedDialogMessage" xml:space="preserve">
+    <value>The Windows startup task setting could not be applied. Please check package manifest registration or Windows startup app permissions.</value>
+  </data>
+  <data name="SettingsPage_StartupRegistrationFailedDialogTitle" xml:space="preserve">
+    <value>Startup setting failed</value>
+  </data>
+  <data name="SettingsPage_SystemDefaultLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>System default</value>
+  </data>
+  <data name="SettingsPage_SystemDefaultThemeComboBoxItem.Content" xml:space="preserve">
+    <value>System default</value>
+  </data>
+  <data name="SettingsPage_TaskbarUsageSettingsCard.Description" xml:space="preserve">
+    <value>Show 5-hour and 7-day usage for the active account of the selected service in the Windows taskbar.</value>
+  </data>
+  <data name="SettingsPage_TaskbarUsageSettingsCard.Header" xml:space="preserve">
+    <value>Taskbar usage</value>
+  </data>
+  <data name="SettingsPage_ThemeSettingsCard.Description" xml:space="preserve">
+    <value>Change the color theme for the app and dialogs immediately.</value>
+  </data>
+  <data name="SettingsPage_ThemeSettingsCard.Header" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="SettingsPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SettingsPage_TraditionalChineseLanguageComboBoxItem.Content" xml:space="preserve">
+    <value>Traditional Chinese</value>
+  </data>
+  <data name="SettingsPage_UpdateAvailableDialogMessageFormat" xml:space="preserve">
+    <value>{1}
+{0} update(s) are available from Microsoft Store.</value>
+  </data>
+  <data name="SettingsPage_UpdateAvailableDialogTitle" xml:space="preserve">
+    <value>Update available</value>
+  </data>
+  <data name="SettingsPage_UpdateCheckFailedDialogMessage" xml:space="preserve">
+    <value>Microsoft Store update information could not be checked. Please verify the package installation state and network connection.</value>
+  </data>
+  <data name="SettingsPage_UpdateCheckFailedDialogTitle" xml:space="preserve">
+    <value>Update check failed</value>
+  </data>
+  <data name="SettingsPage_UpdateCheckSettingsCard.Description" xml:space="preserve">
+    <value>Review the current app version and Microsoft Store updates.</value>
+  </data>
+  <data name="SettingsPage_UpdateCheckSettingsCard.Header" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
+  <data name="SettingsPage_UpdateSettingsCard.Description" xml:space="preserve">
+    <value>Review the current app version and Microsoft Store updates.</value>
+  </data>
+  <data name="SettingsPage_UpdateSettingsCard.Header" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
+  <data name="SkillsPageViewModel_DescriptionFormat" xml:space="preserve">
+    <value>Manage skills for {0}</value>
   </data>
   <data name="SkillsPageViewModel_NoSelectedSkills" xml:space="preserve">
     <value>No skills selected</value>
@@ -1265,7 +1101,130 @@ The installed app is already up to date.</value>
   <data name="SkillsPageViewModel_SelectedSkillCountFormat" xml:space="preserve">
     <value>{0} skill(s) selected</value>
   </data>
-  <data name="SkillsPageViewModel_DescriptionFormat" xml:space="preserve">
-    <value>Manage skills for {0}</value>
+  <data name="SkillsPage_CaskillsBackupFileTypeChoice" xml:space="preserve">
+    <value>Codex Account Skills Backup (.caskills)</value>
+  </data>
+  <data name="SkillsPage_DeleteButtonText" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="SkillsPage_DeleteSelectedSkillsDialogMessage" xml:space="preserve">
+    <value>{0} skill(s) will be deleted permanently. Continue?</value>
+  </data>
+  <data name="SkillsPage_DeleteSelectedSkillsDialogTitle" xml:space="preserve">
+    <value>Delete selected skills</value>
+  </data>
+  <data name="SkillsPage_DeleteSelectedSkillsTextBlock.Text" xml:space="preserve">
+    <value>Delete Selected</value>
+  </data>
+  <data name="SkillsPage_DescriptionHeaderTextBlock.Text" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="SkillsPage_ExportBackupDialogMessage" xml:space="preserve">
+    <value>Skills backup has been saved.</value>
+  </data>
+  <data name="SkillsPage_ExportBackupDialogTitle" xml:space="preserve">
+    <value>Backup export complete</value>
+  </data>
+  <data name="SkillsPage_ExportBackupLoadingMessage" xml:space="preserve">
+    <value>Exporting skills backup.</value>
+  </data>
+  <data name="SkillsPage_ExportBackupNoSelectionDialogMessage" xml:space="preserve">
+    <value>Select skills to export first.</value>
+  </data>
+  <data name="SkillsPage_ExportBackupNoSelectionDialogTitle" xml:space="preserve">
+    <value>No skills selected</value>
+  </data>
+  <data name="SkillsPage_ExportBackupTextBlock.Text" xml:space="preserve">
+    <value>Export Backup</value>
+  </data>
+  <data name="SkillsPage_FilesHeaderTextBlock.Text" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="SkillsPage_ImportBackupDialogTitle" xml:space="preserve">
+    <value>Backup import complete</value>
+  </data>
+  <data name="SkillsPage_ImportBackupLoadingMessage" xml:space="preserve">
+    <value>Importing skills backup.</value>
+  </data>
+  <data name="SkillsPage_ImportBackupResultMessageFormat" xml:space="preserve">
+    <value>{0} skill(s) imported.</value>
+  </data>
+  <data name="SkillsPage_ImportBackupTextBlock.Text" xml:space="preserve">
+    <value>Import Backup</value>
+  </data>
+  <data name="SkillsPage_ModifiedHeaderTextBlock.Text" xml:space="preserve">
+    <value>Modified</value>
+  </data>
+  <data name="SkillsPage_NoFilteredSkillsDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Adjust the search text.</value>
+  </data>
+  <data name="SkillsPage_NoFilteredSkillsTitleTextBlock.Text" xml:space="preserve">
+    <value>No skills match the filter.</value>
+  </data>
+  <data name="SkillsPage_NoSkillsDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Add skills that include SKILL.md files to the skills directory.</value>
+  </data>
+  <data name="SkillsPage_NoSkillsTitleTextBlock.Text" xml:space="preserve">
+    <value>No skills available.</value>
+  </data>
+  <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="SkillsPage_SkillNameHeaderTextBlock.Text" xml:space="preserve">
+    <value>Skill Name</value>
+  </data>
+  <data name="SkillsPage_SkillSearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>Search skill name, directory, or description</value>
+  </data>
+  <data name="SkillsPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Skills</value>
+  </data>
+  <data name="TaskbarUsageControl_PercentageDifferenceFormat" xml:space="preserve">
+    <value>{0:+0;-0;0}%</value>
+  </data>
+  <data name="TaskbarUsageControl_PercentageFormat" xml:space="preserve">
+    <value>{0}%</value>
+  </data>
+  <data name="TaskbarUsageControl_RefreshButtonToolTip" xml:space="preserve">
+    <value>Refresh active account usage</value>
+  </data>
+  <data name="TaskbarUsageControl_UnknownPercentageText" xml:space="preserve">
+    <value>--</value>
+  </data>
+  <data name="ThirdPartyLicensePackage_WindowsSoftwareDevelopmentKitLicense" xml:space="preserve">
+    <value>Windows SDK license</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog.CloseButtonText" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog.Title" xml:space="preserve">
+    <value>Third-party licenses</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>NuGet packages directly referenced by this app and their license information.</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_LicenseHeaderTextBlock.Text" xml:space="preserve">
+    <value>License</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_NuGetPackageDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Review package identifier, version, license, and author information.</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_NuGetPackageHeaderTextBlock.Text" xml:space="preserve">
+    <value>NuGet packages</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_ProjectButtonTextBlock.Text" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="ThirdPartyLicensesDialog_VersionHeaderTextBlock.Text" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="UsageAverageRateAtLimitText" xml:space="preserve">
+    <value>At average pace</value>
+  </data>
+  <data name="UsageAverageRateHeadroomFormat" xml:space="preserve">
+    <value>Average pace {0}% spare</value>
+  </data>
+  <data name="UsageAverageRateWarningFormat" xml:space="preserve">
+    <value>Average pace {0}% over</value>
   </data>
 </root>

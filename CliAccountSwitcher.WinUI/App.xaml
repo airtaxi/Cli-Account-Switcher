@@ -25,6 +25,7 @@
                     <SolidColorBrush x:Key="UsageAverageRateNormalTextBrush" Color="#107C10" />
                     <SolidColorBrush x:Key="UsageAverageRateWarningProgressBarForegroundBrush" Color="#8B0000" />
                     <SolidColorBrush x:Key="UsageAverageRateWarningTextBrush" Color="#8B0000" />
+                    <SolidColorBrush x:Key="TaskbarUsageNeutralForegroundBrush" Color="#707070" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <Color x:Key="ThemeColor">#000000</Color>
@@ -36,6 +37,7 @@
                     <SolidColorBrush x:Key="UsageAverageRateNormalTextBrush" Color="#6CCB5F" />
                     <SolidColorBrush x:Key="UsageAverageRateWarningProgressBarForegroundBrush" Color="#FF6A6A" />
                     <SolidColorBrush x:Key="UsageAverageRateWarningTextBrush" Color="#FF6A6A" />
+                    <SolidColorBrush x:Key="TaskbarUsageNeutralForegroundBrush" Color="#9A9A9A" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
 
@@ -58,6 +60,10 @@
                 x:Key="UsageProgressBarForegroundBrushConverter"
                 FalseValue="{ThemeResource UsageNormalProgressBarForegroundBrush}"
                 TrueValue="{ThemeResource UsageWarningProgressBarForegroundBrush}" />
+            <converters:BoolToObjectConverter
+                x:Key="UsagePacemakerForegroundBrushConverter"
+                FalseValue="{ThemeResource UsageAverageRateNormalTextBrush}"
+                TrueValue="{ThemeResource UsageAverageRateWarningTextBrush}" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -18,12 +18,15 @@ public partial class App : Application
 {
     private static App s_currentApplication;
     private static MainWindow s_mainWindow;
+    private static TaskbarUsageWindow s_taskbarUsageWindow;
     private static bool s_shouldShowMainWindowAfterLaunch;
     private static AppActivationArguments s_pendingApplicationActivationArguments;
     private MainPageNavigationSection? _pendingNotificationNavigationSection;
 
     // Services — resolved from the DI container
     public static IServiceProvider Services { get; private set; }
+
+    public static TaskbarUsageWindow TaskbarUsageWindow => s_taskbarUsageWindow;
 
     public App()
     {
@@ -43,7 +46,6 @@ public partial class App : Application
 
         RegisterAppNotificationManager();
         Services.GetRequiredService<StoreUpdateService>().Start();
-        Services.GetRequiredService<AccountServiceManager>().Start();
     }
 
     private static void ConfigureServices(IServiceCollection serviceCollection)
@@ -90,6 +92,8 @@ public partial class App : Application
 
         serviceCollection.AddTransient(sp => new ActiveAccountQuotaControlViewModel(sp.GetRequiredService<LocalizationService>(), sp.GetRequiredService<DispatcherQueue>()));
 
+        serviceCollection.AddTransient(sp => new TaskbarUsageControlViewModel(sp.GetRequiredService<AccountServiceManager>(), sp.GetRequiredService<ApplicationSettings>(), sp.GetRequiredService<LocalizationService>(), sp.GetRequiredService<DispatcherQueue>()));
+
         serviceCollection.AddTransient(sp => new AccountsPageViewModel(sp.GetRequiredService<AccountServiceManager>(), sp.GetRequiredService<ApplicationSettings>(), sp.GetRequiredService<LocalizationService>(), sp.GetRequiredService<DispatcherQueue>()));
 
         serviceCollection.AddTransient(sp => new SettingsPageViewModel(sp.GetRequiredService<ApplicationSettings>(), sp.GetRequiredService<ApplicationSettingsService>(), sp.GetRequiredService<ApplicationThemeService>(), sp.GetRequiredService<StartupRegistrationService>(), sp.GetRequiredService<StoreUpdateService>(), sp.GetRequiredService<FileLogService>(), sp.GetRequiredService<AccountServiceManager>(), sp.GetRequiredService<LocalizationService>()));
@@ -99,7 +103,9 @@ public partial class App : Application
 
     protected override async void OnLaunched(LaunchActivatedEventArgs launchActivatedEventArguments)
     {
-        await Services.GetRequiredService<AccountServiceManager>().InitializeAsync();
+        var accountServiceManager = Services.GetRequiredService<AccountServiceManager>();
+        await accountServiceManager.InitializeAsync();
+        accountServiceManager.Start();
 
         var applicationActivationArguments = AppInstance.GetCurrent().GetActivatedEventArgs();
 
@@ -111,6 +117,7 @@ public partial class App : Application
         ApplyPendingApplicationActivationArguments();
         var applicationSettings = Services.GetRequiredService<ApplicationSettings>();
         _ = Services.GetRequiredService<StartupRegistrationService>().SetStartupLaunchEnabledAsync(applicationSettings.IsStartupLaunchEnabled);
+        if (!applicationSettings.HideTaskbarUsage) await InitializeTaskbarUsageWindowAsync();
     }
 
     public static void ShowMainWindow()
@@ -122,6 +129,37 @@ public partial class App : Application
         }
 
         s_mainWindow.DispatcherQueue.TryEnqueue(ActivateMainWindow);
+    }
+
+    public static async Task InitializeTaskbarUsageWindowAsync()
+    {
+        if (s_taskbarUsageWindow is not null) return;
+
+        var taskbarUsageWindow = new TaskbarUsageWindow();
+        s_taskbarUsageWindow = taskbarUsageWindow;
+        taskbarUsageWindow.Closed += OnTaskbarUsageWindowClosed;
+        taskbarUsageWindow.TaskbarContentHost.TaskbarWindowRecreated += OnTaskbarContentHostTaskbarWindowRecreated;
+
+        try
+        {
+            await taskbarUsageWindow.PrepareTaskbarContentAsync();
+            taskbarUsageWindow.Activate();
+        }
+        catch
+        {
+            ReleaseTaskbarUsageWindow(taskbarUsageWindow);
+            taskbarUsageWindow.Close();
+            throw;
+        }
+    }
+
+    public static void CloseTaskbarUsageWindow()
+    {
+        if (s_taskbarUsageWindow is null) return;
+
+        var taskbarUsageWindow = s_taskbarUsageWindow;
+        ReleaseTaskbarUsageWindow(taskbarUsageWindow);
+        taskbarUsageWindow.Close();
     }
 
     public static void HandleApplicationInstanceActivated(AppActivationArguments applicationActivationArguments)
@@ -142,6 +180,31 @@ public partial class App : Application
     {
         s_mainWindow.Activate();
         s_mainWindow.BringToFront();
+    }
+
+    private static void OnTaskbarUsageWindowClosed(object sender, WindowEventArgs windowEventArguments)
+    {
+        if (sender is TaskbarUsageWindow taskbarUsageWindow) ReleaseTaskbarUsageWindow(taskbarUsageWindow);
+    }
+
+    private static async void OnTaskbarContentHostTaskbarWindowRecreated(object sender, EventArgs eventArguments)
+    {
+        var taskbarUsageWindow = s_taskbarUsageWindow;
+        if (taskbarUsageWindow is not null) ReleaseTaskbarUsageWindow(taskbarUsageWindow);
+
+        try
+        {
+            await Task.Delay(1000);
+            if (Services?.GetService<ApplicationSettings>()?.HideTaskbarUsage == false) await InitializeTaskbarUsageWindowAsync();
+        }
+        catch (Exception exception) { Services?.GetService<FileLogService>()?.WriteWarning(nameof(App), "Failed to recreate the taskbar usage window.", exception); }
+    }
+
+    private static void ReleaseTaskbarUsageWindow(TaskbarUsageWindow taskbarUsageWindow)
+    {
+        taskbarUsageWindow.Closed -= OnTaskbarUsageWindowClosed;
+        taskbarUsageWindow.TaskbarContentHost.TaskbarWindowRecreated -= OnTaskbarContentHostTaskbarWindowRecreated;
+        if (ReferenceEquals(s_taskbarUsageWindow, taskbarUsageWindow)) s_taskbarUsageWindow = null;
     }
 
     private void RegisterAppNotificationManager()

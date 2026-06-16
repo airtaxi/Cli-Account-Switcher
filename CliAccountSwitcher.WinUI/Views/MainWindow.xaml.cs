@@ -102,6 +102,13 @@ public sealed partial class MainWindow : WindowEx
         else Instance.DispatcherQueue.TryEnqueue(() => Instance.NavigateToMainPageSectionCore(mainPageNavigationSection));
     }
 
+    public static void ShowActiveAccountQuotaPopup()
+    {
+        if (Instance is null) return;
+        if (Instance.DispatcherQueue.HasThreadAccess) Instance.OpenActiveAccountQuotaPopup();
+        else Instance.DispatcherQueue.TryEnqueue(Instance.OpenActiveAccountQuotaPopup);
+    }
+
     private static void ShowLoadingCore(string message)
     {
         Instance.AppFrame.IsEnabled = false;
@@ -288,6 +295,7 @@ public sealed partial class MainWindow : WindowEx
         _applicationThemeService.ThemeChanged -= OnApplicationThemeServiceThemeChanged;
         _localizationService.LanguageChanged -= RefreshLocalizedText;
         _activeAccountQuotaPopupWindow?.Close();
+        App.CloseTaskbarUsageWindow();
         if (App.Services is IAsyncDisposable asyncDisposable) await asyncDisposable.DisposeAsync();
     }
 }

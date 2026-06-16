@@ -37,6 +37,9 @@ public sealed partial class ApplicationSettings : ObservableObject
     public partial bool IsStartupLaunchEnabled { get; set; } = true;
 
     [ObservableProperty]
+    public partial bool HideTaskbarUsage { get; set; }
+
+    [ObservableProperty]
     public partial bool IsExpiredAccountAutomaticDeletionEnabled { get; set; }
 
     [ObservableProperty]
