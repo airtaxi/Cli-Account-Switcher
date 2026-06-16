@@ -67,8 +67,11 @@ public sealed class SkillService
             ClearReadOnlyAttributeIfExists(targetFilePath);
             zipArchiveEntry.ExtractToFile(targetFilePath, overwrite: true);
 
-            var skillDirectoryName = string.Join("/", zipEntrySegments, 0, zipEntrySegments.Length - 1);
-            if (!string.IsNullOrEmpty(skillDirectoryName)) importedSkillDirectoryNames.Add(skillDirectoryName);
+            if (string.Equals(zipEntrySegments[^1], "SKILL.md", StringComparison.OrdinalIgnoreCase))
+            {
+                var skillDirectoryName = string.Join("/", zipEntrySegments, 0, zipEntrySegments.Length - 1);
+                importedSkillDirectoryNames.Add(skillDirectoryName);
+            }
         }
 
         return Task.FromResult(importedSkillDirectoryNames.Count);
