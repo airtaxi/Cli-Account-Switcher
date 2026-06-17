@@ -1,4 +1,5 @@
-﻿using CliAccountSwitcher.WinUI.Managers;
+﻿using CliAccountSwitcher.WinUI.Helpers;
+using CliAccountSwitcher.WinUI.Managers;
 using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -46,7 +47,7 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
     public partial bool IsStartupLaunchEnabled { get; set; } = applicationSettings.IsStartupLaunchEnabled;
 
     [ObservableProperty]
-    public partial bool IsTaskbarUsageVisible { get; set; } = !applicationSettings.HideTaskbarUsage;
+    public partial bool IsTaskbarUsageVisible { get; set; } = TaskbarHelper.IsTaskbarContentHostSupported && !applicationSettings.HideTaskbarUsage;
 
     [ObservableProperty]
     public partial bool IsExpiredAccountAutomaticDeletionEnabled { get; set; } = applicationSettings.IsExpiredAccountAutomaticDeletionEnabled;
@@ -114,6 +115,8 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
 
     public bool IsPrimaryUsageSurgeNotificationSettingsEnabled => IsPrimaryUsageSurgeNotificationEnabled;
 
+    public Visibility TaskbarUsageSettingsVisibility => TaskbarHelper.IsTaskbarContentHostSupported ? Visibility.Visible : Visibility.Collapsed;
+
     public void Load()
     {
         SynchronizePropertiesFromSettings();
@@ -147,7 +150,7 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
             await applicationSettingsService.ImportSettingsAsync(applicationSettingsFilePath);
             applicationThemeService.ApplyTheme(applicationSettings.Theme);
             localizationService.ApplyLanguageTag(applicationSettings.LanguageOverride);
-            if (applicationSettings.HideTaskbarUsage) App.CloseTaskbarUsageWindow();
+            if (applicationSettings.HideTaskbarUsage || !TaskbarHelper.IsTaskbarContentHostSupported) App.CloseTaskbarUsageWindow();
             else await App.InitializeTaskbarUsageWindowAsync();
             var isStartupLaunchApplied = await startupRegistrationService.SetStartupLaunchEnabledAsync(applicationSettings.IsStartupLaunchEnabled);
             if (!isStartupLaunchApplied) await RefreshStartupLaunchStateFromSystemAsync();
@@ -254,6 +257,8 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
 
     public async Task<SettingsPageDialogData> ApplyTaskbarUsageVisibleAsync(bool isTaskbarUsageVisible)
     {
+        if (!TaskbarHelper.IsTaskbarContentHostSupported) return null;
+
         try
         {
             IsTaskbarUsageVisible = isTaskbarUsageVisible;
@@ -340,7 +345,7 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
         ThemeSelectedIndex = GetThemeSelectedIndex(applicationSettings.Theme);
         IsAutomaticUpdateCheckEnabled = applicationSettings.IsAutomaticUpdateCheckEnabled;
         IsStartupLaunchEnabled = applicationSettings.IsStartupLaunchEnabled;
-        IsTaskbarUsageVisible = !applicationSettings.HideTaskbarUsage;
+        IsTaskbarUsageVisible = TaskbarHelper.IsTaskbarContentHostSupported && !applicationSettings.HideTaskbarUsage;
         IsExpiredAccountAutomaticDeletionEnabled = applicationSettings.IsExpiredAccountAutomaticDeletionEnabled;
         IsExpiredAccountNotificationEnabled = applicationSettings.IsExpiredAccountNotificationEnabled;
         IsActiveAccountUsageAutomaticRefreshEnabled = applicationSettings.IsActiveAccountUsageAutomaticRefreshEnabled;

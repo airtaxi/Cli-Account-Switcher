@@ -1,10 +1,15 @@
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 namespace CliAccountSwitcher.WinUI.Helpers;
 
 public static partial class TaskbarHelper
 {
     private const int GetTaskbarPositionMessage = 5;
+    public const double PreferredTaskbarContentWidth = 200;
+
+    [SupportedOSPlatformGuard("windows10.0.22000.0")]
+    public static bool IsTaskbarContentHostSupported => OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000);
 
     [LibraryImport("shell32.dll", EntryPoint = "SHAppBarMessage")]
     private static partial nint SendAppBarMessage(int messageIdentifier, ref AppBarData appBarData);
@@ -17,7 +22,7 @@ public static partial class TaskbarHelper
 
     public static TaskbarPosition GetTaskbarPosition()
     {
-        if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000)) return TaskbarPosition.Bottom;
+        if (IsTaskbarContentHostSupported) return TaskbarPosition.Bottom;
 
         var appBarData = GetAppBarData();
         return appBarData.EdgeIdentifier switch

@@ -97,7 +97,7 @@
                             Toggled="OnStartupLaunchToggleSwitchToggled" />
                     </dev:SettingsCard>
 
-                    <dev:SettingsCard x:Uid="SettingsPage_TaskbarUsageSettingsCard">
+                    <dev:SettingsCard x:Uid="SettingsPage_TaskbarUsageSettingsCard" Visibility="{x:Bind ViewModel.TaskbarUsageSettingsVisibility, Mode=OneWay}">
                         <dev:SettingsCard.HeaderIcon>
                             <FontIcon Glyph="&#xE9D2;" />
                         </dev:SettingsCard.HeaderIcon>

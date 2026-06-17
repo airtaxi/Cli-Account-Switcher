@@ -1,3 +1,4 @@
+using CliAccountSwitcher.WinUI.Helpers;
 using CliAccountSwitcher.WinUI.Managers;
 using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.Services;
@@ -117,7 +118,7 @@ public partial class App : Application
         ApplyPendingApplicationActivationArguments();
         var applicationSettings = Services.GetRequiredService<ApplicationSettings>();
         _ = Services.GetRequiredService<StartupRegistrationService>().SetStartupLaunchEnabledAsync(applicationSettings.IsStartupLaunchEnabled);
-        if (!applicationSettings.HideTaskbarUsage) await InitializeTaskbarUsageWindowAsync();
+        if (TaskbarHelper.IsTaskbarContentHostSupported && !applicationSettings.HideTaskbarUsage) await InitializeTaskbarUsageWindowAsync();
     }
 
     public static void ShowMainWindow()
@@ -133,6 +134,7 @@ public partial class App : Application
 
     public static async Task InitializeTaskbarUsageWindowAsync()
     {
+        if (!TaskbarHelper.IsTaskbarContentHostSupported) return;
         if (s_taskbarUsageWindow is not null) return;
 
         var taskbarUsageWindow = new TaskbarUsageWindow();
@@ -155,6 +157,7 @@ public partial class App : Application
 
     public static void CloseTaskbarUsageWindow()
     {
+        if (!TaskbarHelper.IsTaskbarContentHostSupported) return;
         if (s_taskbarUsageWindow is null) return;
 
         var taskbarUsageWindow = s_taskbarUsageWindow;
@@ -189,6 +192,8 @@ public partial class App : Application
 
     private static async void OnTaskbarContentHostTaskbarWindowRecreated(object sender, EventArgs eventArguments)
     {
+        if (!TaskbarHelper.IsTaskbarContentHostSupported) return;
+
         var taskbarUsageWindow = s_taskbarUsageWindow;
         if (taskbarUsageWindow is not null) ReleaseTaskbarUsageWindow(taskbarUsageWindow);
 
@@ -203,7 +208,7 @@ public partial class App : Application
     private static void ReleaseTaskbarUsageWindow(TaskbarUsageWindow taskbarUsageWindow)
     {
         taskbarUsageWindow.Closed -= OnTaskbarUsageWindowClosed;
-        taskbarUsageWindow.TaskbarContentHost.TaskbarWindowRecreated -= OnTaskbarContentHostTaskbarWindowRecreated;
+        if (TaskbarHelper.IsTaskbarContentHostSupported) taskbarUsageWindow.TaskbarContentHost.TaskbarWindowRecreated -= OnTaskbarContentHostTaskbarWindowRecreated;
         if (ReferenceEquals(s_taskbarUsageWindow, taskbarUsageWindow)) s_taskbarUsageWindow = null;
     }
 

@@ -1,4 +1,5 @@
-﻿using CliAccountSwitcher.WinUI.Views;
+﻿using CliAccountSwitcher.WinUI.Helpers;
+using CliAccountSwitcher.WinUI.Views;
 using CliAccountSwitcher.WinUI.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
@@ -37,7 +38,7 @@ public sealed partial class TaskbarUsageControl : UserControl, IDisposable
     {
         if (sender is not FrameworkElement rootElement) return;
 
-        var shouldShowRefreshButton = rootElement.ActualWidth > TaskbarUsageWindow.PreferredTaskbarContentWidth - RefreshButtonVisibilityWidthOffset;
+        var shouldShowRefreshButton = rootElement.ActualWidth > TaskbarHelper.PreferredTaskbarContentWidth - RefreshButtonVisibilityWidthOffset;
         RefreshActiveAccountButton.Visibility = shouldShowRefreshButton ? Visibility.Visible : Visibility.Collapsed;
         RootGrid.Margin = shouldShowRefreshButton ? new Thickness(0) : new Thickness(0, 0, -RootGrid.ColumnSpacing, 0);
     }

@@ -64,7 +64,7 @@ public sealed partial class AboutPage : Page
         [
             new("CommunityToolkit.Mvvm", "8.4.2", "MIT", "Microsoft", "https://github.com/CommunityToolkit/dotnet"),
             new("CommunityToolkit.WinUI.Converters", "8.2.251219", "MIT", "Microsoft.Toolkit", "https://github.com/CommunityToolkit/Windows"),
-            new("Deskband11Lib", "1.0.3", "MIT", "airtaxi", "https://github.com/airtaxi/Deskband11Lib"),
+            new("Deskband11Lib.WinUI", "1.1.0", "MIT", "airtaxi", "https://github.com/airtaxi/Deskband11Lib"),
             new("DevWinUI.Controls", "9.9.4", "MIT", "Mahdi Hosseini", "https://github.com/ghost1372/DevWinUI"),
             new("H.NotifyIcon.WinUI", "2.4.1", "MIT", "havendv", "https://github.com/HavenDV/H.NotifyIcon"),
             new("Microsoft.Extensions.DependencyInjection", "10.0.9", "MIT", "Microsoft", "https://github.com/dotnet/runtime"),
