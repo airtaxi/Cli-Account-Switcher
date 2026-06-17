@@ -14,6 +14,10 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
 {
     private const int MinimumUsageRefreshIntervalMinutes = 1;
     private const int MaximumUsageRefreshIntervalMinutes = 1440;
+    private const int MinimumUsageSurgeNotificationThresholdPercentage = 1;
+    private const int MaximumUsageSurgeNotificationThresholdPercentage = 100;
+    private const int MinimumUsageSurgeNotificationWindowMinutes = 1;
+    private const int MaximumUsageSurgeNotificationWindowMinutes = 300;
 
     public string ApplicationVersionText { get; } = localizationService.GetFormattedString("SettingsPage_ApplicationVersionFormat", GetCurrentApplicationVersion());
 
@@ -77,6 +81,16 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
     public partial bool IsSecondaryUsageLowQuotaNotificationEnabled { get; set; } = applicationSettings.IsSecondaryUsageLowQuotaNotificationEnabled;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsPrimaryUsageSurgeNotificationSettingsEnabled))]
+    public partial bool IsPrimaryUsageSurgeNotificationEnabled { get; set; } = applicationSettings.IsPrimaryUsageSurgeNotificationEnabled;
+
+    [ObservableProperty]
+    public partial double PrimaryUsageSurgeNotificationThresholdPercentage { get; set; } = applicationSettings.PrimaryUsageSurgeNotificationThresholdPercentage;
+
+    [ObservableProperty]
+    public partial double PrimaryUsageSurgeNotificationWindowMinutes { get; set; } = applicationSettings.PrimaryUsageSurgeNotificationWindowMinutes;
+
+    [ObservableProperty]
     public partial string ActiveAccountNextUsageRefreshText { get; set; } = "";
 
     [ObservableProperty]
@@ -97,6 +111,8 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
     public bool IsActiveAccountUsageRefreshIntervalEnabled => IsActiveAccountUsageAutomaticRefreshEnabled;
 
     public bool IsInactiveAccountUsageRefreshIntervalEnabled => IsInactiveAccountUsageAutomaticRefreshEnabled;
+
+    public bool IsPrimaryUsageSurgeNotificationSettingsEnabled => IsPrimaryUsageSurgeNotificationEnabled;
 
     public void Load()
     {
@@ -306,6 +322,18 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
         applicationSettings.IsSecondaryUsageLowQuotaNotificationEnabled = isSecondaryUsageLowQuotaNotificationEnabled;
     });
 
+    public async Task<SettingsPageDialogData> ApplyPrimaryUsageSurgeNotificationEnabledAsync(bool isPrimaryUsageSurgeNotificationEnabled) => await SaveSettingAsync(() =>
+    {
+        IsPrimaryUsageSurgeNotificationEnabled = isPrimaryUsageSurgeNotificationEnabled;
+        applicationSettings.IsPrimaryUsageSurgeNotificationEnabled = isPrimaryUsageSurgeNotificationEnabled;
+    });
+
+    public async Task<SettingsPageDialogData> ApplyPrimaryUsageSurgeNotificationThresholdPercentageAsync(double percentage)
+        => await ApplyBoundedIntegerSettingAsync(percentage, applicationSettings.PrimaryUsageSurgeNotificationThresholdPercentage, MinimumUsageSurgeNotificationThresholdPercentage, MaximumUsageSurgeNotificationThresholdPercentage, normalizedPercentage => applicationSettings.PrimaryUsageSurgeNotificationThresholdPercentage = normalizedPercentage, SetPrimaryUsageSurgeNotificationThresholdPercentageSilently);
+
+    public async Task<SettingsPageDialogData> ApplyPrimaryUsageSurgeNotificationWindowMinutesAsync(double minutes)
+        => await ApplyBoundedIntegerSettingAsync(minutes, applicationSettings.PrimaryUsageSurgeNotificationWindowMinutes, MinimumUsageSurgeNotificationWindowMinutes, MaximumUsageSurgeNotificationWindowMinutes, normalizedMinutes => applicationSettings.PrimaryUsageSurgeNotificationWindowMinutes = normalizedMinutes, SetPrimaryUsageSurgeNotificationWindowMinutesSilently);
+
     private void SynchronizePropertiesFromSettings()
     {
         LanguageSelectedIndex = GetLanguageSelectedIndex(applicationSettings.LanguageOverride);
@@ -323,6 +351,9 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
         SecondaryUsageWarningThresholdPercentage = applicationSettings.SecondaryUsageWarningThresholdPercentage;
         IsPrimaryUsageLowQuotaNotificationEnabled = applicationSettings.IsPrimaryUsageLowQuotaNotificationEnabled;
         IsSecondaryUsageLowQuotaNotificationEnabled = applicationSettings.IsSecondaryUsageLowQuotaNotificationEnabled;
+        IsPrimaryUsageSurgeNotificationEnabled = applicationSettings.IsPrimaryUsageSurgeNotificationEnabled;
+        PrimaryUsageSurgeNotificationThresholdPercentage = applicationSettings.PrimaryUsageSurgeNotificationThresholdPercentage;
+        PrimaryUsageSurgeNotificationWindowMinutes = applicationSettings.PrimaryUsageSurgeNotificationWindowMinutes;
     }
 
     public async Task RefreshStartupLaunchStateFromSystemAsync()
@@ -351,6 +382,14 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
         return await SaveSettingsAsync() ? null : CreateSaveSettingsFailedDialogData();
     }
 
+    private async Task<SettingsPageDialogData> ApplyBoundedIntegerSettingAsync(double value, int fallbackValue, int minimumValue, int maximumValue, Action<int> applyValue, Action<double> setValueSilently)
+    {
+        var normalizedValue = NormalizeBoundedInteger(value, fallbackValue, minimumValue, maximumValue);
+        applyValue(normalizedValue);
+        setValueSilently(normalizedValue);
+        return await SaveSettingsAsync() ? null : CreateSaveSettingsFailedDialogData();
+    }
+
     private async Task<SettingsPageDialogData> SaveSettingAsync(Action applySetting)
     {
         applySetting();
@@ -376,6 +415,10 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
     private void SetPrimaryUsageWarningThresholdPercentageSilently(double value) => SetPropertySilently(value, static (viewModel, newValue) => viewModel.PrimaryUsageWarningThresholdPercentage = newValue);
 
     private void SetSecondaryUsageWarningThresholdPercentageSilently(double value) => SetPropertySilently(value, static (viewModel, newValue) => viewModel.SecondaryUsageWarningThresholdPercentage = newValue);
+
+    private void SetPrimaryUsageSurgeNotificationThresholdPercentageSilently(double value) => SetPropertySilently(value, static (viewModel, newValue) => viewModel.PrimaryUsageSurgeNotificationThresholdPercentage = newValue);
+
+    private void SetPrimaryUsageSurgeNotificationWindowMinutesSilently(double value) => SetPropertySilently(value, static (viewModel, newValue) => viewModel.PrimaryUsageSurgeNotificationWindowMinutes = newValue);
 
     private void SetIsStartupLaunchEnabledSilently(bool value) => SetPropertySilently(value, static (viewModel, newValue) => viewModel.IsStartupLaunchEnabled = newValue);
 
@@ -410,6 +453,8 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
     private static int ConvertSecondsToWholeMinutes(int seconds) => Math.Clamp((int)Math.Round(seconds / 60.0, MidpointRounding.AwayFromZero), MinimumUsageRefreshIntervalMinutes, MaximumUsageRefreshIntervalMinutes);
 
     private static int NormalizePercentage(double percentage, int fallbackPercentage) => double.IsNaN(percentage) ? fallbackPercentage : Math.Clamp((int)Math.Round(percentage, MidpointRounding.AwayFromZero), 0, 100);
+
+    private static int NormalizeBoundedInteger(double value, int fallbackValue, int minimumValue, int maximumValue) => double.IsNaN(value) ? fallbackValue : Math.Clamp((int)Math.Round(value, MidpointRounding.AwayFromZero), minimumValue, maximumValue);
 
     private static string GetCurrentApplicationVersion() => FormatCurrentApplicationVersion(Package.Current.Id.Version);
 

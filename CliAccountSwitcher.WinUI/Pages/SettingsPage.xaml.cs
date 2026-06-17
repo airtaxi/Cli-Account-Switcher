@@ -197,6 +197,24 @@ public sealed partial class SettingsPage : Page
         await ShowDialogIfNeededAsync(await StartWithControlSynchronization(() => ViewModel.ApplySecondaryUsageLowQuotaNotificationEnabledAsync(SecondaryUsageLowQuotaNotificationToggleSwitch.IsOn)));
     }
 
+    private async void OnPrimaryUsageSurgeNotificationToggleSwitchToggled(object sender, RoutedEventArgs routedEventArguments)
+    {
+        if (_isSynchronizingControls) return;
+        await ShowDialogIfNeededAsync(await StartWithControlSynchronization(() => ViewModel.ApplyPrimaryUsageSurgeNotificationEnabledAsync(PrimaryUsageSurgeNotificationToggleSwitch.IsOn)));
+    }
+
+    private async void OnPrimaryUsageSurgeNotificationThresholdNumberBoxValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs numberBoxValueChangedEventArguments)
+    {
+        if (_isSynchronizingControls) return;
+        await ShowDialogIfNeededAsync(await StartWithControlSynchronization(() => ViewModel.ApplyPrimaryUsageSurgeNotificationThresholdPercentageAsync(numberBoxValueChangedEventArguments.NewValue)));
+    }
+
+    private async void OnPrimaryUsageSurgeNotificationWindowNumberBoxValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs numberBoxValueChangedEventArguments)
+    {
+        if (_isSynchronizingControls) return;
+        await ShowDialogIfNeededAsync(await StartWithControlSynchronization(() => ViewModel.ApplyPrimaryUsageSurgeNotificationWindowMinutesAsync(numberBoxValueChangedEventArguments.NewValue)));
+    }
+
     private void OnRefreshCountdownDispatcherTimerTick(object sender, object eventArguments) => ViewModel.RefreshUsageRefreshCountdownTexts();
 
     private Task<SettingsPageDialogData> StartWithControlSynchronization(Func<Task<SettingsPageDialogData>> action)

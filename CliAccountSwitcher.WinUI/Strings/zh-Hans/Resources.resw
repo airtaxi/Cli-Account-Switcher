@@ -661,6 +661,12 @@
   <data name="Notification_UsageLowQuotaDetectedWithSwitchSuggestionMessageFormat" xml:space="preserve">
     <value>{0} 的 {1} 剩余配额为 {2}%。另一个账号的配额高于警告阈值。选择此通知可从账号管理切换账号。</value>
   </data>
+  <data name="Notification_PrimaryUsageSurgeDetectedMessageFormat" xml:space="preserve">
+    <value>正以约 {0}%/{1} 分的速度消耗 5 小时限制 - 请检查是否存在无限循环（API 暴增）。</value>
+  </data>
+  <data name="Notification_PrimaryUsageSurgeDetectedTitleFormat" xml:space="preserve">
+    <value>{0} 用量暴增</value>
+  </data>
   <data name="OAuthAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
     <value>运行 Claude Code 登录，然后将当前 Claude Code credential 和 global config 保存为托管账号。</value>
   </data>
@@ -988,6 +994,24 @@
   </data>
   <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Header" xml:space="preserve">
     <value>5 小时低配额通知</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationSettingsCard.Description" xml:space="preserve">
+    <value>当 5 小时限制被快速消耗时显示通知。</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationSettingsCard.Header" xml:space="preserve">
+    <value>5 小时用量暴增通知</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationThresholdSettingsCard.Description" xml:space="preserve">
+    <value>当 5 小时用量在换算单位内增加至少此百分比时，将其视为暴增。</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationThresholdSettingsCard.Header" xml:space="preserve">
+    <value>暴增阈值</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationWindowSettingsCard.Description" xml:space="preserve">
+    <value>设置将实际刷新间隔的增长量换算为几分钟基准。</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationWindowSettingsCard.Header" xml:space="preserve">
+    <value>换算单位（分钟）</value>
   </data>
   <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
     <value>当 5 小时限制的剩余用量等于或低于此百分比时标记为低配额。</value>

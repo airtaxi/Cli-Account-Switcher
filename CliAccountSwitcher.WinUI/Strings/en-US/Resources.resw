@@ -661,6 +661,12 @@
   <data name="Notification_UsageLowQuotaDetectedWithSwitchSuggestionMessageFormat" xml:space="preserve">
     <value>{0}'s {1} remaining quota is {2}%. Another account has quota above the warning threshold. Select this notification to switch accounts from Account Management.</value>
   </data>
+  <data name="Notification_PrimaryUsageSurgeDetectedMessageFormat" xml:space="preserve">
+    <value>Consuming the 5-hour limit at about {0}%/{1} min - check for an infinite loop (API surge).</value>
+  </data>
+  <data name="Notification_PrimaryUsageSurgeDetectedTitleFormat" xml:space="preserve">
+    <value>{0} usage surge</value>
+  </data>
   <data name="OAuthAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
     <value>Run Claude Code login, then save the current Claude Code credential and global config as a managed account.</value>
   </data>
@@ -988,6 +994,24 @@ The installed app is already up to date.</value>
   </data>
   <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Header" xml:space="preserve">
     <value>5-hour low-quota notification</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationSettingsCard.Description" xml:space="preserve">
+    <value>Show a notification when the 5-hour limit is being consumed rapidly.</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationSettingsCard.Header" xml:space="preserve">
+    <value>5-hour usage surge notification</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationThresholdSettingsCard.Description" xml:space="preserve">
+    <value>Treat usage as surging when 5-hour usage increases by at least this percentage per conversion window.</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationThresholdSettingsCard.Header" xml:space="preserve">
+    <value>Surge threshold</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationWindowSettingsCard.Description" xml:space="preserve">
+    <value>Set the minute window used to convert the actual refresh interval into a comparable usage rate.</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationWindowSettingsCard.Header" xml:space="preserve">
+    <value>Conversion window (minutes)</value>
   </data>
   <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
     <value>Mark the 5-hour limit as low quota when remaining usage is at or below this percentage.</value>

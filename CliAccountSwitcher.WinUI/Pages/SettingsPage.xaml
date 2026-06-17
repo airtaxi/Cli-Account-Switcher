@@ -292,6 +292,51 @@
                             Toggled="OnPrimaryUsageLowQuotaNotificationToggleSwitchToggled" />
                     </dev:SettingsCard>
 
+                    <dev:SettingsExpander x:Uid="SettingsPage_PrimaryUsageSurgeNotificationSettingsCard">
+                        <dev:SettingsExpander.HeaderIcon>
+                            <FontIcon Glyph="&#xE7F4;" />
+                        </dev:SettingsExpander.HeaderIcon>
+                        <dev:SettingsExpander.Content>
+                            <ToggleSwitch
+                                x:Name="PrimaryUsageSurgeNotificationToggleSwitch"
+                                IsOn="{x:Bind ViewModel.IsPrimaryUsageSurgeNotificationEnabled, Mode=TwoWay}"
+                                Toggled="OnPrimaryUsageSurgeNotificationToggleSwitchToggled" />
+                        </dev:SettingsExpander.Content>
+                        <dev:SettingsExpander.Items>
+                            <dev:SettingsCard x:Uid="SettingsPage_PrimaryUsageSurgeNotificationThresholdSettingsCard">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <NumberBox
+                                        x:Name="PrimaryUsageSurgeNotificationThresholdNumberBox"
+                                        MinWidth="120"
+                                        IsEnabled="{x:Bind ViewModel.IsPrimaryUsageSurgeNotificationSettingsEnabled, Mode=OneWay}"
+                                        Maximum="100"
+                                        Minimum="1"
+                                        SmallChange="1"
+                                        SpinButtonPlacementMode="Inline"
+                                        ValueChanged="OnPrimaryUsageSurgeNotificationThresholdNumberBoxValueChanged"
+                                        Value="{x:Bind ViewModel.PrimaryUsageSurgeNotificationThresholdPercentage, Mode=TwoWay}" />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="%" />
+                                </StackPanel>
+                            </dev:SettingsCard>
+                            <dev:SettingsCard x:Uid="SettingsPage_PrimaryUsageSurgeNotificationWindowSettingsCard">
+                                <NumberBox
+                                    x:Name="PrimaryUsageSurgeNotificationWindowNumberBox"
+                                    MinWidth="120"
+                                    IsEnabled="{x:Bind ViewModel.IsPrimaryUsageSurgeNotificationSettingsEnabled, Mode=OneWay}"
+                                    LargeChange="5"
+                                    Maximum="300"
+                                    Minimum="1"
+                                    SmallChange="1"
+                                    SpinButtonPlacementMode="Inline"
+                                    ValueChanged="OnPrimaryUsageSurgeNotificationWindowNumberBoxValueChanged"
+                                    Value="{x:Bind ViewModel.PrimaryUsageSurgeNotificationWindowMinutes, Mode=TwoWay}" />
+                            </dev:SettingsCard>
+                        </dev:SettingsExpander.Items>
+                    </dev:SettingsExpander>
+
                     <dev:SettingsCard x:Uid="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard">
                         <dev:SettingsCard.HeaderIcon>
                             <FontIcon Glyph="&#xE7F4;" />

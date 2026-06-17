@@ -661,6 +661,12 @@
   <data name="Notification_UsageLowQuotaDetectedWithSwitchSuggestionMessageFormat" xml:space="preserve">
     <value>{0} の {1} 残りクォータは {2}% です。警告しきい値を超えるクォータを持つ別のアカウントがあります。この通知を選択してアカウント管理から切り替えてください。</value>
   </data>
+  <data name="Notification_PrimaryUsageSurgeDetectedMessageFormat" xml:space="preserve">
+    <value>約 {0}%/{1} 分のペースで 5 時間制限を消費しています - 無限ループ (API 急増) ではないか確認してください。</value>
+  </data>
+  <data name="Notification_PrimaryUsageSurgeDetectedTitleFormat" xml:space="preserve">
+    <value>{0} 使用量急増</value>
+  </data>
   <data name="OAuthAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
     <value>Claude Code ログインを実行し、現在の Claude Code credential と global config を管理対象アカウントとして保存します。</value>
   </data>
@@ -988,6 +994,24 @@
   </data>
   <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Header" xml:space="preserve">
     <value>5時間の低クォータ通知</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationSettingsCard.Description" xml:space="preserve">
+    <value>5 時間制限を急速に消費しているときに通知を表示します。</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationSettingsCard.Header" xml:space="preserve">
+    <value>5 時間使用量急増通知</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationThresholdSettingsCard.Description" xml:space="preserve">
+    <value>5 時間使用量が換算単位あたりこの割合以上増えた場合、急増として扱います。</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationThresholdSettingsCard.Header" xml:space="preserve">
+    <value>急増しきい値</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationWindowSettingsCard.Description" xml:space="preserve">
+    <value>実際の更新間隔の増加量を何分基準で換算するかを設定します。</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationWindowSettingsCard.Header" xml:space="preserve">
+    <value>換算単位 (分)</value>
   </data>
   <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
     <value>5時間制限の残り使用量がこの割合以下になったら低クォータとしてマークします。</value>

@@ -1,3 +1,4 @@
+using CliAccountSwitcher.Api.Providers.Abstractions;
 using Microsoft.Windows.AppNotifications;
 using Microsoft.Windows.AppNotifications.Builder;
 using System;
@@ -45,11 +46,21 @@ public sealed class ApplicationNotificationService
         ShowNotification(notificationTitle, notificationMessage, notificationAction: AccountsNavigationNotificationAction);
     }
 
+    public void ShowPrimaryUsageSurgeNotification(CliProviderKind providerKind, int usageSurgePercentage, int usageSurgeWindowMinutes)
+    {
+        var providerDisplayName = GetProviderDisplayName(providerKind);
+        var notificationTitle = _localizationService.GetFormattedString("Notification_PrimaryUsageSurgeDetectedTitleFormat", providerDisplayName);
+        var notificationMessage = _localizationService.GetFormattedString("Notification_PrimaryUsageSurgeDetectedMessageFormat", usageSurgePercentage, usageSurgeWindowMinutes);
+        ShowNotification(notificationTitle, notificationMessage, notificationAction: AccountsNavigationNotificationAction);
+    }
+
     private string GetUsageLowQuotaNotificationMessage(string accountDisplayName, string usageWindowName, int usageRemainingPercentage, bool hasAlternativeAccountOverWarningThreshold)
     {
         var notificationMessageResourceName = hasAlternativeAccountOverWarningThreshold ? "Notification_UsageLowQuotaDetectedWithSwitchSuggestionMessageFormat" : "Notification_UsageLowQuotaDetectedMessageFormat";
         return _localizationService.GetFormattedString(notificationMessageResourceName, accountDisplayName, usageWindowName, usageRemainingPercentage);
     }
+
+    private string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => _localizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => _localizationService.GetLocalizedString("Provider_CodexDisplayName") };
 
     private static void ShowNotification(string notificationTitle, string notificationMessage, AppNotificationButton notificationButton = null, string notificationAction = "")
     {

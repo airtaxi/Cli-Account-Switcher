@@ -194,6 +194,8 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
 
     protected override ProviderUsageSnapshot GetProviderUsageSnapshot(CodexAccount codexAccount) => CreateProviderUsageSnapshot(codexAccount.LastCodexUsageSnapshot);
 
+    protected override DateTimeOffset? GetLastUsageRefreshTime(CodexAccount codexAccount) => codexAccount.LastUsageRefreshTime;
+
     protected override Task<IReadOnlyList<CodexAccount>> LoadAccountStatesCoreAsync(CancellationToken cancellationToken) => Task.FromResult(LoadAccounts());
 
     protected override async Task SaveAccountStatesAsync(CancellationToken cancellationToken)

@@ -661,6 +661,12 @@
   <data name="Notification_UsageLowQuotaDetectedWithSwitchSuggestionMessageFormat" xml:space="preserve">
     <value>{0} 계정의 {1} 잔여 할당량이 {2}%입니다. 기준보다 여유 있는 다른 계정이 있습니다. 이 알림을 눌러 계정 관리에서 전환해 보세요.</value>
   </data>
+  <data name="Notification_PrimaryUsageSurgeDetectedMessageFormat" xml:space="preserve">
+    <value>약 {0}%/{1}분으로 5시간 한도를 소모 중입니다 - 무한 루프(API 폭주)인지 확인하세요.</value>
+  </data>
+  <data name="Notification_PrimaryUsageSurgeDetectedTitleFormat" xml:space="preserve">
+    <value>{0} 사용량 급증</value>
+  </data>
   <data name="OAuthAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
     <value>Claude Code 로그인을 실행한 뒤 현재 Claude Code credential과 global config를 관리 계정으로 저장합니다.</value>
   </data>
@@ -988,6 +994,24 @@
   </data>
   <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Header" xml:space="preserve">
     <value>5시간 저할당량 알림</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationSettingsCard.Description" xml:space="preserve">
+    <value>5시간 한도를 급격히 소모할 때 알림을 표시합니다.</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationSettingsCard.Header" xml:space="preserve">
+    <value>5시간 사용량 급증 알림</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationThresholdSettingsCard.Description" xml:space="preserve">
+    <value>5시간 사용량이 환산 단위당 이 비율 이상 늘어나면 급증으로 판단합니다.</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationThresholdSettingsCard.Header" xml:space="preserve">
+    <value>급증 기준</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationWindowSettingsCard.Description" xml:space="preserve">
+    <value>실제 새로고침 간격의 증가량을 몇 분 기준으로 환산할지 설정합니다.</value>
+  </data>
+  <data name="SettingsPage_PrimaryUsageSurgeNotificationWindowSettingsCard.Header" xml:space="preserve">
+    <value>환산 단위(분)</value>
   </data>
   <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
     <value>5시간 한도 잔여량이 이 비율 이하가 되면 저할당량으로 표시합니다.</value>

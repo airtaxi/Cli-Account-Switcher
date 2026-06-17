@@ -163,6 +163,8 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
 
     protected override ProviderUsageSnapshot GetProviderUsageSnapshot(StoredProviderAccount storedProviderAccount) => CreateProviderUsageSnapshot(storedProviderAccount.ProviderKind, storedProviderAccount.LastProviderUsageSnapshot);
 
+    protected override DateTimeOffset? GetLastUsageRefreshTime(StoredProviderAccount storedProviderAccount) => storedProviderAccount.LastUsageRefreshTime;
+
     protected override async Task<IReadOnlyList<StoredProviderAccount>> LoadAccountStatesCoreAsync(CancellationToken cancellationToken) => await _claudeCodeProviderAdapter.ListStoredAccountsAsync(_providerSnapshotStore, cancellationToken);
 
     protected override async Task SaveAccountStatesAsync(CancellationToken cancellationToken)

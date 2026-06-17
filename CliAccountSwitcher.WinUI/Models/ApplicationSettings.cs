@@ -7,7 +7,7 @@ namespace CliAccountSwitcher.WinUI.Models;
 
 public sealed partial class ApplicationSettings : ObservableObject
 {
-    public const int CurrentSchemaVersion = 1;
+    public const int CurrentSchemaVersion = 2;
 
     public const int DefaultActiveAccountUsageRefreshIntervalSeconds = 120;
 
@@ -16,6 +16,10 @@ public sealed partial class ApplicationSettings : ObservableObject
     public const int DefaultPrimaryUsageWarningThresholdPercentage = 15;
 
     public const int DefaultSecondaryUsageWarningThresholdPercentage = 15;
+
+    public const int DefaultPrimaryUsageSurgeNotificationThresholdPercentage = 10;
+
+    public const int DefaultPrimaryUsageSurgeNotificationWindowMinutes = 5;
 
     [ObservableProperty]
     public partial int SchemaVersion { get; set; } = CurrentSchemaVersion;
@@ -68,4 +72,13 @@ public sealed partial class ApplicationSettings : ObservableObject
 
     [ObservableProperty]
     public partial bool IsSecondaryUsageLowQuotaNotificationEnabled { get; set; } = true;
+
+    [ObservableProperty]
+    public partial bool IsPrimaryUsageSurgeNotificationEnabled { get; set; } = true;
+
+    [ObservableProperty]
+    public partial int PrimaryUsageSurgeNotificationThresholdPercentage { get; set; } = DefaultPrimaryUsageSurgeNotificationThresholdPercentage;
+
+    [ObservableProperty]
+    public partial int PrimaryUsageSurgeNotificationWindowMinutes { get; set; } = DefaultPrimaryUsageSurgeNotificationWindowMinutes;
 }

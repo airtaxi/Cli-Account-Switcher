@@ -10,7 +10,9 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
     protected readonly ApplicationNotificationService ApplicationNotificationService = applicationNotificationService;
 
     private readonly object _accountsLock = new();
+    private readonly object _primaryUsageSurgeNotificationLock = new();
     private readonly List<TAccountState> _accounts = [];
+    private readonly HashSet<string> _primaryUsageSurgeNotifiedAccountIdentifiers = [];
     private readonly SemaphoreSlim _refreshSemaphore = new(1, 1);
     private bool _disposed;
 
@@ -153,6 +155,8 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
 
     protected abstract ProviderUsageSnapshot GetProviderUsageSnapshot(TAccountState accountState);
 
+    protected abstract DateTimeOffset? GetLastUsageRefreshTime(TAccountState accountState);
+
     protected abstract Task<IReadOnlyList<TAccountState>> LoadAccountStatesCoreAsync(CancellationToken cancellationToken);
 
     protected abstract Task SaveAccountStatesAsync(CancellationToken cancellationToken);
@@ -237,11 +241,14 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
         try
         {
             var previousProviderUsageSnapshot = GetProviderUsageSnapshot(accountState);
+            var previousUsageRefreshTime = GetLastUsageRefreshTime(accountState);
             var wasPrimaryUsageUnderWarningThreshold = IsUsageUnderWarningThreshold(previousProviderUsageSnapshot.FiveHour, ApplicationSettingsService.Settings.PrimaryUsageWarningThresholdPercentage);
             var wasSecondaryUsageUnderWarningThreshold = IsUsageUnderWarningThreshold(previousProviderUsageSnapshot.SevenDay, ApplicationSettingsService.Settings.SecondaryUsageWarningThresholdPercentage);
             var currentProviderUsageSnapshot = await RefreshAccountUsageCoreAsync(accountState, cancellationToken);
+            var currentUsageRefreshTime = GetLastUsageRefreshTime(accountState) ?? DateTimeOffset.UtcNow;
 
             ShowLowQuotaNotifications(accountState, currentProviderUsageSnapshot, wasPrimaryUsageUnderWarningThreshold, wasSecondaryUsageUnderWarningThreshold);
+            ShowPrimaryUsageSurgeNotification(accountState, previousProviderUsageSnapshot.FiveHour, previousUsageRefreshTime, currentProviderUsageSnapshot.FiveHour, currentUsageRefreshTime);
             await SaveAccountStatesAsync(cancellationToken);
             NotifyAccountsChanged();
         }
@@ -278,6 +285,35 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
 
         if (!wasPrimaryUsageUnderWarningThreshold && isPrimaryUsageUnderWarningThreshold && applicationSettings.IsPrimaryUsageLowQuotaNotificationEnabled) ApplicationNotificationService.ShowPrimaryUsageLowQuotaNotification(displayName, currentProviderUsageSnapshot.FiveHour.RemainingPercentage, hasPrimaryUsageAlternativeAccountOverWarningThreshold);
         if (!wasSecondaryUsageUnderWarningThreshold && isSecondaryUsageUnderWarningThreshold && applicationSettings.IsSecondaryUsageLowQuotaNotificationEnabled) ApplicationNotificationService.ShowSecondaryUsageLowQuotaNotification(displayName, currentProviderUsageSnapshot.SevenDay.RemainingPercentage, hasSecondaryUsageAlternativeAccountOverWarningThreshold);
+    }
+
+    private void ShowPrimaryUsageSurgeNotification(TAccountState accountState, ProviderUsageWindow previousUsageWindow, DateTimeOffset? previousUsageRefreshTime, ProviderUsageWindow currentUsageWindow, DateTimeOffset currentUsageRefreshTime)
+    {
+        var accountIdentifier = GetAccountIdentifier(accountState);
+        if (string.IsNullOrWhiteSpace(accountIdentifier)) return;
+
+        if (!ApplicationSettingsService.Settings.IsPrimaryUsageSurgeNotificationEnabled)
+        {
+            ClearPrimaryUsageSurgeNotificationState(accountIdentifier);
+            return;
+        }
+
+        if (!TryCalculatePrimaryUsageSurgePercentage(previousUsageWindow, previousUsageRefreshTime, currentUsageWindow, currentUsageRefreshTime, ApplicationSettingsService.Settings.PrimaryUsageSurgeNotificationWindowMinutes, out var usageSurgePercentage))
+        {
+            ClearPrimaryUsageSurgeNotificationState(accountIdentifier);
+            return;
+        }
+
+        var usageSurgeNotificationThresholdPercentage = ApplicationSettingsService.Settings.PrimaryUsageSurgeNotificationThresholdPercentage;
+        if (usageSurgePercentage < usageSurgeNotificationThresholdPercentage)
+        {
+            ClearPrimaryUsageSurgeNotificationState(accountIdentifier);
+            return;
+        }
+
+        if (!TryMarkPrimaryUsageSurgeNotificationState(accountIdentifier)) return;
+
+        ApplicationNotificationService.ShowPrimaryUsageSurgeNotification(ProviderKind, usageSurgePercentage, ApplicationSettingsService.Settings.PrimaryUsageSurgeNotificationWindowMinutes);
     }
 
     private bool HasAlternativeAccountOverWarningThreshold(TAccountState sourceAccountState, Func<TAccountState, ProviderUsageWindow> usageWindowSelector, int usageWarningThresholdPercentage)
@@ -317,6 +353,8 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
         {
             _accounts.RemoveAll(accountState => accountIdentifierSet.Contains(GetAccountIdentifier(accountState)));
         }
+
+        ClearPrimaryUsageSurgeNotificationStates(accountIdentifierSet);
     }
 
     private void RemoveAccountState(string accountIdentifier)
@@ -325,6 +363,8 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
         {
             _accounts.RemoveAll(accountState => string.Equals(GetAccountIdentifier(accountState), accountIdentifier, StringComparison.Ordinal));
         }
+
+        ClearPrimaryUsageSurgeNotificationState(accountIdentifier);
     }
 
     private void SortAccountStates() => _accounts.Sort((firstAccountState, secondAccountState) => CompareAccountStates(firstAccountState, secondAccountState));
@@ -336,6 +376,76 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
     }
 
     private static bool IsUsageUnderWarningThreshold(ProviderUsageWindow providerUsageWindow, int usageWarningThresholdPercentage) => providerUsageWindow.RemainingPercentage >= 0 && providerUsageWindow.RemainingPercentage <= NormalizeUsageWarningThresholdPercentage(usageWarningThresholdPercentage);
+
+    private static bool TryCalculatePrimaryUsageSurgePercentage(ProviderUsageWindow previousUsageWindow, DateTimeOffset? previousUsageRefreshTime, ProviderUsageWindow currentUsageWindow, DateTimeOffset currentUsageRefreshTime, int usageSurgeNotificationWindowMinutes, out int usageSurgePercentage)
+    {
+        usageSurgePercentage = 0;
+        if (previousUsageRefreshTime is null) return false;
+        if (HasUsageWindowReset(previousUsageWindow, currentUsageWindow)) return false;
+        if (!TryGetUsedPercentage(previousUsageWindow, out var previousUsedPercentage) || !TryGetUsedPercentage(currentUsageWindow, out var currentUsedPercentage)) return false;
+
+        var usedPercentageIncrease = currentUsedPercentage - previousUsedPercentage;
+        if (usedPercentageIncrease <= 0) return false;
+
+        var elapsedMinutes = (currentUsageRefreshTime - previousUsageRefreshTime.Value).TotalMinutes;
+        if (elapsedMinutes <= 0) return false;
+
+        var normalizedUsageSurgeNotificationWindowMinutes = Math.Clamp(usageSurgeNotificationWindowMinutes, 1, 300);
+        var normalizedUsageSurgePercentage = usedPercentageIncrease * normalizedUsageSurgeNotificationWindowMinutes / elapsedMinutes;
+        usageSurgePercentage = Convert.ToInt32(Math.Round(normalizedUsageSurgePercentage, MidpointRounding.AwayFromZero));
+        return usageSurgePercentage > 0;
+    }
+
+    private static bool HasUsageWindowReset(ProviderUsageWindow previousUsageWindow, ProviderUsageWindow currentUsageWindow)
+    {
+        if (previousUsageWindow.ResetAt is not null && currentUsageWindow.ResetAt is not null && currentUsageWindow.ResetAt > previousUsageWindow.ResetAt.Value.AddMinutes(1)) return true;
+        return previousUsageWindow.ResetAfterSeconds >= 0 && currentUsageWindow.ResetAfterSeconds >= 0 && currentUsageWindow.ResetAfterSeconds > previousUsageWindow.ResetAfterSeconds;
+    }
+
+    private static bool TryGetUsedPercentage(ProviderUsageWindow providerUsageWindow, out int usedPercentage)
+    {
+        if (providerUsageWindow.UsedPercentage is >= 0 and <= 100)
+        {
+            usedPercentage = providerUsageWindow.UsedPercentage;
+            return true;
+        }
+
+        if (providerUsageWindow.RemainingPercentage is >= 0 and <= 100)
+        {
+            usedPercentage = 100 - providerUsageWindow.RemainingPercentage;
+            return true;
+        }
+
+        usedPercentage = 0;
+        return false;
+    }
+
+    private bool TryMarkPrimaryUsageSurgeNotificationState(string accountIdentifier)
+    {
+        lock (_primaryUsageSurgeNotificationLock)
+        {
+            if (_primaryUsageSurgeNotifiedAccountIdentifiers.Contains(accountIdentifier)) return false;
+
+            _primaryUsageSurgeNotifiedAccountIdentifiers.Add(accountIdentifier);
+            return true;
+        }
+    }
+
+    private void ClearPrimaryUsageSurgeNotificationState(string accountIdentifier)
+    {
+        lock (_primaryUsageSurgeNotificationLock)
+        {
+            _primaryUsageSurgeNotifiedAccountIdentifiers.Remove(accountIdentifier);
+        }
+    }
+
+    private void ClearPrimaryUsageSurgeNotificationStates(IEnumerable<string> accountIdentifiers)
+    {
+        lock (_primaryUsageSurgeNotificationLock)
+        {
+            _primaryUsageSurgeNotifiedAccountIdentifiers.ExceptWith(accountIdentifiers);
+        }
+    }
 
     private void ThrowIfDisposed()
     {

@@ -70,6 +70,8 @@ public sealed class ApplicationSettingsService
         applicationSettings.InactiveAccountUsageRefreshIntervalSeconds = NormalizeRefreshIntervalSeconds(applicationSettings.InactiveAccountUsageRefreshIntervalSeconds, ApplicationSettings.DefaultInactiveAccountUsageRefreshIntervalSeconds);
         applicationSettings.PrimaryUsageWarningThresholdPercentage = NormalizePercentage(applicationSettings.PrimaryUsageWarningThresholdPercentage);
         applicationSettings.SecondaryUsageWarningThresholdPercentage = NormalizePercentage(applicationSettings.SecondaryUsageWarningThresholdPercentage);
+        applicationSettings.PrimaryUsageSurgeNotificationThresholdPercentage = NormalizeUsageSurgeNotificationThresholdPercentage(applicationSettings.PrimaryUsageSurgeNotificationThresholdPercentage);
+        applicationSettings.PrimaryUsageSurgeNotificationWindowMinutes = NormalizeUsageSurgeNotificationWindowMinutes(applicationSettings.PrimaryUsageSurgeNotificationWindowMinutes);
     }
 
     private static void CopySettings(ApplicationSettings sourceApplicationSettings, ApplicationSettings destinationApplicationSettings)
@@ -91,6 +93,9 @@ public sealed class ApplicationSettingsService
         destinationApplicationSettings.SecondaryUsageWarningThresholdPercentage = sourceApplicationSettings.SecondaryUsageWarningThresholdPercentage;
         destinationApplicationSettings.IsPrimaryUsageLowQuotaNotificationEnabled = sourceApplicationSettings.IsPrimaryUsageLowQuotaNotificationEnabled;
         destinationApplicationSettings.IsSecondaryUsageLowQuotaNotificationEnabled = sourceApplicationSettings.IsSecondaryUsageLowQuotaNotificationEnabled;
+        destinationApplicationSettings.IsPrimaryUsageSurgeNotificationEnabled = sourceApplicationSettings.IsPrimaryUsageSurgeNotificationEnabled;
+        destinationApplicationSettings.PrimaryUsageSurgeNotificationThresholdPercentage = sourceApplicationSettings.PrimaryUsageSurgeNotificationThresholdPercentage;
+        destinationApplicationSettings.PrimaryUsageSurgeNotificationWindowMinutes = sourceApplicationSettings.PrimaryUsageSurgeNotificationWindowMinutes;
     }
 
     private static string NormalizeLanguageOverride(string languageOverride) => languageOverride is "ko-KR" or "en-US" or "ja-JP" or "zh-Hans" or "zh-Hant" ? languageOverride : "";
@@ -100,4 +105,8 @@ public sealed class ApplicationSettingsService
     private static int NormalizeRefreshIntervalSeconds(int refreshIntervalSeconds, int defaultRefreshIntervalSeconds) => refreshIntervalSeconds <= 0 ? defaultRefreshIntervalSeconds : Math.Clamp(refreshIntervalSeconds, 60, 86400);
 
     private static int NormalizePercentage(int percentage) => Math.Clamp(percentage, 0, 100);
+
+    private static int NormalizeUsageSurgeNotificationThresholdPercentage(int percentage) => percentage <= 0 ? ApplicationSettings.DefaultPrimaryUsageSurgeNotificationThresholdPercentage : Math.Clamp(percentage, 1, 100);
+
+    private static int NormalizeUsageSurgeNotificationWindowMinutes(int minutes) => minutes <= 0 ? ApplicationSettings.DefaultPrimaryUsageSurgeNotificationWindowMinutes : Math.Clamp(minutes, 1, 300);
 }
