@@ -55,7 +55,7 @@ public sealed class CodexRequestMessageFactory(CodexApiClientOptions codexApiCli
         httpRequestMessage.Headers.TryAddWithoutValidation("accept", "*/*");
         httpRequestMessage.Headers.TryAddWithoutValidation("accept-language", "*");
         httpRequestMessage.Headers.TryAddWithoutValidation("sec-fetch-mode", "cors");
-        httpRequestMessage.Headers.ConnectionClose = false;
+        httpRequestMessage.Headers.ConnectionClose = true;
         return httpRequestMessage;
     }
 
