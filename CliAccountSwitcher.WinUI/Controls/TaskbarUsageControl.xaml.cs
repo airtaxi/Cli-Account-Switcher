@@ -40,6 +40,5 @@ public sealed partial class TaskbarUsageControl : UserControl, IDisposable
 
         var shouldShowRefreshButton = rootElement.ActualWidth > TaskbarHelper.PreferredTaskbarContentWidth - RefreshButtonVisibilityWidthOffset;
         RefreshActiveAccountButton.Visibility = shouldShowRefreshButton ? Visibility.Visible : Visibility.Collapsed;
-        RootGrid.Margin = shouldShowRefreshButton ? new Thickness(0) : new Thickness(0, 0, -RootGrid.ColumnSpacing, 0);
     }
 }
