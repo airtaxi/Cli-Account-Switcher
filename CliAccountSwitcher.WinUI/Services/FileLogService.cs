@@ -1,4 +1,5 @@
 using System.Text;
+using System.Threading;
 
 namespace CliAccountSwitcher.WinUI.Services;
 
@@ -8,6 +9,7 @@ public sealed class FileLogService
     private const string LogFileName = "codex-account-switch-logs.txt";
 
     private readonly Lock _logEntriesLock = new();
+    private readonly SemaphoreSlim _logFileWriteSemaphore = new(1, 1);
     private readonly List<string> _logEntries = [];
     private readonly string _logFilePath = Path.Combine(Constants.UserDataDirectory, LogFileName);
 
@@ -77,21 +79,26 @@ public sealed class FileLogService
 
     private void ResetSessionLog()
     {
+        string logSnapshot;
         lock (_logEntriesLock)
         {
             _logEntries.Clear();
-            TryWriteLogSnapshotToFileCore();
+            logSnapshot = CreateLogSnapshotCore();
         }
+
+        _ = TryWriteLogSnapshotToFileAsync(logSnapshot);
     }
 
-    private void TryWriteLogSnapshotToFileCore()
+    private async Task TryWriteLogSnapshotToFileAsync(string logSnapshot)
     {
+        await _logFileWriteSemaphore.WaitAsync();
         try
         {
             Directory.CreateDirectory(Path.GetDirectoryName(_logFilePath)!);
-            File.WriteAllText(_logFilePath, CreateLogSnapshotCore(), Encoding.UTF8);
+            await File.WriteAllTextAsync(_logFilePath, logSnapshot, Encoding.UTF8);
         }
         catch { }
+        finally { _logFileWriteSemaphore.Release(); }
     }
 
     private void WriteEntry(string logLevel, string source, string message)
@@ -102,12 +109,15 @@ public sealed class FileLogService
         var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
         var logEntry = $"[{timestamp}] [{logLevel}] [{source}] {message.TrimEnd()}";
 
+        string logSnapshot;
         lock (_logEntriesLock)
         {
             _logEntries.Add(logEntry);
             if (_logEntries.Count > MaximumLogEntryCount) _logEntries.RemoveRange(0, _logEntries.Count - MaximumLogEntryCount);
 
-            TryWriteLogSnapshotToFileCore();
+            logSnapshot = CreateLogSnapshotCore();
         }
+
+        _ = TryWriteLogSnapshotToFileAsync(logSnapshot);
     }
 }

@@ -1,4 +1,4 @@
-using CliAccountSwitcher.Api.Providers.Abstractions;
+﻿using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Models;
 using System.Net;
 
@@ -26,10 +26,10 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
 
     public IReadOnlyList<ProviderAccount> GetAccounts()
     {
-        lock (_accountsLock)
-        {
-            return _accounts.Select(CreateProviderAccount).ToArray();
-        }
+        List<TAccountState> accountStateSnapshot;
+        lock (_accountsLock) accountStateSnapshot = [.._accounts];
+
+        return accountStateSnapshot.Select(CreateProviderAccount).ToArray();
     }
 
     public virtual async Task InitializeAsync(CancellationToken cancellationToken = default)

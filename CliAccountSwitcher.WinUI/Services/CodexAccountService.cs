@@ -17,13 +17,16 @@ namespace CliAccountSwitcher.WinUI.Services;
 public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
 {
     private const int MaximumRefreshTokenFailureCount = 3;
+    private const int FileSystemWatcherDebounceDelayMilliseconds = 500;
 
     private readonly SemaphoreSlim _saveSemaphore = new(1, 1);
+    private readonly SemaphoreSlim _fileSystemWatcherSynchronizationSemaphore = new(1, 1);
     private readonly HttpClient _httpClient;
     private readonly CodexAuthenticationDocumentSerializer _codexAuthenticationDocumentSerializer = new();
     private readonly CodexOAuthClient _codexOAuthClient;
     private readonly CodexUsageClient _codexUsageClient;
     private FileSystemWatcher _authenticationFileSystemWatcher;
+    private CancellationTokenSource _fileSystemWatcherDebounceCancellationTokenSource;
     private bool _disposed;
 
     public CodexAccountService(ApplicationSettingsService applicationSettingsService, ApplicationNotificationService applicationNotificationService)
@@ -158,7 +161,11 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
     {
         if (_disposed) return;
         _disposed = true;
+
         _authenticationFileSystemWatcher?.Dispose();
+        _fileSystemWatcherDebounceCancellationTokenSource?.Cancel();
+        _fileSystemWatcherDebounceCancellationTokenSource?.Dispose();
+        _fileSystemWatcherSynchronizationSemaphore.Dispose();
         _saveSemaphore.Dispose();
         _httpClient.Dispose();
         base.Dispose();
@@ -436,13 +443,29 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
         catch { }
     }
 
-    private void OnAuthenticationFileSystemWatcherChanged(object sender, FileSystemEventArgs fileSystemEventArguments) => _ = SynchronizeActiveStatusesSilentlyAsync();
+    private void OnAuthenticationFileSystemWatcherChanged(object sender, FileSystemEventArgs fileSystemEventArguments) => ScheduleDebouncedSynchronizeActiveStatuses();
 
-    private void OnAuthenticationFileSystemWatcherRenamed(object sender, RenamedEventArgs renamedEventArguments) => _ = SynchronizeActiveStatusesSilentlyAsync();
+    private void OnAuthenticationFileSystemWatcherRenamed(object sender, RenamedEventArgs renamedEventArguments) => ScheduleDebouncedSynchronizeActiveStatuses();
 
-    private async Task SynchronizeActiveStatusesSilentlyAsync()
+    private void ScheduleDebouncedSynchronizeActiveStatuses()
     {
-        try { await SynchronizeActiveStatusesAsync(); }
+        var nextCancellationTokenSource = new CancellationTokenSource();
+        var previousCancellationTokenSource = Interlocked.Exchange(ref _fileSystemWatcherDebounceCancellationTokenSource, nextCancellationTokenSource);
+        previousCancellationTokenSource?.Cancel();
+        previousCancellationTokenSource?.Dispose();
+        _ = SynchronizeActiveStatusesDebouncedAsync(nextCancellationTokenSource.Token);
+    }
+
+    private async Task SynchronizeActiveStatusesDebouncedAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            await Task.Delay(FileSystemWatcherDebounceDelayMilliseconds, cancellationToken);
+            await _fileSystemWatcherSynchronizationSemaphore.WaitAsync(CancellationToken.None);
+            try { await SynchronizeActiveStatusesAsync(); }
+            finally { _fileSystemWatcherSynchronizationSemaphore.Release(); }
+        }
+        catch (OperationCanceledException) { }
         catch { }
     }
 
