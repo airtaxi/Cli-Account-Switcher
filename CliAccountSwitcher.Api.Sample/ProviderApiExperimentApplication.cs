@@ -1,7 +1,11 @@
-using CliAccountSwitcher.Api.Providers.Codex.Models;
+﻿using CliAccountSwitcher.Api.Providers.Codex.Models;
 using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.Api.Providers.ClaudeCode;
 using CliAccountSwitcher.Api.Providers.Codex;
+using CliAccountSwitcher.Api.Providers.Zai;
+using CliAccountSwitcher.Api.Providers.Zai.Infrastructure;
+using CliAccountSwitcher.Api.Providers.Zai.Models;
+using CliAccountSwitcher.Api.Providers.Zai.Models.Usage;
 using CliAccountSwitcher.Api.Storage;
 using CliAccountSwitcher.Api.Sample.Infrastructure;
 
@@ -13,6 +17,8 @@ public sealed class ProviderApiExperimentApplication : IDisposable
     private readonly IProviderAdapter _claudeCodeProviderAdapter;
     private readonly IProviderSnapshotStore _providerSnapshotStore;
     private readonly IReadOnlyDictionary<CliProviderKind, IProviderAdapter> _providerAdapters;
+    private readonly ZaiUsageClient _zaiUsageClient;
+    private readonly HttpClient _zaiHttpClient;
 
     public ProviderApiExperimentApplication()
     {
@@ -24,6 +30,8 @@ public sealed class ProviderApiExperimentApplication : IDisposable
             [CliProviderKind.Codex] = _codexProviderAdapter,
             [CliProviderKind.ClaudeCode] = _claudeCodeProviderAdapter
         };
+        _zaiHttpClient = new HttpClient();
+        _zaiUsageClient = new ZaiUsageClient(_zaiHttpClient);
     }
 
     public async Task<int> RunAsync(string[] commandLineArguments)
@@ -33,6 +41,7 @@ public sealed class ProviderApiExperimentApplication : IDisposable
             if (commandLineArguments.Length == 0) return await RunProviderSelectionLoopAsync();
 
             var directCommandLineContext = ParseDirectCommandLine(commandLineArguments);
+            if (directCommandLineContext.IsZaiProvider) return await RunZaiDirectCommandAsync(directCommandLineContext.CommandName, directCommandLineContext.CommandArguments);
             var providerAdapter = GetProviderAdapter(directCommandLineContext.ProviderKind);
             if (string.IsNullOrWhiteSpace(directCommandLineContext.CommandName)) return ShowHelp(providerAdapter);
 
@@ -47,6 +56,18 @@ public sealed class ProviderApiExperimentApplication : IDisposable
                 Console.Error.WriteLine();
                 Console.Error.WriteLine("Response body:");
                 Console.Error.WriteLine(exception.ResponseBody);
+            }
+
+            return 1;
+        }
+        catch (ZaiApiException exception)
+        {
+            Console.Error.WriteLine(exception.Message);
+            if (!string.IsNullOrWhiteSpace(exception.ResponseText))
+            {
+                Console.Error.WriteLine();
+                Console.Error.WriteLine("Response body:");
+                Console.Error.WriteLine(exception.ResponseText);
             }
 
             return 1;
@@ -75,6 +96,7 @@ public sealed class ProviderApiExperimentApplication : IDisposable
 
     public void Dispose()
     {
+        _zaiHttpClient.Dispose();
         if (_codexProviderAdapter is IDisposable codexProviderAdapter) codexProviderAdapter.Dispose();
         if (_claudeCodeProviderAdapter is IDisposable claudeCodeProviderAdapter) claudeCodeProviderAdapter.Dispose();
     }
@@ -85,16 +107,22 @@ public sealed class ProviderApiExperimentApplication : IDisposable
         {
             ShowProviderSelectionMenu();
             var selectionText = ReadRequiredValue("Select a provider");
-            if (!TryResolveProviderSelection(selectionText, out var providerKind, out var shouldExit))
+            if (!TryResolveProviderSelection(selectionText, out var providerSelection))
             {
                 Console.WriteLine("Invalid selection.");
                 Console.WriteLine();
                 continue;
             }
 
-            if (shouldExit) return 0;
+            if (providerSelection == SampleProviderSelection.Exit) return 0;
+            if (providerSelection == SampleProviderSelection.Zai)
+            {
+                var zaiLoopResult = await RunZaiExperimentLoopAsync();
+                if (zaiLoopResult == ZaiLoopResult.ExitApplication) return 0;
+                continue;
+            }
 
-            var providerAdapter = GetProviderAdapter(providerKind);
+            var providerAdapter = GetProviderAdapter(ResolveProviderKind(providerSelection));
             var interactiveLoopResult = await RunProviderInteractiveLoopAsync(providerAdapter);
             if (interactiveLoopResult == InteractiveLoopResult.ExitApplication) return 0;
         }
@@ -167,10 +195,7 @@ public sealed class ProviderApiExperimentApplication : IDisposable
                 _ => ShowUnknownCommand(normalizedCommandName)
             };
         }
-        finally
-        {
-            if (codexProviderAdapter is not null) codexProviderAdapter.InputFilePathOverride = null;
-        }
+        finally { codexProviderAdapter?.InputFilePathOverride = null; }
     }
 
     private int ShowHelp(IProviderAdapter providerAdapter)
@@ -435,6 +460,7 @@ public sealed class ProviderApiExperimentApplication : IDisposable
     private static DirectCommandLineContext ParseDirectCommandLine(IReadOnlyList<string> commandLineArguments)
     {
         var providerKind = CliProviderKind.Codex;
+        var isZaiProvider = false;
         var commandName = "";
         var commandArguments = new List<string>();
 
@@ -444,14 +470,18 @@ public sealed class ProviderApiExperimentApplication : IDisposable
             if (string.Equals(argumentText, "--provider", StringComparison.OrdinalIgnoreCase))
             {
                 if (argumentIndex + 1 >= commandLineArguments.Count) throw new InvalidOperationException("The --provider option requires a value.");
-                providerKind = ParseProviderKind(commandLineArguments[argumentIndex + 1]);
+                var providerText = commandLineArguments[argumentIndex + 1];
+                if (IsZaiProviderText(providerText)) isZaiProvider = true;
+                else providerKind = ParseProviderKind(providerText);
                 argumentIndex++;
                 continue;
             }
 
             if (argumentText.StartsWith("--provider=", StringComparison.OrdinalIgnoreCase))
             {
-                providerKind = ParseProviderKind(argumentText["--provider=".Length..]);
+                var providerText = argumentText["--provider=".Length..];
+                if (IsZaiProviderText(providerText)) isZaiProvider = true;
+                else providerKind = ParseProviderKind(providerText);
                 continue;
             }
 
@@ -467,9 +497,16 @@ public sealed class ProviderApiExperimentApplication : IDisposable
         return new DirectCommandLineContext
         {
             ProviderKind = providerKind,
+            IsZaiProvider = isZaiProvider,
             CommandName = commandName,
             CommandArguments = commandArguments
         };
+    }
+
+    private static bool IsZaiProviderText(string providerText)
+    {
+        var normalizedProviderText = providerText.Trim().ToLowerInvariant();
+        return normalizedProviderText is "3" or "zai" or "z.ai";
     }
 
     private static CliProviderKind ParseProviderKind(string providerText)
@@ -486,6 +523,7 @@ public sealed class ProviderApiExperimentApplication : IDisposable
         Console.WriteLine("Select a provider:");
         Console.WriteLine("  1. Codex");
         Console.WriteLine("  2. Claude Code");
+        Console.WriteLine("  3. Z.ai (GLM Coding Plan) usage");
         Console.WriteLine("  0. Exit");
         Console.WriteLine();
     }
@@ -512,32 +550,43 @@ public sealed class ProviderApiExperimentApplication : IDisposable
         Console.WriteLine();
     }
 
-    private static bool TryResolveProviderSelection(string selectionText, out CliProviderKind providerKind, out bool shouldExit)
+    private static bool TryResolveProviderSelection(string selectionText, out SampleProviderSelection providerSelection)
     {
-        providerKind = CliProviderKind.Codex;
-        shouldExit = false;
+        providerSelection = SampleProviderSelection.None;
 
         var normalizedSelectionText = selectionText.Trim().ToLowerInvariant();
         if (normalizedSelectionText is "0" or "q" or "quit" or "exit")
         {
-            shouldExit = true;
+            providerSelection = SampleProviderSelection.Exit;
             return true;
         }
 
         if (normalizedSelectionText is "1" or "codex")
         {
-            providerKind = CliProviderKind.Codex;
+            providerSelection = SampleProviderSelection.Codex;
             return true;
         }
 
         if (normalizedSelectionText is "2" or "claude" or "claude-code" or "claudecode")
         {
-            providerKind = CliProviderKind.ClaudeCode;
+            providerSelection = SampleProviderSelection.ClaudeCode;
+            return true;
+        }
+
+        if (normalizedSelectionText is "3" or "zai")
+        {
+            providerSelection = SampleProviderSelection.Zai;
             return true;
         }
 
         return false;
     }
+
+    private static CliProviderKind ResolveProviderKind(SampleProviderSelection providerSelection) => providerSelection switch
+    {
+        SampleProviderSelection.ClaudeCode => CliProviderKind.ClaudeCode,
+        _ => CliProviderKind.Codex
+    };
 
     private static string? ResolveInteractiveCommandName(string selectionText)
         => selectionText.Trim().ToLowerInvariant() switch
@@ -590,6 +639,178 @@ public sealed class ProviderApiExperimentApplication : IDisposable
         Console.WriteLine($"{titleText} remaining: {FormatPercentage(providerUsageWindow.RemainingPercentage)}");
         Console.WriteLine($"{titleText} reset after seconds: {providerUsageWindow.ResetAfterSeconds}");
         Console.WriteLine($"{titleText} reset at: {FormatValue(providerUsageWindow.ResetAt?.ToString("yyyy-MM-ddTHH:mm:ssZ"))}");
+    }
+
+    private async Task<ZaiLoopResult> RunZaiExperimentLoopAsync()
+    {
+        while (true)
+        {
+            ShowZaiExperimentMenu();
+            var selectedCommandName = ResolveZaiCommandName(ReadRequiredValue("Select a command"));
+            if (string.IsNullOrWhiteSpace(selectedCommandName))
+            {
+                Console.WriteLine("Invalid selection.");
+                Console.WriteLine();
+                continue;
+            }
+
+            if (selectedCommandName == "exit") return ZaiLoopResult.ExitApplication;
+            if (selectedCommandName == "change-provider") return ZaiLoopResult.ChangeProvider;
+
+            Console.WriteLine();
+            var commandExitCode = await RunZaiCommandAsync(selectedCommandName, null);
+            Console.WriteLine();
+            Console.WriteLine(commandExitCode == 0 ? "Completed." : $"The command exited with code {commandExitCode}.");
+            Console.WriteLine();
+            WaitForContinue();
+        }
+    }
+
+    private static void ShowZaiExperimentMenu()
+    {
+        Console.WriteLine("CliAccountSwitcher.Api.Sample");
+        Console.WriteLine("Provider: Z.ai (GLM Coding Plan)");
+        Console.WriteLine("Choose a feature:");
+        Console.WriteLine("  1. Usage (from chelper config)");
+        Console.WriteLine("  2. Usage (enter API key)");
+        Console.WriteLine("  3. Show chelper config");
+        Console.WriteLine("  4. Help");
+        Console.WriteLine("  5. Change provider");
+        Console.WriteLine("  6. Exit");
+        Console.WriteLine();
+    }
+
+    private static string? ResolveZaiCommandName(string selectionText)
+        => selectionText.Trim().ToLowerInvariant() switch
+        {
+            "1" or "usage-config" or "usage" => "usage-config",
+            "2" or "usage-key" => "usage-key",
+            "3" or "config" => "config",
+            "4" or "help" => "help",
+            "5" or "change-provider" => "change-provider",
+            "6" or "0" or "q" or "quit" or "exit" => "exit",
+            _ => null
+        };
+
+    private Task<int> RunZaiCommandAsync(string commandName, CommandLineArguments? parsedArguments)
+    {
+        var normalizedCommandName = commandName.ToLowerInvariant();
+        return normalizedCommandName switch
+        {
+            "usage-config" => ShowZaiUsageFromConfigAsync(),
+            "usage-key" => ShowZaiUsageFromApiKeyAsync(parsedArguments),
+            "config" => ShowZaiChelperConfigAsync(),
+            "help" => Task.FromResult(ShowZaiHelp()),
+            _ => Task.FromResult(ShowZaiUnknownCommand(normalizedCommandName))
+        };
+    }
+
+    private async Task<int> RunZaiDirectCommandAsync(string commandName, IReadOnlyList<string> commandArguments)
+    {
+        var normalizedCommandName = commandName.Trim().ToLowerInvariant();
+        var parsedArguments = CommandLineArguments.Parse(commandArguments);
+        if (string.IsNullOrWhiteSpace(normalizedCommandName)) return ShowZaiHelp();
+
+        return normalizedCommandName switch
+        {
+            "usage" => await RunZaiDirectUsageAsync(parsedArguments),
+            "config" => await ShowZaiChelperConfigAsync(),
+            "help" => ShowZaiHelp(),
+            _ => ShowZaiUnknownCommand(normalizedCommandName)
+        };
+    }
+
+    private Task<int> RunZaiDirectUsageAsync(CommandLineArguments parsedArguments)
+    {
+        var apiKey = parsedArguments.GetOptionValue("api-key");
+        return string.IsNullOrWhiteSpace(apiKey) ? ShowZaiUsageFromConfigAsync() : ShowZaiUsageWithApiKeyAsync(apiKey);
+    }
+
+    private async Task<int> ShowZaiUsageFromConfigAsync()
+    {
+        ZaiChelperConfig chelperConfig;
+        try { chelperConfig = await ZaiChelperConfigReader.LoadAsync(); }
+        catch (FileNotFoundException) { Console.Error.WriteLine("The chelper config was not found at ~/.chelper/config.yaml. Run `chelper` to create it, or pass an API key with --api-key."); return 1; }
+
+        Console.WriteLine($"API key: {BuildApiKeyPreview(chelperConfig.ApiKey)}  Plan: {FormatValue(chelperConfig.Plan)}");
+        Console.WriteLine();
+        var snapshot = await _zaiUsageClient.GetUsageAsync(chelperConfig);
+        ShowZaiUsageSnapshot(snapshot);
+        return 0;
+    }
+
+    private Task<int> ShowZaiUsageFromApiKeyAsync(CommandLineArguments? parsedArguments)
+    {
+        var apiKey = parsedArguments?.GetOptionValue("api-key");
+        if (string.IsNullOrWhiteSpace(apiKey)) apiKey = ReadRequiredValue("API key");
+        return ShowZaiUsageWithApiKeyAsync(apiKey);
+    }
+
+    private async Task<int> ShowZaiUsageWithApiKeyAsync(string apiKey)
+    {
+        var snapshot = await _zaiUsageClient.GetUsageAsync(apiKey);
+        ShowZaiUsageSnapshot(snapshot);
+        return 0;
+    }
+
+    private static void ShowZaiUsageSnapshot(ZaiUsageSnapshot snapshot)
+    {
+        Console.WriteLine($"Plan level: {FormatValue(snapshot.PlanLevel)}");
+        ShowUsageWindow("Five-hour window", ToProviderUsageWindow(snapshot.FiveHour));
+        ShowUsageWindow("Seven-day window", ToProviderUsageWindow(snapshot.SevenDay));
+    }
+
+    private static ProviderUsageWindow ToProviderUsageWindow(ZaiUsageWindow window) => new()
+    {
+        UsedPercentage = window.UsedPercentage,
+        RemainingPercentage = window.RemainingPercentage,
+        ResetAfterSeconds = window.ResetAfterSeconds,
+        ResetAt = window.ResetAt
+    };
+
+    private async Task<int> ShowZaiChelperConfigAsync()
+    {
+        var configFilePath = new ZaiChelperConfigPaths().ConfigFilePath;
+        ZaiChelperConfig chelperConfig;
+        try { chelperConfig = await ZaiChelperConfigReader.LoadAsync(configFilePath); }
+        catch (FileNotFoundException) { Console.Error.WriteLine($"The chelper config was not found: {configFilePath}"); return 1; }
+
+        Console.WriteLine($"Config file: {configFilePath}");
+        Console.WriteLine($"Plan: {FormatValue(chelperConfig.Plan)}");
+        Console.WriteLine($"Language: {FormatValue(chelperConfig.Language)}");
+        Console.WriteLine($"API key: {BuildApiKeyPreview(chelperConfig.ApiKey)}");
+        Console.WriteLine($"Is valid: {chelperConfig.IsValid}");
+        return 0;
+    }
+
+    private static int ShowZaiHelp()
+    {
+        Console.WriteLine("CliAccountSwitcher.Api.Sample");
+        Console.WriteLine("Provider: Z.ai (GLM Coding Plan)");
+        Console.WriteLine();
+        Console.WriteLine("Commands:");
+        Console.WriteLine("  usage [--api-key <key>]   Query 5-hour/7-day remaining usage");
+        Console.WriteLine("  config                    Show the chelper config (~/.chelper/config.yaml)");
+        Console.WriteLine("  help                      Show this help");
+        Console.WriteLine();
+        Console.WriteLine("Global options:");
+        Console.WriteLine("  --provider zai            Select the Z.ai provider");
+        Console.WriteLine();
+        Console.WriteLine("If --api-key is omitted, the API key from ~/.chelper/config.yaml is used.");
+        return 0;
+    }
+
+    private static int ShowZaiUnknownCommand(string commandName)
+    {
+        Console.Error.WriteLine($"Unknown command: {commandName}");
+        Console.Error.WriteLine("Run `help` to see the available commands.");
+        return 1;
+    }
+
+    private static string BuildApiKeyPreview(string apiKey)
+    {
+        if (string.IsNullOrWhiteSpace(apiKey)) return "(missing)";
+        return apiKey.Length <= 18 ? apiKey : $"{apiKey[..8]}...{apiKey[^6..]}";
     }
 
     private static void AppendCodexInputArgument(List<string> interactiveArguments, IProviderAdapter providerAdapter, string? defaultInputFilePath)
@@ -665,9 +886,26 @@ public sealed class ProviderApiExperimentApplication : IDisposable
         ExitApplication
     }
 
+    private enum SampleProviderSelection
+    {
+        None,
+        Codex,
+        ClaudeCode,
+        Zai,
+        Exit
+    }
+
+    private enum ZaiLoopResult
+    {
+        ChangeProvider,
+        ExitApplication
+    }
+
     private sealed class DirectCommandLineContext
     {
         public CliProviderKind ProviderKind { get; set; }
+
+        public bool IsZaiProvider { get; set; }
 
         public string CommandName { get; set; } = "";
 
