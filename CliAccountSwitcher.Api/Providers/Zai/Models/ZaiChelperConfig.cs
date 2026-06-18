@@ -10,6 +10,8 @@ public sealed class ZaiChelperConfig
 
     public bool IsValid => !string.IsNullOrWhiteSpace(ApiKey);
 
+    public bool IsChinaPlan => string.Equals(Plan, "glm_coding_plan_china", StringComparison.Ordinal);
+
     public static ZaiChelperConfig Parse(string configText)
     {
         var config = new ZaiChelperConfig();

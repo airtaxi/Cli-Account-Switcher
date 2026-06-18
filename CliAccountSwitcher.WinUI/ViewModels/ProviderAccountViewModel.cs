@@ -36,11 +36,13 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
 
     public string EmailAddress => ProviderAccount.EmailAddress;
 
+    public bool IsEmailAddressVisible => ProviderKind != CliProviderKind.Zai;
+
     public string PlanType => ProviderAccount.PlanType;
 
     public string PlanFilterKey => !string.IsNullOrWhiteSpace(PlanType) && !string.Equals(PlanType, "Unknown", StringComparison.OrdinalIgnoreCase) ? PlanType.Trim().ToLowerInvariant() : "";
 
-    public string PlanText => ProviderKind == CliProviderKind.Codex ? FormatCodexPlanText(PlanType) : FormatClaudeCodePlanText(PlanType);
+    public string PlanText => ProviderKind == CliProviderKind.Codex ? FormatCodexPlanText(PlanType) : ProviderKind == CliProviderKind.Zai ? FormatZaiPlanText(PlanType) : FormatClaudeCodePlanText(PlanType);
 
     public bool IsActive => ProviderAccount.IsActive;
 
@@ -102,7 +104,7 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
 
     public string SearchText => $"{DisplayName} {EmailAddress} {PlanText} {AccountIdentifier} {ProviderAccount.ProviderAccountIdentifier}";
 
-    public bool CanRename => ProviderKind == CliProviderKind.Codex;
+    public bool CanRename => ProviderKind is CliProviderKind.Codex or CliProviderKind.Zai;
 
     public void Update(ProviderAccount providerAccount)
     {
@@ -121,6 +123,7 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
         OnPropertyChanged(nameof(CustomAlias));
         OnPropertyChanged(nameof(DisplayName));
         OnPropertyChanged(nameof(EmailAddress));
+        OnPropertyChanged(nameof(IsEmailAddressVisible));
         OnPropertyChanged(nameof(PlanType));
         OnPropertyChanged(nameof(PlanFilterKey));
         OnPropertyChanged(nameof(PlanText));
@@ -172,6 +175,8 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
     }
 
     private static string FormatClaudeCodePlanText(string planType) => string.IsNullOrWhiteSpace(planType) ? "Unknown" : planType;
+
+    private string FormatZaiPlanText(string planType) => string.IsNullOrWhiteSpace(planType) ? _localizationService.GetLocalizedString("ProviderAccountViewModel_UnknownPlan") : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(planType.ToLowerInvariant());
 
     private string FormatCodexPlanText(string planType) => string.IsNullOrWhiteSpace(planType) ? _localizationService.GetLocalizedString("ProviderAccountViewModel_UnknownPlan") : string.Equals(planType, "prolite", StringComparison.OrdinalIgnoreCase) ? _localizationService.GetLocalizedString("AccountsPage_ProLitePlanFilterSelectorBarItem/Text") : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(planType.ToLowerInvariant());
 

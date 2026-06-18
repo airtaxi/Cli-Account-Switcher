@@ -35,6 +35,17 @@ public sealed partial class AccountsPage : Page
 
     private async void OnAddAccountButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
+        if (ViewModel.SelectedProviderKind == CliProviderKind.Zai)
+        {
+            var addZaiAccountDialog = new CliAccountSwitcher.WinUI.Dialogs.AddZaiAccountDialog
+            {
+                XamlRoot = XamlRoot
+            };
+            await addZaiAccountDialog.ShowAsync();
+            ViewModel.ReloadAccounts();
+            return;
+        }
+
         var addAccountDialog = new CliAccountSwitcher.WinUI.Dialogs.AddAccountDialog
         {
             XamlRoot = XamlRoot
@@ -161,6 +172,7 @@ public sealed partial class AccountsPage : Page
 
         if (CodexPlanFilterSelectorBar.SelectedItem != CodexAllPlanFilterSelectorBarItem) CodexPlanFilterSelectorBar.SelectedItem = CodexAllPlanFilterSelectorBarItem;
         if (ClaudeCodePlanFilterSelectorBar.SelectedItem != ClaudeCodeAllPlanFilterSelectorBarItem) ClaudeCodePlanFilterSelectorBar.SelectedItem = ClaudeCodeAllPlanFilterSelectorBarItem;
+        if (ZaiPlanFilterSelectorBar.SelectedItem != ZaiAllPlanFilterSelectorBarItem) ZaiPlanFilterSelectorBar.SelectedItem = ZaiAllPlanFilterSelectorBarItem;
     }
 
     private async Task RunWithLoadingAsync(string loadingMessage, Func<Task> action)

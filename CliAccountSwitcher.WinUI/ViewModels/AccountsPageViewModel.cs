@@ -48,6 +48,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsCodexProviderSelected))]
     [NotifyPropertyChangedFor(nameof(IsClaudeCodeProviderSelected))]
+    [NotifyPropertyChangedFor(nameof(IsZaiProviderSelected))]
     [NotifyPropertyChangedFor(nameof(DescriptionText))]
     [NotifyPropertyChangedFor(nameof(PlanHeaderText))]
     public partial CliProviderKind SelectedProviderKind { get; set; } = CliProviderKind.Codex;
@@ -86,6 +87,8 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     public bool IsCodexProviderSelected => SelectedProviderKind == CliProviderKind.Codex;
 
     public bool IsClaudeCodeProviderSelected => SelectedProviderKind == CliProviderKind.ClaudeCode;
+
+    public bool IsZaiProviderSelected => SelectedProviderKind == CliProviderKind.Zai;
 
     // Localizations
     public string DescriptionText => _localizationService.GetFormattedString("AccountsPageViewModel_DescriptionFormat", GetProviderDisplayName(SelectedProviderKind));
@@ -445,11 +448,11 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     partial void OnSelectedPlanFilterChanged(string value) => ApplyFilter();
 
-    private string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => _localizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), _ => _localizationService.GetLocalizedString("Provider_CodexDisplayName") };
+    private string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => _localizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), CliProviderKind.Zai => _localizationService.GetLocalizedString("Provider_ZaiDisplayName"), _ => _localizationService.GetLocalizedString("Provider_CodexDisplayName") };
 
-    public static string GetBackupFileExtension(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => ".ccb", _ => ".zip" };
+    public static string GetBackupFileExtension(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => ".ccb", CliProviderKind.Zai => ".zaib", _ => ".zip" };
 
-    private static string GetBackupFileTypeChoiceResourceName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => "AccountsPage_ClaudeCodeBackupFileTypeChoice", _ => "AccountsPage_ZipBackupFileTypeChoice" };
+    private static string GetBackupFileTypeChoiceResourceName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => "AccountsPage_ClaudeCodeBackupFileTypeChoice", CliProviderKind.Zai => "AccountsPage_ZaiBackupFileTypeChoice", _ => "AccountsPage_ZipBackupFileTypeChoice" };
 
 
 }

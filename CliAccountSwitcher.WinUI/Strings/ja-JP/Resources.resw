@@ -352,6 +352,18 @@
   <data name="AccountsPage_UsageHeaderTextBlock.Text" xml:space="preserve">
     <value>使用量</value>
   </data>
+  <data name="AccountsPage_ZaiBackupFileTypeChoice" xml:space="preserve">
+    <value>Z.ai バックアップ</value>
+  </data>
+  <data name="AccountsPage_ZaiLitePlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Lite</value>
+  </data>
+  <data name="AccountsPage_ZaiMaxPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Max</value>
+  </data>
+  <data name="AccountsPage_ZaiProPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Pro</value>
+  </data>
   <data name="AccountsPage_ZipBackupFileTypeChoice" xml:space="preserve">
     <value>ZIP バックアップ</value>
   </data>
@@ -372,6 +384,15 @@
   </data>
   <data name="AddAccountDialog_OAuthSelectorBarItem.Text" xml:space="preserve">
     <value>OAuth</value>
+  </data>
+  <data name="AddZaiAccountDialog.Title" xml:space="preserve">
+    <value>Z.ai アカウントを追加</value>
+  </data>
+  <data name="AddZaiAccountDialog_ApiKeySelectorBarItem.Text" xml:space="preserve">
+    <value>API キー</value>
+  </data>
+  <data name="AddZaiAccountDialog_CurrentAccountSelectorBarItem.Text" xml:space="preserve">
+    <value>現在のアカウント</value>
   </data>
   <data name="AppDescription" xml:space="preserve">
     <value>CLI Account Switcher は AI サービス向けの CLI アカウント切替アプリです。Codex と Claude Code をサポートしています。</value>
@@ -643,6 +664,12 @@
   <data name="Notification_PrimaryUsageLowQuotaWindowName" xml:space="preserve">
     <value>5時間</value>
   </data>
+  <data name="Notification_PrimaryUsageSurgeDetectedMessageFormat" xml:space="preserve">
+    <value>約 {0}%/{1} 分のペースで 5 時間制限を消費しています - 無限ループ (API 急増) ではないか確認してください。</value>
+  </data>
+  <data name="Notification_PrimaryUsageSurgeDetectedTitleFormat" xml:space="preserve">
+    <value>{0} 使用量急増</value>
+  </data>
   <data name="Notification_SecondaryUsageLowQuotaWindowName" xml:space="preserve">
     <value>7日間</value>
   </data>
@@ -660,12 +687,6 @@
   </data>
   <data name="Notification_UsageLowQuotaDetectedWithSwitchSuggestionMessageFormat" xml:space="preserve">
     <value>{0} の {1} 残りクォータは {2}% です。警告しきい値を超えるクォータを持つ別のアカウントがあります。この通知を選択してアカウント管理から切り替えてください。</value>
-  </data>
-  <data name="Notification_PrimaryUsageSurgeDetectedMessageFormat" xml:space="preserve">
-    <value>約 {0}%/{1} 分のペースで 5 時間制限を消費しています - 無限ループ (API 急増) ではないか確認してください。</value>
-  </data>
-  <data name="Notification_PrimaryUsageSurgeDetectedTitleFormat" xml:space="preserve">
-    <value>{0} 使用量急増</value>
   </data>
   <data name="OAuthAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
     <value>Claude Code ログインを実行し、現在の Claude Code credential と global config を管理対象アカウントとして保存します。</value>
@@ -768,6 +789,12 @@
   </data>
   <data name="Provider_CodexDisplayName" xml:space="preserve">
     <value>Codex</value>
+  </data>
+  <data name="Provider_ZaiComboBoxItem.Content" xml:space="preserve">
+    <value>Z.ai (読み取り専用)</value>
+  </data>
+  <data name="Provider_ZaiDisplayName" xml:space="preserve">
+    <value>Z.ai</value>
   </data>
   <data name="SecondaryUsageAverageRateWarningTextBlock.Text" xml:space="preserve">
     <value>平均超過ペース</value>
@@ -1203,6 +1230,12 @@ Microsoft Store に {0} 件の更新があります。</value>
   <data name="SkillsPage_TitleTextBlock.Text" xml:space="preserve">
     <value>スキル</value>
   </data>
+  <data name="SkillsPage_ZaiUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Z.ai は読み取り専用の使用量モニターであり、ローカルスキルファイルを管理しません。スキルを管理するには Codex または Claude Code に切り替えてください。</value>
+  </data>
+  <data name="SkillsPage_ZaiUnsupportedTitleTextBlock.Text" xml:space="preserve">
+    <value>スキルはサポートされていません</value>
+  </data>
   <data name="TaskbarUsageControl_PercentageDifferenceFormat" xml:space="preserve">
     <value>{0:+0;-0;0}%</value>
   </data>
@@ -1250,5 +1283,50 @@ Microsoft Store に {0} 件の更新があります。</value>
   </data>
   <data name="UsageAverageRateWarningFormat" xml:space="preserve">
     <value>平均ペースを{0}%超過</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_AddButtonTextBlock.Text" xml:space="preserve">
+    <value>追加</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_AliasHeaderTextBlock.Text" xml:space="preserve">
+    <value>ラベル (任意)</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_AliasTextBox.PlaceholderText" xml:space="preserve">
+    <value>例: 個人</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_ApiKeyHeaderTextBlock.Text" xml:space="preserve">
+    <value>API キー</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_ApiKeyPasswordBox.PlaceholderText" xml:space="preserve">
+    <value>Z.ai API キーを貼り付け</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>API キーを貼り付けて Z.ai アカウントを追加します。複数のキーを区別するには任意のラベルを入力してください。</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>API キーを検証できませんでした。キーを確認して再試行してください。</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>無効な API キー</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>API キーを入力</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>coding-helper 設定ファイルに保存されている API キーをインポートします。</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>coding-helper 設定を読み取れないか、API キーが無効です。</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>インポートに失敗しました</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_FilePathHeaderTextBlock.Text" xml:space="preserve">
+    <value>設定ファイル</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_ImportButtonTextBlock.Text" xml:space="preserve">
+    <value>インポート</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>coding-helper からインポート</value>
   </data>
 </root>

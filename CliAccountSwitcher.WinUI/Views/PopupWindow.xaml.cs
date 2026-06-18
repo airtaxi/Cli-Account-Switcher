@@ -26,6 +26,7 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
     private const int FallbackTaskbarIconOffset = 24;
     private const int CodexProviderSelectedIndex = 0;
     private const int ClaudeCodeProviderSelectedIndex = 1;
+    private const int ZaiProviderSelectedIndex = 2;
 
     [LibraryImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
@@ -250,9 +251,9 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
         finally { _isApplyingProviderSelection = false; }
     }
 
-    private static int GetProviderSelectedIndex(CliProviderKind selectedProviderKind) => selectedProviderKind switch { CliProviderKind.ClaudeCode => ClaudeCodeProviderSelectedIndex, _ => CodexProviderSelectedIndex  };
+    private static int GetProviderSelectedIndex(CliProviderKind selectedProviderKind) => selectedProviderKind switch { CliProviderKind.ClaudeCode => ClaudeCodeProviderSelectedIndex, CliProviderKind.Zai => ZaiProviderSelectedIndex, _ => CodexProviderSelectedIndex  };
 
-    private static CliProviderKind GetProviderKindFromSelectedIndex(int selectedIndex) => selectedIndex switch { ClaudeCodeProviderSelectedIndex => CliProviderKind.ClaudeCode, _ => CliProviderKind.Codex  };
+    private static CliProviderKind GetProviderKindFromSelectedIndex(int selectedIndex) => selectedIndex switch { ClaudeCodeProviderSelectedIndex => CliProviderKind.ClaudeCode, ZaiProviderSelectedIndex => CliProviderKind.Zai, _ => CliProviderKind.Codex  };
 
     private void QueueWindowContentResize()
     {

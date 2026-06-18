@@ -100,7 +100,7 @@ public sealed class ApplicationSettingsService
 
     private static string NormalizeLanguageOverride(string languageOverride) => languageOverride is "ko-KR" or "en-US" or "ja-JP" or "zh-Hans" or "zh-Hant" ? languageOverride : "";
 
-    private static CliProviderKind NormalizeSelectedProviderKind(CliProviderKind selectedProviderKind) => selectedProviderKind is CliProviderKind.Codex or CliProviderKind.ClaudeCode ? selectedProviderKind : CliProviderKind.Codex;
+    private static CliProviderKind NormalizeSelectedProviderKind(CliProviderKind selectedProviderKind) => selectedProviderKind is CliProviderKind.Codex or CliProviderKind.ClaudeCode or CliProviderKind.Zai ? selectedProviderKind : CliProviderKind.Codex;
 
     private static int NormalizeRefreshIntervalSeconds(int refreshIntervalSeconds, int defaultRefreshIntervalSeconds) => refreshIntervalSeconds <= 0 ? defaultRefreshIntervalSeconds : Math.Clamp(refreshIntervalSeconds, 60, 86400);
 

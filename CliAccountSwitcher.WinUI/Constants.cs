@@ -15,4 +15,5 @@ public static class Constants
     public static string ProviderSnapshotsDirectory => Path.Combine(UserDataDirectory, "provider-snapshots");
     public static string ConfigurationFilePath => Path.Combine(UserDataDirectory, "config.json");
     public static string AccountsFilePath => Path.Combine(UserDataDirectory, "accounts.json");
+    public static string ZaiAccountsFilePath => Path.Combine(UserDataDirectory, "zai-accounts.json");
 }

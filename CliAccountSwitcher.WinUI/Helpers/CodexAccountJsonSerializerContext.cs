@@ -1,5 +1,6 @@
-using CliAccountSwitcher.Api.Providers.Codex.Models.Authentication;
+﻿using CliAccountSwitcher.Api.Providers.Codex.Models.Authentication;
 using CliAccountSwitcher.Api.Providers.Codex.Models.Usage;
+using CliAccountSwitcher.Api.Providers.Zai.Models.Usage;
 using CliAccountSwitcher.WinUI.Models;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -17,6 +18,9 @@ namespace CliAccountSwitcher.WinUI.Helpers;
 [JsonSerializable(typeof(ApplicationSettings))]
 [JsonSerializable(typeof(ClaudeCodeBackupDocument))]
 [JsonSerializable(typeof(ClaudeCodeBackupAccountDocument))]
-public sealed partial class CodexAccountJsonSerializerContext : JsonSerializerContext
-{
-}
+[JsonSerializable(typeof(ZaiAccountStoreDocument))]
+[JsonSerializable(typeof(List<ZaiAccount>))]
+[JsonSerializable(typeof(ZaiAccount))]
+[JsonSerializable(typeof(ZaiUsageSnapshot))]
+[JsonSerializable(typeof(ZaiUsageWindow))]
+public sealed partial class CodexAccountJsonSerializerContext : JsonSerializerContext;

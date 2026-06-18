@@ -4,7 +4,7 @@ namespace CliAccountSwitcher.Api.Providers.Zai.Models.Usage;
 
 internal static class ZaiQuotaLimitResponse
 {
-    public static ZaiUsageSnapshot Parse(string responseText, int httpStatusCode)
+    public static ZaiUsageSnapshot Parse(string responseText, int httpStatusCode, bool usedChinaEndpoint = false)
     {
         using var jsonDocument = JsonDocument.Parse(responseText);
         var rootElement = jsonDocument.RootElement;
@@ -14,7 +14,8 @@ internal static class ZaiQuotaLimitResponse
         {
             PlanLevel = ReadStringOrNull(dataElement, "level") ?? "",
             RawResponseText = responseText,
-            HttpStatusCode = httpStatusCode
+            HttpStatusCode = httpStatusCode,
+            UsedChinaEndpoint = usedChinaEndpoint
         };
 
         if (TryGetProperty(dataElement, "limits", out var limitsElement) && limitsElement.ValueKind == JsonValueKind.Array)

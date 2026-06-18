@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="CliAccountSwitcher.WinUI.Pages.AddZaiAccountDialog.ApiKeyAddAccountPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="24" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Spacing="6">
+            <TextBlock
+                x:Uid="ZaiApiKeyAddAccountPage_TitleTextBlock"
+                FontSize="22"
+                FontWeight="SemiBold" />
+            <TextBlock
+                x:Uid="ZaiApiKeyAddAccountPage_DescriptionTextBlock"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                TextWrapping="Wrap" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Spacing="6">
+            <TextBlock x:Uid="ZaiApiKeyAddAccountPage_ApiKeyHeaderTextBlock" FontWeight="SemiBold" />
+            <PasswordBox
+                x:Name="ApiKeyPasswordBox"
+                x:Uid="ZaiApiKeyAddAccountPage_ApiKeyPasswordBox"
+                MinWidth="480" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Spacing="6">
+            <TextBlock x:Uid="ZaiApiKeyAddAccountPage_AliasHeaderTextBlock" FontWeight="SemiBold" />
+            <TextBox
+                x:Name="AliasTextBox"
+                x:Uid="ZaiApiKeyAddAccountPage_AliasTextBox"
+                MinWidth="480" />
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="3"
+            Orientation="Horizontal"
+            Spacing="8">
+            <Button
+                x:Name="AddApiKeyButton"
+                Click="OnAddApiKeyButtonClicked"
+                Style="{StaticResource AccentButtonStyle}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <FontIcon FontSize="14" Glyph="&#xE710;" />
+                    <TextBlock x:Uid="ZaiApiKeyAddAccountPage_AddButtonTextBlock" />
+                </StackPanel>
+            </Button>
+            <ProgressRing
+                x:Name="ValidationProgressRing"
+                Width="24"
+                Height="24"
+                IsActive="False"
+                Visibility="Collapsed" />
+        </StackPanel>
+
+        <InfoBar
+            x:Name="ErrorInfoBar"
+            x:Uid="ZaiApiKeyAddAccountPage_ErrorInfoBar"
+            Grid.Row="4"
+            IsOpen="False"
+            Severity="Error" />
+    </Grid>
+</Page>

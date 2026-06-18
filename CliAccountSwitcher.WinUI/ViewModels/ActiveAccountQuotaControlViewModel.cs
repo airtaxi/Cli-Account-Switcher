@@ -47,6 +47,8 @@ public sealed partial class ActiveAccountQuotaControlViewModel(LocalizationServi
 
     public string ActiveAccountEmailAddressText => DashboardViewModel?.ActiveAccountEmailAddressText ?? "";
 
+    public bool IsActiveAccountEmailAddressVisible => DashboardViewModel?.IsActiveAccountEmailAddressVisible != false;
+
     public string ActiveAccountPlanText => DashboardViewModel?.ActiveAccountPlanText ?? "";
 
     public string ActiveAccountPrimaryUsageRemainingText => DashboardViewModel?.ActiveAccountPrimaryUsageRemainingText ?? "";
@@ -116,6 +118,7 @@ public sealed partial class ActiveAccountQuotaControlViewModel(LocalizationServi
         OnPropertyChanged(nameof(HasNoActiveAccount));
         OnPropertyChanged(nameof(ActiveAccountDisplayNameText));
         OnPropertyChanged(nameof(ActiveAccountEmailAddressText));
+        OnPropertyChanged(nameof(IsActiveAccountEmailAddressVisible));
         OnPropertyChanged(nameof(ActiveAccountPlanText));
         OnPropertyChanged(nameof(ActiveAccountPrimaryUsageRemainingText));
         OnPropertyChanged(nameof(ActiveAccountSecondaryUsageRemainingText));

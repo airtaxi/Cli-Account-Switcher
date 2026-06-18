@@ -352,6 +352,18 @@
   <data name="AccountsPage_UsageHeaderTextBlock.Text" xml:space="preserve">
     <value>用量</value>
   </data>
+  <data name="AccountsPage_ZaiBackupFileTypeChoice" xml:space="preserve">
+    <value>Z.ai 備份</value>
+  </data>
+  <data name="AccountsPage_ZaiLitePlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Lite</value>
+  </data>
+  <data name="AccountsPage_ZaiMaxPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Max</value>
+  </data>
+  <data name="AccountsPage_ZaiProPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Pro</value>
+  </data>
   <data name="AccountsPage_ZipBackupFileTypeChoice" xml:space="preserve">
     <value>ZIP 備份</value>
   </data>
@@ -372,6 +384,15 @@
   </data>
   <data name="AddAccountDialog_OAuthSelectorBarItem.Text" xml:space="preserve">
     <value>OAuth</value>
+  </data>
+  <data name="AddZaiAccountDialog.Title" xml:space="preserve">
+    <value>新增 Z.ai 帳戶</value>
+  </data>
+  <data name="AddZaiAccountDialog_ApiKeySelectorBarItem.Text" xml:space="preserve">
+    <value>API 金鑰</value>
+  </data>
+  <data name="AddZaiAccountDialog_CurrentAccountSelectorBarItem.Text" xml:space="preserve">
+    <value>目前帳戶</value>
   </data>
   <data name="AppDescription" xml:space="preserve">
     <value>CLI Account Switcher 是面向 AI 服務的 CLI 帳號切換器。支援 Codex 和 Claude Code。</value>
@@ -643,6 +664,12 @@
   <data name="Notification_PrimaryUsageLowQuotaWindowName" xml:space="preserve">
     <value>5 小時</value>
   </data>
+  <data name="Notification_PrimaryUsageSurgeDetectedMessageFormat" xml:space="preserve">
+    <value>正以約 {0}%/{1} 分的速度消耗 5 小時限制 - 請檢查是否存在無限迴圈（API 暴增）。</value>
+  </data>
+  <data name="Notification_PrimaryUsageSurgeDetectedTitleFormat" xml:space="preserve">
+    <value>{0} 用量暴增</value>
+  </data>
   <data name="Notification_SecondaryUsageLowQuotaWindowName" xml:space="preserve">
     <value>7 天</value>
   </data>
@@ -660,12 +687,6 @@
   </data>
   <data name="Notification_UsageLowQuotaDetectedWithSwitchSuggestionMessageFormat" xml:space="preserve">
     <value>{0} 的 {1} 剩餘配額為 {2}%。另一個帳號的配額高於警告閾值。選取此通知可從帳號管理切換帳號。</value>
-  </data>
-  <data name="Notification_PrimaryUsageSurgeDetectedMessageFormat" xml:space="preserve">
-    <value>正以約 {0}%/{1} 分的速度消耗 5 小時限制 - 請檢查是否存在無限迴圈（API 暴增）。</value>
-  </data>
-  <data name="Notification_PrimaryUsageSurgeDetectedTitleFormat" xml:space="preserve">
-    <value>{0} 用量暴增</value>
   </data>
   <data name="OAuthAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
     <value>執行 Claude Code 登入，然後將目前的 Claude Code credential 與 global config 儲存為受管理帳戶。</value>
@@ -768,6 +789,12 @@
   </data>
   <data name="Provider_CodexDisplayName" xml:space="preserve">
     <value>Codex</value>
+  </data>
+  <data name="Provider_ZaiComboBoxItem.Content" xml:space="preserve">
+    <value>Z.ai（唯讀）</value>
+  </data>
+  <data name="Provider_ZaiDisplayName" xml:space="preserve">
+    <value>Z.ai</value>
   </data>
   <data name="SecondaryUsageAverageRateWarningTextBlock.Text" xml:space="preserve">
     <value>超過平均速度</value>
@@ -1203,6 +1230,12 @@ Microsoft Store 中有 {0} 個可用更新。</value>
   <data name="SkillsPage_TitleTextBlock.Text" xml:space="preserve">
     <value>技能</value>
   </data>
+  <data name="SkillsPage_ZaiUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Z.ai 是唯讀用量監控，不管理本地技能檔案。請切換到 Codex 或 Claude Code 來管理技能。</value>
+  </data>
+  <data name="SkillsPage_ZaiUnsupportedTitleTextBlock.Text" xml:space="preserve">
+    <value>不支援技能管理</value>
+  </data>
   <data name="TaskbarUsageControl_PercentageDifferenceFormat" xml:space="preserve">
     <value>{0:+0;-0;0}%</value>
   </data>
@@ -1250,5 +1283,50 @@ Microsoft Store 中有 {0} 個可用更新。</value>
   </data>
   <data name="UsageAverageRateWarningFormat" xml:space="preserve">
     <value>超過平均速度 {0}%</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_AddButtonTextBlock.Text" xml:space="preserve">
+    <value>新增</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_AliasHeaderTextBlock.Text" xml:space="preserve">
+    <value>標籤（選用）</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_AliasTextBox.PlaceholderText" xml:space="preserve">
+    <value>例如：個人</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_ApiKeyHeaderTextBlock.Text" xml:space="preserve">
+    <value>API 金鑰</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_ApiKeyPasswordBox.PlaceholderText" xml:space="preserve">
+    <value>貼上您的 Z.ai API 金鑰</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>貼上 API 金鑰以新增 Z.ai 帳戶。輸入選用標籤以區分多個金鑰。</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>無法驗證 API 金鑰。請檢查金鑰後再試一次。</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>API 金鑰無效</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>輸入 API 金鑰</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>匯入儲存在 coding-helper 設定檔中的 API 金鑰。</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>無法讀取 coding-helper 設定或 API 金鑰無效。</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>匯入失敗</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_FilePathHeaderTextBlock.Text" xml:space="preserve">
+    <value>設定檔</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_ImportButtonTextBlock.Text" xml:space="preserve">
+    <value>匯入</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>從 coding-helper 匯入</value>
   </data>
 </root>

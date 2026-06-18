@@ -8,6 +8,8 @@ public sealed class ZaiUsageSnapshot
 
     public int HttpStatusCode { get; set; }
 
+    public bool UsedChinaEndpoint { get; set; }
+
     public ZaiUsageWindow FiveHour { get; set; } = new();
 
     public ZaiUsageWindow SevenDay { get; set; } = new();

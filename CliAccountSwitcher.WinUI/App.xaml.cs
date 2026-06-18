@@ -82,8 +82,10 @@ public partial class App : Application
         // DO NOT use AddSingleton<T>() for types with parameterized constructors — use explicit factory lambdas for NativeAOT safety.
         serviceCollection.AddSingleton(sp => new CodexAccountService(sp.GetRequiredService<ApplicationSettingsService>(), sp.GetRequiredService<ApplicationNotificationService>()));
         serviceCollection.AddSingleton(sp => new ClaudeAccountService(sp.GetRequiredService<ApplicationSettingsService>(), sp.GetRequiredService<ApplicationNotificationService>()));
+        serviceCollection.AddSingleton(sp => new ZaiAccountService(sp.GetRequiredService<ApplicationSettingsService>(), sp.GetRequiredService<ApplicationNotificationService>()));
         serviceCollection.AddSingleton<IAccountService>(sp => sp.GetRequiredService<CodexAccountService>());
         serviceCollection.AddSingleton<IAccountService>(sp => sp.GetRequiredService<ClaudeAccountService>());
+        serviceCollection.AddSingleton<IAccountService>(sp => sp.GetRequiredService<ZaiAccountService>());
 
         // AccountServiceManager — needs ApplicationSettingsService + all IAccountService implementations
         serviceCollection.AddSingleton(sp => new AccountServiceManager(sp.GetRequiredService<ApplicationSettingsService>(), sp.GetServices<IAccountService>()));

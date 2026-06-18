@@ -83,7 +83,8 @@
                         <TextBlock
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                             Text="{x:Bind ViewModel.ActiveAccountEmailAddressText, Mode=OneWay}"
-                            TextTrimming="WordEllipsis" />
+                            TextTrimming="WordEllipsis"
+                            Visibility="{x:Bind ViewModel.IsActiveAccountEmailAddressVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <TextBlock
                             Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                             Text="{x:Bind ViewModel.ActiveAccountPlanText, Mode=OneWay}"

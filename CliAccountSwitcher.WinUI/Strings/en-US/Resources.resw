@@ -352,6 +352,18 @@
   <data name="AccountsPage_UsageHeaderTextBlock.Text" xml:space="preserve">
     <value>Usage</value>
   </data>
+  <data name="AccountsPage_ZaiBackupFileTypeChoice" xml:space="preserve">
+    <value>Z.ai Backup</value>
+  </data>
+  <data name="AccountsPage_ZaiLitePlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Lite</value>
+  </data>
+  <data name="AccountsPage_ZaiMaxPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Max</value>
+  </data>
+  <data name="AccountsPage_ZaiProPlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Pro</value>
+  </data>
   <data name="AccountsPage_ZipBackupFileTypeChoice" xml:space="preserve">
     <value>ZIP Backup</value>
   </data>
@@ -372,6 +384,15 @@
   </data>
   <data name="AddAccountDialog_OAuthSelectorBarItem.Text" xml:space="preserve">
     <value>OAuth</value>
+  </data>
+  <data name="AddZaiAccountDialog.Title" xml:space="preserve">
+    <value>Add Z.ai Account</value>
+  </data>
+  <data name="AddZaiAccountDialog_ApiKeySelectorBarItem.Text" xml:space="preserve">
+    <value>API Key</value>
+  </data>
+  <data name="AddZaiAccountDialog_CurrentAccountSelectorBarItem.Text" xml:space="preserve">
+    <value>Current Account</value>
   </data>
   <data name="AppDescription" xml:space="preserve">
     <value>CLI account switcher for AI services. Supports Codex and Claude Code.</value>
@@ -643,6 +664,12 @@
   <data name="Notification_PrimaryUsageLowQuotaWindowName" xml:space="preserve">
     <value>5-hour</value>
   </data>
+  <data name="Notification_PrimaryUsageSurgeDetectedMessageFormat" xml:space="preserve">
+    <value>Consuming the 5-hour limit at about {0}%/{1} min - check for an infinite loop (API surge).</value>
+  </data>
+  <data name="Notification_PrimaryUsageSurgeDetectedTitleFormat" xml:space="preserve">
+    <value>{0} usage surge</value>
+  </data>
   <data name="Notification_SecondaryUsageLowQuotaWindowName" xml:space="preserve">
     <value>7-day</value>
   </data>
@@ -660,12 +687,6 @@
   </data>
   <data name="Notification_UsageLowQuotaDetectedWithSwitchSuggestionMessageFormat" xml:space="preserve">
     <value>{0}'s {1} remaining quota is {2}%. Another account has quota above the warning threshold. Select this notification to switch accounts from Account Management.</value>
-  </data>
-  <data name="Notification_PrimaryUsageSurgeDetectedMessageFormat" xml:space="preserve">
-    <value>Consuming the 5-hour limit at about {0}%/{1} min - check for an infinite loop (API surge).</value>
-  </data>
-  <data name="Notification_PrimaryUsageSurgeDetectedTitleFormat" xml:space="preserve">
-    <value>{0} usage surge</value>
   </data>
   <data name="OAuthAddAccountPage_ClaudeCodeDescription" xml:space="preserve">
     <value>Run Claude Code login, then save the current Claude Code credential and global config as a managed account.</value>
@@ -768,6 +789,12 @@
   </data>
   <data name="Provider_CodexDisplayName" xml:space="preserve">
     <value>Codex</value>
+  </data>
+  <data name="Provider_ZaiComboBoxItem.Content" xml:space="preserve">
+    <value>Z.ai (Read-only)</value>
+  </data>
+  <data name="Provider_ZaiDisplayName" xml:space="preserve">
+    <value>Z.ai</value>
   </data>
   <data name="SecondaryUsageAverageRateWarningTextBlock.Text" xml:space="preserve">
     <value>Over average pace</value>
@@ -1203,6 +1230,12 @@ The installed app is already up to date.</value>
   <data name="SkillsPage_TitleTextBlock.Text" xml:space="preserve">
     <value>Skills</value>
   </data>
+  <data name="SkillsPage_ZaiUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Z.ai is a read-only usage monitor and does not manage local skill files. Switch to Codex or Claude Code to manage skills.</value>
+  </data>
+  <data name="SkillsPage_ZaiUnsupportedTitleTextBlock.Text" xml:space="preserve">
+    <value>Skills are not supported</value>
+  </data>
   <data name="TaskbarUsageControl_PercentageDifferenceFormat" xml:space="preserve">
     <value>{0:+0;-0;0}%</value>
   </data>
@@ -1250,5 +1283,50 @@ The installed app is already up to date.</value>
   </data>
   <data name="UsageAverageRateWarningFormat" xml:space="preserve">
     <value>Average pace {0}% over</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_AddButtonTextBlock.Text" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_AliasHeaderTextBlock.Text" xml:space="preserve">
+    <value>Label (optional)</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_AliasTextBox.PlaceholderText" xml:space="preserve">
+    <value>e.g. Personal</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_ApiKeyHeaderTextBlock.Text" xml:space="preserve">
+    <value>API key</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_ApiKeyPasswordBox.PlaceholderText" xml:space="preserve">
+    <value>Paste your Z.ai API key</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Add a Z.ai account by pasting an API key. An optional label helps distinguish multiple keys.</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>The API key could not be verified. Check the key and try again.</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>Invalid API key</value>
+  </data>
+  <data name="ZaiApiKeyAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Enter API key</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Imports the API key stored in the coding-helper configuration file.</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_ErrorInfoBar.Message" xml:space="preserve">
+    <value>The coding-helper config could not be read or the API key is invalid.</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_ErrorInfoBar.Title" xml:space="preserve">
+    <value>Import failed</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_FilePathHeaderTextBlock.Text" xml:space="preserve">
+    <value>Config file</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_ImportButtonTextBlock.Text" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="ZaiCurrentAccountAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Import from coding-helper</value>
   </data>
 </root>

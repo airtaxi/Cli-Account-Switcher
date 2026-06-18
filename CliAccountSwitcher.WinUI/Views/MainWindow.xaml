@@ -111,6 +111,7 @@
                         SelectionChanged="OnProviderComboBoxSelectionChanged">
                         <ComboBoxItem x:Uid="Provider_CodexComboBoxItem" />
                         <ComboBoxItem x:Uid="Provider_ClaudeCodeComboBoxItem" />
+                        <ComboBoxItem x:Uid="Provider_ZaiComboBoxItem" />
                     </ComboBox>
                 </StackPanel>
             </TitleBar.RightHeader>
