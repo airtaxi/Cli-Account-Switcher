@@ -50,12 +50,12 @@ public sealed class AccountServiceManager : IDisposable
     {
         ThrowIfDisposed();
         _applicationSettingsService.SettingsChanged += OnApplicationSettingsServiceSettingsChanged;
-        _ = RunActiveStatusRefreshLoopAsync();
-        _ = RunActiveUsageRefreshLoopAsync();
-        _ = RunInactiveUsageRefreshLoopAsync();
-        _ = SynchronizeActiveStatusesSilentlyAsync();
-        if (IsActiveUsageRefreshEnabled) _ = RefreshAccountsByActiveStateSilentlyAsync(true);
-        if (IsInactiveUsageRefreshEnabled) _ = RefreshAccountsByActiveStateSilentlyAsync(false);
+        _ = Task.Run(RunActiveStatusRefreshLoopAsync);
+        _ = Task.Run(RunActiveUsageRefreshLoopAsync);
+        _ = Task.Run(RunInactiveUsageRefreshLoopAsync);
+        _ = Task.Run(SynchronizeActiveStatusesSilentlyAsync);
+        if (IsActiveUsageRefreshEnabled) _ = Task.Run(() => RefreshAccountsByActiveStateSilentlyAsync(true));
+        if (IsInactiveUsageRefreshEnabled) _ = Task.Run(() => RefreshAccountsByActiveStateSilentlyAsync(false));
     }
 
     public IReadOnlyList<ProviderAccount> GetAccounts(CliProviderKind providerKind) => GetAccountService(providerKind).GetAccounts();
@@ -127,9 +127,9 @@ public sealed class AccountServiceManager : IDisposable
         using var periodicTimer = new PeriodicTimer(ActiveStatusRefreshInterval);
         try
         {
-            while (await periodicTimer.WaitForNextTickAsync(_backgroundCancellationTokenSource.Token))
+            while (await periodicTimer.WaitForNextTickAsync(_backgroundCancellationTokenSource.Token).ConfigureAwait(false))
             {
-                await SynchronizeActiveStatusesSilentlyAsync();
+                await SynchronizeActiveStatusesSilentlyAsync().ConfigureAwait(false);
             }
         }
         catch (OperationCanceledException) { }
@@ -144,12 +144,12 @@ public sealed class AccountServiceManager : IDisposable
                 if (!IsActiveUsageRefreshEnabled)
                 {
                     SetNextActiveUsageRefreshTime(null);
-                    await Task.Delay(TimeSpan.FromSeconds(1), _backgroundCancellationTokenSource.Token);
+                    await Task.Delay(TimeSpan.FromSeconds(1), _backgroundCancellationTokenSource.Token).ConfigureAwait(false);
                     continue;
                 }
 
-                if (!await WaitForNextRefreshAsync(true, ActiveUsageRefreshInterval)) continue;
-                await RefreshAccountsByActiveStateSilentlyAsync(true);
+                if (!await WaitForNextRefreshAsync(true, ActiveUsageRefreshInterval).ConfigureAwait(false)) continue;
+                await RefreshAccountsByActiveStateSilentlyAsync(true).ConfigureAwait(false);
                 SetNextActiveUsageRefreshTime(DateTimeOffset.UtcNow.Add(ActiveUsageRefreshInterval));
             }
         }
@@ -165,12 +165,12 @@ public sealed class AccountServiceManager : IDisposable
                 if (!IsInactiveUsageRefreshEnabled)
                 {
                     SetNextInactiveUsageRefreshTime(null);
-                    await Task.Delay(TimeSpan.FromSeconds(1), _backgroundCancellationTokenSource.Token);
+                    await Task.Delay(TimeSpan.FromSeconds(1), _backgroundCancellationTokenSource.Token).ConfigureAwait(false);
                     continue;
                 }
 
-                if (!await WaitForNextRefreshAsync(false, InactiveUsageRefreshInterval)) continue;
-                await RefreshAccountsByActiveStateSilentlyAsync(false);
+                if (!await WaitForNextRefreshAsync(false, InactiveUsageRefreshInterval).ConfigureAwait(false)) continue;
+                await RefreshAccountsByActiveStateSilentlyAsync(false).ConfigureAwait(false);
                 SetNextInactiveUsageRefreshTime(DateTimeOffset.UtcNow.Add(InactiveUsageRefreshInterval));
             }
         }
@@ -189,7 +189,7 @@ public sealed class AccountServiceManager : IDisposable
         var remainingTime = nextRefreshTime.Value - DateTimeOffset.UtcNow;
         if (remainingTime <= TimeSpan.Zero) return true;
 
-        await Task.Delay(GetRefreshSchedulePollingDelay(remainingTime), _backgroundCancellationTokenSource.Token);
+        await Task.Delay(GetRefreshSchedulePollingDelay(remainingTime), _backgroundCancellationTokenSource.Token).ConfigureAwait(false);
         return false;
     }
 
@@ -197,7 +197,7 @@ public sealed class AccountServiceManager : IDisposable
     {
         foreach (var accountService in _accountServicesByKind.Values)
         {
-            try { await accountService.SynchronizeActiveStatusesAsync(_backgroundCancellationTokenSource.Token); }
+            try { await accountService.SynchronizeActiveStatusesAsync(_backgroundCancellationTokenSource.Token).ConfigureAwait(false); }
             catch { }
         }
     }
@@ -206,7 +206,7 @@ public sealed class AccountServiceManager : IDisposable
     {
         foreach (var accountService in _accountServicesByKind.Values)
         {
-            try { await accountService.RefreshAccountsByActiveStateAsync(isActive, _backgroundCancellationTokenSource.Token); }
+            try { await accountService.RefreshAccountsByActiveStateAsync(isActive, _backgroundCancellationTokenSource.Token).ConfigureAwait(false); }
             catch { }
         }
     }

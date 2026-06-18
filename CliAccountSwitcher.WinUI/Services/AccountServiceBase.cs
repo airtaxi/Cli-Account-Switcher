@@ -223,6 +223,7 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
     private async Task RefreshAccountStatesAsync(Func<TAccountState, bool> accountStatePredicate, CancellationToken cancellationToken)
     {
         ThrowIfDisposed();
+        var hasChangedAccountState = false;
         await _refreshSemaphore.WaitAsync(cancellationToken);
         try
         {
@@ -230,13 +231,15 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
             foreach (var accountState in targetAccountStates)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await RefreshAccountUsageAsync(accountState, cancellationToken);
+                hasChangedAccountState |= await RefreshAccountUsageAsync(accountState, cancellationToken);
             }
         }
         finally { _refreshSemaphore.Release(); }
+
+        if (hasChangedAccountState) NotifyAccountsChanged();
     }
 
-    private async Task RefreshAccountUsageAsync(TAccountState accountState, CancellationToken cancellationToken)
+    private async Task<bool> RefreshAccountUsageAsync(TAccountState accountState, CancellationToken cancellationToken)
     {
         try
         {
@@ -250,12 +253,12 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
             ShowLowQuotaNotifications(accountState, currentProviderUsageSnapshot, wasPrimaryUsageUnderWarningThreshold, wasSecondaryUsageUnderWarningThreshold);
             ShowPrimaryUsageSurgeNotification(accountState, previousProviderUsageSnapshot.FiveHour, previousUsageRefreshTime, currentProviderUsageSnapshot.FiveHour, currentUsageRefreshTime);
             await SaveAccountStatesAsync(cancellationToken);
-            NotifyAccountsChanged();
+            return true;
         }
-        catch (Exception exception) when (IsAccountExpiredException(exception)) { await HandleExpiredAccountAsync(accountState, cancellationToken); }
+        catch (Exception exception) when (IsAccountExpiredException(exception)) { return await HandleExpiredAccountAsync(accountState, cancellationToken); }
     }
 
-    private async Task HandleExpiredAccountAsync(TAccountState accountState, CancellationToken cancellationToken)
+    private async Task<bool> HandleExpiredAccountAsync(TAccountState accountState, CancellationToken cancellationToken)
     {
         var wasTokenExpired = GetIsTokenExpired(accountState);
         if (!wasTokenExpired && ApplicationSettingsService.Settings.IsExpiredAccountNotificationEnabled) ApplicationNotificationService.ShowExpiredAccountDetectedNotification(GetDisplayName(accountState));
@@ -265,13 +268,12 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
             await DeleteAccountStatesCoreAsync([accountState], cancellationToken);
             RemoveAccountState(GetAccountIdentifier(accountState));
             await SaveAccountStatesAsync(cancellationToken);
-            NotifyAccountsChanged();
-            return;
+            return true;
         }
 
         MarkAccountAsExpired(accountState);
         await SaveAccountStatesAsync(cancellationToken);
-        NotifyAccountsChanged();
+        return true;
     }
 
     private void ShowLowQuotaNotifications(TAccountState accountState, ProviderUsageSnapshot currentProviderUsageSnapshot, bool wasPrimaryUsageUnderWarningThreshold, bool wasSecondaryUsageUnderWarningThreshold)
