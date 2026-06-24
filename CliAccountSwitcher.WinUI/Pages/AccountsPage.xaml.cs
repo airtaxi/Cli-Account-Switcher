@@ -21,6 +21,7 @@ public sealed partial class AccountsPage : Page
     private readonly LocalizationService _localizationService = App.Services.GetRequiredService<LocalizationService>();
     private readonly CodexApplicationRestartService _codexApplicationRestartService = App.Services.GetRequiredService<CodexApplicationRestartService>();
     private readonly ClaudeCodeApplicationRestartService _claudeCodeApplicationRestartService = App.Services.GetRequiredService<ClaudeCodeApplicationRestartService>();
+    private readonly OpenCodeGoApplicationRestartService _openCodeGoApplicationRestartService = App.Services.GetRequiredService<OpenCodeGoApplicationRestartService>();
 
     public AccountsPageViewModel ViewModel { get; }
 
@@ -42,6 +43,17 @@ public sealed partial class AccountsPage : Page
                 XamlRoot = XamlRoot
             };
             await addZaiAccountDialog.ShowAsync();
+            ViewModel.ReloadAccounts();
+            return;
+        }
+
+        if (ViewModel.SelectedProviderKind == CliProviderKind.OpenCodeGo)
+        {
+            var addOpenCodeGoAccountDialog = new CliAccountSwitcher.WinUI.Dialogs.AddOpenCodeGoAccountDialog
+            {
+                XamlRoot = XamlRoot
+            };
+            await addOpenCodeGoAccountDialog.ShowAsync();
             ViewModel.ReloadAccounts();
             return;
         }
@@ -214,6 +226,10 @@ public sealed partial class AccountsPage : Page
             case ProviderActivationFollowUp.RestartClaudeCode:
                 await AskToRestartClaudeCodeAsync();
                 break;
+
+            case ProviderActivationFollowUp.RestartOpenCodeGo:
+                await AskToRestartOpenCodeGoAsync();
+                break;
         }
     }
 
@@ -241,6 +257,19 @@ public sealed partial class AccountsPage : Page
         finally { MainWindow.HideLoading(); }
 
         if (!wasClaudeCodeRestarted) await this.ShowDialogAsync(_localizationService.GetLocalizedString("AccountsPage_RestartClaudeCodeSessionFailedDialogTitle"), _localizationService.GetLocalizedString("AccountsPage_RestartClaudeCodeSessionFailedDialogMessage"));
+    }
+
+    private async Task AskToRestartOpenCodeGoAsync()
+    {
+        var contentDialogResult = await this.ShowDialogAsync(_localizationService.GetLocalizedString("AccountsPage_RestartOpenCodeGoApplicationDialogTitle"), _localizationService.GetLocalizedString("AccountsPage_RestartOpenCodeGoApplicationDialogMessage"), _localizationService.GetLocalizedString("AccountsPage_RestartOpenCodeGoApplicationButtonText"), _localizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
+        if (contentDialogResult != ContentDialogResult.Primary) return;
+
+        MainWindow.ShowLoading(_localizationService.GetLocalizedString("AccountsPage_RestartOpenCodeGoApplicationLoadingMessage"));
+        var wasOpenCodeGoRestarted = false;
+        try { wasOpenCodeGoRestarted = await _openCodeGoApplicationRestartService.RestartOpenCodeGoAsync(); }
+        finally { MainWindow.HideLoading(); }
+
+        if (!wasOpenCodeGoRestarted) await this.ShowDialogAsync(_localizationService.GetLocalizedString("AccountsPage_RestartOpenCodeGoApplicationFailedDialogTitle"), _localizationService.GetLocalizedString("AccountsPage_RestartOpenCodeGoApplicationFailedDialogMessage"));
     }
 
     private async Task<ContentDialogResult> ShowDialogAsync(BasicDialogData dialogData) => await this.ShowDialogAsync(dialogData.Title, dialogData.Message, dialogData.PrimaryButtonText, dialogData.SecondaryButtonText);

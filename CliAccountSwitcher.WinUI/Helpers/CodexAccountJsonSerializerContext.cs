@@ -1,5 +1,6 @@
 ﻿using CliAccountSwitcher.Api.Providers.Codex.Models.Authentication;
 using CliAccountSwitcher.Api.Providers.Codex.Models.Usage;
+using CliAccountSwitcher.Api.Providers.OpenCodeGo.Models.Usage;
 using CliAccountSwitcher.Api.Providers.Zai.Models.Usage;
 using CliAccountSwitcher.WinUI.Models;
 using System.Collections.Generic;
@@ -23,4 +24,9 @@ namespace CliAccountSwitcher.WinUI.Helpers;
 [JsonSerializable(typeof(ZaiAccount))]
 [JsonSerializable(typeof(ZaiUsageSnapshot))]
 [JsonSerializable(typeof(ZaiUsageWindow))]
+[JsonSerializable(typeof(OpenCodeGoAccountStoreDocument))]
+[JsonSerializable(typeof(List<OpenCodeGoAccount>))]
+[JsonSerializable(typeof(OpenCodeGoAccount))]
+[JsonSerializable(typeof(OpenCodeGoUsageSnapshot))]
+[JsonSerializable(typeof(OpenCodeGoUsageWindow))]
 public sealed partial class CodexAccountJsonSerializerContext : JsonSerializerContext;

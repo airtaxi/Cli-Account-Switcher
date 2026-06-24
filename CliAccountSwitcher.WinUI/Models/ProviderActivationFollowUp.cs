@@ -4,5 +4,6 @@ public enum ProviderActivationFollowUp
 {
     None,
     RestartCodex,
-    RestartClaudeCode
+    RestartClaudeCode,
+    RestartOpenCodeGo
 }

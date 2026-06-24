@@ -6,9 +6,9 @@ namespace CliAccountSwitcher.WinUI.Services;
 
 public sealed class SkillService
 {
-    public static string GetSkillsDirectoryPath(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => Constants.ClaudeCodeSkillsDirectory, _ => Constants.CodexSkillsDirectory  };
+    public static string GetSkillsDirectoryPath(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => Constants.ClaudeCodeSkillsDirectory, CliProviderKind.OpenCodeGo => Constants.OpenCodeGoHomeDirectory, _ => Constants.CodexSkillsDirectory  };
 
-    public static string GetBackupFileNamePrefix(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => "claude-skills", _ => "codex-skills"  };
+    public static string GetBackupFileNamePrefix(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => "claude-skills", CliProviderKind.OpenCodeGo => "opencode-skills", _ => "codex-skills"  };
 
     public IReadOnlyList<SkillItem> ScanSkills(CliProviderKind providerKind)
     {

@@ -13,11 +13,14 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
     private static readonly TimeSpan s_primaryUsageAverageUnitDuration = TimeSpan.FromHours(1);
     private static readonly TimeSpan s_secondaryUsageWindowDuration = TimeSpan.FromDays(7);
     private static readonly TimeSpan s_secondaryUsageAverageUnitDuration = TimeSpan.FromDays(1);
+    private static readonly TimeSpan s_monthlyUsageWindowDuration = TimeSpan.FromDays(30);
+    private static readonly TimeSpan s_monthlyUsageAverageUnitDuration = TimeSpan.FromDays(1);
 
     private readonly ApplicationSettings _applicationSettings = applicationSettings;
     private readonly LocalizationService _localizationService = localizationService;
     private DateTimeOffset? _primaryUsageResetTime = GetUsageResetTime(GetProviderUsageSnapshot(providerAccount).FiveHour, providerAccount.LastUsageRefreshTime);
     private DateTimeOffset? _secondaryUsageResetTime = GetUsageResetTime(GetProviderUsageSnapshot(providerAccount).SevenDay, providerAccount.LastUsageRefreshTime);
+    private DateTimeOffset? _monthlyUsageResetTime = GetUsageResetTime(GetProviderUsageSnapshot(providerAccount).Monthly, providerAccount.LastUsageRefreshTime);
 
     [ObservableProperty]
     public partial bool IsSelected { get; set; }
@@ -38,11 +41,13 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
 
     public bool IsEmailAddressVisible => ProviderKind != CliProviderKind.Zai;
 
+    public bool IsMonthlyUsageVisible => ProviderKind == CliProviderKind.OpenCodeGo;
+
     public string PlanType => ProviderAccount.PlanType;
 
     public string PlanFilterKey => !string.IsNullOrWhiteSpace(PlanType) && !string.Equals(PlanType, "Unknown", StringComparison.OrdinalIgnoreCase) ? PlanType.Trim().ToLowerInvariant() : "";
 
-    public string PlanText => ProviderKind == CliProviderKind.Codex ? FormatCodexPlanText(PlanType) : ProviderKind == CliProviderKind.Zai ? FormatZaiPlanText(PlanType) : FormatClaudeCodePlanText(PlanType);
+    public string PlanText => ProviderKind == CliProviderKind.Codex ? FormatCodexPlanText(PlanType) : ProviderKind == CliProviderKind.Zai ? FormatZaiPlanText(PlanType) : ProviderKind == CliProviderKind.OpenCodeGo ? FormatOpenCodeGoPlanText(PlanType) : FormatClaudeCodePlanText(PlanType);
 
     public bool IsActive => ProviderAccount.IsActive;
 
@@ -100,17 +105,42 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
 
     public string SecondaryUsageAverageRateStatusText => FormatUsageAverageRateStatus(SecondaryUsageAverageRateLimitExceededPercentage, SecondaryUsageAverageRateLimitHeadroomPercentage);
 
+    public string MonthlyUsageText => FormatUsageWindow(ProviderUsageSnapshot.Monthly, _monthlyUsageResetTime);
+
+    public string MonthlyUsageWindowLabelText => _localizationService.GetLocalizedString("ProviderAccountViewModel_MonthlyUsageWindowLabel");
+
+    public string MonthlyUsageRemainingText => FormatUsageRemaining(ProviderUsageSnapshot.Monthly);
+
+    public string MonthlyUsageResetText => FormatUsageReset(_monthlyUsageResetTime);
+
+    public int MonthlyUsageRemainingPercentage => ClampUsageRemainingPercentage(ProviderUsageSnapshot.Monthly);
+
+    public bool IsMonthlyUsageUnderWarningThreshold => IsUsageUnderWarningThreshold(ProviderUsageSnapshot.Monthly, _applicationSettings.SecondaryUsageWarningThresholdPercentage);
+
+    public bool IsMonthlyUsageOverAverageRateLimit => MonthlyUsageAverageRateLimitExceededPercentage > 0;
+
+    public int MonthlyUsageAverageRateLimitExceededPercentage => CalculateUsageAverageRateLimitExceededPercentage(ProviderUsageSnapshot.Monthly, s_monthlyUsageWindowDuration, s_monthlyUsageAverageUnitDuration);
+
+    public int MonthlyUsageAverageRateLimitHeadroomPercentage => CalculateUsageAverageRateLimitHeadroomPercentage(ProviderUsageSnapshot.Monthly, s_monthlyUsageWindowDuration, s_monthlyUsageAverageUnitDuration);
+
+    public bool IsMonthlyUsageAtAverageRateLimit => MonthlyUsageAverageRateLimitExceededPercentage == 0 && MonthlyUsageAverageRateLimitHeadroomPercentage == 0;
+
+    public bool HasMonthlyUsageAverageRateLimitHeadroom => MonthlyUsageAverageRateLimitHeadroomPercentage > 0;
+
+    public string MonthlyUsageAverageRateStatusText => FormatUsageAverageRateStatus(MonthlyUsageAverageRateLimitExceededPercentage, MonthlyUsageAverageRateLimitHeadroomPercentage);
+
     public string LastUsageRefreshText => _localizationService.GetFormattedString("ProviderAccountViewModel_LastUsageRefreshFormat", ProviderAccount.LastUsageRefreshTime is null ? _localizationService.GetLocalizedString("ProviderAccountViewModel_NotRefreshed") : ProviderAccount.LastUsageRefreshTime.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm", CultureInfo.CurrentCulture));
 
     public string SearchText => $"{DisplayName} {EmailAddress} {PlanText} {AccountIdentifier} {ProviderAccount.ProviderAccountIdentifier}";
 
-    public bool CanRename => ProviderKind is CliProviderKind.Codex or CliProviderKind.Zai;
+    public bool CanRename => ProviderKind is CliProviderKind.Codex or CliProviderKind.Zai or CliProviderKind.OpenCodeGo;
 
     public void Update(ProviderAccount providerAccount)
     {
         ProviderAccount = providerAccount;
         _primaryUsageResetTime = GetUsageResetTime(ProviderUsageSnapshot.FiveHour, ProviderAccount.LastUsageRefreshTime);
         _secondaryUsageResetTime = GetUsageResetTime(ProviderUsageSnapshot.SevenDay, ProviderAccount.LastUsageRefreshTime);
+        _monthlyUsageResetTime = GetUsageResetTime(ProviderUsageSnapshot.Monthly, ProviderAccount.LastUsageRefreshTime);
         RefreshAccountProperties();
     }
 
@@ -124,6 +154,7 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
         OnPropertyChanged(nameof(DisplayName));
         OnPropertyChanged(nameof(EmailAddress));
         OnPropertyChanged(nameof(IsEmailAddressVisible));
+        OnPropertyChanged(nameof(IsMonthlyUsageVisible));
         OnPropertyChanged(nameof(PlanType));
         OnPropertyChanged(nameof(PlanFilterKey));
         OnPropertyChanged(nameof(PlanText));
@@ -155,6 +186,18 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
         OnPropertyChanged(nameof(HasSecondaryUsageAverageRateLimitHeadroom));
         OnPropertyChanged(nameof(PrimaryUsageAverageRateStatusText));
         OnPropertyChanged(nameof(SecondaryUsageAverageRateStatusText));
+        OnPropertyChanged(nameof(MonthlyUsageText));
+        OnPropertyChanged(nameof(MonthlyUsageWindowLabelText));
+        OnPropertyChanged(nameof(MonthlyUsageRemainingText));
+        OnPropertyChanged(nameof(MonthlyUsageResetText));
+        OnPropertyChanged(nameof(MonthlyUsageRemainingPercentage));
+        OnPropertyChanged(nameof(IsMonthlyUsageUnderWarningThreshold));
+        OnPropertyChanged(nameof(IsMonthlyUsageOverAverageRateLimit));
+        OnPropertyChanged(nameof(MonthlyUsageAverageRateLimitExceededPercentage));
+        OnPropertyChanged(nameof(MonthlyUsageAverageRateLimitHeadroomPercentage));
+        OnPropertyChanged(nameof(IsMonthlyUsageAtAverageRateLimit));
+        OnPropertyChanged(nameof(HasMonthlyUsageAverageRateLimitHeadroom));
+        OnPropertyChanged(nameof(MonthlyUsageAverageRateStatusText));
         OnPropertyChanged(nameof(LastUsageRefreshText));
         OnPropertyChanged(nameof(SearchText));
         OnPropertyChanged(nameof(CanRename));
@@ -164,6 +207,7 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
     {
         OnPropertyChanged(nameof(IsPrimaryUsageUnderWarningThreshold));
         OnPropertyChanged(nameof(IsSecondaryUsageUnderWarningThreshold));
+        OnPropertyChanged(nameof(IsMonthlyUsageUnderWarningThreshold));
     }
 
     public void RefreshUsageResetTextProperties()
@@ -172,11 +216,15 @@ public sealed partial class ProviderAccountViewModel(ProviderAccount providerAcc
         OnPropertyChanged(nameof(SecondaryUsageText));
         OnPropertyChanged(nameof(PrimaryUsageResetText));
         OnPropertyChanged(nameof(SecondaryUsageResetText));
+        OnPropertyChanged(nameof(MonthlyUsageText));
+        OnPropertyChanged(nameof(MonthlyUsageResetText));
     }
 
     private static string FormatClaudeCodePlanText(string planType) => string.IsNullOrWhiteSpace(planType) ? "Unknown" : planType;
 
     private string FormatZaiPlanText(string planType) => string.IsNullOrWhiteSpace(planType) ? _localizationService.GetLocalizedString("ProviderAccountViewModel_UnknownPlan") : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(planType.ToLowerInvariant());
+
+    private string FormatOpenCodeGoPlanText(string planType) => "API";
 
     private string FormatCodexPlanText(string planType) => string.IsNullOrWhiteSpace(planType) ? _localizationService.GetLocalizedString("ProviderAccountViewModel_UnknownPlan") : string.Equals(planType, "prolite", StringComparison.OrdinalIgnoreCase) ? _localizationService.GetLocalizedString("AccountsPage_ProLitePlanFilterSelectorBarItem/Text") : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(planType.ToLowerInvariant());
 

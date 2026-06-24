@@ -262,6 +262,12 @@
   <data name="AccountsPage_NoFilteredAccountsTitleTextBlock.Text" xml:space="preserve">
     <value>条件に一致するアカウントがありません。</value>
   </data>
+  <data name="AccountsPage_OpenCodeGoBackupFileTypeChoice.Text" xml:space="preserve">
+    <value>OpenCode Go バックアップ (.ocb)</value>
+  </data>
+  <data name="AccountsPage_OpenCodeGoLitePlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Lite</value>
+  </data>
   <data name="AccountsPage_PlanHeaderTextBlock.Text" xml:space="preserve">
     <value>プラン</value>
   </data>
@@ -337,6 +343,24 @@
   <data name="AccountsPage_RestartCodexApplicationLoadingMessage" xml:space="preserve">
     <value>Codex と VS Code を再起動しています。</value>
   </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationButtonText" xml:space="preserve">
+    <value>再起動</value>
+  </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationDialogMessage" xml:space="preserve">
+    <value>アカウント切り替えが完了しました。実行中の OpenCode Go デスクトップアプリを再起動して変更を適用しますか？</value>
+  </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationDialogTitle" xml:space="preserve">
+    <value>OpenCode Go を再起動</value>
+  </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationFailedDialogMessage" xml:space="preserve">
+    <value>OpenCode Go デスクトップアプリの再起動に失敗しました。手動で再起動してください。</value>
+  </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationFailedDialogTitle" xml:space="preserve">
+    <value>再起動に失敗しました</value>
+  </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationLoadingMessage" xml:space="preserve">
+    <value>OpenCode Go を再起動中...</value>
+  </data>
   <data name="AccountsPage_StatusHeaderTextBlock.Text" xml:space="preserve">
     <value>状態</value>
   </data>
@@ -384,6 +408,15 @@
   </data>
   <data name="AddAccountDialog_OAuthSelectorBarItem.Text" xml:space="preserve">
     <value>OAuth</value>
+  </data>
+  <data name="AddOpenCodeGoAccountDialog.CloseButtonText" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
+  <data name="AddOpenCodeGoAccountDialog.Title" xml:space="preserve">
+    <value>OpenCode Go アカウントを追加</value>
+  </data>
+  <data name="AddZaiAccountDialog.CloseButtonText" xml:space="preserve">
+    <value>閉じる</value>
   </data>
   <data name="AddZaiAccountDialog.Title" xml:space="preserve">
     <value>Z.ai アカウントを追加</value>
@@ -724,6 +757,30 @@
   <data name="OAuthAddAccountPage_WaitingTextBlock.Text" xml:space="preserve">
     <value>認証コールバックを待機しています。</value>
   </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_AddButtonTextBlock.Text" xml:space="preserve">
+    <value>アカウントを追加</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_AliasHeaderTextBlock.Text" xml:space="preserve">
+    <value>アカウトラベル（任意）</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_AliasTextBox.PlaceholderText" xml:space="preserve">
+    <value>このアカウントを区別するためのラベルを入力</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_CookieExpiryNoticeTextBlock.Text" xml:space="preserve">
+    <value>OpenCode Go が将来的に API キーベースの使用量追跡を追加した場合、このアプリはその方式に切り替えます。それまでは、ログインセッションを使用してコンソールダッシュボードから使用量を読み取り、セッションは 1 年後に期限切れになります。</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>OpenCode Go アカウントでサインインしてください。ログイン後、最初の API キー、アカウントのメールアドレス、キー名が自動的に抽出されます。OpenCode Go API キーは手動で削除しない限り期限切れになりません。使用量の追跡にはコンソールログインセッションが必要で、最大 1 年間有効です。</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_InitializingWebViewTextBlock.Text" xml:space="preserve">
+    <value>ログインウィンドウを初期化中...</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_ResetButtonTextBlock.Text" xml:space="preserve">
+    <value>ログインやり直し</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>OpenCode Go にサインイン</value>
+  </data>
   <data name="PrimaryUsageAverageRateWarningTextBlock.Text" xml:space="preserve">
     <value>平均超過ペース</value>
   </data>
@@ -732,6 +789,9 @@
   </data>
   <data name="ProviderAccountViewModel_LastUsageRefreshFormat" xml:space="preserve">
     <value>最終更新: {0}</value>
+  </data>
+  <data name="ProviderAccountViewModel_MonthlyUsageWindowLabel" xml:space="preserve">
+    <value>月次制限</value>
   </data>
   <data name="ProviderAccountViewModel_NoAccessToken" xml:space="preserve">
     <value>なし</value>
@@ -789,6 +849,12 @@
   </data>
   <data name="Provider_CodexDisplayName" xml:space="preserve">
     <value>Codex</value>
+  </data>
+  <data name="Provider_OpenCodeGoComboBoxItem.Content" xml:space="preserve">
+    <value>OpenCode Go</value>
+  </data>
+  <data name="Provider_OpenCodeGoDisplayName" xml:space="preserve">
+    <value>OpenCode Go</value>
   </data>
   <data name="Provider_ZaiComboBoxItem.Content" xml:space="preserve">
     <value>Z.ai (読み取り専用)</value>
@@ -1217,6 +1283,12 @@ Microsoft Store に {0} 件の更新があります。</value>
   </data>
   <data name="SkillsPage_NoSkillsTitleTextBlock.Text" xml:space="preserve">
     <value>登録されたスキルがありません。</value>
+  </data>
+  <data name="SkillsPage_OpenCodeGoUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
+    <value>OpenCode Go はローカルスキルファイルを管理しません。スキルを管理するには Codex または Claude Code に切り替えてください。</value>
+  </data>
+  <data name="SkillsPage_OpenCodeGoUnsupportedTitleTextBlock.Text" xml:space="preserve">
+    <value>スキルはサポートされていません</value>
   </data>
   <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
     <value>更新</value>

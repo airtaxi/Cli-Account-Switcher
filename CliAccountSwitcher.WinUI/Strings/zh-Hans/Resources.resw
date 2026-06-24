@@ -262,6 +262,12 @@
   <data name="AccountsPage_NoFilteredAccountsTitleTextBlock.Text" xml:space="preserve">
     <value>没有符合筛选条件的账号。</value>
   </data>
+  <data name="AccountsPage_OpenCodeGoBackupFileTypeChoice.Text" xml:space="preserve">
+    <value>OpenCode Go 备份 (.ocb)</value>
+  </data>
+  <data name="AccountsPage_OpenCodeGoLitePlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Lite</value>
+  </data>
   <data name="AccountsPage_PlanHeaderTextBlock.Text" xml:space="preserve">
     <value>方案</value>
   </data>
@@ -337,6 +343,24 @@
   <data name="AccountsPage_RestartCodexApplicationLoadingMessage" xml:space="preserve">
     <value>正在重启 Codex 和 VS Code。</value>
   </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationButtonText" xml:space="preserve">
+    <value>重启</value>
+  </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationDialogMessage" xml:space="preserve">
+    <value>账户切换已完成。是否重启正在运行的 OpenCode Go 桌面应用以应用更改？</value>
+  </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationDialogTitle" xml:space="preserve">
+    <value>重启 OpenCode Go</value>
+  </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationFailedDialogMessage" xml:space="preserve">
+    <value>无法重启 OpenCode Go 桌面应用。请手动重启。</value>
+  </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationFailedDialogTitle" xml:space="preserve">
+    <value>重启失败</value>
+  </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationLoadingMessage" xml:space="preserve">
+    <value>正在重启 OpenCode Go...</value>
+  </data>
   <data name="AccountsPage_StatusHeaderTextBlock.Text" xml:space="preserve">
     <value>状态</value>
   </data>
@@ -384,6 +408,15 @@
   </data>
   <data name="AddAccountDialog_OAuthSelectorBarItem.Text" xml:space="preserve">
     <value>OAuth</value>
+  </data>
+  <data name="AddOpenCodeGoAccountDialog.CloseButtonText" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="AddOpenCodeGoAccountDialog.Title" xml:space="preserve">
+    <value>添加 OpenCode Go 账户</value>
+  </data>
+  <data name="AddZaiAccountDialog.CloseButtonText" xml:space="preserve">
+    <value>关闭</value>
   </data>
   <data name="AddZaiAccountDialog.Title" xml:space="preserve">
     <value>添加 Z.ai 账户</value>
@@ -724,6 +757,30 @@
   <data name="OAuthAddAccountPage_WaitingTextBlock.Text" xml:space="preserve">
     <value>正在等待身份验证回调。</value>
   </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_AddButtonTextBlock.Text" xml:space="preserve">
+    <value>添加账户</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_AliasHeaderTextBlock.Text" xml:space="preserve">
+    <value>账户标签（可选）</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_AliasTextBox.PlaceholderText" xml:space="preserve">
+    <value>输入标签以区分此账户</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_CookieExpiryNoticeTextBlock.Text" xml:space="preserve">
+    <value>如果 OpenCode Go 未来新增 API 密钥使用量追踪，此应用将切换至该方式。在此之前，使用量将通过登录会话从控制台仪表板读取，会话将在 1 年后过期。</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>使用您的 OpenCode Go 账户登录。登录后，将自动提取第一个 API 密钥、账户邮箱和密钥名称。OpenCode Go API 密钥不会过期，除非您手动删除。使用量追踪需要控制台登录会话，有效期最长为 1 年。</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_InitializingWebViewTextBlock.Text" xml:space="preserve">
+    <value>正在初始化登录窗口...</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_ResetButtonTextBlock.Text" xml:space="preserve">
+    <value>重新登录</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>登录 OpenCode Go</value>
+  </data>
   <data name="PrimaryUsageAverageRateWarningTextBlock.Text" xml:space="preserve">
     <value>超过平均速度</value>
   </data>
@@ -732,6 +789,9 @@
   </data>
   <data name="ProviderAccountViewModel_LastUsageRefreshFormat" xml:space="preserve">
     <value>上次刷新：{0}</value>
+  </data>
+  <data name="ProviderAccountViewModel_MonthlyUsageWindowLabel" xml:space="preserve">
+    <value>每月限额</value>
   </data>
   <data name="ProviderAccountViewModel_NoAccessToken" xml:space="preserve">
     <value>无</value>
@@ -789,6 +849,12 @@
   </data>
   <data name="Provider_CodexDisplayName" xml:space="preserve">
     <value>Codex</value>
+  </data>
+  <data name="Provider_OpenCodeGoComboBoxItem.Content" xml:space="preserve">
+    <value>OpenCode Go</value>
+  </data>
+  <data name="Provider_OpenCodeGoDisplayName" xml:space="preserve">
+    <value>OpenCode Go</value>
   </data>
   <data name="Provider_ZaiComboBoxItem.Content" xml:space="preserve">
     <value>Z.ai（只读）</value>
@@ -1217,6 +1283,12 @@ Microsoft Store 中有 {0} 个可用更新。</value>
   </data>
   <data name="SkillsPage_NoSkillsTitleTextBlock.Text" xml:space="preserve">
     <value>没有已注册的技能。</value>
+  </data>
+  <data name="SkillsPage_OpenCodeGoUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
+    <value>OpenCode Go 不管理本地技能文件。切换至 Codex 或 Claude Code 以管理技能。</value>
+  </data>
+  <data name="SkillsPage_OpenCodeGoUnsupportedTitleTextBlock.Text" xml:space="preserve">
+    <value>不支持技能管理</value>
   </data>
   <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
     <value>刷新</value>

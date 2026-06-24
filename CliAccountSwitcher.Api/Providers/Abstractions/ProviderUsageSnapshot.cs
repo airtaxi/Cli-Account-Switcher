@@ -13,4 +13,6 @@ public sealed class ProviderUsageSnapshot
     public ProviderUsageWindow FiveHour { get; set; } = new();
 
     public ProviderUsageWindow SevenDay { get; set; } = new();
+
+    public ProviderUsageWindow Monthly { get; set; } = new();
 }

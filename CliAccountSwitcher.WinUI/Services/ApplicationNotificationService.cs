@@ -60,7 +60,7 @@ public sealed class ApplicationNotificationService
         return _localizationService.GetFormattedString(notificationMessageResourceName, accountDisplayName, usageWindowName, usageRemainingPercentage);
     }
 
-    private string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => _localizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), CliProviderKind.Zai => _localizationService.GetLocalizedString("Provider_ZaiDisplayName"), _ => _localizationService.GetLocalizedString("Provider_CodexDisplayName") };
+    private string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => _localizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), CliProviderKind.Zai => _localizationService.GetLocalizedString("Provider_ZaiDisplayName"), CliProviderKind.OpenCodeGo => _localizationService.GetLocalizedString("Provider_OpenCodeGoDisplayName"), _ => _localizationService.GetLocalizedString("Provider_CodexDisplayName") };
 
     private static void ShowNotification(string notificationTitle, string notificationMessage, AppNotificationButton notificationButton = null, string notificationAction = "")
     {

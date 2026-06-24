@@ -110,6 +110,7 @@
                 x:Name="AccountSearchAutoSuggestBox"
                 x:Uid="AccountsPage_AccountSearchAutoSuggestBox"
                 Grid.Column="0"
+                Grid.ColumnSpan="{x:Bind ViewModel.SearchBoxColumnSpan, Mode=OneWay}"
                 QueryIcon="Find"
                 Text="{x:Bind ViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
@@ -159,6 +160,7 @@
                     <SelectorBarItem x:Uid="AccountsPage_ZaiProPlanFilterSelectorBarItem" Tag="pro" />
                     <SelectorBarItem x:Uid="AccountsPage_ZaiMaxPlanFilterSelectorBarItem" Tag="max" />
                 </dev:SelectorBarSegmented>
+
             </Grid>
         </Grid>
 
@@ -342,6 +344,7 @@
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
                                         <Border
                                             MinWidth="76"
@@ -479,8 +482,53 @@
                                                 TextTrimming="CharacterEllipsis"
                                                 Visibility="{x:Bind HasSecondaryUsageAverageRateLimitHeadroom, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                                         </StackPanel>
-                                        <TextBlock
+                                        <Border
                                             Grid.Row="2"
+                                            MinWidth="76"
+                                            Padding="8,3"
+                                            VerticalAlignment="Center"
+                                            Background="{x:Bind IsMonthlyUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource SecondaryUsageLimitBadgeBackgroundBrushConverter}}"
+                                            CornerRadius="{ThemeResource ControlCornerRadius}"
+                                            Visibility="{x:Bind IsMonthlyUsageVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                Foreground="{x:Bind IsMonthlyUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageLimitBadgeForegroundBrushConverter}}"
+                                                Text="{x:Bind MonthlyUsageWindowLabelText, Mode=OneWay}" />
+                                        </Border>
+                                        <StackPanel
+                                            Grid.Row="2"
+                                            Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            Spacing="3"
+                                            Visibility="{x:Bind IsMonthlyUsageVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            <Grid ColumnSpacing="4">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock
+                                                    FontWeight="SemiBold"
+                                                    Text="{x:Bind MonthlyUsageRemainingText, Mode=OneWay}"
+                                                    TextTrimming="CharacterEllipsis" />
+                                                <TextBlock
+                                                    Grid.Column="1"
+                                                    VerticalAlignment="Bottom"
+                                                    FontSize="12"
+                                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                    Text="{x:Bind MonthlyUsageResetText, Mode=OneWay}"
+                                                    TextTrimming="CharacterEllipsis" />
+                                            </Grid>
+                                            <Grid>
+                                                <ProgressBar
+                                                    Foreground="{x:Bind IsMonthlyUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
+                                                    Maximum="100"
+                                                    Value="{x:Bind MonthlyUsageRemainingPercentage, Mode=OneWay}" />
+                                            </Grid>
+                                        </StackPanel>
+                                        <TextBlock
+                                            Grid.Row="3"
                                             Grid.ColumnSpan="2"
                                             FontSize="12"
                                             Foreground="{ThemeResource TextFillColorTertiaryBrush}"

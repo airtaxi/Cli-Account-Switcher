@@ -27,6 +27,7 @@ public sealed partial class MainWindow : WindowEx
     private const int CodexProviderSelectedIndex = 0;
     private const int ClaudeCodeProviderSelectedIndex = 1;
     private const int ZaiProviderSelectedIndex = 2;
+    private const int OpenCodeGoProviderSelectedIndex = 3;
 
     private delegate nint WindowSubclassProcedure(nint windowHandle, uint message, nint messageWordParameter, nint messageLongParameter, nuint subclassIdentifier, nuint referenceData);
 
@@ -265,9 +266,9 @@ public sealed partial class MainWindow : WindowEx
         finally { _isApplyingProviderSelection = false; }
     }
 
-    private static int GetProviderSelectedIndex(CliProviderKind selectedProviderKind) => selectedProviderKind switch { CliProviderKind.ClaudeCode => ClaudeCodeProviderSelectedIndex, CliProviderKind.Zai => ZaiProviderSelectedIndex, _ => CodexProviderSelectedIndex  };
+    private static int GetProviderSelectedIndex(CliProviderKind selectedProviderKind) => selectedProviderKind switch { CliProviderKind.ClaudeCode => ClaudeCodeProviderSelectedIndex, CliProviderKind.Zai => ZaiProviderSelectedIndex, CliProviderKind.OpenCodeGo => OpenCodeGoProviderSelectedIndex, _ => CodexProviderSelectedIndex  };
 
-    private static CliProviderKind GetProviderKindFromSelectedIndex(int selectedIndex) => selectedIndex switch { ClaudeCodeProviderSelectedIndex => CliProviderKind.ClaudeCode, ZaiProviderSelectedIndex => CliProviderKind.Zai, _ => CliProviderKind.Codex  };
+    private static CliProviderKind GetProviderKindFromSelectedIndex(int selectedIndex) => selectedIndex switch { ClaudeCodeProviderSelectedIndex => CliProviderKind.ClaudeCode, ZaiProviderSelectedIndex => CliProviderKind.Zai, OpenCodeGoProviderSelectedIndex => CliProviderKind.OpenCodeGo, _ => CliProviderKind.Codex  };
 
     private SelectorBarItem GetSelectorBarItem(MainPageNavigationSection mainPageNavigationSection) => mainPageNavigationSection switch
     {

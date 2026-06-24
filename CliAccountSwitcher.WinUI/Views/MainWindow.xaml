@@ -112,6 +112,7 @@
                         <ComboBoxItem x:Uid="Provider_CodexComboBoxItem" />
                         <ComboBoxItem x:Uid="Provider_ClaudeCodeComboBoxItem" />
                         <ComboBoxItem x:Uid="Provider_ZaiComboBoxItem" />
+                        <ComboBoxItem x:Uid="Provider_OpenCodeGoComboBoxItem" />
                     </ComboBox>
                 </StackPanel>
             </TitleBar.RightHeader>

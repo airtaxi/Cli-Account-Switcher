@@ -262,6 +262,12 @@
   <data name="AccountsPage_NoFilteredAccountsTitleTextBlock.Text" xml:space="preserve">
     <value>No accounts match the filter.</value>
   </data>
+  <data name="AccountsPage_OpenCodeGoBackupFileTypeChoice.Text" xml:space="preserve">
+    <value>OpenCode Go backup (.ocb)</value>
+  </data>
+  <data name="AccountsPage_OpenCodeGoLitePlanFilterSelectorBarItem.Text" xml:space="preserve">
+    <value>Lite</value>
+  </data>
   <data name="AccountsPage_PlanHeaderTextBlock.Text" xml:space="preserve">
     <value>Plan</value>
   </data>
@@ -337,6 +343,24 @@
   <data name="AccountsPage_RestartCodexApplicationLoadingMessage" xml:space="preserve">
     <value>Restarting Codex and VS Code.</value>
   </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationButtonText" xml:space="preserve">
+    <value>Restart</value>
+  </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationDialogMessage" xml:space="preserve">
+    <value>Account switching is complete. Restart the running OpenCode Go desktop app to apply the change?</value>
+  </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationDialogTitle" xml:space="preserve">
+    <value>Restart OpenCode Go</value>
+  </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationFailedDialogMessage" xml:space="preserve">
+    <value>Failed to restart the OpenCode Go desktop app. Please restart it manually.</value>
+  </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationFailedDialogTitle" xml:space="preserve">
+    <value>Restart failed</value>
+  </data>
+  <data name="AccountsPage_RestartOpenCodeGoApplicationLoadingMessage" xml:space="preserve">
+    <value>Restarting OpenCode Go...</value>
+  </data>
   <data name="AccountsPage_StatusHeaderTextBlock.Text" xml:space="preserve">
     <value>Status</value>
   </data>
@@ -384,6 +408,15 @@
   </data>
   <data name="AddAccountDialog_OAuthSelectorBarItem.Text" xml:space="preserve">
     <value>OAuth</value>
+  </data>
+  <data name="AddOpenCodeGoAccountDialog.CloseButtonText" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="AddOpenCodeGoAccountDialog.Title" xml:space="preserve">
+    <value>Add OpenCode Go Account</value>
+  </data>
+  <data name="AddZaiAccountDialog.CloseButtonText" xml:space="preserve">
+    <value>Close</value>
   </data>
   <data name="AddZaiAccountDialog.Title" xml:space="preserve">
     <value>Add Z.ai Account</value>
@@ -724,6 +757,30 @@
   <data name="OAuthAddAccountPage_WaitingTextBlock.Text" xml:space="preserve">
     <value>Waiting for the authentication callback.</value>
   </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_AddButtonTextBlock.Text" xml:space="preserve">
+    <value>Add Account</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_AliasHeaderTextBlock.Text" xml:space="preserve">
+    <value>Account Label (optional)</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_AliasTextBox.PlaceholderText" xml:space="preserve">
+    <value>Enter a label to distinguish this account</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_CookieExpiryNoticeTextBlock.Text" xml:space="preserve">
+    <value>If OpenCode Go adds API-key-based usage tracking in the future, this app will switch to that method. Until then, usage is read from the console dashboard using the login session, which expires after 1 year.</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Sign in with your OpenCode Go account. After login, the first API key, account email, and key name will be extracted automatically. OpenCode Go API keys do not expire unless you delete them manually. Usage tracking requires the console login session, which is valid for up to 1 year.</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_InitializingWebViewTextBlock.Text" xml:space="preserve">
+    <value>Initializing login window...</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_ResetButtonTextBlock.Text" xml:space="preserve">
+    <value>Reset Login</value>
+  </data>
+  <data name="OpenCodeGoWebViewLoginAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Sign in to OpenCode Go</value>
+  </data>
   <data name="PrimaryUsageAverageRateWarningTextBlock.Text" xml:space="preserve">
     <value>Over average pace</value>
   </data>
@@ -732,6 +789,9 @@
   </data>
   <data name="ProviderAccountViewModel_LastUsageRefreshFormat" xml:space="preserve">
     <value>Last refreshed: {0}</value>
+  </data>
+  <data name="ProviderAccountViewModel_MonthlyUsageWindowLabel" xml:space="preserve">
+    <value>Monthly limit</value>
   </data>
   <data name="ProviderAccountViewModel_NoAccessToken" xml:space="preserve">
     <value>None</value>
@@ -789,6 +849,12 @@
   </data>
   <data name="Provider_CodexDisplayName" xml:space="preserve">
     <value>Codex</value>
+  </data>
+  <data name="Provider_OpenCodeGoComboBoxItem.Content" xml:space="preserve">
+    <value>OpenCode Go</value>
+  </data>
+  <data name="Provider_OpenCodeGoDisplayName" xml:space="preserve">
+    <value>OpenCode Go</value>
   </data>
   <data name="Provider_ZaiComboBoxItem.Content" xml:space="preserve">
     <value>Z.ai (Read-only)</value>
@@ -1217,6 +1283,12 @@ The installed app is already up to date.</value>
   </data>
   <data name="SkillsPage_NoSkillsTitleTextBlock.Text" xml:space="preserve">
     <value>No skills available.</value>
+  </data>
+  <data name="SkillsPage_OpenCodeGoUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
+    <value>OpenCode Go does not manage local skill files. Switch to Codex or Claude Code to manage skills.</value>
+  </data>
+  <data name="SkillsPage_OpenCodeGoUnsupportedTitleTextBlock.Text" xml:space="preserve">
+    <value>Skills are not supported</value>
   </data>
   <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
     <value>Refresh</value>

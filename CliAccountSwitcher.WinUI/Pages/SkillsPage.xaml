@@ -53,7 +53,7 @@
     </Page.Resources>
 
     <Grid>
-        <Frame IsEnabled="{x:Bind ViewModel.IsZaiProviderSelected, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}">
+        <Frame IsEnabled="{x:Bind ViewModel.IsSkillsSupported, Mode=OneWay}">
             <Grid Padding="24" RowSpacing="16">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -326,6 +326,32 @@
                     TextAlignment="Center" />
                 <TextBlock
                     x:Uid="SkillsPage_ZaiUnsupportedDescriptionTextBlock"
+                    HorizontalAlignment="Center"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </Grid>
+
+        <Grid Background="{ThemeResource SolidBackgroundFillColorBaseBrush}" Visibility="{x:Bind ViewModel.IsOpenCodeGoProviderSelected, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel
+                MaxWidth="440"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Spacing="12">
+                <FontIcon
+                    HorizontalAlignment="Center"
+                    FontSize="40"
+                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                    Glyph="&#xE7BA;" />
+                <TextBlock
+                    x:Uid="SkillsPage_OpenCodeGoUnsupportedTitleTextBlock"
+                    HorizontalAlignment="Center"
+                    FontSize="20"
+                    FontWeight="SemiBold"
+                    TextAlignment="Center" />
+                <TextBlock
+                    x:Uid="SkillsPage_OpenCodeGoUnsupportedDescriptionTextBlock"
                     HorizontalAlignment="Center"
                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                     TextAlignment="Center"

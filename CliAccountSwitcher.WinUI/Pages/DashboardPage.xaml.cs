@@ -1,3 +1,4 @@
+using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Helpers;
 using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.ViewModels;
@@ -12,6 +13,8 @@ namespace CliAccountSwitcher.WinUI.Pages;
 
 public sealed partial class DashboardPage : Page
 {
+    private readonly ApplicationSettings _applicationSettings = App.Services.GetRequiredService<ApplicationSettings>();
+
     public DashboardPageViewModel ViewModel { get; }
 
     public DashboardPage()
@@ -24,11 +27,32 @@ public sealed partial class DashboardPage : Page
 
     private async void OnAddAccountButtonClicked(object sender, RoutedEventArgs routedEventArguments)
     {
-        var addAccountDialog = new CliAccountSwitcher.WinUI.Dialogs.AddAccountDialog
+        var selectedProviderKind = _applicationSettings.SelectedProviderKind;
+        if (selectedProviderKind == CliProviderKind.Zai)
         {
-            XamlRoot = XamlRoot
-        };
-        await addAccountDialog.ShowAsync();
+            var addZaiAccountDialog = new CliAccountSwitcher.WinUI.Dialogs.AddZaiAccountDialog
+            {
+                XamlRoot = XamlRoot
+            };
+            await addZaiAccountDialog.ShowAsync();
+        }
+        else if (selectedProviderKind == CliProviderKind.OpenCodeGo)
+        {
+            var addOpenCodeGoAccountDialog = new CliAccountSwitcher.WinUI.Dialogs.AddOpenCodeGoAccountDialog
+            {
+                XamlRoot = XamlRoot
+            };
+            await addOpenCodeGoAccountDialog.ShowAsync();
+        }
+        else
+        {
+            var addAccountDialog = new CliAccountSwitcher.WinUI.Dialogs.AddAccountDialog
+            {
+                XamlRoot = XamlRoot
+            };
+            await addAccountDialog.ShowAsync();
+        }
+
         await ViewModel.ReloadDashboardAsync();
     }
 

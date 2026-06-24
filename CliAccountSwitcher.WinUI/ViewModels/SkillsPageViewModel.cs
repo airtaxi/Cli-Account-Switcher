@@ -45,6 +45,7 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
     [NotifyPropertyChangedFor(nameof(IsCodexProviderSelected))]
     [NotifyPropertyChangedFor(nameof(IsClaudeCodeProviderSelected))]
     [NotifyPropertyChangedFor(nameof(IsZaiProviderSelected))]
+    [NotifyPropertyChangedFor(nameof(IsOpenCodeGoProviderSelected))]
     [NotifyPropertyChangedFor(nameof(DescriptionText))]
     public partial CliProviderKind SelectedProviderKind { get; set; } = CliProviderKind.Codex;
 
@@ -84,6 +85,10 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
     public bool IsClaudeCodeProviderSelected => SelectedProviderKind == CliProviderKind.ClaudeCode;
 
     public bool IsZaiProviderSelected => SelectedProviderKind == CliProviderKind.Zai;
+
+    public bool IsOpenCodeGoProviderSelected => SelectedProviderKind == CliProviderKind.OpenCodeGo;
+
+    public bool IsSkillsSupported => SelectedProviderKind is not (CliProviderKind.Zai or CliProviderKind.OpenCodeGo);
 
     public string BackupSuggestedFileName => $"{SkillService.GetBackupFileNamePrefix(SelectedProviderKind)}-{DateTimeOffset.Now.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture)}";
     public string BackupFileExtension => SkillsBackupFileExtension;
@@ -180,7 +185,7 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
     private void ReloadSkills(CliProviderKind providerKind)
     {
         SelectedProviderKind = providerKind;
-        var scannedSkillItems = providerKind == CliProviderKind.Zai ? Array.Empty<SkillItem>() : _skillService.ScanSkills(providerKind);
+        var scannedSkillItems = providerKind is CliProviderKind.Zai or CliProviderKind.OpenCodeGo ? Array.Empty<SkillItem>() : _skillService.ScanSkills(providerKind);
         SynchronizeSkills(scannedSkillItems);
         ApplyFilter();
         RefreshSkillStateProperties();
@@ -330,7 +335,7 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
 
-    private string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => _localizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), CliProviderKind.Zai => _localizationService.GetLocalizedString("Provider_ZaiDisplayName"), _ => _localizationService.GetLocalizedString("Provider_CodexDisplayName") };
+    private string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => _localizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), CliProviderKind.Zai => _localizationService.GetLocalizedString("Provider_ZaiDisplayName"), CliProviderKind.OpenCodeGo => _localizationService.GetLocalizedString("Provider_OpenCodeGoDisplayName"), _ => _localizationService.GetLocalizedString("Provider_CodexDisplayName") };
 
     private static (CliProviderKind providerKind, string directoryName) CreateSkillKey(SkillItem skillItem) => (skillItem.ProviderKind, skillItem.DirectoryName);
 

@@ -1,4 +1,4 @@
-using CliAccountSwitcher.WinUI.Helpers;
+﻿using CliAccountSwitcher.WinUI.Helpers;
 using CliAccountSwitcher.WinUI.Managers;
 using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.Services;
@@ -60,6 +60,7 @@ public partial class App : Application
         serviceCollection.AddSingleton<StartupRegistrationService>();
         serviceCollection.AddSingleton<CodexApplicationRestartService>();
         serviceCollection.AddSingleton<ClaudeCodeApplicationRestartService>();
+        serviceCollection.AddSingleton<OpenCodeGoApplicationRestartService>();
         serviceCollection.AddSingleton<SkillService>();
 
         // LocalizationService — needs language tag from settings
@@ -83,9 +84,11 @@ public partial class App : Application
         serviceCollection.AddSingleton(sp => new CodexAccountService(sp.GetRequiredService<ApplicationSettingsService>(), sp.GetRequiredService<ApplicationNotificationService>()));
         serviceCollection.AddSingleton(sp => new ClaudeAccountService(sp.GetRequiredService<ApplicationSettingsService>(), sp.GetRequiredService<ApplicationNotificationService>()));
         serviceCollection.AddSingleton(sp => new ZaiAccountService(sp.GetRequiredService<ApplicationSettingsService>(), sp.GetRequiredService<ApplicationNotificationService>()));
+        serviceCollection.AddSingleton(sp => new OpenCodeGoAccountService(sp.GetRequiredService<ApplicationSettingsService>(), sp.GetRequiredService<ApplicationNotificationService>()));
         serviceCollection.AddSingleton<IAccountService>(sp => sp.GetRequiredService<CodexAccountService>());
         serviceCollection.AddSingleton<IAccountService>(sp => sp.GetRequiredService<ClaudeAccountService>());
         serviceCollection.AddSingleton<IAccountService>(sp => sp.GetRequiredService<ZaiAccountService>());
+        serviceCollection.AddSingleton<IAccountService>(sp => sp.GetRequiredService<OpenCodeGoAccountService>());
 
         // AccountServiceManager — needs ApplicationSettingsService + all IAccountService implementations
         serviceCollection.AddSingleton(sp => new AccountServiceManager(sp.GetRequiredService<ApplicationSettingsService>(), sp.GetServices<IAccountService>()));
