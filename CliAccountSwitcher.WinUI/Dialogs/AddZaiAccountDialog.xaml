@@ -7,6 +7,7 @@
     xmlns:dev="using:DevWinUI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Uid="AddZaiAccountDialog"
+    Closing="OnAddZaiAccountDialogClosing"
     DefaultButton="Close"
     Style="{StaticResource DefaultContentDialogStyle}"
     mc:Ignorable="d">
