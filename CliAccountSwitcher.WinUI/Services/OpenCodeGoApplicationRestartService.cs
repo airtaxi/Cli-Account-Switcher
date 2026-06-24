@@ -71,7 +71,10 @@ public sealed class OpenCodeGoApplicationRestartService
         {
             try
             {
-                if (!openCodeGoProcess.HasExited) openCodeGoProcess.WaitForExit(ProcessExitTimeoutMilliseconds);
+                if (!openCodeGoProcess.HasExited)
+                {
+                    openCodeGoProcess.WaitForExit(ProcessExitTimeoutMilliseconds);
+                }
             }
             catch { }
             finally { openCodeGoProcess.Dispose(); }
@@ -89,7 +92,10 @@ public sealed class OpenCodeGoApplicationRestartService
         var wasAnyExecutableFilePathStarted = false;
         foreach (var executableFilePath in executableFilePaths)
         {
-            if (TryStartExecutableFilePath(executableFilePath)) wasAnyExecutableFilePathStarted = true;
+            if (TryStartExecutableFilePath(executableFilePath))
+            {
+                wasAnyExecutableFilePathStarted = true;
+            }
         }
 
         if (!wasAnyExecutableFilePathStarted) return TryStartOpenCodeGoFromDefaultPath();

@@ -44,7 +44,8 @@ public sealed class CodexResponseRequest
         return payloadObject;
     }
 
-    private static JsonArray CreateTextInputPayload(string inputText) => [
+    private static JsonArray CreateTextInputPayload(string inputText) =>
+    [
         new JsonObject
         {
             ["type"] = "message",

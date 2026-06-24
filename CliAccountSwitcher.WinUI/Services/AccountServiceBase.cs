@@ -1,4 +1,4 @@
-﻿using CliAccountSwitcher.Api.Providers.Abstractions;
+using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Models;
 using System.Net;
 
@@ -351,20 +351,14 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
 
     private void RemoveAccountStates(IReadOnlySet<string> accountIdentifierSet)
     {
-        lock (_accountsLock)
-        {
-            _accounts.RemoveAll(accountState => accountIdentifierSet.Contains(GetAccountIdentifier(accountState)));
-        }
+        lock (_accountsLock) _accounts.RemoveAll(accountState => accountIdentifierSet.Contains(GetAccountIdentifier(accountState)));
 
         ClearPrimaryUsageSurgeNotificationStates(accountIdentifierSet);
     }
 
     private void RemoveAccountState(string accountIdentifier)
     {
-        lock (_accountsLock)
-        {
-            _accounts.RemoveAll(accountState => string.Equals(GetAccountIdentifier(accountState), accountIdentifier, StringComparison.Ordinal));
-        }
+        lock (_accountsLock) _accounts.RemoveAll(accountState => string.Equals(GetAccountIdentifier(accountState), accountIdentifier, StringComparison.Ordinal));
 
         ClearPrimaryUsageSurgeNotificationState(accountIdentifier);
     }
