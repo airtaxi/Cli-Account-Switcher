@@ -220,7 +220,8 @@ public sealed class ZaiAccountService : AccountServiceBase<ZaiAccount>
             ProviderKind = CliProviderKind.Zai,
             PlanType = snapshot.PlanLevel,
             FiveHour = CreateProviderUsageWindow(snapshot.FiveHour),
-            SevenDay = CreateProviderUsageWindow(snapshot.SevenDay)
+            SevenDay = CreateProviderUsageWindow(snapshot.SevenDay),
+            Monthly = CreateProviderUsageWindow(snapshot.Monthly)
         };
     }
 

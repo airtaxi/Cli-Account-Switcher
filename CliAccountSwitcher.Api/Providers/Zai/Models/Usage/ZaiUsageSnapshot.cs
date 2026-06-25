@@ -13,4 +13,6 @@ public sealed class ZaiUsageSnapshot
     public ZaiUsageWindow FiveHour { get; set; } = new();
 
     public ZaiUsageWindow SevenDay { get; set; } = new();
+
+    public ZaiUsageWindow Monthly { get; set; } = new();
 }

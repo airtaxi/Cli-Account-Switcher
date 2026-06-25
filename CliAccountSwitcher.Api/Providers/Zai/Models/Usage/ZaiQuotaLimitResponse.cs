@@ -23,12 +23,13 @@ internal static class ZaiQuotaLimitResponse
             foreach (var limitElement in limitsElement.EnumerateArray())
             {
                 if (limitElement.ValueKind != JsonValueKind.Object) continue;
-                if (!string.Equals(ReadStringOrNull(limitElement, "type"), "TOKENS_LIMIT", StringComparison.OrdinalIgnoreCase)) continue;
 
+                var type = ReadStringOrNull(limitElement, "type");
                 var unit = ReadInt32OrNull(limitElement, "unit") ?? -1;
                 var window = CreateUsageWindow(limitElement);
-                if (unit == 3) snapshot.FiveHour = window;
-                else if (unit == 6) snapshot.SevenDay = window;
+                if (string.Equals(type, "TOKENS_LIMIT", StringComparison.OrdinalIgnoreCase) && unit == 3) snapshot.FiveHour = window;
+                if (string.Equals(type, "TOKENS_LIMIT", StringComparison.OrdinalIgnoreCase) && unit == 6) snapshot.SevenDay = window;
+                if (string.Equals(type, "TIME_LIMIT", StringComparison.OrdinalIgnoreCase) && unit == 5) snapshot.Monthly = window;
             }
         }
 
