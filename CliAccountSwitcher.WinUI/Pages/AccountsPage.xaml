@@ -525,7 +525,33 @@
                                                     Foreground="{x:Bind IsMonthlyUsageUnderWarningThreshold, Mode=OneWay, Converter={StaticResource UsageProgressBarForegroundBrushConverter}}"
                                                     Maximum="100"
                                                     Value="{x:Bind MonthlyUsageRemainingPercentage, Mode=OneWay}" />
+                                                <ProgressBar
+                                                    Foreground="{ThemeResource UsageAverageRateWarningProgressBarForegroundBrush}"
+                                                    Maximum="100"
+                                                    Visibility="{x:Bind IsMonthlyUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                    Value="{x:Bind MonthlyUsageRemainingPercentage, Mode=OneWay}" />
                                             </Grid>
+                                            <TextBlock
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                Foreground="{ThemeResource UsageAverageRateWarningTextBrush}"
+                                                Text="{x:Bind MonthlyUsageAverageRateStatusText, Mode=OneWay}"
+                                                TextTrimming="CharacterEllipsis"
+                                                Visibility="{x:Bind IsMonthlyUsageOverAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                            <TextBlock
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Text="{x:Bind MonthlyUsageAverageRateStatusText, Mode=OneWay}"
+                                                TextTrimming="CharacterEllipsis"
+                                                Visibility="{x:Bind IsMonthlyUsageAtAverageRateLimit, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                            <TextBlock
+                                                FontSize="12"
+                                                FontWeight="SemiBold"
+                                                Foreground="{ThemeResource UsageAverageRateNormalTextBrush}"
+                                                Text="{x:Bind MonthlyUsageAverageRateStatusText, Mode=OneWay}"
+                                                TextTrimming="CharacterEllipsis"
+                                                Visibility="{x:Bind HasMonthlyUsageAverageRateLimitHeadroom, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                                         </StackPanel>
                                         <TextBlock
                                             Grid.Row="3"
