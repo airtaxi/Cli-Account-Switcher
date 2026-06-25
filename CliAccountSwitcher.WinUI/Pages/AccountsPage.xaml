@@ -643,9 +643,9 @@
                         FontSize="18"
                         FontWeight="SemiBold" />
                     <TextBlock
-                        x:Uid="AccountsPage_NoAccountsDescriptionTextBlock"
                         HorizontalAlignment="Center"
-                        Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{x:Bind ViewModel.NoAccountsDescriptionText, Mode=OneWay}" />
                 </StackPanel>
 
                 <StackPanel

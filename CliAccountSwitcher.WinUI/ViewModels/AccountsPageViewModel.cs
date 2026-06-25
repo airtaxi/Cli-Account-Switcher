@@ -51,6 +51,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
     [NotifyPropertyChangedFor(nameof(IsZaiProviderSelected))]
     [NotifyPropertyChangedFor(nameof(IsOpenCodeGoProviderSelected))]
     [NotifyPropertyChangedFor(nameof(DescriptionText))]
+    [NotifyPropertyChangedFor(nameof(NoAccountsDescriptionText))]
     [NotifyPropertyChangedFor(nameof(PlanHeaderText))]
     [NotifyPropertyChangedFor(nameof(SearchBoxColumnSpan))]
     public partial CliProviderKind SelectedProviderKind { get; set; } = CliProviderKind.Codex;
@@ -98,6 +99,7 @@ public sealed partial class AccountsPageViewModel : ObservableObject, IDisposabl
 
     // Localizations
     public string DescriptionText => _localizationService.GetFormattedString("AccountsPageViewModel_DescriptionFormat", GetProviderDisplayName(SelectedProviderKind));
+    public string NoAccountsDescriptionText => SelectedProviderKind switch { CliProviderKind.ClaudeCode => _localizationService.GetLocalizedString("AccountsPage_NoAccountsDescriptionTextBlock_ClaudeCode.Text"), CliProviderKind.Zai => _localizationService.GetLocalizedString("AccountsPage_NoAccountsDescriptionTextBlock_Zai.Text"), CliProviderKind.OpenCodeGo => _localizationService.GetLocalizedString("AccountsPage_NoAccountsDescriptionTextBlock_OpenCodeGo.Text"), _ => _localizationService.GetLocalizedString("AccountsPage_NoAccountsDescriptionTextBlock_Codex.Text") };
     public string PlanHeaderText => _localizationService.GetLocalizedString("AccountsPage_PlanHeaderTextBlock/Text");
     public string RefreshAllAccountsLoadingMessage => _localizationService.GetLocalizedString("AccountsPage_RefreshAllAccountsLoadingMessage");
     public string RefreshSelectedAccountsLoadingMessage => _localizationService.GetLocalizedString("AccountsPage_RefreshSelectedAccountsLoadingMessage");

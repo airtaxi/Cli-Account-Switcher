@@ -250,8 +250,17 @@
   <data name="AccountsPage_ImportBackupTextBlock.Text" xml:space="preserve">
     <value>백업 불러오기</value>
   </data>
-  <data name="AccountsPage_NoAccountsDescriptionTextBlock.Text" xml:space="preserve">
-    <value>계정 추가 버튼으로 auth.json을 가져오세요.</value>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_ClaudeCode.Text" xml:space="preserve">
+    <value>계정 추가 버튼을 눌러 Claude Code에 로그인하거나 인증 정보를 불러오세요.</value>
+  </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_Codex.Text" xml:space="preserve">
+    <value>계정 추가 버튼을 눌러 Codex에 로그인하거나 인증 파일을 불러오세요.</value>
+  </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_OpenCodeGo.Text" xml:space="preserve">
+    <value>계정 추가 버튼을 눌러 OpenCode Go에 로그인하여 계정을 추가하세요.</value>
+  </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_Zai.Text" xml:space="preserve">
+    <value>계정 추가 버튼을 눌러 현재 Z.ai 계정을 불러오거나 API 키를 입력하세요.</value>
   </data>
   <data name="AccountsPage_NoAccountsTitleTextBlock.Text" xml:space="preserve">
     <value>등록된 계정이 없습니다.</value>

@@ -250,8 +250,17 @@
   <data name="AccountsPage_ImportBackupTextBlock.Text" xml:space="preserve">
     <value>导入备份</value>
   </data>
-  <data name="AccountsPage_NoAccountsDescriptionTextBlock.Text" xml:space="preserve">
-    <value>使用“添加账号”导入 auth.json。</value>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_ClaudeCode.Text" xml:space="preserve">
+    <value>点击“添加账号”登录 Claude Code 或加载认证信息。</value>
+  </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_Codex.Text" xml:space="preserve">
+    <value>点击“添加账号”登录 Codex 或加载认证文件。</value>
+  </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_OpenCodeGo.Text" xml:space="preserve">
+    <value>点击“添加账号”登录 OpenCode Go 以添加账号。</value>
+  </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_Zai.Text" xml:space="preserve">
+    <value>点击“添加账号”导入当前 Z.ai 账号或输入 API 密钥。</value>
   </data>
   <data name="AccountsPage_NoAccountsTitleTextBlock.Text" xml:space="preserve">
     <value>尚未注册账号。</value>

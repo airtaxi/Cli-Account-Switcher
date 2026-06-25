@@ -250,8 +250,17 @@
   <data name="AccountsPage_ImportBackupTextBlock.Text" xml:space="preserve">
     <value>バックアップをインポート</value>
   </data>
-  <data name="AccountsPage_NoAccountsDescriptionTextBlock.Text" xml:space="preserve">
-    <value>アカウントを追加して auth.json をインポートしてください。</value>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_ClaudeCode.Text" xml:space="preserve">
+    <value>アカウント追加ボタンから Claude Code にログインするか、認証情報を読み込んでください。</value>
+  </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_Codex.Text" xml:space="preserve">
+    <value>アカウント追加ボタンから Codex にログインするか、認証ファイルを読み込んでください。</value>
+  </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_OpenCodeGo.Text" xml:space="preserve">
+    <value>アカウント追加ボタンから OpenCode Go にログインしてアカウントを追加してください。</value>
+  </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_Zai.Text" xml:space="preserve">
+    <value>アカウント追加ボタンから現在の Z.ai アカウントを取り込むか、API キーを入力してください。</value>
   </data>
   <data name="AccountsPage_NoAccountsTitleTextBlock.Text" xml:space="preserve">
     <value>登録済みアカウントがありません。</value>

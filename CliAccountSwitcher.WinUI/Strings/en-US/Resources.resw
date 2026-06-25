@@ -250,8 +250,17 @@
   <data name="AccountsPage_ImportBackupTextBlock.Text" xml:space="preserve">
     <value>Import Backup</value>
   </data>
-  <data name="AccountsPage_NoAccountsDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Use Add Account to import auth.json.</value>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_ClaudeCode.Text" xml:space="preserve">
+    <value>Use Add Account to sign in to Claude Code or load credentials.</value>
+  </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_Codex.Text" xml:space="preserve">
+    <value>Use Add Account to sign in to Codex or load an auth file.</value>
+  </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_OpenCodeGo.Text" xml:space="preserve">
+    <value>Use Add Account to sign in to OpenCode Go.</value>
+  </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_Zai.Text" xml:space="preserve">
+    <value>Use Add Account to import the current Z.ai account or enter an API key.</value>
   </data>
   <data name="AccountsPage_NoAccountsTitleTextBlock.Text" xml:space="preserve">
     <value>No accounts registered.</value>

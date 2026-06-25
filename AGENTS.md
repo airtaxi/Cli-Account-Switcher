@@ -82,8 +82,6 @@ Specifically, keep `s_thirdPartyLicensePackages` and `CreateThirdPartyLicensePac
 
 - Prefer container `Spacing`, `RowSpacing`, and `ColumnSpacing` for layout gaps. Use `Margin` only for individual positional adjustment.
 - Match the current visual stack: WinUI 3, WinUIEx windows, DevWinUI controls, Mica backdrop, custom title bar, and resource-based localization.
-- After changing XAML, remind the user to run their XAML formatter on the changed XAML files.
-
 ## Build And Packaging Notes
 
 - The app is configured for `x86`, `x64`, and `ARM64` platforms with runtime identifiers `win-x86`, `win-x64`, and `win-arm64`.
