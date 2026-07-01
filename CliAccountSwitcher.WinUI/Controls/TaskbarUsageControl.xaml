@@ -17,6 +17,7 @@
         Margin="4,4"
         Padding="4"
         HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
         HorizontalContentAlignment="Stretch"
         Background="Transparent"
         BorderBrush="Transparent"
