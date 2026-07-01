@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentDialog
+    x:Class="CliAccountSwitcher.WinUI.Dialogs.AddOllamaAccountDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Uid="AddOllamaAccountDialog"
+    Closing="OnAddOllamaAccountDialogClosing"
+    DefaultButton="Close"
+    Style="{StaticResource DefaultContentDialogStyle}"
+    mc:Ignorable="d">
+    <ContentDialog.Resources>
+        <ResourceDictionary>
+            <x:Double x:Key="ContentDialogMaxWidth">720</x:Double>
+        </ResourceDictionary>
+    </ContentDialog.Resources>
+
+    <Grid Width="560" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            x:Uid="OllamaWebViewLoginAddAccountPage_DescriptionTextBlock"
+            Grid.Row="0"
+            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+            TextWrapping="Wrap" />
+
+        <StackPanel Grid.Row="1" Spacing="6">
+            <TextBlock x:Uid="OllamaWebViewLoginAddAccountPage_AliasHeaderTextBlock" FontWeight="SemiBold" />
+            <TextBox
+                x:Name="AliasTextBox"
+                x:Uid="OllamaWebViewLoginAddAccountPage_AliasTextBox"
+                MinWidth="480" />
+        </StackPanel>
+
+        <Button
+            x:Name="SignInButton"
+            Grid.Row="2"
+            Click="OnSignInButtonClicked"
+            Style="{StaticResource AccentButtonStyle}">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+                <FontIcon FontSize="14" Glyph="&#xE77B;" />
+                <TextBlock x:Uid="OllamaWebViewLoginAddAccountPage_TitleTextBlock" />
+            </StackPanel>
+        </Button>
+
+        <StackPanel
+            x:Name="StatusPanel"
+            Grid.Row="3"
+            Orientation="Horizontal"
+            Spacing="8"
+            Visibility="Collapsed">
+            <ProgressRing
+                x:Name="StatusProgressRing"
+                Width="24"
+                Height="24"
+                IsActive="False"
+                Visibility="Collapsed" />
+            <TextBlock
+                x:Name="StatusTextBlock"
+                VerticalAlignment="Center"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                TextWrapping="Wrap" />
+        </StackPanel>
+
+        <Button
+            x:Name="AddAccountButton"
+            Grid.Row="4"
+            Click="OnAddAccountButtonClicked"
+            IsEnabled="False"
+            Style="{StaticResource AccentButtonStyle}">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+                <FontIcon FontSize="14" Glyph="&#xE710;" />
+                <TextBlock x:Uid="OllamaWebViewLoginAddAccountPage_AddButtonTextBlock" />
+            </StackPanel>
+        </Button>
+
+        <StackPanel Grid.Row="5" Spacing="8">
+            <TextBlock
+                x:Uid="OllamaWebViewLoginAddAccountPage_CookieExpiryNoticeTextBlock"
+                FontSize="12"
+                Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                TextWrapping="Wrap" />
+            <InfoBar
+                x:Name="ErrorInfoBar"
+                IsOpen="False"
+                Severity="Error" />
+        </StackPanel>
+    </Grid>
+</ContentDialog>

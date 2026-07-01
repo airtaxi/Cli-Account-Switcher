@@ -256,6 +256,9 @@
   <data name="AccountsPage_NoAccountsDescriptionTextBlock_Codex.Text" xml:space="preserve">
     <value>계정 추가 버튼을 눌러 Codex에 로그인하거나 인증 파일을 불러오세요.</value>
   </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_Ollama.Text" xml:space="preserve">
+    <value>계정 추가 버튼을 눌러 Ollama에 로그인하세요.</value>
+  </data>
   <data name="AccountsPage_NoAccountsDescriptionTextBlock_OpenCodeGo.Text" xml:space="preserve">
     <value>계정 추가 버튼을 눌러 OpenCode Go에 로그인하여 계정을 추가하세요.</value>
   </data>
@@ -270,6 +273,9 @@
   </data>
   <data name="AccountsPage_NoFilteredAccountsTitleTextBlock.Text" xml:space="preserve">
     <value>조건에 맞는 계정이 없습니다.</value>
+  </data>
+  <data name="AccountsPage_OllamaBackupFileTypeChoice" xml:space="preserve">
+    <value>Ollama 백업 (.ollamab)</value>
   </data>
   <data name="AccountsPage_OpenCodeGoBackupFileTypeChoice.Text" xml:space="preserve">
     <value>OpenCode Go 백업 (.ocb)</value>
@@ -417,6 +423,12 @@
   </data>
   <data name="AddAccountDialog_OAuthSelectorBarItem.Text" xml:space="preserve">
     <value>OAuth 인증</value>
+  </data>
+  <data name="AddOllamaAccountDialog.CloseButtonText" xml:space="preserve">
+    <value>닫기</value>
+  </data>
+  <data name="AddOllamaAccountDialog.Title" xml:space="preserve">
+    <value>Ollama 계정 추가</value>
   </data>
   <data name="AddOpenCodeGoAccountDialog.CloseButtonText" xml:space="preserve">
     <value>닫기</value>
@@ -766,6 +778,30 @@
   <data name="OAuthAddAccountPage_WaitingTextBlock.Text" xml:space="preserve">
     <value>인증 콜백을 기다리는 중입니다.</value>
   </data>
+  <data name="OllamaWebViewLoginAddAccountPage_AddButtonTextBlock.Text" xml:space="preserve">
+    <value>계정 추가</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_AliasHeaderTextBlock.Text" xml:space="preserve">
+    <value>계정 별명 (선택)</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_AliasTextBox.PlaceholderText" xml:space="preserve">
+    <value>이 계정을 구분할 별명 입력</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_CookieExpiryNoticeTextBlock.Text" xml:space="preserve">
+    <value>Ollama는 세션 쿠키로 사용량을 읽습니다. 쿠키가 만료되면 계정이 만료된 것으로 표시되며 다시 로그인해야 합니다.</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Ollama 계정으로 로그인하세요. 로그인 후 세션 쿠키와 계정 이메일이 자동으로 추출됩니다. 세션 쿠키는 시간이 지나면 만료될 수 있습니다.</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_ExtractingStatusText.Text" xml:space="preserve">
+    <value>로그인 감지됨. 계정 정보 추출 중...</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_InitializingWebViewTextBlock.Text" xml:space="preserve">
+    <value>로그인 창 초기화 중...</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Ollama 로그인</value>
+  </data>
   <data name="OpenCodeGoWebViewLoginAddAccountPage_AddButtonTextBlock.Text" xml:space="preserve">
     <value>계정 추가</value>
   </data>
@@ -858,6 +894,12 @@
   </data>
   <data name="Provider_CodexDisplayName" xml:space="preserve">
     <value>Codex</value>
+  </data>
+  <data name="Provider_OllamaComboBoxItem.Content" xml:space="preserve">
+    <value>Ollama (읽기 전용)</value>
+  </data>
+  <data name="Provider_OllamaDisplayName" xml:space="preserve">
+    <value>Ollama</value>
   </data>
   <data name="Provider_OpenCodeGoComboBoxItem.Content" xml:space="preserve">
     <value>OpenCode Go</value>
@@ -1292,6 +1334,12 @@ Microsoft Store에서 사용 가능한 업데이트 {0}개를 찾았습니다.</
   </data>
   <data name="SkillsPage_NoSkillsTitleTextBlock.Text" xml:space="preserve">
     <value>등록된 스킬이 없습니다.</value>
+  </data>
+  <data name="SkillsPage_OllamaUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Ollama는 CLI 도구 기반 스킬 디렉터리를 사용하지 않는 읽기 전용 프로바이더입니다.</value>
+  </data>
+  <data name="SkillsPage_OllamaUnsupportedTitleTextBlock.Text" xml:space="preserve">
+    <value>Ollama는 스킬을 지원하지 않습니다</value>
   </data>
   <data name="SkillsPage_OpenCodeGoUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
     <value>OpenCode Go는 로컬 스킬 파일을 관리하지 않습니다. 스킬을 관리하려면 Codex 또는 Claude Code로 전환하세요.</value>

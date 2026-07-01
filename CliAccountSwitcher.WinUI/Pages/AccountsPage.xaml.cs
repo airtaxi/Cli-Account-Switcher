@@ -58,6 +58,17 @@ public sealed partial class AccountsPage : Page
             return;
         }
 
+        if (ViewModel.SelectedProviderKind == CliProviderKind.Ollama)
+        {
+            var addOllamaAccountDialog = new CliAccountSwitcher.WinUI.Dialogs.AddOllamaAccountDialog
+            {
+                XamlRoot = XamlRoot
+            };
+            await addOllamaAccountDialog.ShowAsync();
+            ViewModel.ReloadAccounts();
+            return;
+        }
+
         var addAccountDialog = new CliAccountSwitcher.WinUI.Dialogs.AddAccountDialog
         {
             XamlRoot = XamlRoot

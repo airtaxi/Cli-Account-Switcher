@@ -46,6 +46,7 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
     [NotifyPropertyChangedFor(nameof(IsClaudeCodeProviderSelected))]
     [NotifyPropertyChangedFor(nameof(IsZaiProviderSelected))]
     [NotifyPropertyChangedFor(nameof(IsOpenCodeGoProviderSelected))]
+    [NotifyPropertyChangedFor(nameof(IsOllamaProviderSelected))]
     [NotifyPropertyChangedFor(nameof(DescriptionText))]
     public partial CliProviderKind SelectedProviderKind { get; set; } = CliProviderKind.Codex;
 
@@ -88,7 +89,9 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
 
     public bool IsOpenCodeGoProviderSelected => SelectedProviderKind == CliProviderKind.OpenCodeGo;
 
-    public bool IsSkillsSupported => SelectedProviderKind is not (CliProviderKind.Zai or CliProviderKind.OpenCodeGo);
+    public bool IsOllamaProviderSelected => SelectedProviderKind == CliProviderKind.Ollama;
+
+    public bool IsSkillsSupported => SelectedProviderKind is not (CliProviderKind.Zai or CliProviderKind.OpenCodeGo or CliProviderKind.Ollama);
 
     public string BackupSuggestedFileName => $"{SkillService.GetBackupFileNamePrefix(SelectedProviderKind)}-{DateTimeOffset.Now.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture)}";
     public string BackupFileExtension => SkillsBackupFileExtension;
@@ -335,7 +338,7 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
 
-    private string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => _localizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), CliProviderKind.Zai => _localizationService.GetLocalizedString("Provider_ZaiDisplayName"), CliProviderKind.OpenCodeGo => _localizationService.GetLocalizedString("Provider_OpenCodeGoDisplayName"), _ => _localizationService.GetLocalizedString("Provider_CodexDisplayName") };
+    private string GetProviderDisplayName(CliProviderKind providerKind) => providerKind switch { CliProviderKind.ClaudeCode => _localizationService.GetLocalizedString("Provider_ClaudeCodeDisplayName"), CliProviderKind.Zai => _localizationService.GetLocalizedString("Provider_ZaiDisplayName"), CliProviderKind.OpenCodeGo => _localizationService.GetLocalizedString("Provider_OpenCodeGoDisplayName"), CliProviderKind.Ollama => _localizationService.GetLocalizedString("Provider_OllamaDisplayName"), _ => _localizationService.GetLocalizedString("Provider_CodexDisplayName") };
 
     private static (CliProviderKind providerKind, string directoryName) CreateSkillKey(SkillItem skillItem) => (skillItem.ProviderKind, skillItem.DirectoryName);
 

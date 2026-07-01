@@ -256,6 +256,9 @@
   <data name="AccountsPage_NoAccountsDescriptionTextBlock_Codex.Text" xml:space="preserve">
     <value>アカウント追加ボタンから Codex にログインするか、認証ファイルを読み込んでください。</value>
   </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_Ollama.Text" xml:space="preserve">
+    <value>アカウント追加で Ollama にログインします。</value>
+  </data>
   <data name="AccountsPage_NoAccountsDescriptionTextBlock_OpenCodeGo.Text" xml:space="preserve">
     <value>アカウント追加ボタンから OpenCode Go にログインしてアカウントを追加してください。</value>
   </data>
@@ -270,6 +273,9 @@
   </data>
   <data name="AccountsPage_NoFilteredAccountsTitleTextBlock.Text" xml:space="preserve">
     <value>条件に一致するアカウントがありません。</value>
+  </data>
+  <data name="AccountsPage_OllamaBackupFileTypeChoice" xml:space="preserve">
+    <value>Ollama バックアップ (.ollamab)</value>
   </data>
   <data name="AccountsPage_OpenCodeGoBackupFileTypeChoice.Text" xml:space="preserve">
     <value>OpenCode Go バックアップ (.ocb)</value>
@@ -417,6 +423,12 @@
   </data>
   <data name="AddAccountDialog_OAuthSelectorBarItem.Text" xml:space="preserve">
     <value>OAuth</value>
+  </data>
+  <data name="AddOllamaAccountDialog.CloseButtonText" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
+  <data name="AddOllamaAccountDialog.Title" xml:space="preserve">
+    <value>Ollama アカウント追加</value>
   </data>
   <data name="AddOpenCodeGoAccountDialog.CloseButtonText" xml:space="preserve">
     <value>閉じる</value>
@@ -766,6 +778,30 @@
   <data name="OAuthAddAccountPage_WaitingTextBlock.Text" xml:space="preserve">
     <value>認証コールバックを待機しています。</value>
   </data>
+  <data name="OllamaWebViewLoginAddAccountPage_AddButtonTextBlock.Text" xml:space="preserve">
+    <value>アカウント追加</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_AliasHeaderTextBlock.Text" xml:space="preserve">
+    <value>アカウントの別名（任意）</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_AliasTextBox.PlaceholderText" xml:space="preserve">
+    <value>このアカウントを区別するための別名を入力</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_CookieExpiryNoticeTextBlock.Text" xml:space="preserve">
+    <value>Ollama の使用量はセッション Cookie で読み取られます。Cookie の有効期限が切れるとアカウントは期限切れとして表示され、再度ログインする必要があります。</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Ollama アカウントでログインしてください。ログイン後、セッション Cookie とアカウントメールが自動的に抽出されます。セッション Cookie は時間の経過とともに期限切れになる場合があります。</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_ExtractingStatusText.Text" xml:space="preserve">
+    <value>ログインを検出しました。アカウント情報を抽出中...</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_InitializingWebViewTextBlock.Text" xml:space="preserve">
+    <value>ログインウィンドウを初期化中...</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Ollama にログイン</value>
+  </data>
   <data name="OpenCodeGoWebViewLoginAddAccountPage_AddButtonTextBlock.Text" xml:space="preserve">
     <value>アカウントを追加</value>
   </data>
@@ -858,6 +894,12 @@
   </data>
   <data name="Provider_CodexDisplayName" xml:space="preserve">
     <value>Codex</value>
+  </data>
+  <data name="Provider_OllamaComboBoxItem.Content" xml:space="preserve">
+    <value>Ollama (読み取り専用)</value>
+  </data>
+  <data name="Provider_OllamaDisplayName" xml:space="preserve">
+    <value>Ollama</value>
   </data>
   <data name="Provider_OpenCodeGoComboBoxItem.Content" xml:space="preserve">
     <value>OpenCode Go</value>
@@ -1292,6 +1334,12 @@ Microsoft Store に {0} 件の更新があります。</value>
   </data>
   <data name="SkillsPage_NoSkillsTitleTextBlock.Text" xml:space="preserve">
     <value>登録されたスキルがありません。</value>
+  </data>
+  <data name="SkillsPage_OllamaUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Ollama は読み取り専用プロバイダーであり、CLI ツールのスキルディレクトリを使用しません。</value>
+  </data>
+  <data name="SkillsPage_OllamaUnsupportedTitleTextBlock.Text" xml:space="preserve">
+    <value>Ollama はスキルに対応していません</value>
   </data>
   <data name="SkillsPage_OpenCodeGoUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
     <value>OpenCode Go はローカルスキルファイルを管理しません。スキルを管理するには Codex または Claude Code に切り替えてください。</value>

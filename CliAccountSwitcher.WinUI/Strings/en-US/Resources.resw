@@ -256,6 +256,9 @@
   <data name="AccountsPage_NoAccountsDescriptionTextBlock_Codex.Text" xml:space="preserve">
     <value>Use Add Account to sign in to Codex or load an auth file.</value>
   </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_Ollama.Text" xml:space="preserve">
+    <value>Use Add Account to sign in to Ollama.</value>
+  </data>
   <data name="AccountsPage_NoAccountsDescriptionTextBlock_OpenCodeGo.Text" xml:space="preserve">
     <value>Use Add Account to sign in to OpenCode Go.</value>
   </data>
@@ -270,6 +273,9 @@
   </data>
   <data name="AccountsPage_NoFilteredAccountsTitleTextBlock.Text" xml:space="preserve">
     <value>No accounts match the filter.</value>
+  </data>
+  <data name="AccountsPage_OllamaBackupFileTypeChoice" xml:space="preserve">
+    <value>Ollama Backup (.ollamab)</value>
   </data>
   <data name="AccountsPage_OpenCodeGoBackupFileTypeChoice.Text" xml:space="preserve">
     <value>OpenCode Go backup (.ocb)</value>
@@ -417,6 +423,12 @@
   </data>
   <data name="AddAccountDialog_OAuthSelectorBarItem.Text" xml:space="preserve">
     <value>OAuth</value>
+  </data>
+  <data name="AddOllamaAccountDialog.CloseButtonText" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="AddOllamaAccountDialog.Title" xml:space="preserve">
+    <value>Add Ollama Account</value>
   </data>
   <data name="AddOpenCodeGoAccountDialog.CloseButtonText" xml:space="preserve">
     <value>Close</value>
@@ -766,6 +778,30 @@
   <data name="OAuthAddAccountPage_WaitingTextBlock.Text" xml:space="preserve">
     <value>Waiting for the authentication callback.</value>
   </data>
+  <data name="OllamaWebViewLoginAddAccountPage_AddButtonTextBlock.Text" xml:space="preserve">
+    <value>Add Account</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_AliasHeaderTextBlock.Text" xml:space="preserve">
+    <value>Account Label (optional)</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_AliasTextBox.PlaceholderText" xml:space="preserve">
+    <value>Enter a label to distinguish this account</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_CookieExpiryNoticeTextBlock.Text" xml:space="preserve">
+    <value>Ollama usage is read using the session cookie. When the cookie expires, the account will be marked as expired and you will need to sign in again.</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>Sign in with your Ollama account. After login, the session cookie and account email will be extracted automatically. The session cookie may expire over time.</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_ExtractingStatusText.Text" xml:space="preserve">
+    <value>Login detected. Extracting account info...</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_InitializingWebViewTextBlock.Text" xml:space="preserve">
+    <value>Initializing login window...</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>Sign in to Ollama</value>
+  </data>
   <data name="OpenCodeGoWebViewLoginAddAccountPage_AddButtonTextBlock.Text" xml:space="preserve">
     <value>Add Account</value>
   </data>
@@ -858,6 +894,12 @@
   </data>
   <data name="Provider_CodexDisplayName" xml:space="preserve">
     <value>Codex</value>
+  </data>
+  <data name="Provider_OllamaComboBoxItem.Content" xml:space="preserve">
+    <value>Ollama (Read-only)</value>
+  </data>
+  <data name="Provider_OllamaDisplayName" xml:space="preserve">
+    <value>Ollama</value>
   </data>
   <data name="Provider_OpenCodeGoComboBoxItem.Content" xml:space="preserve">
     <value>OpenCode Go</value>
@@ -1292,6 +1334,12 @@ The installed app is already up to date.</value>
   </data>
   <data name="SkillsPage_NoSkillsTitleTextBlock.Text" xml:space="preserve">
     <value>No skills available.</value>
+  </data>
+  <data name="SkillsPage_OllamaUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Ollama is a read-only provider that does not use a CLI tool skills directory.</value>
+  </data>
+  <data name="SkillsPage_OllamaUnsupportedTitleTextBlock.Text" xml:space="preserve">
+    <value>Ollama does not support skills</value>
   </data>
   <data name="SkillsPage_OpenCodeGoUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
     <value>OpenCode Go does not manage local skill files. Switch to Codex or Claude Code to manage skills.</value>

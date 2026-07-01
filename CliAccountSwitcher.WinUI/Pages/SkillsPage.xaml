@@ -358,5 +358,31 @@
                     TextWrapping="Wrap" />
             </StackPanel>
         </Grid>
+
+        <Grid Background="{ThemeResource SolidBackgroundFillColorBaseBrush}" Visibility="{x:Bind ViewModel.IsOllamaProviderSelected, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel
+                MaxWidth="440"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Spacing="12">
+                <FontIcon
+                    HorizontalAlignment="Center"
+                    FontSize="40"
+                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                    Glyph="&#xE7BA;" />
+                <TextBlock
+                    x:Uid="SkillsPage_OllamaUnsupportedTitleTextBlock"
+                    HorizontalAlignment="Center"
+                    FontSize="20"
+                    FontWeight="SemiBold"
+                    TextAlignment="Center" />
+                <TextBlock
+                    x:Uid="SkillsPage_OllamaUnsupportedDescriptionTextBlock"
+                    HorizontalAlignment="Center"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>

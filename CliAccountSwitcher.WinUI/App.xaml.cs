@@ -85,10 +85,12 @@ public partial class App : Application
         serviceCollection.AddSingleton(sp => new ClaudeAccountService(sp.GetRequiredService<ApplicationSettingsService>(), sp.GetRequiredService<ApplicationNotificationService>()));
         serviceCollection.AddSingleton(sp => new ZaiAccountService(sp.GetRequiredService<ApplicationSettingsService>(), sp.GetRequiredService<ApplicationNotificationService>()));
         serviceCollection.AddSingleton(sp => new OpenCodeGoAccountService(sp.GetRequiredService<ApplicationSettingsService>(), sp.GetRequiredService<ApplicationNotificationService>()));
+        serviceCollection.AddSingleton(sp => new OllamaAccountService(sp.GetRequiredService<ApplicationSettingsService>(), sp.GetRequiredService<ApplicationNotificationService>()));
         serviceCollection.AddSingleton<IAccountService>(sp => sp.GetRequiredService<CodexAccountService>());
         serviceCollection.AddSingleton<IAccountService>(sp => sp.GetRequiredService<ClaudeAccountService>());
         serviceCollection.AddSingleton<IAccountService>(sp => sp.GetRequiredService<ZaiAccountService>());
         serviceCollection.AddSingleton<IAccountService>(sp => sp.GetRequiredService<OpenCodeGoAccountService>());
+        serviceCollection.AddSingleton<IAccountService>(sp => sp.GetRequiredService<OllamaAccountService>());
 
         // AccountServiceManager — needs ApplicationSettingsService + all IAccountService implementations
         serviceCollection.AddSingleton(sp => new AccountServiceManager(sp.GetRequiredService<ApplicationSettingsService>(), sp.GetServices<IAccountService>()));

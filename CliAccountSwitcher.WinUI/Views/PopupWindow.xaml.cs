@@ -28,6 +28,7 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
     private const int ClaudeCodeProviderSelectedIndex = 1;
     private const int ZaiProviderSelectedIndex = 2;
     private const int OpenCodeGoProviderSelectedIndex = 3;
+    private const int OllamaProviderSelectedIndex = 4;
 
     [LibraryImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
@@ -252,9 +253,9 @@ public sealed partial class PopupWindow : WindowEx, IDisposable
         finally { _isApplyingProviderSelection = false; }
     }
 
-    private static int GetProviderSelectedIndex(CliProviderKind selectedProviderKind) => selectedProviderKind switch { CliProviderKind.ClaudeCode => ClaudeCodeProviderSelectedIndex, CliProviderKind.Zai => ZaiProviderSelectedIndex, CliProviderKind.OpenCodeGo => OpenCodeGoProviderSelectedIndex, _ => CodexProviderSelectedIndex  };
+    private static int GetProviderSelectedIndex(CliProviderKind selectedProviderKind) => selectedProviderKind switch { CliProviderKind.ClaudeCode => ClaudeCodeProviderSelectedIndex, CliProviderKind.Zai => ZaiProviderSelectedIndex, CliProviderKind.OpenCodeGo => OpenCodeGoProviderSelectedIndex, CliProviderKind.Ollama => OllamaProviderSelectedIndex, _ => CodexProviderSelectedIndex  };
 
-    private static CliProviderKind GetProviderKindFromSelectedIndex(int selectedIndex) => selectedIndex switch { ClaudeCodeProviderSelectedIndex => CliProviderKind.ClaudeCode, ZaiProviderSelectedIndex => CliProviderKind.Zai, OpenCodeGoProviderSelectedIndex => CliProviderKind.OpenCodeGo, _ => CliProviderKind.Codex  };
+    private static CliProviderKind GetProviderKindFromSelectedIndex(int selectedIndex) => selectedIndex switch { ClaudeCodeProviderSelectedIndex => CliProviderKind.ClaudeCode, ZaiProviderSelectedIndex => CliProviderKind.Zai, OpenCodeGoProviderSelectedIndex => CliProviderKind.OpenCodeGo, OllamaProviderSelectedIndex => CliProviderKind.Ollama, _ => CliProviderKind.Codex  };
 
     private void QueueWindowContentResize()
     {

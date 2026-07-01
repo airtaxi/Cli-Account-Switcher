@@ -256,6 +256,9 @@
   <data name="AccountsPage_NoAccountsDescriptionTextBlock_Codex.Text" xml:space="preserve">
     <value>點擊「新增帳號」登入 Codex 或載入認證檔案。</value>
   </data>
+  <data name="AccountsPage_NoAccountsDescriptionTextBlock_Ollama.Text" xml:space="preserve">
+    <value>使用新增帳戶登入 Ollama。</value>
+  </data>
   <data name="AccountsPage_NoAccountsDescriptionTextBlock_OpenCodeGo.Text" xml:space="preserve">
     <value>點擊「新增帳號」登入 OpenCode Go 以新增帳號。</value>
   </data>
@@ -270,6 +273,9 @@
   </data>
   <data name="AccountsPage_NoFilteredAccountsTitleTextBlock.Text" xml:space="preserve">
     <value>没有符合篩選條件的帳號。</value>
+  </data>
+  <data name="AccountsPage_OllamaBackupFileTypeChoice" xml:space="preserve">
+    <value>Ollama 備份 (.ollamab)</value>
   </data>
   <data name="AccountsPage_OpenCodeGoBackupFileTypeChoice.Text" xml:space="preserve">
     <value>OpenCode Go 備份 (.ocb)</value>
@@ -417,6 +423,12 @@
   </data>
   <data name="AddAccountDialog_OAuthSelectorBarItem.Text" xml:space="preserve">
     <value>OAuth</value>
+  </data>
+  <data name="AddOllamaAccountDialog.CloseButtonText" xml:space="preserve">
+    <value>關閉</value>
+  </data>
+  <data name="AddOllamaAccountDialog.Title" xml:space="preserve">
+    <value>新增 Ollama 帳戶</value>
   </data>
   <data name="AddOpenCodeGoAccountDialog.CloseButtonText" xml:space="preserve">
     <value>關閉</value>
@@ -766,6 +778,30 @@
   <data name="OAuthAddAccountPage_WaitingTextBlock.Text" xml:space="preserve">
     <value>正在等待驗證回呼。</value>
   </data>
+  <data name="OllamaWebViewLoginAddAccountPage_AddButtonTextBlock.Text" xml:space="preserve">
+    <value>新增帳戶</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_AliasHeaderTextBlock.Text" xml:space="preserve">
+    <value>帳戶標籤（選填）</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_AliasTextBox.PlaceholderText" xml:space="preserve">
+    <value>輸入標籤以區分此帳戶</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_CookieExpiryNoticeTextBlock.Text" xml:space="preserve">
+    <value>Ollama 使用量透過工作階段 Cookie 讀取。Cookie 到期時，帳戶將標記為已到期，您需要重新登入。</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>使用您的 Ollama 帳戶登入。登入後將自動擷取工作階段 Cookie 與帳戶電子郵件。工作階段 Cookie 可能會隨時間到期。</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_ExtractingStatusText.Text" xml:space="preserve">
+    <value>偵測到登入。正在擷取帳戶資訊...</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_InitializingWebViewTextBlock.Text" xml:space="preserve">
+    <value>正在初始化登入視窗...</value>
+  </data>
+  <data name="OllamaWebViewLoginAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
+    <value>登入 Ollama</value>
+  </data>
   <data name="OpenCodeGoWebViewLoginAddAccountPage_AddButtonTextBlock.Text" xml:space="preserve">
     <value>新增帳號</value>
   </data>
@@ -858,6 +894,12 @@
   </data>
   <data name="Provider_CodexDisplayName" xml:space="preserve">
     <value>Codex</value>
+  </data>
+  <data name="Provider_OllamaComboBoxItem.Content" xml:space="preserve">
+    <value>Ollama (唯讀)</value>
+  </data>
+  <data name="Provider_OllamaDisplayName" xml:space="preserve">
+    <value>Ollama</value>
   </data>
   <data name="Provider_OpenCodeGoComboBoxItem.Content" xml:space="preserve">
     <value>OpenCode Go</value>
@@ -1292,6 +1334,12 @@ Microsoft Store 中有 {0} 個可用更新。</value>
   </data>
   <data name="SkillsPage_NoSkillsTitleTextBlock.Text" xml:space="preserve">
     <value>沒有已註冊的技能。</value>
+  </data>
+  <data name="SkillsPage_OllamaUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Ollama 是唯讀提供者，不使用 CLI 工具技能目錄。</value>
+  </data>
+  <data name="SkillsPage_OllamaUnsupportedTitleTextBlock.Text" xml:space="preserve">
+    <value>Ollama 不支援技能</value>
   </data>
   <data name="SkillsPage_OpenCodeGoUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
     <value>OpenCode Go 不管理本地技能檔案。切換至 Codex 或 Claude Code 以管理技能。</value>

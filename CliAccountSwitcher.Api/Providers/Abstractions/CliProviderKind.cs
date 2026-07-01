@@ -5,5 +5,6 @@ public enum CliProviderKind
     Codex = 1,
     ClaudeCode = 2,
     Zai = 3,
-    OpenCodeGo = 4
+    OpenCodeGo = 4,
+    Ollama = 5
 }

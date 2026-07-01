@@ -43,6 +43,7 @@
                         <ComboBoxItem x:Uid="Provider_ClaudeCodeComboBoxItem" />
                         <ComboBoxItem x:Uid="Provider_ZaiComboBoxItem" />
                         <ComboBoxItem x:Uid="Provider_OpenCodeGoComboBoxItem" />
+                        <ComboBoxItem x:Uid="Provider_OllamaComboBoxItem" />
                     </ComboBox>
                 </StackPanel>
             </Grid>
