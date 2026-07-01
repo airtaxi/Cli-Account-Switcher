@@ -48,7 +48,7 @@
                 <ProgressBar
                     Height="4"
                     Canvas.ZIndex="{x:Bind ViewModel.PrimaryUsageRemainingProgressBarZIndex, Mode=OneWay}"
-                    Foreground="{ThemeResource TaskbarUsageNeutralForegroundBrush}"
+                    Foreground="{ThemeResource ReverseThemeColor}"
                     Maximum="100"
                     Value="{x:Bind ViewModel.PrimaryUsageRemainingPercentage, Mode=OneWay}" />
                 <ProgressBar
@@ -66,7 +66,7 @@
                 VerticalAlignment="Center"
                 FontSize="11"
                 FontWeight="ExtraBold"
-                Foreground="{ThemeResource TaskbarUsageNeutralForegroundBrush}"
+                Foreground="{ThemeResource ReverseThemeColor}"
                 MaxLines="1"
                 Text="{x:Bind ViewModel.PrimaryUsageRemainingPercentageText, Mode=OneWay}"
                 TextLineBounds="TrimToCapHeight" />
@@ -90,7 +90,7 @@
                 <ProgressBar
                     Height="4"
                     Canvas.ZIndex="{x:Bind ViewModel.SecondaryUsageRemainingProgressBarZIndex, Mode=OneWay}"
-                    Foreground="{ThemeResource TaskbarUsageNeutralForegroundBrush}"
+                    Foreground="{ThemeResource ReverseThemeColor}"
                     Maximum="100"
                     Value="{x:Bind ViewModel.SecondaryUsageRemainingPercentage, Mode=OneWay}" />
                 <ProgressBar
@@ -108,7 +108,7 @@
                 VerticalAlignment="Center"
                 FontSize="11"
                 FontWeight="ExtraBold"
-                Foreground="{ThemeResource TaskbarUsageNeutralForegroundBrush}"
+                Foreground="{ThemeResource ReverseThemeColor}"
                 MaxLines="1"
                 Text="{x:Bind ViewModel.SecondaryUsageRemainingPercentageText, Mode=OneWay}"
                 TextLineBounds="TrimToCapHeight" />
@@ -162,7 +162,7 @@
                     Height="32"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Foreground="{ThemeResource TaskbarUsageNeutralForegroundBrush}" />
+                    Foreground="{ThemeResource ReverseThemeColor}" />
             </Grid>
         </Grid>
     </Button>
