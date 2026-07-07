@@ -1,6 +1,9 @@
 ﻿using CliAccountSwitcher.WinUI.Helpers;
+using CliAccountSwitcher.WinUI.Models;
+using CliAccountSwitcher.WinUI.Services;
 using Deskband11Lib.Core;
 using Deskband11Lib.WinUI;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using System.Runtime.Versioning;
@@ -16,7 +19,8 @@ public sealed partial class TaskbarUsageWindow : Window
     {
         InitializeComponent();
 
-        TaskbarContentHost = new TaskbarContentHost(this, (FrameworkElement)Content, new() { PreferredWidth = TaskbarHelper.PreferredTaskbarContentWidth });
+        var applicationSettings = App.Services.GetRequiredService<ApplicationSettings>();
+        TaskbarContentHost = new TaskbarContentHost(this, (FrameworkElement)Content, new() { PreferredWidth = TaskbarHelper.PreferredTaskbarContentWidth, PreferredMonitorIdentity = applicationSettings.PreferredMonitorIdentity });
     }
 
     public async Task PrepareTaskbarContentAsync() => await TaskbarContentHost.AttachWhenLayoutReadyAsync();

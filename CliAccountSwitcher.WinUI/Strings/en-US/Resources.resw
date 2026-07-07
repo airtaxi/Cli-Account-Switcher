@@ -1133,6 +1133,18 @@ The installed app is already up to date.</value>
   <data name="SettingsPage_OpenStoreButtonText" xml:space="preserve">
     <value>Open Store</value>
   </data>
+  <data name="SettingsPage_PreferredMonitorRefreshButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Refresh monitor list</value>
+  </data>
+  <data name="SettingsPage_PreferredMonitorSettingsCard.Description" xml:space="preserve">
+    <value>Choose which monitor's taskbar to display the usage widget on.</value>
+  </data>
+  <data name="SettingsPage_PreferredMonitorSettingsCard.Header" xml:space="preserve">
+    <value>Display monitor</value>
+  </data>
+  <data name="SettingsPage_PrimaryMonitorText" xml:space="preserve">
+    <value>Primary monitor</value>
+  </data>
   <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
     <value>Save whether 5-hour low-quota notifications should be enabled.</value>
   </data>
@@ -1183,6 +1195,9 @@ The installed app is already up to date.</value>
   </data>
   <data name="SettingsPage_SaveSettingsFailedDialogTitle" xml:space="preserve">
     <value>Settings save failed</value>
+  </data>
+  <data name="SettingsPage_SecondaryMonitorFormat" xml:space="preserve">
+    <value>Secondary monitor {0}</value>
   </data>
   <data name="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
     <value>Save whether 7-day low-quota notifications should be enabled.</value>

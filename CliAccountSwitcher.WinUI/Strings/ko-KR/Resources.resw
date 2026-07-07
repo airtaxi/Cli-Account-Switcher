@@ -1133,6 +1133,18 @@
   <data name="SettingsPage_OpenStoreButtonText" xml:space="preserve">
     <value>Store 열기</value>
   </data>
+  <data name="SettingsPage_PreferredMonitorRefreshButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>모니터 목록 새로고침</value>
+  </data>
+  <data name="SettingsPage_PreferredMonitorSettingsCard.Description" xml:space="preserve">
+    <value>작업 표시줄 사용량 위젯을 표시할 모니터를 선택합니다.</value>
+  </data>
+  <data name="SettingsPage_PreferredMonitorSettingsCard.Header" xml:space="preserve">
+    <value>표시할 모니터</value>
+  </data>
+  <data name="SettingsPage_PrimaryMonitorText" xml:space="preserve">
+    <value>기본 모니터</value>
+  </data>
   <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
     <value>5시간 저할당량 도달 알림 사용 여부를 저장합니다.</value>
   </data>
@@ -1183,6 +1195,9 @@
   </data>
   <data name="SettingsPage_SaveSettingsFailedDialogTitle" xml:space="preserve">
     <value>설정 저장 실패</value>
+  </data>
+  <data name="SettingsPage_SecondaryMonitorFormat" xml:space="preserve">
+    <value>보조 모니터 {0}</value>
   </data>
   <data name="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
     <value>7일 저할당량 도달 알림 사용 여부를 저장합니다.</value>

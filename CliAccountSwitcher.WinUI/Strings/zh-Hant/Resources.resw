@@ -1133,6 +1133,18 @@
   <data name="SettingsPage_OpenStoreButtonText" xml:space="preserve">
     <value>開啟 Store</value>
   </data>
+  <data name="SettingsPage_PreferredMonitorRefreshButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>重新整理顯示器清單</value>
+  </data>
+  <data name="SettingsPage_PreferredMonitorSettingsCard.Description" xml:space="preserve">
+    <value>選擇在哪個顯示器的工作列上顯示使用量小工具。</value>
+  </data>
+  <data name="SettingsPage_PreferredMonitorSettingsCard.Header" xml:space="preserve">
+    <value>顯示顯示器</value>
+  </data>
+  <data name="SettingsPage_PrimaryMonitorText" xml:space="preserve">
+    <value>主顯示器</value>
+  </data>
   <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
     <value>儲存是否啟用 5 小時低配額通知。</value>
   </data>
@@ -1183,6 +1195,9 @@
   </data>
   <data name="SettingsPage_SaveSettingsFailedDialogTitle" xml:space="preserve">
     <value>設定儲存失敗</value>
+  </data>
+  <data name="SettingsPage_SecondaryMonitorFormat" xml:space="preserve">
+    <value>輔助顯示器 {0}</value>
   </data>
   <data name="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
     <value>儲存是否啟用 7 天低配額通知。</value>

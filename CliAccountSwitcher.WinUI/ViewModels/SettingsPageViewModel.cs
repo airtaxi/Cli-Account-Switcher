@@ -1,11 +1,17 @@
 ﻿using CliAccountSwitcher.WinUI.Helpers;
 using CliAccountSwitcher.WinUI.Managers;
+using CliAccountSwitcher.WinUI.Messages;
 using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using Deskband11Lib.Core;
 using Microsoft.UI.Xaml;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 
@@ -117,10 +123,61 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
 
     public Visibility TaskbarUsageSettingsVisibility => TaskbarHelper.IsTaskbarContentHostSupported ? Visibility.Visible : Visibility.Collapsed;
 
+    [ObservableProperty]
+    public partial List<MonitorIdentityOption> MonitorIdentities { get; set; } = [];
+
+    [ObservableProperty]
+    public partial string SelectedMonitorDisplayName { get; set; } = string.Empty;
+
+    public Visibility PreferredMonitorSettingsVisibility => TaskbarHelper.IsTaskbarContentHostSupported ? Visibility.Visible : Visibility.Collapsed;
+
     public void Load()
     {
         SynchronizePropertiesFromSettings();
         RefreshUsageRefreshCountdownTexts();
+        RefreshMonitorIdentities();
+    }
+
+    [RelayCommand]
+    public void RefreshMonitorIdentities()
+    {
+        if (!TaskbarHelper.IsTaskbarContentHostSupported)
+        {
+            MonitorIdentities = [];
+            SelectedMonitorDisplayName = string.Empty;
+            return;
+        }
+
+        var availableIdentities = TaskbarMonitor.GetAvailableMonitorIdentities();
+        var currentIdentity = applicationSettings.PreferredMonitorIdentity;
+        var options = new List<MonitorIdentityOption>();
+
+        foreach (var identity in availableIdentities) options.Add(new MonitorIdentityOption { Identity = identity, DisplayName = GetMonitorIdentityDisplayName(identity) });
+
+        var hasCurrentIdentity = availableIdentities.Any(identity => identity == currentIdentity);
+        if (!hasCurrentIdentity) options.Add(new MonitorIdentityOption { Identity = currentIdentity, DisplayName = GetMonitorIdentityDisplayName(currentIdentity), IsEnabled = false });
+
+        MonitorIdentities = options;
+        SelectedMonitorDisplayName = GetMonitorIdentityDisplayName(currentIdentity);
+    }
+
+    public string GetMonitorIdentityDisplayName(int identity)
+    {
+        if (identity <= 0) return localizationService.GetLocalizedString("SettingsPage_PrimaryMonitorText");
+        return localizationService.GetFormattedString("SettingsPage_SecondaryMonitorFormat", identity);
+    }
+
+    public async Task<SettingsPageDialogData> ApplyPreferredMonitorIdentityAsync(int identity)
+    {
+        if (applicationSettings.PreferredMonitorIdentity == identity) return null;
+        applicationSettings.PreferredMonitorIdentity = identity;
+
+        var wasSaved = await SaveSettingsAsync();
+        if (!wasSaved) return CreateSaveSettingsFailedDialogData();
+
+        SelectedMonitorDisplayName = GetMonitorIdentityDisplayName(identity);
+        WeakReferenceMessenger.Default.Send<PreferredMonitorChangedMessage>();
+        return null;
     }
 
     public bool HasIntegratedLogs() => fileLogService.HasLogs();
@@ -150,14 +207,15 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
             await applicationSettingsService.ImportSettingsAsync(applicationSettingsFilePath);
             applicationThemeService.ApplyTheme(applicationSettings.Theme);
             localizationService.ApplyLanguageTag(applicationSettings.LanguageOverride);
-            if (applicationSettings.HideTaskbarUsage || !TaskbarHelper.IsTaskbarContentHostSupported) App.CloseTaskbarUsageWindow();
-            else await App.InitializeTaskbarUsageWindowAsync();
+            App.CloseTaskbarUsageWindow();
+            if (!applicationSettings.HideTaskbarUsage && TaskbarHelper.IsTaskbarContentHostSupported) await App.InitializeTaskbarUsageWindowAsync();
             var isStartupLaunchApplied = await startupRegistrationService.SetStartupLaunchEnabledAsync(applicationSettings.IsStartupLaunchEnabled);
             if (!isStartupLaunchApplied) await RefreshStartupLaunchStateFromSystemAsync();
 
             var didLanguageOverrideChange = !string.Equals(previousLanguageOverride, applicationSettings.LanguageOverride, StringComparison.Ordinal);
             SynchronizePropertiesFromSettings();
             RefreshUsageRefreshCountdownTexts();
+            RefreshMonitorIdentities();
             return new SettingsPageDialogData(localizationService.GetLocalizedString("SettingsPage_ImportApplicationSettingsDialogTitle"), localizationService.GetLocalizedString(didLanguageOverrideChange ? "SettingsPage_ImportApplicationSettingsLanguageChangedDialogMessage" : "SettingsPage_ImportApplicationSettingsDialogMessage"), ShouldNavigateToSettingsAfterClose: didLanguageOverrideChange);
         }
         catch { return new SettingsPageDialogData(localizationService.GetLocalizedString("SettingsPage_ImportApplicationSettingsFailedDialogTitle"), localizationService.GetLocalizedString("SettingsPage_ImportApplicationSettingsFailedDialogMessage")); }

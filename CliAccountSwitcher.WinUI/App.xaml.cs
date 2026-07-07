@@ -1,9 +1,11 @@
 ﻿using CliAccountSwitcher.WinUI.Helpers;
 using CliAccountSwitcher.WinUI.Managers;
+using CliAccountSwitcher.WinUI.Messages;
 using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.Services;
 using CliAccountSwitcher.WinUI.ViewModels;
 using CliAccountSwitcher.WinUI.Views;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
@@ -126,6 +128,8 @@ public partial class App : Application
         var applicationSettings = Services.GetRequiredService<ApplicationSettings>();
         _ = Services.GetRequiredService<StartupRegistrationService>().SetStartupLaunchEnabledAsync(applicationSettings.IsStartupLaunchEnabled);
         if (TaskbarHelper.IsTaskbarContentHostSupported && !applicationSettings.HideTaskbarUsage) await InitializeTaskbarUsageWindowAsync();
+
+        WeakReferenceMessenger.Default.Register<PreferredMonitorChangedMessage>(this, OnPreferredMonitorChanged);
     }
 
     public static void ShowMainWindow()
@@ -170,6 +174,21 @@ public partial class App : Application
         var taskbarUsageWindow = s_taskbarUsageWindow;
         ReleaseTaskbarUsageWindow(taskbarUsageWindow);
         taskbarUsageWindow.Close();
+    }
+
+    private static async void OnPreferredMonitorChanged(object recipient, PreferredMonitorChangedMessage message)
+    {
+        if (!TaskbarHelper.IsTaskbarContentHostSupported) return;
+
+        var oldTaskbarUsageWindow = s_taskbarUsageWindow;
+        if (oldTaskbarUsageWindow is not null) ReleaseTaskbarUsageWindow(oldTaskbarUsageWindow);
+
+        try
+        {
+            await InitializeTaskbarUsageWindowAsync();
+            oldTaskbarUsageWindow?.Close();
+        }
+        catch (Exception exception) { Services?.GetService<FileLogService>()?.WriteWarning(nameof(App), "Failed to reinitialize the taskbar usage window after preferred monitor change.", exception); }
     }
 
     public static void HandleApplicationInstanceActivated(AppActivationArguments applicationActivationArguments)

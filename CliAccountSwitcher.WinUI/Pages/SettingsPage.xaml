@@ -97,15 +97,43 @@
                             Toggled="OnStartupLaunchToggleSwitchToggled" />
                     </dev:SettingsCard>
 
-                    <dev:SettingsCard x:Uid="SettingsPage_TaskbarUsageSettingsCard" Visibility="{x:Bind ViewModel.TaskbarUsageSettingsVisibility, Mode=OneWay}">
-                        <dev:SettingsCard.HeaderIcon>
+                    <dev:SettingsExpander x:Uid="SettingsPage_TaskbarUsageSettingsCard" Visibility="{x:Bind ViewModel.TaskbarUsageSettingsVisibility, Mode=OneWay}">
+                        <dev:SettingsExpander.HeaderIcon>
                             <FontIcon Glyph="&#xE9D2;" />
-                        </dev:SettingsCard.HeaderIcon>
+                        </dev:SettingsExpander.HeaderIcon>
                         <ToggleSwitch
                             x:Name="TaskbarUsageToggleSwitch"
                             IsOn="{x:Bind ViewModel.IsTaskbarUsageVisible, Mode=TwoWay}"
                             Toggled="OnTaskbarUsageToggleSwitchToggled" />
-                    </dev:SettingsCard>
+                        <dev:SettingsExpander.Items>
+                            <dev:SettingsCard
+                                x:Uid="SettingsPage_PreferredMonitorSettingsCard"
+                                IsEnabled="{x:Bind ViewModel.IsTaskbarUsageVisible, Mode=OneWay}"
+                                Visibility="{x:Bind ViewModel.PreferredMonitorSettingsVisibility, Mode=OneWay}">
+                                <dev:SettingsCard.HeaderIcon>
+                                    <FontIcon Glyph="&#xE7F4;" />
+                                </dev:SettingsCard.HeaderIcon>
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <Button
+                                        x:Name="PreferredMonitorRefreshButton"
+                                        x:Uid="SettingsPage_PreferredMonitorRefreshButton"
+                                        Padding="8"
+                                        Command="{x:Bind ViewModel.RefreshMonitorIdentitiesCommand}">
+                                        <FontIcon FontSize="14" Glyph="&#xE72C;" />
+                                    </Button>
+                                    <SplitButton x:Name="PreferredMonitorSplitButton" Click="OnPreferredMonitorSplitButtonClicked">
+                                        <TextBlock Text="{x:Bind ViewModel.SelectedMonitorDisplayName, Mode=OneWay}" />
+                                        <SplitButton.Flyout>
+                                            <MenuFlyout
+                                                x:Name="PreferredMonitorMenuFlyout"
+                                                Opened="OnPreferredMonitorMenuFlyoutOpened"
+                                                Placement="BottomEdgeAlignedRight" />
+                                        </SplitButton.Flyout>
+                                    </SplitButton>
+                                </StackPanel>
+                            </dev:SettingsCard>
+                        </dev:SettingsExpander.Items>
+                    </dev:SettingsExpander>
 
                     <dev:SettingsExpander x:Uid="SettingsPage_ApplicationSettingsTransferSettingsExpander">
                         <dev:SettingsExpander.HeaderIcon>

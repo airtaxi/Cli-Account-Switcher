@@ -1133,6 +1133,18 @@
   <data name="SettingsPage_OpenStoreButtonText" xml:space="preserve">
     <value>Store を開く</value>
   </data>
+  <data name="SettingsPage_PreferredMonitorRefreshButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>モニター一覧を更新</value>
+  </data>
+  <data name="SettingsPage_PreferredMonitorSettingsCard.Description" xml:space="preserve">
+    <value>タスクバーの使用量ウィジェットを表示するモニターを選択します。</value>
+  </data>
+  <data name="SettingsPage_PreferredMonitorSettingsCard.Header" xml:space="preserve">
+    <value>表示モニター</value>
+  </data>
+  <data name="SettingsPage_PrimaryMonitorText" xml:space="preserve">
+    <value>プライマリモニター</value>
+  </data>
   <data name="SettingsPage_PrimaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
     <value>5時間の低クォータ通知を有効にするかどうかを保存します。</value>
   </data>
@@ -1183,6 +1195,9 @@
   </data>
   <data name="SettingsPage_SaveSettingsFailedDialogTitle" xml:space="preserve">
     <value>設定の保存に失敗しました</value>
+  </data>
+  <data name="SettingsPage_SecondaryMonitorFormat" xml:space="preserve">
+    <value>セカンダリモニター {0}</value>
   </data>
   <data name="SettingsPage_SecondaryUsageLowQuotaNotificationSettingsCard.Description" xml:space="preserve">
     <value>7日間の低クォータ通知を有効にするかどうかを保存します。</value>

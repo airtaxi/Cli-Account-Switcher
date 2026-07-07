@@ -81,4 +81,7 @@ public sealed partial class ApplicationSettings : ObservableObject
 
     [ObservableProperty]
     public partial int PrimaryUsageSurgeNotificationWindowMinutes { get; set; } = DefaultPrimaryUsageSurgeNotificationWindowMinutes;
+
+    [ObservableProperty]
+    public partial int PreferredMonitorIdentity { get; set; }
 }

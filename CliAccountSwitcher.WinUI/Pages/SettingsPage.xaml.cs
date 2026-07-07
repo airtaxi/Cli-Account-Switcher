@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Messaging.Messages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.Windows.Storage.Pickers;
 using System;
 using System.Threading.Tasks;
@@ -135,6 +136,31 @@ public sealed partial class SettingsPage : Page
     {
         if (_isSynchronizingControls) return;
         await ShowDialogIfNeededAsync(await StartWithControlSynchronization(() => ViewModel.ApplyTaskbarUsageVisibleAsync(TaskbarUsageToggleSwitch.IsOn)));
+    }
+
+    private void OnPreferredMonitorMenuFlyoutOpened(object sender, object eventArguments) => RefreshPreferredMonitorMenu();
+
+    private void OnPreferredMonitorSplitButtonClicked(SplitButton sender, SplitButtonClickEventArgs args) => PreferredMonitorMenuFlyout.ShowAt(sender);
+
+    private void RefreshPreferredMonitorMenu()
+    {
+        ViewModel.RefreshMonitorIdentities();
+
+        PreferredMonitorMenuFlyout.Items.Clear();
+        foreach (var option in ViewModel.MonitorIdentities)
+        {
+            var item = new MenuFlyoutItem { Text = option.DisplayName, IsEnabled = option.IsEnabled, Tag = option.Identity };
+            item.Click += OnPreferredMonitorMenuFlyoutItemClicked;
+            PreferredMonitorMenuFlyout.Items.Add(item);
+        }
+    }
+
+    private async void OnPreferredMonitorMenuFlyoutItemClicked(object sender, RoutedEventArgs routedEventArguments)
+    {
+        if (sender is not MenuFlyoutItem item) return;
+        if (item.Tag is not int identity) return;
+
+        await ShowDialogIfNeededAsync(await StartWithControlSynchronization(() => ViewModel.ApplyPreferredMonitorIdentityAsync(identity)));
     }
 
     private async void OnExpiredAccountAutomaticDeletionToggleSwitchToggled(object sender, RoutedEventArgs routedEventArguments)

@@ -72,6 +72,7 @@ public sealed class ApplicationSettingsService
         applicationSettings.SecondaryUsageWarningThresholdPercentage = NormalizePercentage(applicationSettings.SecondaryUsageWarningThresholdPercentage);
         applicationSettings.PrimaryUsageSurgeNotificationThresholdPercentage = NormalizeUsageSurgeNotificationThresholdPercentage(applicationSettings.PrimaryUsageSurgeNotificationThresholdPercentage);
         applicationSettings.PrimaryUsageSurgeNotificationWindowMinutes = NormalizeUsageSurgeNotificationWindowMinutes(applicationSettings.PrimaryUsageSurgeNotificationWindowMinutes);
+        applicationSettings.PreferredMonitorIdentity = NormalizePreferredMonitorIdentity(applicationSettings.PreferredMonitorIdentity);
     }
 
     private static void CopySettings(ApplicationSettings sourceApplicationSettings, ApplicationSettings destinationApplicationSettings)
@@ -96,6 +97,7 @@ public sealed class ApplicationSettingsService
         destinationApplicationSettings.IsPrimaryUsageSurgeNotificationEnabled = sourceApplicationSettings.IsPrimaryUsageSurgeNotificationEnabled;
         destinationApplicationSettings.PrimaryUsageSurgeNotificationThresholdPercentage = sourceApplicationSettings.PrimaryUsageSurgeNotificationThresholdPercentage;
         destinationApplicationSettings.PrimaryUsageSurgeNotificationWindowMinutes = sourceApplicationSettings.PrimaryUsageSurgeNotificationWindowMinutes;
+        destinationApplicationSettings.PreferredMonitorIdentity = sourceApplicationSettings.PreferredMonitorIdentity;
     }
 
     private static string NormalizeLanguageOverride(string languageOverride) => languageOverride is "ko-KR" or "en-US" or "ja-JP" or "zh-Hans" or "zh-Hant" ? languageOverride : "";
@@ -109,4 +111,6 @@ public sealed class ApplicationSettingsService
     private static int NormalizeUsageSurgeNotificationThresholdPercentage(int percentage) => percentage <= 0 ? ApplicationSettings.DefaultPrimaryUsageSurgeNotificationThresholdPercentage : Math.Clamp(percentage, 1, 100);
 
     private static int NormalizeUsageSurgeNotificationWindowMinutes(int minutes) => minutes <= 0 ? ApplicationSettings.DefaultPrimaryUsageSurgeNotificationWindowMinutes : Math.Clamp(minutes, 1, 300);
+
+    private static int NormalizePreferredMonitorIdentity(int preferredMonitorIdentity) => preferredMonitorIdentity < 0 ? 0 : preferredMonitorIdentity;
 }
