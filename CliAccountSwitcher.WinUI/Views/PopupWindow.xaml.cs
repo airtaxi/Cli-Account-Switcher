@@ -1,4 +1,4 @@
-using CliAccountSwitcher.Api.Providers.Abstractions;
+﻿using CliAccountSwitcher.Api.Providers.Abstractions;
 using CliAccountSwitcher.WinUI.Helpers;
 using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.Services;
@@ -21,7 +21,7 @@ namespace CliAccountSwitcher.WinUI.Views;
 
 public sealed partial class PopupWindow : WindowEx, IDisposable
 {
-    private const double WindowContentWidth = 480;
+    private const double WindowContentWidth = 500;
     private const double WindowHeightPadding = 10;
     private const int FallbackTaskbarIconOffset = 24;
     private const int CodexProviderSelectedIndex = 0;
