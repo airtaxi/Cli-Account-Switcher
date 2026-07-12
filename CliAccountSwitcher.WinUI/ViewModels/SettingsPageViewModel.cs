@@ -19,8 +19,8 @@ namespace CliAccountSwitcher.WinUI.ViewModels;
 
 public sealed partial class SettingsPageViewModel(ApplicationSettings applicationSettings, ApplicationSettingsService applicationSettingsService, ApplicationThemeService applicationThemeService, StartupRegistrationService startupRegistrationService, StoreUpdateService storeUpdateService, FileLogService fileLogService, AccountServiceManager accountServiceManager, LocalizationService localizationService) : ObservableObject
 {
-    private const int MinimumUsageRefreshIntervalMinutes = 1;
-    private const int MaximumUsageRefreshIntervalMinutes = 1440;
+    private const int MinimumUsageRefreshIntervalSeconds = 5;
+    private const int MaximumUsageRefreshIntervalSeconds = 86400;
     private const int MinimumUsageSurgeNotificationThresholdPercentage = 1;
     private const int MaximumUsageSurgeNotificationThresholdPercentage = 100;
     private const int MinimumUsageSurgeNotificationWindowMinutes = 1;
@@ -66,14 +66,14 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
     public partial bool IsActiveAccountUsageAutomaticRefreshEnabled { get; set; } = applicationSettings.IsActiveAccountUsageAutomaticRefreshEnabled;
 
     [ObservableProperty]
-    public partial double ActiveAccountUsageRefreshIntervalMinutes { get; set; } = ConvertSecondsToWholeMinutes(applicationSettings.ActiveAccountUsageRefreshIntervalSeconds);
+    public partial double ActiveAccountUsageRefreshIntervalSeconds { get; set; } = applicationSettings.ActiveAccountUsageRefreshIntervalSeconds;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsInactiveAccountUsageRefreshIntervalEnabled))]
     public partial bool IsInactiveAccountUsageAutomaticRefreshEnabled { get; set; } = applicationSettings.IsInactiveAccountUsageAutomaticRefreshEnabled;
 
     [ObservableProperty]
-    public partial double InactiveAccountUsageRefreshIntervalMinutes { get; set; } = ConvertSecondsToWholeMinutes(applicationSettings.InactiveAccountUsageRefreshIntervalSeconds);
+    public partial double InactiveAccountUsageRefreshIntervalSeconds { get; set; } = applicationSettings.InactiveAccountUsageRefreshIntervalSeconds;
 
     [ObservableProperty]
     public partial double PrimaryUsageWarningThresholdPercentage { get; set; } = applicationSettings.PrimaryUsageWarningThresholdPercentage;
@@ -354,7 +354,7 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
         return dialogData;
     }
 
-    public async Task<SettingsPageDialogData> ApplyActiveAccountUsageRefreshIntervalMinutesAsync(double refreshIntervalMinutes) => await ApplyUsageRefreshIntervalMinutesAsync(refreshIntervalMinutes, applicationSettings.ActiveAccountUsageRefreshIntervalSeconds, refreshIntervalSeconds => applicationSettings.ActiveAccountUsageRefreshIntervalSeconds = refreshIntervalSeconds, SetActiveAccountUsageRefreshIntervalMinutesSilently);
+    public async Task<SettingsPageDialogData> ApplyActiveAccountUsageRefreshIntervalSecondsAsync(double refreshIntervalSeconds) => await ApplyUsageRefreshIntervalSecondsAsync(refreshIntervalSeconds, applicationSettings.ActiveAccountUsageRefreshIntervalSeconds, applyRefreshIntervalSeconds => applicationSettings.ActiveAccountUsageRefreshIntervalSeconds = applyRefreshIntervalSeconds, SetActiveAccountUsageRefreshIntervalSecondsSilently);
 
     public async Task<SettingsPageDialogData> ApplyInactiveAccountUsageAutomaticRefreshEnabledAsync(bool isInactiveAccountUsageAutomaticRefreshEnabled)
     {
@@ -367,7 +367,7 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
         return dialogData;
     }
 
-    public async Task<SettingsPageDialogData> ApplyInactiveAccountUsageRefreshIntervalMinutesAsync(double refreshIntervalMinutes) => await ApplyUsageRefreshIntervalMinutesAsync(refreshIntervalMinutes, applicationSettings.InactiveAccountUsageRefreshIntervalSeconds, refreshIntervalSeconds => applicationSettings.InactiveAccountUsageRefreshIntervalSeconds = refreshIntervalSeconds, SetInactiveAccountUsageRefreshIntervalMinutesSilently);
+    public async Task<SettingsPageDialogData> ApplyInactiveAccountUsageRefreshIntervalSecondsAsync(double refreshIntervalSeconds) => await ApplyUsageRefreshIntervalSecondsAsync(refreshIntervalSeconds, applicationSettings.InactiveAccountUsageRefreshIntervalSeconds, applyRefreshIntervalSeconds => applicationSettings.InactiveAccountUsageRefreshIntervalSeconds = applyRefreshIntervalSeconds, SetInactiveAccountUsageRefreshIntervalSecondsSilently);
 
     public async Task<SettingsPageDialogData> ApplyPrimaryUsageWarningThresholdPercentageAsync(double percentage) => await ApplyPercentageAsync(percentage, applicationSettings.PrimaryUsageWarningThresholdPercentage, normalizedPercentage => applicationSettings.PrimaryUsageWarningThresholdPercentage = normalizedPercentage, SetPrimaryUsageWarningThresholdPercentageSilently);
 
@@ -407,9 +407,9 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
         IsExpiredAccountAutomaticDeletionEnabled = applicationSettings.IsExpiredAccountAutomaticDeletionEnabled;
         IsExpiredAccountNotificationEnabled = applicationSettings.IsExpiredAccountNotificationEnabled;
         IsActiveAccountUsageAutomaticRefreshEnabled = applicationSettings.IsActiveAccountUsageAutomaticRefreshEnabled;
-        ActiveAccountUsageRefreshIntervalMinutes = ConvertSecondsToWholeMinutes(applicationSettings.ActiveAccountUsageRefreshIntervalSeconds);
+        ActiveAccountUsageRefreshIntervalSeconds = applicationSettings.ActiveAccountUsageRefreshIntervalSeconds;
         IsInactiveAccountUsageAutomaticRefreshEnabled = applicationSettings.IsInactiveAccountUsageAutomaticRefreshEnabled;
-        InactiveAccountUsageRefreshIntervalMinutes = ConvertSecondsToWholeMinutes(applicationSettings.InactiveAccountUsageRefreshIntervalSeconds);
+        InactiveAccountUsageRefreshIntervalSeconds = applicationSettings.InactiveAccountUsageRefreshIntervalSeconds;
         PrimaryUsageWarningThresholdPercentage = applicationSettings.PrimaryUsageWarningThresholdPercentage;
         SecondaryUsageWarningThresholdPercentage = applicationSettings.SecondaryUsageWarningThresholdPercentage;
         IsPrimaryUsageLowQuotaNotificationEnabled = applicationSettings.IsPrimaryUsageLowQuotaNotificationEnabled;
@@ -427,11 +427,11 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
         await SaveSettingsAsync();
     }
 
-    private async Task<SettingsPageDialogData> ApplyUsageRefreshIntervalMinutesAsync(double refreshIntervalMinutes, int fallbackRefreshIntervalSeconds, Action<int> applyRefreshIntervalSeconds, Action<double> setRefreshIntervalMinutesSilently)
+    private async Task<SettingsPageDialogData> ApplyUsageRefreshIntervalSecondsAsync(double refreshIntervalSeconds, int fallbackRefreshIntervalSeconds, Action<int> applyRefreshIntervalSeconds, Action<double> setRefreshIntervalSecondsSilently)
     {
-        var refreshIntervalSeconds = NormalizeUsageRefreshIntervalSeconds(refreshIntervalMinutes, fallbackRefreshIntervalSeconds);
-        applyRefreshIntervalSeconds(refreshIntervalSeconds);
-        setRefreshIntervalMinutesSilently(ConvertSecondsToWholeMinutes(refreshIntervalSeconds));
+        var normalizedRefreshIntervalSeconds = NormalizeUsageRefreshIntervalSeconds(refreshIntervalSeconds, fallbackRefreshIntervalSeconds);
+        applyRefreshIntervalSeconds(normalizedRefreshIntervalSeconds);
+        setRefreshIntervalSecondsSilently(normalizedRefreshIntervalSeconds);
         var wasSaved = await SaveSettingsAsync();
         RefreshUsageRefreshCountdownTexts();
         return wasSaved ? null : CreateSaveSettingsFailedDialogData();
@@ -471,9 +471,9 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
 
     private SettingsPageDialogData CreateSaveSettingsFailedDialogData() => new(localizationService.GetLocalizedString("SettingsPage_SaveSettingsFailedDialogTitle"), localizationService.GetLocalizedString("SettingsPage_SaveSettingsFailedDialogMessage"));
 
-    private void SetActiveAccountUsageRefreshIntervalMinutesSilently(double value) => SetPropertySilently(value, static (viewModel, newValue) => viewModel.ActiveAccountUsageRefreshIntervalMinutes = newValue);
+    private void SetActiveAccountUsageRefreshIntervalSecondsSilently(double value) => SetPropertySilently(value, static (viewModel, newValue) => viewModel.ActiveAccountUsageRefreshIntervalSeconds = newValue);
 
-    private void SetInactiveAccountUsageRefreshIntervalMinutesSilently(double value) => SetPropertySilently(value, static (viewModel, newValue) => viewModel.InactiveAccountUsageRefreshIntervalMinutes = newValue);
+    private void SetInactiveAccountUsageRefreshIntervalSecondsSilently(double value) => SetPropertySilently(value, static (viewModel, newValue) => viewModel.InactiveAccountUsageRefreshIntervalSeconds = newValue);
 
     private void SetPrimaryUsageWarningThresholdPercentageSilently(double value) => SetPropertySilently(value, static (viewModel, newValue) => viewModel.PrimaryUsageWarningThresholdPercentage = newValue);
 
@@ -506,14 +506,7 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
 
     private static ElementTheme GetThemeFromSelectedIndex(int selectedIndex) => selectedIndex switch { 1 => ElementTheme.Light, 2 => ElementTheme.Dark, _ => ElementTheme.Default };
 
-    private static int NormalizeUsageRefreshIntervalSeconds(double refreshIntervalMinutes, int fallbackRefreshIntervalSeconds)
-    {
-        var fallbackRefreshIntervalMinutes = ConvertSecondsToWholeMinutes(fallbackRefreshIntervalSeconds);
-        var normalizedRefreshIntervalMinutes = double.IsNaN(refreshIntervalMinutes) ? fallbackRefreshIntervalMinutes : Math.Clamp((int)Math.Round(refreshIntervalMinutes, MidpointRounding.AwayFromZero), MinimumUsageRefreshIntervalMinutes, MaximumUsageRefreshIntervalMinutes);
-        return normalizedRefreshIntervalMinutes * 60;
-    }
-
-    private static int ConvertSecondsToWholeMinutes(int seconds) => Math.Clamp((int)Math.Round(seconds / 60.0, MidpointRounding.AwayFromZero), MinimumUsageRefreshIntervalMinutes, MaximumUsageRefreshIntervalMinutes);
+    private static int NormalizeUsageRefreshIntervalSeconds(double refreshIntervalSeconds, int fallbackRefreshIntervalSeconds) => double.IsNaN(refreshIntervalSeconds) ? fallbackRefreshIntervalSeconds : Math.Clamp((int)Math.Round(refreshIntervalSeconds, MidpointRounding.AwayFromZero), MinimumUsageRefreshIntervalSeconds, MaximumUsageRefreshIntervalSeconds);
 
     private static int NormalizePercentage(double percentage, int fallbackPercentage) => double.IsNaN(percentage) ? fallbackPercentage : Math.Clamp((int)Math.Round(percentage, MidpointRounding.AwayFromZero), 0, 100);
 

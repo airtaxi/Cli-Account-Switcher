@@ -929,13 +929,13 @@
     <value>下次刷新</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
-    <value>设置活跃账号用量每隔多少分钟刷新一次。</value>
+    <value>设置活跃账号用量每隔多少秒刷新一次。</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
     <value>刷新间隔</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>按所选分钟间隔刷新活跃账号的用量。</value>
+    <value>按所选秒间隔刷新活跃账号的用量。</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
     <value>活跃账号自动刷新</value>
@@ -1076,13 +1076,13 @@
     <value>下次刷新</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
-    <value>设置非活跃账号用量每隔多少分钟刷新一次。</value>
+    <value>设置非活跃账号用量每隔多少秒刷新一次。</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
     <value>刷新间隔</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>按所选分钟间隔刷新非活跃账号的用量。</value>
+    <value>按所选秒间隔刷新非活跃账号的用量。</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
     <value>非活跃账号自动刷新</value>

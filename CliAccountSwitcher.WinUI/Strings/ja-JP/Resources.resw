@@ -929,13 +929,13 @@
     <value>次回更新</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
-    <value>アクティブアカウントの使用量を何分ごとに更新するか設定します。</value>
+    <value>アクティブアカウントの使用量を何秒ごとに更新するか設定します。</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
     <value>更新間隔</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>選択した分間隔でアクティブアカウントの使用量を更新します。</value>
+    <value>選択した秒間隔でアクティブアカウントの使用量を更新します。</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
     <value>アクティブアカウントの自動更新</value>
@@ -1076,13 +1076,13 @@
     <value>次回更新</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
-    <value>非アクティブアカウントの使用量を何分ごとに更新するか設定します。</value>
+    <value>非アクティブアカウントの使用量を何秒ごとに更新するか設定します。</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
     <value>更新間隔</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>選択した分間隔で非アクティブアカウントの使用量を更新します。</value>
+    <value>選択した秒間隔で非アクティブアカウントの使用量を更新します。</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
     <value>非アクティブアカウントの自動更新</value>

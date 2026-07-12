@@ -218,13 +218,13 @@
                                     x:Name="ActiveAccountUsageRefreshIntervalNumberBox"
                                     MinWidth="140"
                                     IsEnabled="{x:Bind ViewModel.IsActiveAccountUsageRefreshIntervalEnabled, Mode=OneWay}"
-                                    LargeChange="5"
-                                    Maximum="1440"
-                                    Minimum="1"
-                                    SmallChange="1"
+                                    LargeChange="60"
+                                    Maximum="86400"
+                                    Minimum="5"
+                                    SmallChange="5"
                                     SpinButtonPlacementMode="Inline"
                                     ValueChanged="OnActiveAccountUsageRefreshIntervalNumberBoxValueChanged"
-                                    Value="{x:Bind ViewModel.ActiveAccountUsageRefreshIntervalMinutes, Mode=TwoWay}" />
+                                    Value="{x:Bind ViewModel.ActiveAccountUsageRefreshIntervalSeconds, Mode=TwoWay}" />
                             </dev:SettingsCard>
                             <dev:SettingsCard x:Uid="SettingsPage_ActiveAccountNextUsageRefreshSettingsCard">
                                 <TextBlock
@@ -251,13 +251,13 @@
                                     x:Name="InactiveAccountUsageRefreshIntervalNumberBox"
                                     MinWidth="140"
                                     IsEnabled="{x:Bind ViewModel.IsInactiveAccountUsageRefreshIntervalEnabled, Mode=OneWay}"
-                                    LargeChange="5"
-                                    Maximum="1440"
-                                    Minimum="1"
-                                    SmallChange="1"
+                                    LargeChange="60"
+                                    Maximum="86400"
+                                    Minimum="5"
+                                    SmallChange="5"
                                     SpinButtonPlacementMode="Inline"
                                     ValueChanged="OnInactiveAccountUsageRefreshIntervalNumberBoxValueChanged"
-                                    Value="{x:Bind ViewModel.InactiveAccountUsageRefreshIntervalMinutes, Mode=TwoWay}" />
+                                    Value="{x:Bind ViewModel.InactiveAccountUsageRefreshIntervalSeconds, Mode=TwoWay}" />
                             </dev:SettingsCard>
                             <dev:SettingsCard x:Uid="SettingsPage_InactiveAccountNextUsageRefreshSettingsCard">
                                 <TextBlock

@@ -184,7 +184,7 @@ public sealed partial class SettingsPage : Page
     private async void OnActiveAccountUsageRefreshIntervalNumberBoxValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs numberBoxValueChangedEventArguments)
     {
         if (_isSynchronizingControls) return;
-        await ShowDialogIfNeededAsync(await StartWithControlSynchronization(() => ViewModel.ApplyActiveAccountUsageRefreshIntervalMinutesAsync(numberBoxValueChangedEventArguments.NewValue)));
+        await ShowDialogIfNeededAsync(await StartWithControlSynchronization(() => ViewModel.ApplyActiveAccountUsageRefreshIntervalSecondsAsync(numberBoxValueChangedEventArguments.NewValue)));
     }
 
     private async void OnInactiveAccountUsageAutomaticRefreshToggleSwitchToggled(object sender, RoutedEventArgs routedEventArguments)
@@ -196,7 +196,7 @@ public sealed partial class SettingsPage : Page
     private async void OnInactiveAccountUsageRefreshIntervalNumberBoxValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs numberBoxValueChangedEventArguments)
     {
         if (_isSynchronizingControls) return;
-        await ShowDialogIfNeededAsync(await StartWithControlSynchronization(() => ViewModel.ApplyInactiveAccountUsageRefreshIntervalMinutesAsync(numberBoxValueChangedEventArguments.NewValue)));
+        await ShowDialogIfNeededAsync(await StartWithControlSynchronization(() => ViewModel.ApplyInactiveAccountUsageRefreshIntervalSecondsAsync(numberBoxValueChangedEventArguments.NewValue)));
     }
 
     private async void OnPrimaryUsageWarningThresholdNumberBoxValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs numberBoxValueChangedEventArguments)

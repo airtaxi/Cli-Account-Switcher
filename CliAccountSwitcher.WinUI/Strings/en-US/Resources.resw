@@ -929,13 +929,13 @@
     <value>Next refresh</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
-    <value>Set how often active account usage refreshes, in minutes.</value>
+    <value>Set how often active account usage refreshes, in seconds.</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
     <value>Refresh interval</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>Refresh usage for the active account at the selected minute interval.</value>
+    <value>Refresh usage for the active account at the selected second interval.</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
     <value>Active account automatic refresh</value>
@@ -1076,13 +1076,13 @@
     <value>Next refresh</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
-    <value>Set how often inactive account usage refreshes, in minutes.</value>
+    <value>Set how often inactive account usage refreshes, in seconds.</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
     <value>Refresh interval</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>Refresh usage for inactive accounts at the selected minute interval.</value>
+    <value>Refresh usage for inactive accounts at the selected second interval.</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
     <value>Inactive account automatic refresh</value>

@@ -929,13 +929,13 @@
     <value>下次重新整理</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
-    <value>設定使用中帳號用量每隔多少分鐘重新整理一次。</value>
+    <value>設定使用中帳號用量每隔多少秒重新整理一次。</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
     <value>重新整理間隔</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>按所選分鐘間隔重新整理使用中帳號的用量。</value>
+    <value>按所選秒間隔重新整理使用中帳號的用量。</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
     <value>使用中帳號自動重新整理</value>
@@ -1076,13 +1076,13 @@
     <value>下次重新整理</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
-    <value>設定非使用中帳號用量每隔多少分鐘重新整理一次。</value>
+    <value>設定非使用中帳號用量每隔多少秒重新整理一次。</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
     <value>重新整理間隔</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>按所選分鐘間隔重新整理非使用中帳號的用量。</value>
+    <value>按所選秒間隔重新整理非使用中帳號的用量。</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
     <value>非使用中帳號自動重新整理</value>

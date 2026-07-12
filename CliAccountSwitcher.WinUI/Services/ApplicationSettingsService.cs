@@ -104,7 +104,7 @@ public sealed class ApplicationSettingsService
 
     private static CliProviderKind NormalizeSelectedProviderKind(CliProviderKind selectedProviderKind) => selectedProviderKind is CliProviderKind.Codex or CliProviderKind.ClaudeCode or CliProviderKind.Zai or CliProviderKind.OpenCodeGo or CliProviderKind.Ollama ? selectedProviderKind : CliProviderKind.Codex;
 
-    private static int NormalizeRefreshIntervalSeconds(int refreshIntervalSeconds, int defaultRefreshIntervalSeconds) => refreshIntervalSeconds <= 0 ? defaultRefreshIntervalSeconds : Math.Clamp(refreshIntervalSeconds, 60, 86400);
+    private static int NormalizeRefreshIntervalSeconds(int refreshIntervalSeconds, int defaultRefreshIntervalSeconds) => refreshIntervalSeconds <= 0 ? defaultRefreshIntervalSeconds : Math.Clamp(refreshIntervalSeconds, 5, 86400);
 
     private static int NormalizePercentage(int percentage) => Math.Clamp(percentage, 0, 100);
 

@@ -929,13 +929,13 @@
     <value>다음 새로고침</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
-    <value>활성 계정 사용량을 몇 분마다 새로고침할지 설정합니다.</value>
+    <value>활성 계정 사용량을 몇 초마다 새로고침할지 설정합니다.</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
     <value>새로고침 간격</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>활성 계정의 사용량을 지정한 분 단위 간격으로 새로고침합니다.</value>
+    <value>활성 계정의 사용량을 지정한 초 단위 간격으로 새로고침합니다.</value>
   </data>
   <data name="SettingsPage_ActiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
     <value>활성 계정 자동 새로고침</value>
@@ -1076,13 +1076,13 @@
     <value>다음 새로고침</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Description" xml:space="preserve">
-    <value>비활성 계정 사용량을 몇 분마다 새로고침할지 설정합니다.</value>
+    <value>비활성 계정 사용량을 몇 초마다 새로고침할지 설정합니다.</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshIntervalSettingsCard.Header" xml:space="preserve">
     <value>새로고침 간격</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Description" xml:space="preserve">
-    <value>비활성 계정의 사용량을 지정한 분 단위 간격으로 새로고침합니다.</value>
+    <value>비활성 계정의 사용량을 지정한 초 단위 간격으로 새로고침합니다.</value>
   </data>
   <data name="SettingsPage_InactiveAccountUsageRefreshSettingsCard.Header" xml:space="preserve">
     <value>비활성 계정 자동 새로고침</value>
