@@ -719,7 +719,7 @@
     <value>5時間</value>
   </data>
   <data name="Notification_PrimaryUsageSurgeDetectedMessageFormat" xml:space="preserve">
-    <value>約 {0}%/{1} 分のペースで 5 時間制限を消費しています - 無限ループ (API 急増) ではないか確認してください。</value>
+    <value>直近 {1} 分間で 5 時間制限を {0}% 消費しました - 無限ループ (API 急増) ではないか確認してください。</value>
   </data>
   <data name="Notification_PrimaryUsageSurgeDetectedTitleFormat" xml:space="preserve">
     <value>{0} 使用量急増</value>
@@ -1158,16 +1158,16 @@
     <value>5 時間使用量急増通知</value>
   </data>
   <data name="SettingsPage_PrimaryUsageSurgeNotificationThresholdSettingsCard.Description" xml:space="preserve">
-    <value>5 時間使用量が換算単位あたりこの割合以上増えた場合、急増として扱います。</value>
+    <value>観察単位内で 5 時間使用量がこの割合以上増えた場合、急増として扱います。</value>
   </data>
   <data name="SettingsPage_PrimaryUsageSurgeNotificationThresholdSettingsCard.Header" xml:space="preserve">
     <value>急増しきい値</value>
   </data>
   <data name="SettingsPage_PrimaryUsageSurgeNotificationWindowSettingsCard.Description" xml:space="preserve">
-    <value>実際の更新間隔の増加量を何分基準で換算するかを設定します。</value>
+    <value>実際の使用量の増加を測定する時間単位 (分) を設定します。</value>
   </data>
   <data name="SettingsPage_PrimaryUsageSurgeNotificationWindowSettingsCard.Header" xml:space="preserve">
-    <value>換算単位 (分)</value>
+    <value>観察単位 (分)</value>
   </data>
   <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
     <value>5時間制限の残り使用量がこの割合以下になったら低クォータとしてマークします。</value>

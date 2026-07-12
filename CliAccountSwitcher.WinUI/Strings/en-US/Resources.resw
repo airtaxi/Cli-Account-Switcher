@@ -719,7 +719,7 @@
     <value>5-hour</value>
   </data>
   <data name="Notification_PrimaryUsageSurgeDetectedMessageFormat" xml:space="preserve">
-    <value>Consuming the 5-hour limit at about {0}%/{1} min - check for an infinite loop (API surge).</value>
+    <value>Consumed {0}% of the 5-hour limit in the last {1} min - check for an infinite loop (API surge).</value>
   </data>
   <data name="Notification_PrimaryUsageSurgeDetectedTitleFormat" xml:space="preserve">
     <value>{0} usage surge</value>
@@ -1158,16 +1158,16 @@ The installed app is already up to date.</value>
     <value>5-hour usage surge notification</value>
   </data>
   <data name="SettingsPage_PrimaryUsageSurgeNotificationThresholdSettingsCard.Description" xml:space="preserve">
-    <value>Treat usage as surging when 5-hour usage increases by at least this percentage per conversion window.</value>
+    <value>Treat usage as surging when 5-hour usage increases by at least this percentage within the observation window.</value>
   </data>
   <data name="SettingsPage_PrimaryUsageSurgeNotificationThresholdSettingsCard.Header" xml:space="preserve">
     <value>Surge threshold</value>
   </data>
   <data name="SettingsPage_PrimaryUsageSurgeNotificationWindowSettingsCard.Description" xml:space="preserve">
-    <value>Set the minute window used to convert the actual refresh interval into a comparable usage rate.</value>
+    <value>Set the time window in minutes over which the actual usage increase is measured.</value>
   </data>
   <data name="SettingsPage_PrimaryUsageSurgeNotificationWindowSettingsCard.Header" xml:space="preserve">
-    <value>Conversion window (minutes)</value>
+    <value>Observation window (minutes)</value>
   </data>
   <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
     <value>Mark the 5-hour limit as low quota when remaining usage is at or below this percentage.</value>

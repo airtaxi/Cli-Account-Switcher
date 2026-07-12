@@ -719,7 +719,7 @@
     <value>5 小時</value>
   </data>
   <data name="Notification_PrimaryUsageSurgeDetectedMessageFormat" xml:space="preserve">
-    <value>正以約 {0}%/{1} 分的速度消耗 5 小時限制 - 請檢查是否存在無限迴圈（API 暴增）。</value>
+    <value>在過去 {1} 分鐘內消耗了 {0}% 的 5 小時限制 - 請檢查是否存在無限迴圈（API 暴增）。</value>
   </data>
   <data name="Notification_PrimaryUsageSurgeDetectedTitleFormat" xml:space="preserve">
     <value>{0} 用量暴增</value>
@@ -1158,16 +1158,16 @@
     <value>5 小時用量暴增通知</value>
   </data>
   <data name="SettingsPage_PrimaryUsageSurgeNotificationThresholdSettingsCard.Description" xml:space="preserve">
-    <value>當 5 小時用量在換算單位內增加至少此百分比時，將其視為暴增。</value>
+    <value>當 5 小時用量在觀察單位內增加至少此百分比時，將其視為暴增。</value>
   </data>
   <data name="SettingsPage_PrimaryUsageSurgeNotificationThresholdSettingsCard.Header" xml:space="preserve">
     <value>暴增閾值</value>
   </data>
   <data name="SettingsPage_PrimaryUsageSurgeNotificationWindowSettingsCard.Description" xml:space="preserve">
-    <value>設定將實際重新整理間隔的增長量換算為幾分鐘基準。</value>
+    <value>設定測量實際用量增長的時間單位（分鐘）。</value>
   </data>
   <data name="SettingsPage_PrimaryUsageSurgeNotificationWindowSettingsCard.Header" xml:space="preserve">
-    <value>換算單位（分鐘）</value>
+    <value>觀察單位（分鐘）</value>
   </data>
   <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
     <value>当 5 小時限制的剩餘用量等於或低於此百分比時标记為低配額。</value>

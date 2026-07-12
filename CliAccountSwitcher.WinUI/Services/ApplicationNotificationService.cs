@@ -46,11 +46,11 @@ public sealed class ApplicationNotificationService
         ShowNotification(notificationTitle, notificationMessage, notificationAction: AccountsNavigationNotificationAction);
     }
 
-    public void ShowPrimaryUsageSurgeNotification(CliProviderKind providerKind, int usageSurgePercentage, int usageSurgeWindowMinutes)
+    public void ShowPrimaryUsageSurgeNotification(CliProviderKind providerKind, int usageIncreasePercentage, int elapsedMinutes)
     {
         var providerDisplayName = GetProviderDisplayName(providerKind);
         var notificationTitle = _localizationService.GetFormattedString("Notification_PrimaryUsageSurgeDetectedTitleFormat", providerDisplayName);
-        var notificationMessage = _localizationService.GetFormattedString("Notification_PrimaryUsageSurgeDetectedMessageFormat", usageSurgePercentage, usageSurgeWindowMinutes);
+        var notificationMessage = _localizationService.GetFormattedString("Notification_PrimaryUsageSurgeDetectedMessageFormat", usageIncreasePercentage, elapsedMinutes);
         ShowNotification(notificationTitle, notificationMessage, notificationAction: AccountsNavigationNotificationAction);
     }
 

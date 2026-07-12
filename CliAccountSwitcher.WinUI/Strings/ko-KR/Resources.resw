@@ -719,7 +719,7 @@
     <value>5시간</value>
   </data>
   <data name="Notification_PrimaryUsageSurgeDetectedMessageFormat" xml:space="preserve">
-    <value>약 {0}%/{1}분으로 5시간 한도를 소모 중입니다 - 무한 루프(API 폭주)인지 확인하세요.</value>
+    <value>최근 {1}분 동안 5시간 한도를 {0}% 소모했습니다 - 무한 루프(API 폭주)인지 확인하세요.</value>
   </data>
   <data name="Notification_PrimaryUsageSurgeDetectedTitleFormat" xml:space="preserve">
     <value>{0} 사용량 급증</value>
@@ -1158,16 +1158,16 @@
     <value>5시간 사용량 급증 알림</value>
   </data>
   <data name="SettingsPage_PrimaryUsageSurgeNotificationThresholdSettingsCard.Description" xml:space="preserve">
-    <value>5시간 사용량이 환산 단위당 이 비율 이상 늘어나면 급증으로 판단합니다.</value>
+    <value>관찰 단위 동안 5시간 사용량이 이 비율 이상 늘어나면 급증으로 판단합니다.</value>
   </data>
   <data name="SettingsPage_PrimaryUsageSurgeNotificationThresholdSettingsCard.Header" xml:space="preserve">
     <value>급증 기준</value>
   </data>
   <data name="SettingsPage_PrimaryUsageSurgeNotificationWindowSettingsCard.Description" xml:space="preserve">
-    <value>실제 새로고침 간격의 증가량을 몇 분 기준으로 환산할지 설정합니다.</value>
+    <value>사용량 증가를 측정할 시간 단위(분)를 설정합니다.</value>
   </data>
   <data name="SettingsPage_PrimaryUsageSurgeNotificationWindowSettingsCard.Header" xml:space="preserve">
-    <value>환산 단위(분)</value>
+    <value>관찰 단위(분)</value>
   </data>
   <data name="SettingsPage_PrimaryUsageWarningThresholdSettingsCard.Description" xml:space="preserve">
     <value>5시간 한도 잔여량이 이 비율 이하가 되면 저할당량으로 표시합니다.</value>
