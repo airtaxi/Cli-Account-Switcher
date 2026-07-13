@@ -6,7 +6,7 @@
 
 ![CLI Account Switcher screenshot](.github/Assets/EN.jpg)
 
-CLI Account Switcher is a Windows desktop utility for managing authentication accounts for AI coding tools. It supports Codex, Claude Code, Z.ai, and OpenCode Go accounts.
+CLI Account Switcher is a Windows desktop utility for managing authentication accounts for AI coding tools. It supports Codex, Claude Code, Z.ai, OpenCode Go, and Ollama accounts.
 
 The app stores saved account records in its own local application data folder and switches the active account by writing the selected authentication document to the relevant local authentication file for each tool.
 
@@ -17,12 +17,12 @@ The app stores saved account records in its own local application data folder an
 
 ## Features
 
-- Add Codex, Claude Code, Z.ai, and OpenCode Go accounts with the supported sign-in and import flows.
+- Add Codex, Claude Code, Z.ai, OpenCode Go, and Ollama accounts with the supported sign-in and import flows.
 - Switch the active account for any supported CLI from the Accounts screen.
 - View plan information and remaining usage for supported accounts.
 - Monitor active account usage from the Windows taskbar with real-time refresh support.
 - Compare usage against the pacemaker indicator to understand whether the current pace is comfortably within the reset window or running too fast.
-- Manage Codex, Claude Code, Z.ai, and OpenCode Go accounts in one Windows app.
+- Manage Codex, Claude Code, Z.ai, OpenCode Go, and Ollama accounts in one Windows app.
 - Click the tray icon to open a quick active account usage popup without opening the full window.
 - Refresh account usage and detect expired accounts.
 - Back up and restore saved accounts.
@@ -58,7 +58,7 @@ The repository contains three projects:
 | Project | Description |
 | --- | --- |
 | `CliAccountSwitcher.WinUI` | Packaged WinUI 3 desktop app. |
-| `CliAccountSwitcher.Api` | Codex, Claude Code, Z.ai, and OpenCode Go authentication, usage, models, and API client helpers. |
+| `CliAccountSwitcher.Api` | Codex, Claude Code, Z.ai, OpenCode Go, and Ollama authentication, usage, models, and API client helpers. |
 | `CliAccountSwitcher.Api.Sample` | Console sample project for Codex and Claude Code API behavior. |
 
 The WinUI app targets `net10.0-windows10.0.26100.0`, enables NativeAOT publishing, uses MSIX tooling, and supports `x86`, `x64`, and `ARM64` package bundles.

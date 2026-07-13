@@ -6,7 +6,7 @@
 
 ![CLI Account Switcher 스크린샷](.github/Assets/KO.jpg)
 
-CLI Account Switcher는 AI 코딩 도구의 인증 계정을 관리하기 위한 Windows 데스크톱 유틸리티입니다. Codex, Claude Code, Z.ai, OpenCode Go 계정을 지원합니다.
+CLI Account Switcher는 AI 코딩 도구의 인증 계정을 관리하기 위한 Windows 데스크톱 유틸리티입니다. Codex, Claude Code, Z.ai, OpenCode Go, Ollama 계정을 지원합니다.
 
 앱은 저장된 계정 목록을 자체 로컬 앱 데이터 폴더에 보관하고, 선택한 인증 문서를 해당 도구의 로컬 인증 파일에 기록해 활성 계정을 전환합니다.
 
@@ -17,12 +17,12 @@ CLI Account Switcher는 AI 코딩 도구의 인증 계정을 관리하기 위한
 
 ## 주요 기능
 
-- 지원되는 로그인 및 가져오기 방식으로 Codex, Claude Code, Z.ai, OpenCode Go 계정을 추가합니다.
+- 지원되는 로그인 및 가져오기 방식으로 Codex, Claude Code, Z.ai, OpenCode Go, Ollama 계정을 추가합니다.
 - 계정 화면에서 지원되는 CLI의 활성 계정을 전환합니다.
 - 지원되는 계정의 플랜과 잔여 사용량 정보를 확인합니다.
 - Windows 작업 표시줄에서 활성 계정 사용량을 실시간으로 조회하고 새로 고칩니다.
 - 페이스메이커 지표로 현재 사용 페이스가 리셋 주기 안에서 여유로운지, 너무 빠른지 비교합니다.
-- 하나의 Windows 앱에서 Codex, Claude Code, Z.ai, OpenCode Go 계정을 함께 관리합니다.
+- 하나의 Windows 앱에서 Codex, Claude Code, Z.ai, OpenCode Go, Ollama 계정을 함께 관리합니다.
 - 전체 창을 열지 않고 트레이 아이콘을 눌러 활성 계정의 남은 사용량을 빠르게 확인합니다.
 - 계정 사용량을 새로 고치고 만료된 계정을 감지합니다.
 - 저장된 계정을 백업하고 복원합니다.
@@ -58,7 +58,7 @@ CLI Account Switcher는 AI 코딩 도구의 인증 계정을 관리하기 위한
 | 프로젝트 | 설명 |
 | --- | --- |
 | `CliAccountSwitcher.WinUI` | 패키징된 WinUI 3 데스크톱 앱입니다. |
-| `CliAccountSwitcher.Api` | Codex, Claude Code, Z.ai, OpenCode Go 인증, 사용량, 모델, API 클라이언트 도우미를 담당합니다. |
+| `CliAccountSwitcher.Api` | Codex, Claude Code, Z.ai, OpenCode Go, Ollama 인증, 사용량, 모델, API 클라이언트 도우미를 담당합니다. |
 | `CliAccountSwitcher.Api.Sample` | Codex와 Claude Code API 동작을 확인하기 위한 콘솔 샘플 프로젝트입니다. |
 
 WinUI 앱은 `net10.0-windows10.0.26100.0`을 대상으로 하며, NativeAOT 게시와 MSIX 도구를 사용하고 `x86`, `x64`, `ARM64` 패키지 번들을 지원합니다.
