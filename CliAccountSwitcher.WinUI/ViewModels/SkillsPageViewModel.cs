@@ -67,7 +67,10 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
     public partial IReadOnlyList<string> SelectedSkillDirectoryNames { get; set; } = [];
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsSelectAllSkillsCheckBoxThreeState))]
     public partial bool? FilteredSkillsSelectionState { get; set; } = false;
+
+    public bool IsSelectAllSkillsCheckBoxThreeState => FilteredSkillsSelectionState != true;
 
     public bool HasSkills => SkillCount > 0;
 

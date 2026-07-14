@@ -163,7 +163,7 @@
                                             Checked="OnSelectAllSkillsCheckBoxChecked"
                                             IsChecked="{x:Bind ViewModel.FilteredSkillsSelectionState, Mode=OneWay}"
                                             IsEnabled="{x:Bind ViewModel.HasFilteredSkills, Mode=OneWay}"
-                                            IsThreeState="True"
+                                            IsThreeState="{x:Bind ViewModel.IsSelectAllSkillsCheckBoxThreeState, Mode=OneWay}"
                                             Unchecked="OnSelectAllSkillsCheckBoxUnchecked" />
                                         <TextBlock
                                             x:Uid="SkillsPage_SkillNameHeaderTextBlock"

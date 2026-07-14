@@ -38,7 +38,10 @@ public sealed partial class ImportSkillsSelectionDialogViewModel : ObservableObj
     public partial int FilteredSkillCount { get; set; }
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsSelectAllSkillsCheckBoxThreeState))]
     public partial bool? AllSkillsSelectionState { get; set; } = true;
+
+    public bool IsSelectAllSkillsCheckBoxThreeState => AllSkillsSelectionState != true;
 
     public bool HasSkills => SkillCount > 0;
 
