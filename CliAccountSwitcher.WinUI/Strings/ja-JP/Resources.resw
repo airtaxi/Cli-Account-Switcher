@@ -1356,12 +1356,6 @@ Microsoft Store に {0} 件の更新があります。</value>
   <data name="SkillsPage_OllamaUnsupportedTitleTextBlock.Text" xml:space="preserve">
     <value>Ollama はスキルに対応していません</value>
   </data>
-  <data name="SkillsPage_OpenCodeGoUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
-    <value>OpenCode Go はローカルスキルファイルを管理しません。スキルを管理するには Codex または Claude Code に切り替えてください。</value>
-  </data>
-  <data name="SkillsPage_OpenCodeGoUnsupportedTitleTextBlock.Text" xml:space="preserve">
-    <value>スキルはサポートされていません</value>
-  </data>
   <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
     <value>更新</value>
   </data>

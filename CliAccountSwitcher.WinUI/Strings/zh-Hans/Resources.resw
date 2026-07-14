@@ -1356,12 +1356,6 @@ Microsoft Store 中有 {0} 个可用更新。</value>
   <data name="SkillsPage_OllamaUnsupportedTitleTextBlock.Text" xml:space="preserve">
     <value>Ollama 不支持技能</value>
   </data>
-  <data name="SkillsPage_OpenCodeGoUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
-    <value>OpenCode Go 不管理本地技能文件。切换至 Codex 或 Claude Code 以管理技能。</value>
-  </data>
-  <data name="SkillsPage_OpenCodeGoUnsupportedTitleTextBlock.Text" xml:space="preserve">
-    <value>不支持技能管理</value>
-  </data>
   <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
     <value>刷新</value>
   </data>

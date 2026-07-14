@@ -45,7 +45,6 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
     [NotifyPropertyChangedFor(nameof(IsCodexProviderSelected))]
     [NotifyPropertyChangedFor(nameof(IsClaudeCodeProviderSelected))]
     [NotifyPropertyChangedFor(nameof(IsZaiProviderSelected))]
-    [NotifyPropertyChangedFor(nameof(IsOpenCodeGoProviderSelected))]
     [NotifyPropertyChangedFor(nameof(IsOllamaProviderSelected))]
     [NotifyPropertyChangedFor(nameof(IsSkillsSupported))]
     [NotifyPropertyChangedFor(nameof(DescriptionText))]
@@ -88,11 +87,9 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
 
     public bool IsZaiProviderSelected => SelectedProviderKind == CliProviderKind.Zai;
 
-    public bool IsOpenCodeGoProviderSelected => SelectedProviderKind == CliProviderKind.OpenCodeGo;
-
     public bool IsOllamaProviderSelected => SelectedProviderKind == CliProviderKind.Ollama;
 
-    public bool IsSkillsSupported => SelectedProviderKind is not (CliProviderKind.Zai or CliProviderKind.OpenCodeGo or CliProviderKind.Ollama);
+    public bool IsSkillsSupported => SelectedProviderKind is not (CliProviderKind.Zai or CliProviderKind.Ollama);
 
     public string BackupSuggestedFileName => $"{SkillService.GetBackupFileNamePrefix(SelectedProviderKind)}-{DateTimeOffset.Now.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture)}";
     public string BackupFileExtension => SkillsBackupFileExtension;
@@ -189,7 +186,7 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
     private void ReloadSkills(CliProviderKind providerKind)
     {
         SelectedProviderKind = providerKind;
-        var scannedSkillItems = providerKind is CliProviderKind.Zai or CliProviderKind.OpenCodeGo ? Array.Empty<SkillItem>() : _skillService.ScanSkills(providerKind);
+        var scannedSkillItems = providerKind is CliProviderKind.Zai ? Array.Empty<SkillItem>() : _skillService.ScanSkills(providerKind);
         SynchronizeSkills(scannedSkillItems);
         ApplyFilter();
         RefreshSkillStateProperties();

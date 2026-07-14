@@ -1356,12 +1356,6 @@ The installed app is already up to date.</value>
   <data name="SkillsPage_OllamaUnsupportedTitleTextBlock.Text" xml:space="preserve">
     <value>Ollama does not support skills</value>
   </data>
-  <data name="SkillsPage_OpenCodeGoUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
-    <value>OpenCode Go does not manage local skill files. Switch to Codex or Claude Code to manage skills.</value>
-  </data>
-  <data name="SkillsPage_OpenCodeGoUnsupportedTitleTextBlock.Text" xml:space="preserve">
-    <value>Skills are not supported</value>
-  </data>
   <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
     <value>Refresh</value>
   </data>

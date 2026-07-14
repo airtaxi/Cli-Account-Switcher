@@ -17,6 +17,7 @@ public static class Constants
     public static string AccountsFilePath => Path.Combine(UserDataDirectory, "accounts.json");
     public static string ZaiAccountsFilePath => Path.Combine(UserDataDirectory, "zai-accounts.json");
     public static string OpenCodeGoHomeDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".local", "share", "opencode");
+    public static string OpenCodeGoSkillsDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config", "opencode", "skills");
     public static string OpenCodeGoAuthFilePath => Path.Combine(OpenCodeGoHomeDirectory, "auth.json");
     public static string OpenCodeGoExecutableFilePath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "@opencode-aidesktop", "OpenCode.exe");
     public static string OpenCodeGoAccountsFilePath => Path.Combine(UserDataDirectory, "opencode-accounts.json");
