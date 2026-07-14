@@ -1,4 +1,5 @@
 using CliAccountSwitcher.Api.Providers.Abstractions;
+using CliAccountSwitcher.WinUI.Dialogs;
 using CliAccountSwitcher.WinUI.Helpers;
 using CliAccountSwitcher.WinUI.Models;
 using CliAccountSwitcher.WinUI.ViewModels;
@@ -61,9 +62,30 @@ public sealed partial class SkillsPage : Page
         var storageFile = await fileOpenPicker.PickSingleFileAsync();
         if (storageFile is null) return;
 
+        MainWindow.ShowLoading(ViewModel.ListBackupLoadingMessage);
+        IReadOnlyList<SkillItem> backupSkillItems;
+        try { backupSkillItems = await ViewModel.ListBackupSkillsAsync(storageFile.Path); }
+        finally { MainWindow.HideLoading(); }
+
+        if (backupSkillItems.Count == 0)
+        {
+            await ShowDialogAsync(ViewModel.CreateNoSkillsInBackupDialogData());
+            return;
+        }
+
+        var importSkillsSelectionDialog = new ImportSkillsSelectionDialog();
+        importSkillsSelectionDialog.XamlRoot = XamlRoot;
+        importSkillsSelectionDialog.ViewModel.LoadSkills(backupSkillItems);
+
+        var contentDialogResult = await importSkillsSelectionDialog.ShowAsync();
+        if (contentDialogResult != ContentDialogResult.Primary) return;
+
+        var selectedSkillDirectoryNames = importSkillsSelectionDialog.ViewModel.GetSelectedSkillDirectoryNames();
+        if (selectedSkillDirectoryNames.Count == 0) return;
+
         MainWindow.ShowLoading(ViewModel.ImportBackupLoadingMessage);
         BasicDialogData dialogData;
-        try { dialogData = await ViewModel.ImportSkillsBackupAsync(selectedProviderKind, storageFile.Path); }
+        try { dialogData = await ViewModel.ImportSelectedSkillsAsync(selectedProviderKind, storageFile.Path, selectedSkillDirectoryNames); }
         finally { MainWindow.HideLoading(); }
 
         await ShowDialogAsync(dialogData);

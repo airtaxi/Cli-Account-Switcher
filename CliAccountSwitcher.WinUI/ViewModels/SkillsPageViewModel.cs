@@ -99,6 +99,7 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
 
     public string ExportBackupLoadingMessage => _localizationService.GetLocalizedString("SkillsPage_ExportBackupLoadingMessage");
     public string ImportBackupLoadingMessage => _localizationService.GetLocalizedString("SkillsPage_ImportBackupLoadingMessage");
+    public string ListBackupLoadingMessage => _localizationService.GetLocalizedString("ImportSkillsSelectionDialog_ListingBackupLoadingMessage");
 
     public void ReloadSkills() => ReloadSkills(_applicationSettings.SelectedProviderKind);
 
@@ -130,12 +131,17 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
         return new BasicDialogData(_localizationService.GetLocalizedString("SkillsPage_ExportBackupDialogTitle"), _localizationService.GetLocalizedString("SkillsPage_ExportBackupDialogMessage"));
     }
 
-    public async Task<BasicDialogData> ImportSkillsBackupAsync(CliProviderKind providerKind, string backupFilePath)
+    public async Task<BasicDialogData> ImportSelectedSkillsAsync(CliProviderKind providerKind, string backupFilePath, IReadOnlyList<string> selectedSkillDirectoryNames)
     {
-        var importedCount = await _skillService.ImportSkillsAsync(providerKind, backupFilePath);
+        var selectedSkillDirectoryNameSet = selectedSkillDirectoryNames.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var importedCount = await _skillService.ImportSelectedSkillsAsync(providerKind, backupFilePath, selectedSkillDirectoryNameSet);
         ReloadSkills();
         return new BasicDialogData(_localizationService.GetLocalizedString("SkillsPage_ImportBackupDialogTitle"), _localizationService.GetFormattedString("SkillsPage_ImportBackupResultMessageFormat", importedCount));
     }
+
+    public Task<IReadOnlyList<SkillItem>> ListBackupSkillsAsync(string backupFilePath) => Task.FromResult(_skillService.ListBackupSkills(backupFilePath));
+
+    public BasicDialogData CreateNoSkillsInBackupDialogData() => new(_localizationService.GetLocalizedString("ImportSkillsSelectionDialogViewModel_NoSkillsInBackupTitle"), _localizationService.GetLocalizedString("ImportSkillsSelectionDialogViewModel_NoSkillsInBackupMessage"));
 
     public BasicDialogData CreateDeleteSelectedSkillsConfirmationDialogData() => new(_localizationService.GetLocalizedString("SkillsPage_DeleteSelectedSkillsDialogTitle"), _localizationService.GetFormattedString("SkillsPage_DeleteSelectedSkillsDialogMessage", SelectedSkillDirectoryNames.Count), _localizationService.GetLocalizedString("SkillsPage_DeleteButtonText"), _localizationService.GetLocalizedString("DialogHelper_CancelButtonText"));
 

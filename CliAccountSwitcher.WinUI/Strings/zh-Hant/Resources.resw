@@ -613,6 +613,48 @@
   <data name="FileAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
     <value>載入檔案</value>
   </data>
+  <data name="ImportSkillsSelectionDialog.PrimaryButtonText" xml:space="preserve">
+    <value>匯入</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog.SecondaryButtonText" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog.Title" xml:space="preserve">
+    <value>匯入技能</value>
+  </data>
+  <data name="ImportSkillsSelectionDialogViewModel_NoSelectedSkills" xml:space="preserve">
+    <value>未選擇技能</value>
+  </data>
+  <data name="ImportSkillsSelectionDialogViewModel_NoSkillsInBackupMessage" xml:space="preserve">
+    <value>備份檔案中未找到技能。</value>
+  </data>
+  <data name="ImportSkillsSelectionDialogViewModel_NoSkillsInBackupTitle" xml:space="preserve">
+    <value>空備份</value>
+  </data>
+  <data name="ImportSkillsSelectionDialogViewModel_SelectedSkillCountFormat" xml:space="preserve">
+    <value>已選擇 {0} 個技能</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_DescriptionHeaderTextBlock.Text" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>從備份中選擇要匯入的技能。</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_ListingBackupLoadingMessage" xml:space="preserve">
+    <value>正在讀取備份...</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_NoSkillsTextBlock.Text" xml:space="preserve">
+    <value>備份中未找到技能。</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_SearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>搜尋技能</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_SelectAllTextBlock.Text" xml:space="preserve">
+    <value>全選</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_SkillNameHeaderTextBlock.Text" xml:space="preserve">
+    <value>技能名稱</value>
+  </data>
   <data name="MainPage_AboutSelectorBarItem.Text" xml:space="preserve">
     <value>關於</value>
   </data>

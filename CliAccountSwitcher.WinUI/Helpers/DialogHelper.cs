@@ -1,4 +1,4 @@
-using CliAccountSwitcher.WinUI.Services;
+﻿using CliAccountSwitcher.WinUI.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;

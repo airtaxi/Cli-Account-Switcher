@@ -613,6 +613,48 @@
   <data name="FileAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
     <value>파일 불러오기</value>
   </data>
+  <data name="ImportSkillsSelectionDialog.PrimaryButtonText" xml:space="preserve">
+    <value>가져오기</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog.SecondaryButtonText" xml:space="preserve">
+    <value>취소</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog.Title" xml:space="preserve">
+    <value>스킬 가져오기</value>
+  </data>
+  <data name="ImportSkillsSelectionDialogViewModel_NoSelectedSkills" xml:space="preserve">
+    <value>선택 없음</value>
+  </data>
+  <data name="ImportSkillsSelectionDialogViewModel_NoSkillsInBackupMessage" xml:space="preserve">
+    <value>백업 파일에 스킬이 없습니다.</value>
+  </data>
+  <data name="ImportSkillsSelectionDialogViewModel_NoSkillsInBackupTitle" xml:space="preserve">
+    <value>빈 백업</value>
+  </data>
+  <data name="ImportSkillsSelectionDialogViewModel_SelectedSkillCountFormat" xml:space="preserve">
+    <value>{0}개 선택됨</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_DescriptionHeaderTextBlock.Text" xml:space="preserve">
+    <value>설명</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>백업에서 가져올 스킬을 선택하세요.</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_ListingBackupLoadingMessage" xml:space="preserve">
+    <value>백업을 읽는 중입니다...</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_NoSkillsTextBlock.Text" xml:space="preserve">
+    <value>백업에 스킬이 없습니다.</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_SearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>스킬 검색</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_SelectAllTextBlock.Text" xml:space="preserve">
+    <value>전체 선택</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_SkillNameHeaderTextBlock.Text" xml:space="preserve">
+    <value>스킬 이름</value>
+  </data>
   <data name="MainPage_AboutSelectorBarItem.Text" xml:space="preserve">
     <value>정보</value>
   </data>

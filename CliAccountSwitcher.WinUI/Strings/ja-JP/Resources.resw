@@ -613,6 +613,48 @@
   <data name="FileAddAccountPage_TitleTextBlock.Text" xml:space="preserve">
     <value>ファイルを読み込む</value>
   </data>
+  <data name="ImportSkillsSelectionDialog.PrimaryButtonText" xml:space="preserve">
+    <value>インポート</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog.SecondaryButtonText" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog.Title" xml:space="preserve">
+    <value>スキルのインポート</value>
+  </data>
+  <data name="ImportSkillsSelectionDialogViewModel_NoSelectedSkills" xml:space="preserve">
+    <value>選択なし</value>
+  </data>
+  <data name="ImportSkillsSelectionDialogViewModel_NoSkillsInBackupMessage" xml:space="preserve">
+    <value>バックアップファイルにスキルが見つかりません。</value>
+  </data>
+  <data name="ImportSkillsSelectionDialogViewModel_NoSkillsInBackupTitle" xml:space="preserve">
+    <value>空のバックアップ</value>
+  </data>
+  <data name="ImportSkillsSelectionDialogViewModel_SelectedSkillCountFormat" xml:space="preserve">
+    <value>{0}件選択中</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_DescriptionHeaderTextBlock.Text" xml:space="preserve">
+    <value>説明</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_DescriptionTextBlock.Text" xml:space="preserve">
+    <value>バックアップからインポートするスキルを選択してください。</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_ListingBackupLoadingMessage" xml:space="preserve">
+    <value>バックアップを読み込み中...</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_NoSkillsTextBlock.Text" xml:space="preserve">
+    <value>バックアップにスキルが見つかりません。</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_SearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>スキルを検索</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_SelectAllTextBlock.Text" xml:space="preserve">
+    <value>すべて選択</value>
+  </data>
+  <data name="ImportSkillsSelectionDialog_SkillNameHeaderTextBlock.Text" xml:space="preserve">
+    <value>スキル名</value>
+  </data>
   <data name="MainPage_AboutSelectorBarItem.Text" xml:space="preserve">
     <value>情報</value>
   </data>

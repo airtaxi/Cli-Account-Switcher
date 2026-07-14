@@ -38,7 +38,38 @@ public sealed class SkillService
         return Task.CompletedTask;
     }
 
-    public Task<int> ImportSkillsAsync(CliProviderKind providerKind, string backupFilePath, CancellationToken cancellationToken = default)
+    public IReadOnlyList<SkillItem> ListBackupSkills(string backupFilePath)
+    {
+        using var zipArchive = ZipFile.OpenRead(backupFilePath);
+        var skillItems = new List<SkillItem>();
+        var seenSkillDirectoryNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var zipArchiveEntry in zipArchive.Entries)
+        {
+            if (!TryGetSafeZipEntrySegments(zipArchiveEntry.FullName, out var zipEntrySegments)) continue;
+            if (IsZipDirectoryEntry(zipArchiveEntry.FullName)) continue;
+            if (zipEntrySegments.Length < 2) continue;
+            if (!string.Equals(zipEntrySegments[^1], "SKILL.md", StringComparison.OrdinalIgnoreCase)) continue;
+
+            var skillDirectoryName = string.Join("/", zipEntrySegments, 0, zipEntrySegments.Length - 1);
+            if (!seenSkillDirectoryNames.Add(skillDirectoryName)) continue;
+
+            string skillName;
+            string skillDescription;
+            try
+            {
+                using var streamReader = new StreamReader(zipArchiveEntry.Open());
+                (skillName, skillDescription) = ReadSkillFrontMatter(streamReader, skillDirectoryName.Replace('/', Path.DirectorySeparatorChar));
+            }
+            catch { (skillName, skillDescription) = (skillDirectoryName, ""); }
+
+            skillItems.Add(new SkillItem { Name = skillName, DirectoryName = skillDirectoryName, Description = skillDescription });
+        }
+
+        return skillItems.OrderBy(skillItem => skillItem.Name, StringComparer.CurrentCultureIgnoreCase).ToArray();
+    }
+
+    public Task<int> ImportSelectedSkillsAsync(CliProviderKind providerKind, string backupFilePath, IReadOnlySet<string> selectedSkillDirectoryNames, CancellationToken cancellationToken = default)
     {
         var skillsDirectoryPath = Path.GetFullPath(GetSkillsDirectoryPath(providerKind));
         Directory.CreateDirectory(skillsDirectoryPath);
@@ -59,19 +90,20 @@ public sealed class SkillService
 
             if (isDirectoryEntry)
             {
+                var skillDirectoryName = string.Join("/", zipEntrySegments).TrimEnd('/');
+                if (!selectedSkillDirectoryNames.Contains(skillDirectoryName)) continue;
                 Directory.CreateDirectory(targetFilePath);
                 continue;
             }
+
+            var fileSkillDirectoryName = string.Join("/", zipEntrySegments, 0, zipEntrySegments.Length - 1);
+            if (!selectedSkillDirectoryNames.Contains(fileSkillDirectoryName)) continue;
 
             Directory.CreateDirectory(Path.GetDirectoryName(targetFilePath)!);
             ClearReadOnlyAttributeIfExists(targetFilePath);
             zipArchiveEntry.ExtractToFile(targetFilePath, overwrite: true);
 
-            if (string.Equals(zipEntrySegments[^1], "SKILL.md", StringComparison.OrdinalIgnoreCase))
-            {
-                var skillDirectoryName = string.Join("/", zipEntrySegments, 0, zipEntrySegments.Length - 1);
-                importedSkillDirectoryNames.Add(skillDirectoryName);
-            }
+            if (string.Equals(zipEntrySegments[^1], "SKILL.md", StringComparison.OrdinalIgnoreCase)) importedSkillDirectoryNames.Add(fileSkillDirectoryName);
         }
 
         return Task.FromResult(importedSkillDirectoryNames.Count);
@@ -141,7 +173,17 @@ public sealed class SkillService
         {
             if (!File.Exists(skillFilePath)) return (fallbackName, "");
 
-            var skillFileContent = File.ReadAllText(skillFilePath).Replace("\r\n", "\n").Replace('\r', '\n');
+            using var streamReader = new StreamReader(skillFilePath);
+            return ReadSkillFrontMatter(streamReader, fallbackName);
+        }
+        catch { return (fallbackName, ""); }
+    }
+
+    private static (string name, string description) ReadSkillFrontMatter(TextReader textReader, string fallbackName)
+    {
+        try
+        {
+            var skillFileContent = textReader.ReadToEnd().Replace("\r\n", "\n").Replace('\r', '\n');
             var skillFileLines = skillFileContent.Split('\n');
             var frontMatterStartLineIndex = Array.FindIndex(skillFileLines, skillFileLine => !string.IsNullOrWhiteSpace(skillFileLine));
             if (frontMatterStartLineIndex < 0 || !string.Equals(skillFileLines[frontMatterStartLineIndex].Trim(), "---", StringComparison.Ordinal)) return (fallbackName, "");

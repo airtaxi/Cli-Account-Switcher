@@ -109,6 +109,7 @@ public partial class App : Application
         serviceCollection.AddTransient(sp => new SettingsPageViewModel(sp.GetRequiredService<ApplicationSettings>(), sp.GetRequiredService<ApplicationSettingsService>(), sp.GetRequiredService<ApplicationThemeService>(), sp.GetRequiredService<StartupRegistrationService>(), sp.GetRequiredService<StoreUpdateService>(), sp.GetRequiredService<FileLogService>(), sp.GetRequiredService<AccountServiceManager>(), sp.GetRequiredService<LocalizationService>()));
 
         serviceCollection.AddTransient(sp => new SkillsPageViewModel(sp.GetRequiredService<SkillService>(), sp.GetRequiredService<ApplicationSettings>(), sp.GetRequiredService<LocalizationService>(), sp.GetRequiredService<DispatcherQueue>()));
+        serviceCollection.AddTransient(sp => new ImportSkillsSelectionDialogViewModel(sp.GetRequiredService<LocalizationService>()));
     }
 
     protected override async void OnLaunched(LaunchActivatedEventArgs launchActivatedEventArguments)
