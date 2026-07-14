@@ -47,6 +47,7 @@ public sealed partial class SkillsPageViewModel : ObservableObject, IDisposable
     [NotifyPropertyChangedFor(nameof(IsZaiProviderSelected))]
     [NotifyPropertyChangedFor(nameof(IsOpenCodeGoProviderSelected))]
     [NotifyPropertyChangedFor(nameof(IsOllamaProviderSelected))]
+    [NotifyPropertyChangedFor(nameof(IsSkillsSupported))]
     [NotifyPropertyChangedFor(nameof(DescriptionText))]
     public partial CliProviderKind SelectedProviderKind { get; set; } = CliProviderKind.Codex;
 
