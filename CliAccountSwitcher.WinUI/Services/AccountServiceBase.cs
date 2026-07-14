@@ -218,6 +218,14 @@ public abstract class AccountServiceBase<TAccountState>(ApplicationSettingsServi
 
     protected void NotifyAccountsChanged() => AccountsChanged?.Invoke(this, EventArgs.Empty);
 
+    protected TAccountState PickAutoActivateTarget(IReadOnlyList<TAccountState> importedAccounts)
+    {
+        if (importedAccounts.Count == 0) return null;
+        if (importedAccounts.Count == 1) return importedAccounts[0];
+        var activeAccounts = importedAccounts.Where(GetIsActive).ToList();
+        return activeAccounts.Count == 1 ? activeAccounts[0] : importedAccounts[0];
+    }
+
     protected static int NormalizeUsageWarningThresholdPercentage(int usageWarningThresholdPercentage) => Math.Clamp(usageWarningThresholdPercentage, 0, 100);
 
     private async Task RefreshAccountStatesAsync(Func<TAccountState, bool> accountStatePredicate, CancellationToken cancellationToken)

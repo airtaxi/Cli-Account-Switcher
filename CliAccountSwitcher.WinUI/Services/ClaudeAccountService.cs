@@ -54,7 +54,7 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
             var payloadJson = await _providerSnapshotStore.GetPayloadJsonAsync(CliProviderKind.ClaudeCode, storedProviderAccount.StoredAccountIdentifier, cancellationToken);
             if (string.IsNullOrWhiteSpace(payloadJson)) throw new InvalidDataException($"The stored Claude Code account payload was not found: {storedProviderAccount.StoredAccountIdentifier}");
 
-            var backupAccountDocument = CreateClaudeCodeBackupAccountDocument(payloadJson);
+            var backupAccountDocument = CreateClaudeCodeBackupAccountDocument(payloadJson, storedProviderAccount);
             _ = ClaudeCodeCredentialDocument.Parse(backupAccountDocument.CredentialsJson);
             _ = ClaudeCodeGlobalConfigDocument.Parse(backupAccountDocument.GlobalConfigJson);
             backupDocument.Accounts.Add(backupAccountDocument);
@@ -73,7 +73,9 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
         if (backupDocument.SchemaVersion != 1) throw new InvalidDataException($"Unsupported Claude Code backup schema version: {backupDocument.SchemaVersion}");
         if (!string.Equals(backupDocument.ProviderKind, CliProviderKind.ClaudeCode.ToString(), StringComparison.OrdinalIgnoreCase)) throw new InvalidDataException("The backup document is not for Claude Code.");
 
+        var hasExistingAccounts = GetAccountStatesSnapshot().Count > 0;
         var importResult = new ProviderAccountBackupImportResult();
+        var importedAccounts = new List<StoredProviderAccount>();
         var duplicateKeys = GetAccountStatesSnapshot()
             .Select(CreateClaudeCodeDuplicateKey)
             .Where(duplicateKey => !string.IsNullOrWhiteSpace(duplicateKey))
@@ -104,8 +106,10 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
                     continue;
                 }
 
-                await SaveClaudeCodeAccountWithoutActivationAsync(backupAccountDocument.CredentialsJson, backupAccountDocument.GlobalConfigJson, cancellationToken);
+                var storedAccount = await SaveClaudeCodeAccountWithoutActivationAsync(backupAccountDocument.CredentialsJson, backupAccountDocument.GlobalConfigJson, cancellationToken);
+                storedAccount.IsActive = backupAccountDocument.IsActive;
                 duplicateKeys.Add(duplicateKey);
+                importedAccounts.Add(storedAccount);
                 importResult.SuccessCount++;
             }
             catch { importResult.FailureCount++; }
@@ -113,6 +117,11 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
 
         if (importResult.SuccessCount > 0)
         {
+            if (!hasExistingAccounts)
+            {
+                var autoActivateTarget = PickAutoActivateTarget(importedAccounts);
+                if (autoActivateTarget is not null) await ActivateAccountCoreAsync(autoActivateTarget, cancellationToken);
+            }
             await SynchronizeActiveStatusesAsync(cancellationToken);
             NotifyAccountsChanged();
         }
@@ -295,7 +304,7 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
         destinationStoredProviderAccount.LastUpdated = sourceStoredProviderAccount.LastUpdated;
     }
 
-    private static ClaudeCodeBackupAccountDocument CreateClaudeCodeBackupAccountDocument(string payloadJson)
+    private static ClaudeCodeBackupAccountDocument CreateClaudeCodeBackupAccountDocument(string payloadJson, StoredProviderAccount storedProviderAccount)
     {
         using var jsonDocument = JsonDocument.Parse(payloadJson);
         var credentialsJson = ReadJsonString(jsonDocument.RootElement, "credentialsJson");
@@ -305,7 +314,8 @@ public sealed class ClaudeAccountService : AccountServiceBase<StoredProviderAcco
         return new ClaudeCodeBackupAccountDocument
         {
             CredentialsJson = credentialsJson,
-            GlobalConfigJson = globalConfigJson
+            GlobalConfigJson = globalConfigJson,
+            IsActive = storedProviderAccount.IsActive
         };
     }
 

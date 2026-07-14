@@ -108,8 +108,10 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
 
     public override async Task<ProviderAccountBackupImportResult> ImportBackupAsync(string backupFilePath, CancellationToken cancellationToken = default)
     {
+        var hasExistingAccounts = GetAccountStatesSnapshot().Count > 0;
         var providerAccountBackupImportResult = new ProviderAccountBackupImportResult();
         var importedAccountIdentifiers = new HashSet<string>(StringComparer.Ordinal);
+        var importedAccounts = new List<CodexAccount>();
 
         using var zipArchive = ZipFile.OpenRead(backupFilePath);
         foreach (var zipArchiveEntry in zipArchive.Entries.Where(zipArchiveEntry => string.Equals(Path.GetExtension(zipArchiveEntry.FullName), ".json", StringComparison.OrdinalIgnoreCase)))
@@ -139,8 +141,10 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
                 try
                 {
                     var validatedAccount = await CreateValidatedAccountAsync(candidateAccount.CodexAuthenticationDocument, candidateAccount.CustomAlias, cancellationToken);
+                    validatedAccount.IsActive = candidateAccount.IsActive;
                     UpsertAccountState(validatedAccount);
                     importedAccountIdentifiers.Add(validatedAccount.AccountIdentifier);
+                    importedAccounts.Add(validatedAccount);
                     providerAccountBackupImportResult.SuccessCount++;
                 }
                 catch { providerAccountBackupImportResult.FailureCount++; }
@@ -149,6 +153,11 @@ public sealed class CodexAccountService : AccountServiceBase<CodexAccount>
 
         if (providerAccountBackupImportResult.SuccessCount > 0)
         {
+            if (!hasExistingAccounts)
+            {
+                var autoActivateTarget = PickAutoActivateTarget(importedAccounts);
+                if (autoActivateTarget is not null) await ActivateAccountCoreAsync(autoActivateTarget, cancellationToken);
+            }
             await SynchronizeActiveStatusesAsync(cancellationToken);
             await SaveAccountStatesAsync(cancellationToken);
             NotifyAccountsChanged();

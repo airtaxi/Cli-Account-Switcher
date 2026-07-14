@@ -79,8 +79,10 @@ public sealed class ZaiAccountService : AccountServiceBase<ZaiAccount>
 
     public override async Task<ProviderAccountBackupImportResult> ImportBackupAsync(string backupFilePath, CancellationToken cancellationToken = default)
     {
+        var hasExistingAccounts = GetAccountStatesSnapshot().Count > 0;
         var providerAccountBackupImportResult = new ProviderAccountBackupImportResult();
         var importedAccountIdentifiers = new HashSet<string>(StringComparer.Ordinal);
+        var importedAccounts = new List<ZaiAccount>();
 
         ZaiAccountStoreDocument storeDocument;
         try
@@ -101,11 +103,17 @@ public sealed class ZaiAccountService : AccountServiceBase<ZaiAccount>
 
             UpsertAccountState(candidateAccount);
             importedAccountIdentifiers.Add(accountIdentifier);
+            importedAccounts.Add(candidateAccount);
             providerAccountBackupImportResult.SuccessCount++;
         }
 
         if (providerAccountBackupImportResult.SuccessCount > 0)
         {
+            if (!hasExistingAccounts)
+            {
+                var autoActivateTarget = PickAutoActivateTarget(importedAccounts);
+                if (autoActivateTarget is not null) await ActivateAccountCoreAsync(autoActivateTarget, cancellationToken);
+            }
             await SynchronizeActiveStatusesAsync(cancellationToken);
             await SaveAccountStatesAsync(cancellationToken);
             NotifyAccountsChanged();
