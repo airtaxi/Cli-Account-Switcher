@@ -1393,10 +1393,10 @@ Microsoft Store 中有 {0} 個可用更新。</value>
     <value>沒有已註冊的技能。</value>
   </data>
   <data name="SkillsPage_OllamaUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Ollama 是唯讀提供者，不使用 CLI 工具技能目錄。</value>
+    <value>Ollama 是唯讀提供者，不管理本地技能檔案。請切換到 Codex、Claude Code 或 OpenCode Go 來管理技能。</value>
   </data>
   <data name="SkillsPage_OllamaUnsupportedTitleTextBlock.Text" xml:space="preserve">
-    <value>Ollama 不支援技能</value>
+    <value>不支援技能管理</value>
   </data>
   <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
     <value>重新整理</value>
@@ -1411,7 +1411,7 @@ Microsoft Store 中有 {0} 個可用更新。</value>
     <value>技能</value>
   </data>
   <data name="SkillsPage_ZaiUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Z.ai 是唯讀用量監控，不管理本地技能檔案。請切換到 Codex 或 Claude Code 來管理技能。</value>
+    <value>Z.ai 是唯讀用量監控，不管理本地技能檔案。請切換到 Codex、Claude Code 或 OpenCode Go 來管理技能。</value>
   </data>
   <data name="SkillsPage_ZaiUnsupportedTitleTextBlock.Text" xml:space="preserve">
     <value>不支援技能管理</value>

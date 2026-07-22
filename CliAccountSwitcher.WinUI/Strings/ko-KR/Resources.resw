@@ -1393,10 +1393,10 @@ Microsoft Store에서 사용 가능한 업데이트 {0}개를 찾았습니다.</
     <value>등록된 스킬이 없습니다.</value>
   </data>
   <data name="SkillsPage_OllamaUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Ollama는 CLI 도구 기반 스킬 디렉터리를 사용하지 않는 읽기 전용 프로바이더입니다.</value>
+    <value>Ollama는 로컬 스킬 파일을 관리하지 않는 읽기 전용 프로바이더입니다. 스킬을 관리하려면 Codex, Claude Code 또는 OpenCode Go로 전환하세요.</value>
   </data>
   <data name="SkillsPage_OllamaUnsupportedTitleTextBlock.Text" xml:space="preserve">
-    <value>Ollama는 스킬을 지원하지 않습니다</value>
+    <value>스킬을 지원하지 않음</value>
   </data>
   <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
     <value>새로고침</value>
@@ -1411,7 +1411,7 @@ Microsoft Store에서 사용 가능한 업데이트 {0}개를 찾았습니다.</
     <value>스킬</value>
   </data>
   <data name="SkillsPage_ZaiUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Z.ai는 읽기 전용 사용량 모니터이며 로컬 스킬 파일을 관리하지 않습니다. 스킬을 관리하려면 Codex 또는 Claude Code로 전환하세요.</value>
+    <value>Z.ai는 읽기 전용 사용량 모니터이며 로컬 스킬 파일을 관리하지 않습니다. 스킬을 관리하려면 Codex, Claude Code 또는 OpenCode Go로 전환하세요.</value>
   </data>
   <data name="SkillsPage_ZaiUnsupportedTitleTextBlock.Text" xml:space="preserve">
     <value>스킬을 지원하지 않음</value>

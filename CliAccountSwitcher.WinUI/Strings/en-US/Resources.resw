@@ -1393,10 +1393,10 @@ The installed app is already up to date.</value>
     <value>No skills available.</value>
   </data>
   <data name="SkillsPage_OllamaUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Ollama is a read-only provider that does not use a CLI tool skills directory.</value>
+    <value>Ollama is a read-only provider that does not manage local skill files. Switch to Codex, Claude Code, or OpenCode Go to manage skills.</value>
   </data>
   <data name="SkillsPage_OllamaUnsupportedTitleTextBlock.Text" xml:space="preserve">
-    <value>Ollama does not support skills</value>
+    <value>Skills are not supported</value>
   </data>
   <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
     <value>Refresh</value>
@@ -1411,7 +1411,7 @@ The installed app is already up to date.</value>
     <value>Skills</value>
   </data>
   <data name="SkillsPage_ZaiUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Z.ai is a read-only usage monitor and does not manage local skill files. Switch to Codex or Claude Code to manage skills.</value>
+    <value>Z.ai is a read-only usage monitor and does not manage local skill files. Switch to Codex, Claude Code, or OpenCode Go to manage skills.</value>
   </data>
   <data name="SkillsPage_ZaiUnsupportedTitleTextBlock.Text" xml:space="preserve">
     <value>Skills are not supported</value>

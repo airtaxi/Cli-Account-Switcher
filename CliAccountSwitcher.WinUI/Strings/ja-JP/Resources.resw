@@ -1393,10 +1393,10 @@ Microsoft Store に {0} 件の更新があります。</value>
     <value>登録されたスキルがありません。</value>
   </data>
   <data name="SkillsPage_OllamaUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Ollama は読み取り専用プロバイダーであり、CLI ツールのスキルディレクトリを使用しません。</value>
+    <value>Ollama は読み取り専用プロバイダーであり、ローカルスキルファイルを管理しません。スキルを管理するには Codex、Claude Code、または OpenCode Go に切り替えてください。</value>
   </data>
   <data name="SkillsPage_OllamaUnsupportedTitleTextBlock.Text" xml:space="preserve">
-    <value>Ollama はスキルに対応していません</value>
+    <value>スキルはサポートされていません</value>
   </data>
   <data name="SkillsPage_RefreshSkillsTextBlock.Text" xml:space="preserve">
     <value>更新</value>
@@ -1411,7 +1411,7 @@ Microsoft Store に {0} 件の更新があります。</value>
     <value>スキル</value>
   </data>
   <data name="SkillsPage_ZaiUnsupportedDescriptionTextBlock.Text" xml:space="preserve">
-    <value>Z.ai は読み取り専用の使用量モニターであり、ローカルスキルファイルを管理しません。スキルを管理するには Codex または Claude Code に切り替えてください。</value>
+    <value>Z.ai は読み取り専用の使用量モニターであり、ローカルスキルファイルを管理しません。スキルを管理するには Codex、Claude Code、または OpenCode Go に切り替えてください。</value>
   </data>
   <data name="SkillsPage_ZaiUnsupportedTitleTextBlock.Text" xml:space="preserve">
     <value>スキルはサポートされていません</value>
