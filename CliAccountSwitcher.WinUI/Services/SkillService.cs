@@ -88,22 +88,20 @@ public sealed class SkillService
             var targetFilePath = Path.GetFullPath(CombinePathSegments(skillsDirectoryPath, zipEntrySegments));
             if (!IsPathWithinDirectory(skillsDirectoryPath, targetFilePath)) continue;
 
+            var entryPath = string.Join("/", zipEntrySegments);
+            if (!IsEntryWithinSelectedSkillDirectories(entryPath, selectedSkillDirectoryNames)) continue;
+
             if (isDirectoryEntry)
             {
-                var skillDirectoryName = string.Join("/", zipEntrySegments).TrimEnd('/');
-                if (!selectedSkillDirectoryNames.Contains(skillDirectoryName)) continue;
                 Directory.CreateDirectory(targetFilePath);
                 continue;
             }
-
-            var fileSkillDirectoryName = string.Join("/", zipEntrySegments, 0, zipEntrySegments.Length - 1);
-            if (!selectedSkillDirectoryNames.Contains(fileSkillDirectoryName)) continue;
 
             Directory.CreateDirectory(Path.GetDirectoryName(targetFilePath)!);
             ClearReadOnlyAttributeIfExists(targetFilePath);
             zipArchiveEntry.ExtractToFile(targetFilePath, overwrite: true);
 
-            if (string.Equals(zipEntrySegments[^1], "SKILL.md", StringComparison.OrdinalIgnoreCase)) importedSkillDirectoryNames.Add(fileSkillDirectoryName);
+            if (string.Equals(zipEntrySegments[^1], "SKILL.md", StringComparison.OrdinalIgnoreCase)) importedSkillDirectoryNames.Add(string.Join("/", zipEntrySegments, 0, zipEntrySegments.Length - 1));
         }
 
         return Task.FromResult(importedSkillDirectoryNames.Count);
@@ -290,6 +288,18 @@ public sealed class SkillService
     }
 
     private static bool IsZipDirectoryEntry(string zipEntryFullName) => zipEntryFullName.EndsWith("/", StringComparison.Ordinal) || zipEntryFullName.EndsWith("\\", StringComparison.Ordinal);
+
+    private static bool IsEntryWithinSelectedSkillDirectories(string entryPath, IReadOnlySet<string> selectedSkillDirectoryNames)
+    {
+        foreach (var selectedSkillDirectoryName in selectedSkillDirectoryNames)
+        {
+            var normalizedSelectedSkillDirectoryName = selectedSkillDirectoryName.TrimEnd('/');
+            if (entryPath.Equals(normalizedSelectedSkillDirectoryName, StringComparison.OrdinalIgnoreCase)) return true;
+            if (entryPath.StartsWith(normalizedSelectedSkillDirectoryName + "/", StringComparison.OrdinalIgnoreCase)) return true;
+        }
+
+        return false;
+    }
 
     private static string NormalizeZipEntryPath(string zipEntryPath) => zipEntryPath.Replace('\\', '/');
 
