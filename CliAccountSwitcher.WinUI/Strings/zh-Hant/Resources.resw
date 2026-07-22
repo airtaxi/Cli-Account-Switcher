@@ -1159,6 +1159,12 @@
   <data name="SettingsPage_LightThemeComboBoxItem.Content" xml:space="preserve">
     <value>淺色</value>
   </data>
+  <data name="SettingsPage_ManualSlotPrioritySettingsCard.Description" xml:space="preserve">
+    <value>輸入 0 到 65535 之間的值。當多個小元件同時顯示在工作列時，值越低則越遠離工作列按鈕。</value>
+  </data>
+  <data name="SettingsPage_ManualSlotPrioritySettingsCard.Header" xml:space="preserve">
+    <value>顯示優先順序</value>
+  </data>
   <data name="SettingsPage_NextUsageRefreshFormat" xml:space="preserve">
     <value>下次重新整理还有 {0}</value>
   </data>

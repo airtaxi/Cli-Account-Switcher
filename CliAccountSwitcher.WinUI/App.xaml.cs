@@ -130,7 +130,7 @@ public partial class App : Application
         _ = Services.GetRequiredService<StartupRegistrationService>().SetStartupLaunchEnabledAsync(applicationSettings.IsStartupLaunchEnabled);
         if (TaskbarHelper.IsTaskbarContentHostSupported && !applicationSettings.HideTaskbarUsage) await InitializeTaskbarUsageWindowAsync();
 
-        WeakReferenceMessenger.Default.Register<PreferredMonitorChangedMessage>(this, OnPreferredMonitorChanged);
+        WeakReferenceMessenger.Default.Register<TaskbarUsageSettingsChangedMessage>(this, OnTaskbarUsageSettingsChanged);
     }
 
     public static void ShowMainWindow()
@@ -177,7 +177,7 @@ public partial class App : Application
         taskbarUsageWindow.Close();
     }
 
-    private static async void OnPreferredMonitorChanged(object recipient, PreferredMonitorChangedMessage message)
+    private static async void OnTaskbarUsageSettingsChanged(object recipient, TaskbarUsageSettingsChangedMessage message)
     {
         if (!TaskbarHelper.IsTaskbarContentHostSupported) return;
 

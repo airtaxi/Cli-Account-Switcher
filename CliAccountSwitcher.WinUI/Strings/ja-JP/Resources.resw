@@ -1159,6 +1159,12 @@
   <data name="SettingsPage_LightThemeComboBoxItem.Content" xml:space="preserve">
     <value>ライト</value>
   </data>
+  <data name="SettingsPage_ManualSlotPrioritySettingsCard.Description" xml:space="preserve">
+    <value>0から65535までの値を入力してください。複数のウィジェットが同時に表示される場合、値が低いほどタスクバーボタンから遠くに配置されます。</value>
+  </data>
+  <data name="SettingsPage_ManualSlotPrioritySettingsCard.Header" xml:space="preserve">
+    <value>表示優先順位</value>
+  </data>
   <data name="SettingsPage_NextUsageRefreshFormat" xml:space="preserve">
     <value>次回更新まで {0}</value>
   </data>

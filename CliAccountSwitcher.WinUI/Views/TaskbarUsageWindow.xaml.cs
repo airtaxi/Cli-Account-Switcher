@@ -20,7 +20,12 @@ public sealed partial class TaskbarUsageWindow : Window
         InitializeComponent();
 
         var applicationSettings = App.Services.GetRequiredService<ApplicationSettings>();
-        TaskbarContentHost = new TaskbarContentHost(this, (FrameworkElement)Content, new() { PreferredWidth = TaskbarHelper.PreferredTaskbarContentWidth, PreferredMonitorIdentity = applicationSettings.PreferredMonitorIdentity });
+        TaskbarContentHost = new TaskbarContentHost(this, (FrameworkElement)Content, new()
+        {
+            PreferredWidth = TaskbarHelper.PreferredTaskbarContentWidth,
+            PreferredMonitorIdentity = applicationSettings.PreferredMonitorIdentity,
+            ManualSlotPriority = applicationSettings.ManualSlotPriority
+        });
     }
 
     public async Task PrepareTaskbarContentAsync() => await TaskbarContentHost.AttachWhenLayoutReadyAsync();

@@ -25,6 +25,8 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
     private const int MaximumUsageSurgeNotificationThresholdPercentage = 100;
     private const int MinimumUsageSurgeNotificationWindowMinutes = 1;
     private const int MaximumUsageSurgeNotificationWindowMinutes = 300;
+    private const int MinimumManualSlotPriority = 0;
+    private const int MaximumManualSlotPriority = 65535;
 
     public string ApplicationVersionText { get; } = localizationService.GetFormattedString("SettingsPage_ApplicationVersionFormat", GetCurrentApplicationVersion());
 
@@ -96,6 +98,9 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
 
     [ObservableProperty]
     public partial double PrimaryUsageSurgeNotificationWindowMinutes { get; set; } = applicationSettings.PrimaryUsageSurgeNotificationWindowMinutes;
+
+    [ObservableProperty]
+    public partial double ManualSlotPriority { get; set; } = applicationSettings.ManualSlotPriority;
 
     [ObservableProperty]
     public partial string ActiveAccountNextUsageRefreshText { get; set; } = "";
@@ -176,7 +181,7 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
         if (!wasSaved) return CreateSaveSettingsFailedDialogData();
 
         SelectedMonitorDisplayName = GetMonitorIdentityDisplayName(identity);
-        WeakReferenceMessenger.Default.Send<PreferredMonitorChangedMessage>();
+        WeakReferenceMessenger.Default.Send<TaskbarUsageSettingsChangedMessage>();
         return null;
     }
 
@@ -397,6 +402,13 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
     public async Task<SettingsPageDialogData> ApplyPrimaryUsageSurgeNotificationWindowMinutesAsync(double minutes)
         => await ApplyBoundedIntegerSettingAsync(minutes, applicationSettings.PrimaryUsageSurgeNotificationWindowMinutes, MinimumUsageSurgeNotificationWindowMinutes, MaximumUsageSurgeNotificationWindowMinutes, normalizedMinutes => applicationSettings.PrimaryUsageSurgeNotificationWindowMinutes = normalizedMinutes, SetPrimaryUsageSurgeNotificationWindowMinutesSilently);
 
+    public async Task<SettingsPageDialogData> ApplyManualSlotPriorityAsync(double manualSlotPriority)
+    {
+        var dialogData = await ApplyBoundedIntegerSettingAsync(manualSlotPriority, applicationSettings.ManualSlotPriority, MinimumManualSlotPriority, MaximumManualSlotPriority, normalizedManualSlotPriority => applicationSettings.ManualSlotPriority = (ushort)normalizedManualSlotPriority, SetManualSlotPrioritySilently);
+        if (dialogData is null) WeakReferenceMessenger.Default.Send<TaskbarUsageSettingsChangedMessage>();
+        return dialogData;
+    }
+
     private void SynchronizePropertiesFromSettings()
     {
         LanguageSelectedIndex = GetLanguageSelectedIndex(applicationSettings.LanguageOverride);
@@ -417,6 +429,7 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
         IsPrimaryUsageSurgeNotificationEnabled = applicationSettings.IsPrimaryUsageSurgeNotificationEnabled;
         PrimaryUsageSurgeNotificationThresholdPercentage = applicationSettings.PrimaryUsageSurgeNotificationThresholdPercentage;
         PrimaryUsageSurgeNotificationWindowMinutes = applicationSettings.PrimaryUsageSurgeNotificationWindowMinutes;
+        ManualSlotPriority = applicationSettings.ManualSlotPriority;
     }
 
     public async Task RefreshStartupLaunchStateFromSystemAsync()
@@ -482,6 +495,8 @@ public sealed partial class SettingsPageViewModel(ApplicationSettings applicatio
     private void SetPrimaryUsageSurgeNotificationThresholdPercentageSilently(double value) => SetPropertySilently(value, static (viewModel, newValue) => viewModel.PrimaryUsageSurgeNotificationThresholdPercentage = newValue);
 
     private void SetPrimaryUsageSurgeNotificationWindowMinutesSilently(double value) => SetPropertySilently(value, static (viewModel, newValue) => viewModel.PrimaryUsageSurgeNotificationWindowMinutes = newValue);
+
+    private void SetManualSlotPrioritySilently(double value) => SetPropertySilently(value, static (viewModel, newValue) => viewModel.ManualSlotPriority = newValue);
 
     private void SetIsStartupLaunchEnabledSilently(bool value) => SetPropertySilently(value, static (viewModel, newValue) => viewModel.IsStartupLaunchEnabled = newValue);
 

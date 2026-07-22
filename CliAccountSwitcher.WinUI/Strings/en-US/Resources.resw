@@ -1159,6 +1159,12 @@
   <data name="SettingsPage_LightThemeComboBoxItem.Content" xml:space="preserve">
     <value>Light</value>
   </data>
+  <data name="SettingsPage_ManualSlotPrioritySettingsCard.Description" xml:space="preserve">
+    <value>Set a value between 0 and 65535. When multiple widgets share the taskbar, a lower value places the widget farther from the taskbar buttons.</value>
+  </data>
+  <data name="SettingsPage_ManualSlotPrioritySettingsCard.Header" xml:space="preserve">
+    <value>Display priority</value>
+  </data>
   <data name="SettingsPage_NextUsageRefreshFormat" xml:space="preserve">
     <value>Next refresh in {0}</value>
   </data>

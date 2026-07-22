@@ -241,6 +241,12 @@ public sealed partial class SettingsPage : Page
         await ShowDialogIfNeededAsync(await StartWithControlSynchronization(() => ViewModel.ApplyPrimaryUsageSurgeNotificationWindowMinutesAsync(numberBoxValueChangedEventArguments.NewValue)));
     }
 
+    private async void OnManualSlotPriorityNumberBoxValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs numberBoxValueChangedEventArguments)
+    {
+        if (_isSynchronizingControls) return;
+        await ShowDialogIfNeededAsync(await StartWithControlSynchronization(() => ViewModel.ApplyManualSlotPriorityAsync(numberBoxValueChangedEventArguments.NewValue)));
+    }
+
     private void OnRefreshCountdownDispatcherTimerTick(object sender, object eventArguments) => ViewModel.RefreshUsageRefreshCountdownTexts();
 
     private Task<SettingsPageDialogData> StartWithControlSynchronization(Func<Task<SettingsPageDialogData>> action)

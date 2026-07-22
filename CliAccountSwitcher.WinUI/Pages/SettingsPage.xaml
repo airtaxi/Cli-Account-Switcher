@@ -132,6 +132,23 @@
                                     </SplitButton>
                                 </StackPanel>
                             </dev:SettingsCard>
+                            <dev:SettingsCard
+                                x:Uid="SettingsPage_ManualSlotPrioritySettingsCard"
+                                IsEnabled="{x:Bind ViewModel.IsTaskbarUsageVisible, Mode=OneWay}"
+                                Visibility="{x:Bind ViewModel.TaskbarUsageSettingsVisibility, Mode=OneWay}">
+                                <dev:SettingsCard.HeaderIcon>
+                                    <FontIcon Glyph="&#xE8D0;" />
+                                </dev:SettingsCard.HeaderIcon>
+                                <NumberBox
+                                    x:Name="ManualSlotPriorityNumberBox"
+                                    MinWidth="140"
+                                    Maximum="65535"
+                                    Minimum="0"
+                                    SmallChange="1"
+                                    SpinButtonPlacementMode="Inline"
+                                    ValueChanged="OnManualSlotPriorityNumberBoxValueChanged"
+                                    Value="{x:Bind ViewModel.ManualSlotPriority, Mode=TwoWay}" />
+                            </dev:SettingsCard>
                         </dev:SettingsExpander.Items>
                     </dev:SettingsExpander>
 

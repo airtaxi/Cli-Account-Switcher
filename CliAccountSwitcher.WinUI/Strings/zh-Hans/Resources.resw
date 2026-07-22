@@ -1159,6 +1159,12 @@
   <data name="SettingsPage_LightThemeComboBoxItem.Content" xml:space="preserve">
     <value>浅色</value>
   </data>
+  <data name="SettingsPage_ManualSlotPrioritySettingsCard.Description" xml:space="preserve">
+    <value>输入 0 到 65535 之间的值。当多个小组件同时显示在任务栏时，值越低则越远离任务栏按钮。</value>
+  </data>
+  <data name="SettingsPage_ManualSlotPrioritySettingsCard.Header" xml:space="preserve">
+    <value>显示优先级</value>
+  </data>
   <data name="SettingsPage_NextUsageRefreshFormat" xml:space="preserve">
     <value>下次刷新还有 {0}</value>
   </data>

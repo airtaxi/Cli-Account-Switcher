@@ -98,6 +98,7 @@ public sealed class ApplicationSettingsService
         destinationApplicationSettings.PrimaryUsageSurgeNotificationThresholdPercentage = sourceApplicationSettings.PrimaryUsageSurgeNotificationThresholdPercentage;
         destinationApplicationSettings.PrimaryUsageSurgeNotificationWindowMinutes = sourceApplicationSettings.PrimaryUsageSurgeNotificationWindowMinutes;
         destinationApplicationSettings.PreferredMonitorIdentity = sourceApplicationSettings.PreferredMonitorIdentity;
+        destinationApplicationSettings.ManualSlotPriority = sourceApplicationSettings.ManualSlotPriority;
     }
 
     private static string NormalizeLanguageOverride(string languageOverride) => languageOverride is "ko-KR" or "en-US" or "ja-JP" or "zh-Hans" or "zh-Hant" ? languageOverride : "";

@@ -21,6 +21,9 @@ public sealed partial class ApplicationSettings : ObservableObject
 
     public const int DefaultPrimaryUsageSurgeNotificationWindowMinutes = 5;
 
+    // Must match the default value of Deskband11Lib.Core.TaskbarContentHostOptions.ManualSlotPriority.
+    public const ushort DefaultManualSlotPriority = 65535;
+
     [ObservableProperty]
     public partial int SchemaVersion { get; set; } = CurrentSchemaVersion;
 
@@ -84,4 +87,7 @@ public sealed partial class ApplicationSettings : ObservableObject
 
     [ObservableProperty]
     public partial int PreferredMonitorIdentity { get; set; }
+
+    [ObservableProperty]
+    public partial ushort ManualSlotPriority { get; set; } = DefaultManualSlotPriority;
 }

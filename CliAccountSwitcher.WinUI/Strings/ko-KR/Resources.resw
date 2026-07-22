@@ -1159,6 +1159,12 @@
   <data name="SettingsPage_LightThemeComboBoxItem.Content" xml:space="preserve">
     <value>라이트</value>
   </data>
+  <data name="SettingsPage_ManualSlotPrioritySettingsCard.Description" xml:space="preserve">
+    <value>0에서 65535 사이의 값을 입력하세요. 여러 위젯이 함께 표시될 때 낮은 값일수록 작업 표시줄 버튼에서 멀리 배치됩니다.</value>
+  </data>
+  <data name="SettingsPage_ManualSlotPrioritySettingsCard.Header" xml:space="preserve">
+    <value>표시 우선 순위</value>
+  </data>
   <data name="SettingsPage_NextUsageRefreshFormat" xml:space="preserve">
     <value>다음 새로고침까지 {0}</value>
   </data>
