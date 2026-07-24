@@ -12,29 +12,28 @@ The app stores saved account records in its own local application data folder an
 
 ## Highlights
 
-- **Live taskbar usage**: keep the selected service's active account usage visible directly on the Windows taskbar, including both 5-hour and 7-day windows (and monthly usage for OpenCode Go).
-- **Pacemaker view**: see at a glance whether your current usage pace is ahead of or behind the ideal reset-window pace, so you can choose when to slow down or switch accounts.
+- Keep the selected service's active account usage visible on the Windows taskbar, including both 5-hour and 7-day windows (and monthly usage for OpenCode Go).
+- See whether your current usage pace is ahead of or behind the ideal reset-window pace, so you can choose when to slow down or switch accounts.
 
 ## Features
 
 - Add Codex, Claude Code, Z.ai, OpenCode Go, and Ollama accounts with the supported sign-in and import flows.
 - Switch the active account for any supported CLI from the Accounts screen.
 - View plan information and remaining usage for supported accounts.
-- Monitor active account usage from the Windows taskbar with real-time refresh support.
-- Compare usage against the pacemaker indicator to understand whether the current pace is comfortably within the reset window or running too fast.
-- Manage Codex, Claude Code, Z.ai, OpenCode Go, and Ollama accounts in one Windows app.
+- Monitor active account usage from the Windows taskbar with real-time refresh.
+- Compare usage against the pacemaker indicator to see whether the current pace is within the reset window or running too fast.
 - Click the tray icon to open a quick active account usage popup without opening the full window.
 - Refresh account usage and detect expired accounts.
 - Back up and restore saved accounts.
 
 ## Screens
 
-- **Dashboard**: active account summary, average remaining usage, and low-usage account list.
-- **Accounts**: searchable and filterable account list with switch, refresh, rename, delete, backup, and restore actions.
-- **Taskbar usage**: always-on active account usage display with 5-hour and 7-day remaining usage, pacemaker comparison, and manual refresh (monthly usage also shown for OpenCode Go).
-- **Tray icon popup**: quick active account quota view with refresh support from the tray icon.
-- **Settings**: language, theme, startup launch, update checks, refresh intervals, warning thresholds, notifications, and settings import/export.
-- **About**: app version and third-party license information.
+- Dashboard shows an active account summary, average remaining usage, and a low-usage account list.
+- Accounts offers a searchable, filterable list with switch, refresh, rename, delete, backup, and restore actions.
+- Taskbar usage is the always-on active account usage display, with 5-hour and 7-day remaining usage, pacemaker comparison, and manual refresh (monthly usage also shown for OpenCode Go).
+- Tray icon popup gives a quick active account quota view with refresh support from the tray icon.
+- Settings covers language, theme, startup launch, update checks, refresh intervals, warning thresholds, notifications, and settings import/export.
+- About shows the app version and third-party license information.
 
 ## Basic Workflow
 
